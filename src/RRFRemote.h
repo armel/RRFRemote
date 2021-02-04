@@ -6,6 +6,10 @@
 #include <Ticker.h>
 #include "font.h"
 
+// Version
+
+#define VERSION 0.1
+
 // Debug
 
 #define DEBUG false
