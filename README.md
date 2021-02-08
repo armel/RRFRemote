@@ -1,6 +1,8 @@
 # RRFRemote
 Le projet RRFRemote permet de suivre l'activité du RRF et de piloter son point d'accès ou hotpsot. Il peut fonctionner en charge (via un connecteur USB) ou sur batterie. 
 
+![https://github.com/armel/RRFRemote/blob/feature_alpha/img/RRFRemote.jpeg](RRFRmote)
+
 # Architecture technique en bref
 
 Basé sur un ESP-32, dual core, pouvant être cadencé jusqu'à 240 MHz, le RRFRemote fonctionne parfaitement à 80 MHz. Il dispose de 16 MB de mémoire flash. Comme tous les ESP, le Wifi est évidement intégré. L'écran 2 pouces TFT couleur, basé sur le chipset ILI9342C, affiche une résolution de 320 x 240 pixels. Il est hyper lumineux. La batterie intégrée fait 110 mAh. Il est possible d'ajouter une batterie supplémentaire (de 700 ou 800mAh) si besoin. En terme de dimensions et de masse, c'est très compact : 54 x 54 x 18mm pour 47,2g. Se trimbale dans la poche sans problème ;)
