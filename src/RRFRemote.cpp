@@ -4,6 +4,10 @@
 
 void setup()
 {
+  // Init screensaver timer
+
+  screensaver = millis();
+  
   // Init M5
   M5.begin(true, false, false, false);
   M5.Power.begin();
@@ -253,7 +257,7 @@ void loop()
     M5.Lcd.drawString(String(legende[i]), 4 + (i * 34), 162);
   }
 
-  // Elswhere
+  // Elsewhere
 
   scroll(10);
 
@@ -282,7 +286,7 @@ void loop()
         elsewhere = doc["elsewhere"][1][room[i]];
         if (strcmp(elsewhere, "Aucune émission") != 0)
         {
-
+          screensaver = millis(); // Screensaver update !!!
           tmp_str = getValue(elsewhere, ' ', 1);
           if (tmp_str == "")
           {
@@ -676,6 +680,7 @@ void loop()
 
     if (tot != 0)
     { // if transmit
+      screensaver = millis();   // Screensaver update !!!
       scroll(10);
       if (DEBUG)
       {
@@ -746,7 +751,7 @@ void loop()
           Serial.println((String) "Alternance :" + alternance + " / Type :" + type);
         }
 
-        if (!M5.Power.isCharging())
+        if (!M5.Power.isCharging() && screensaver_off != 1)
         {
           M5.Lcd.setBrightness(brightness_current);
         }
@@ -908,7 +913,7 @@ void loop()
     M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
     M5.Lcd.setTextDatum(CR_DATUM);
 
-    if (M5.Power.isCharging())
+    if (M5.Power.isCharging() && screensaver_off != 1)
     {
       sprintf(swap, "%c", ICON_CHARGING);
       tmp_str = swap;
@@ -1029,7 +1034,7 @@ void loop()
       }
       else if (menu_selected == 4)
       {
-        M5.Lcd.drawString("COLOR " + String(color[color_current]), 160, 60);
+        M5.Lcd.drawString("THEME " + String(color[color_current]), 160, 60);
       }
       else if (menu_selected == 5)
       {
@@ -1079,5 +1084,18 @@ void loop()
       button();
       delay(10);
     }
+  }
+
+  // Manage screensaver
+
+  if(screensaver_off == 0 && millis() - screensaver > screensaver_limit) {
+    M5.Lcd.sleep();
+    screensaver_off = 1;
+    M5.Lcd.setBrightness(0);
+  } 
+  else if(screensaver_off == 1 && millis() - screensaver < screensaver_limit) {
+    M5.Lcd.wakeup();
+    screensaver_off = 0;
+    M5.Lcd.setBrightness(brightness_current);
   }
 }

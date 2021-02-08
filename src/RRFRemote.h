@@ -8,7 +8,7 @@
 
 // Version
 
-#define VERSION "0.3.1"
+#define VERSION "0.3.2"
 
 // Debug
 
@@ -108,7 +108,7 @@ int pos;
 
 const char *room[] = {"RRF", "TECHNIQUE", "BAVARDAGE", "LOCAL", "INTERNATIONAL", "FON"};
 const int dtmf[] = {96, 98, 100, 101, 99, 97};
-const char *menu[] = {"QSY", "RAPTOR", "PERROQUET", "STOP", "COLOR", "BRIGHTNESS"};
+const char *menu[] = {"QSY", "RAPTOR", "PERROQUET", "STOP", "COULEUR", "BRIGHTNESS"};
 
 String tmp_str;
 String json_data = "", xml_data = "";
@@ -134,6 +134,10 @@ int menu_mode = 0;
 int menu_current = 0;
 int menu_selected = -1;
 int menu_refresh = 0;
+
+unsigned long screensaver;
+int screensaver_limit = 1*60*1000;
+int screensaver_off = 0;
 
 // Parse data
 String getValue(String data, char separator, int index)
@@ -237,18 +241,21 @@ void button()
   { // Mode menu inactive
     if (M5.BtnA.wasPressed())
     {
+      screensaver = millis(); // Screensaver update !!!
       room_current -= 1;
       refresh = 0;
       reset = 0;
     }
     else if (M5.BtnC.wasPressed())
     {
+      screensaver = millis(); // Screensaver update !!!
       room_current += 1;
       refresh = 0;
       reset = 0;
     }
     else if (M5.BtnB.wasPressed())
     {
+      screensaver = millis(); // Screensaver update !!!
       menu_mode = 1;
       menu_refresh = 0;
       menu_selected = -1;
