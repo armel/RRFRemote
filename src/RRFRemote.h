@@ -8,7 +8,7 @@
 
 // Version
 
-#define VERSION "0.2.2"
+#define VERSION "0.3.1"
 
 // Debug
 
@@ -16,35 +16,33 @@
 
 // Color (https://htmlcolorcodes.com/fr/)
 
-typedef struct __attribute__((__packed__)) {
-	uint8_t r;
-	uint8_t g;
-	uint8_t b;
-} color_t ;
+typedef struct __attribute__((__packed__))
+{
+  uint8_t r;
+  uint8_t g;
+  uint8_t b;
+} color_t;
 
-const color_t TFT_BACK       = { 48,  48,  48};
+color_t TFT_BACK = {48, 48, 48};
+color_t TFT_FRONT = {52, 152, 219};
+color_t TFT_HEADER = {27, 79, 114};
 
-/*
-// Orange
-const color_t TFT_FRONT      = {245, 176,  65};
-const color_t TFT_HEADER     = {186,  74,   0};
-*/
+const char *color[] = {"BLEU", "ORANGE", "VERT", "ROUGE"};
 
-/*
-// Vert
-const color_t TFT_FRONT      = { 52, 174,  96};
-const color_t TFT_HEADER     = { 20,  90,  50};
-*/
+int color_current = 0;
 
-// Bleu
-const color_t TFT_FRONT      = { 52, 152, 219};
-const color_t TFT_HEADER     = { 27,  79, 114};
+// Color
+const color_t TFT_FRONT_BLEU = {52, 152, 219};
+const color_t TFT_HEADER_BLEU = {27, 79, 114};
 
-/*
-// Rouge
-const color_t TFT_FRONT      = {231,  76,  60};
-const color_t TFT_HEADER     = {120,  40,  31};
-*/
+const color_t TFT_FRONT_ORANGE = {245, 176, 65};
+const color_t TFT_HEADER_ORANGE = {186, 74, 0};
+
+const color_t TFT_FRONT_VERT = {52, 174, 96};
+const color_t TFT_HEADER_VERT = {20, 90, 50};
+
+const color_t TFT_FRONT_ROUGE = {231, 76, 60};
+const color_t TFT_HEADER_ROUGE = {120, 40, 31};
 
 // Icon
 
@@ -54,6 +52,8 @@ const color_t TFT_HEADER     = {120,  40,  31};
 #define ICON_CALL 77
 #define ICON_TOT 105
 #define ICON_SETTING 106
+#define ICON_LEFT 119
+#define ICON_RIGHT 87
 #define ICON_BAT100 118
 #define ICON_BAT075 117
 #define ICON_BAT050 116
@@ -91,13 +91,12 @@ Preferences preferences;
 String spotnik = "http://192.168.1.99:3000/";
 
 String endpoint[] = {
-  "http://rrf.f5nlg.ovh:8080/RRFTracker/RRF-today/rrf_tiny.json",
-  "http://rrf.f5nlg.ovh:8080/RRFTracker/TECHNIQUE-today/rrf_tiny.json",
-  "http://rrf.f5nlg.ovh:8080/RRFTracker/BAVARDAGE-today/rrf_tiny.json",
-  "http://rrf.f5nlg.ovh:8080/RRFTracker/LOCAL-today/rrf_tiny.json",
-  "http://rrf.f5nlg.ovh:8080/RRFTracker/INTERNATIONAL-today/rrf_tiny.json",
-  "http://rrf.f5nlg.ovh:8080/RRFTracker/FON-today/rrf_tiny.json"
-};
+    "http://rrf.f5nlg.ovh:8080/RRFTracker/RRF-today/rrf_tiny.json",
+    "http://rrf.f5nlg.ovh:8080/RRFTracker/TECHNIQUE-today/rrf_tiny.json",
+    "http://rrf.f5nlg.ovh:8080/RRFTracker/BAVARDAGE-today/rrf_tiny.json",
+    "http://rrf.f5nlg.ovh:8080/RRFTracker/LOCAL-today/rrf_tiny.json",
+    "http://rrf.f5nlg.ovh:8080/RRFTracker/INTERNATIONAL-today/rrf_tiny.json",
+    "http://rrf.f5nlg.ovh:8080/RRFTracker/FON-today/rrf_tiny.json"};
 
 // Scroll
 
@@ -108,7 +107,8 @@ int pos;
 // Misceleanous
 
 const char *room[] = {"RRF", "TECHNIQUE", "BAVARDAGE", "LOCAL", "INTERNATIONAL", "FON"};
-const char *dtmf[] = {"96", "98", "100", "101", "99", "97"};
+const int dtmf[] = {96, 98, 100, 101, 99, 97};
+const char *menu[] = {"QSY", "RAPTOR", "PERROQUET", "STOP", "COLOR", "BRIGHTNESS"};
 
 String tmp_str;
 String json_data = "", xml_data = "";
@@ -119,9 +119,10 @@ String emission_str, emission_str_old;
 String link_total_str, link_total_str_old;
 String link_actif_str, link_actif_str_old;
 String tx_total_str, tx_total_str_old;
+String elsewhere_str, elsewhere_str_old;
 
 int room_current = 0;
-int brightness = 32;
+int brightness_current = 32;
 int transmit_on = 0, transmit_off = 0;
 int reset = 0;
 int alternance = 0;
@@ -129,6 +130,10 @@ int refresh = 0;
 int type = 0;
 int battery_current = -1;
 int qsy = 0;
+int menu_mode = 0;
+int menu_current = 0;
+int menu_selected = -1;
+int menu_refresh = 0;
 
 // Parse data
 String getValue(String data, char separator, int index)
@@ -163,11 +168,40 @@ int interpolation(int value, int in_min, int in_max, int out_min, int out_max)
   }
 }
 
+// Reset color
+void reset_color()
+{
+  if (color_current == 0)
+  {
+    TFT_FRONT = TFT_FRONT_BLEU;
+    TFT_HEADER = TFT_HEADER_BLEU;
+  }
+  else if (color_current == 1)
+  {
+    TFT_FRONT = TFT_FRONT_ORANGE;
+    TFT_HEADER = TFT_HEADER_ORANGE;
+  }
+  else if (color_current == 2)
+  {
+    TFT_FRONT = TFT_FRONT_VERT;
+    TFT_HEADER = TFT_HEADER_VERT;
+  }
+  else if (color_current == 3)
+  {
+    TFT_FRONT = TFT_FRONT_ROUGE;
+    TFT_HEADER = TFT_HEADER_ROUGE;
+  }
+}
+
 // Clear screen
 void clear()
 {
   msg = "";
   M5.lcd.clear();
+
+  // Reset color
+
+  reset_color();
 
   // Grey zone
   M5.Lcd.drawLine(0, 100, 320, 100, TFT_WHITE);
@@ -195,36 +229,142 @@ void clear()
 }
 
 // Manage buttons
-void button() {
-  M5.update();  // Read the state of button
+void button()
+{
+  M5.update(); // Read the state of button
 
-  if(M5.BtnA.isPressed() && M5.BtnC.isPressed()) {
-    M5.Power.deepSleep();
-  } else if(M5.BtnB.isPressed() && M5.BtnA.isPressed()) {
-    brightness--;
-    if (brightness <= 5) {
-      brightness = 5;
-    }
-  } else if(M5.BtnB.isPressed() && M5.BtnC.isPressed()) {
-    brightness++;
-    if (brightness > 250) {
-      brightness = 250;
-    }
-  } else {
-    if (M5.BtnA.wasPressed()) {
+  if (menu_mode == 0)
+  { // Mode menu inactive
+    if (M5.BtnA.wasPressed())
+    {
       room_current -= 1;
       refresh = 0;
       reset = 0;
-    } else if (M5.BtnC.wasPressed()) {
+    }
+    else if (M5.BtnC.wasPressed())
+    {
       room_current += 1;
       refresh = 0;
       reset = 0;
-    } else if (M5.BtnB.wasPressed()) {
-      qsy = 1;
+    }
+    else if (M5.BtnB.wasPressed())
+    {
+      menu_mode = 1;
+      menu_refresh = 0;
+      menu_selected = -1;
     }
   }
+  else
+  { // Mode menu active, no selection
+    if (menu_selected == -1)
+    {
+      if (M5.BtnA.wasPressed())
+      {
+        menu_current -= 1;
+      }
+      else if (M5.BtnC.wasPressed())
+      {
+        menu_current += 1;
+      }
+      else if (M5.BtnB.pressedFor(1000))
+      {
+        menu_selected = menu_current;
+        menu_refresh = 0;
+      }
 
-  preferences.putUInt("brightness", brightness);
+      if (menu_current < 0)
+      {
+        menu_current = 5;
+      }
+      else if (menu_current > 5)
+      {
+        menu_current = 0;
+      }
+      preferences.putUInt("menu", menu_current);
+    }
+    else
+    {
+      // Mode menu active, QSY
+      if (menu_selected == 0)
+      {
+        qsy = dtmf[room_current];
+      } 
+      // Mode menu active, Raptor
+      else if (menu_selected == 1)
+      {
+        qsy = 200;
+      }
+      // Mode menu active, Parrot
+      else if (menu_selected == 2)
+      {
+        qsy = 95;
+      }
+      // Mode menu active, Stop
+      else if (menu_selected == 3)
+      {
+        M5.Power.powerOFF();
+      }
+      // Mode menu active, Color
+      else if (menu_selected == 4)
+      {
+        if (M5.BtnA.wasPressed())
+        {
+          color_current -= 1;
+        }
+        else if (M5.BtnC.wasPressed())
+        {
+          color_current += 1;
+        }
+        else if (M5.BtnB.wasPressed())
+        {
+          menu_mode = 0;
+          menu_selected = -1;
+          reset = 0;
+          refresh = 0;
+        }
+
+        if (color_current < 0)
+        {
+          color_current = 3;
+        }
+        else if (color_current > 3)
+        {
+          color_current = 0;
+        }
+        preferences.putUInt("color", color_current);
+      }
+      // Mode menu active, Brightness
+      else if (menu_selected == 5)
+      {
+        if (M5.BtnA.wasPressed())
+        {
+          brightness_current -= 2;
+        }
+        else if (M5.BtnC.wasPressed())
+        {
+          brightness_current += 2;
+        }
+        else if (M5.BtnB.wasPressed())
+        {
+          menu_mode = 0;
+          menu_selected = -1;
+          reset = 0;
+          refresh = 0;
+        }
+
+        if (brightness_current < 10)
+        {
+          brightness_current = 10;
+        }
+        else if (brightness_current > 128)
+        {
+          brightness_current = 128;
+        }
+        preferences.putUInt("brightness", brightness_current);
+        M5.Lcd.setBrightness(brightness_current);
+      }
+    }
+  }
 }
 
 // Build scroll
@@ -288,29 +428,34 @@ void rrftracker(void *pvParameters)
       room_current = 0;
     }
 
-    preferences.putUInt("room_current", room_current);
+    preferences.putUInt("room", room_current);
 
     if ((WiFi.status() == WL_CONNECTED)) // Check the current connection status
-    {                                             
+    {
 
-      if (qsy == 1) {
-        http.begin(client_rrftracker, spotnik + String("?dtmf=") + String(dtmf[room_current]));  // Specify the URL
-        http.addHeader("Content-Type", "text/plain"); // Specify content-type header
-        http.setTimeout(500);                         // Set timeout
-        int httpCode = http.GET();                    // Make the request
-        if (httpCode < 0)                             // Check for the returning code
-        {                                 
-          qsy = 0;                                                          
+      if (qsy > 0)
+      {
+        http.begin(client_rrftracker, spotnik + String("?dtmf=") + String(qsy)); // Specify the URL
+        http.addHeader("Content-Type", "text/plain");                            // Specify content-type header
+        http.setTimeout(500);                                                    // Set timeout
+        int httpCode = http.GET();                                               // Make the request
+        if (httpCode < 0)                                                        // Check for the returning code
+        {
+          qsy = 0;
+          refresh = 0;
+          reset = 0;
+          menu_mode = 0;
+          menu_selected = -1;
         }
         http.end(); // Free the resources
       }
 
-      http.begin(client_rrftracker, endpoint[room_current]);  // Specify the URL
-      http.addHeader("Content-Type", "text/plain");   // Specify content-type header
-      http.setTimeout(500);                           // Set Time Out
-      int httpCode = http.GET();                      // Make the request
-      if (httpCode > 0)                               // Check for the returning code
-      {                                                                               
+      http.begin(client_rrftracker, endpoint[room_current]); // Specify the URL
+      http.addHeader("Content-Type", "text/plain");          // Specify content-type header
+      http.setTimeout(500);                                  // Set Time Out
+      int httpCode = http.GET();                             // Make the request
+      if (httpCode > 0)                                      // Check for the returning code
+      {
         json_data_new = http.getString(); // Get data
       }
       http.end(); // Free the resources
@@ -325,22 +470,24 @@ void rrftracker(void *pvParameters)
 }
 
 // Get data from HamQSL
-void hamqsl(void * pvParameters) {
+void hamqsl(void *pvParameters)
+{
   HTTPClient http;
-  unsigned long timer = 0, wait = 0, limit = 60*60*1000;    // Retreive all hours
+  unsigned long timer = 0, wait = 0, limit = 60 * 60 * 1000; // Retreive all hours
 
-  for(;;) {
+  for (;;)
+  {
     timer = millis();
 
     if ((WiFi.status() == WL_CONNECTED)) // Check the current connection status
-    {                                             
-      http.begin(client_hamqsl, "http://www.hamqsl.com/solarxml.php");  // Specify the URL
-      http.addHeader("Content-Type", "text/plain"); // Specify content-type header
-      http.setTimeout(2000);                        // Set Time Out
-      int httpCode = http.GET();                    // Make the request
-      if (httpCode > 0)                             // Check for the returning code
-      {                                                                               
-        xml_data = http.getString();  // Get data
+    {
+      http.begin(client_hamqsl, "http://www.hamqsl.com/solarxml.php"); // Specify the URL
+      http.addHeader("Content-Type", "text/plain");                    // Specify content-type header
+      http.setTimeout(2000);                                           // Set Time Out
+      int httpCode = http.GET();                                       // Make the request
+      if (httpCode > 0)                                                // Check for the returning code
+      {
+        xml_data = http.getString(); // Get data
       }
       http.end(); // Free the resources
     }
