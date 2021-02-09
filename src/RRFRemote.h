@@ -73,9 +73,11 @@ Preferences preferences;
 
 // HTTP endpoint
 
-String spotnik = "http://192.168.1.99:3000/";
+String endpoint_spotnik = "http://192.168.1.99:3000/";
+String endpoint_hamqsl = "http://www.hamqsl.com/solarxml.php";
+String endpoint_api = "http://137.74.192.234:4440/nodes";
 
-String endpoint[] = {
+String endpoint_rrf[] = {
     "http://rrf.f5nlg.ovh:8080/RRFTracker/RRF-today/rrf_tiny.json",
     "http://rrf.f5nlg.ovh:8080/RRFTracker/TECHNIQUE-today/rrf_tiny.json",
     "http://rrf.f5nlg.ovh:8080/RRFTracker/BAVARDAGE-today/rrf_tiny.json",
@@ -121,7 +123,7 @@ int menu_selected = -1;
 int menu_refresh = 0;
 
 unsigned long screensaver;
-int screensaver_limit = 1*60*1000;
+int screensaver_limit = 1 * 60 * 1000;
 int screensaver_off = 0;
 
 // Parse data
@@ -221,138 +223,148 @@ void button()
 {
   M5.update(); // Read the state of button
 
-  if (menu_mode == 0)
-  { // Mode menu inactive
-    if (M5.BtnA.wasPressed())
+  if (screensaver_off == 1)
+  {
+    if (M5.BtnA.wasPressed() || M5.BtnB.wasPressed() || M5.BtnC.wasPressed())
     {
       screensaver = millis(); // Screensaver update !!!
-      room_current -= 1;
-      refresh = 0;
-      reset = 0;
-    }
-    else if (M5.BtnC.wasPressed())
-    {
-      screensaver = millis(); // Screensaver update !!!
-      room_current += 1;
-      refresh = 0;
-      reset = 0;
-    }
-    else if (M5.BtnB.wasPressed())
-    {
-      screensaver = millis(); // Screensaver update !!!
-      menu_mode = 1;
-      menu_refresh = 0;
-      menu_selected = -1;
     }
   }
   else
-  { // Mode menu active, no selection
-    if (menu_selected == -1)
-    {
+  {
+    if (menu_mode == 0)
+    { // Mode menu inactive
       if (M5.BtnA.wasPressed())
       {
-        menu_current -= 1;
+        screensaver = millis(); // Screensaver update !!!
+        room_current -= 1;
+        refresh = 0;
+        reset = 0;
       }
       else if (M5.BtnC.wasPressed())
       {
-        menu_current += 1;
+        screensaver = millis(); // Screensaver update !!!
+        room_current += 1;
+        refresh = 0;
+        reset = 0;
       }
-      else if (M5.BtnB.pressedFor(1000))
+      else if (M5.BtnB.wasPressed())
       {
-        menu_selected = menu_current;
+        screensaver = millis(); // Screensaver update !!!
+        menu_mode = 1;
         menu_refresh = 0;
+        menu_selected = -1;
       }
-
-      if (menu_current < 0)
-      {
-        menu_current = 5;
-      }
-      else if (menu_current > 5)
-      {
-        menu_current = 0;
-      }
-      preferences.putUInt("menu", menu_current);
     }
     else
-    {
-      // Mode menu active, QSY
-      if (menu_selected == 0)
-      {
-        qsy = dtmf[room_current];
-      } 
-      // Mode menu active, Raptor
-      else if (menu_selected == 1)
-      {
-        qsy = 200;
-      }
-      // Mode menu active, Parrot
-      else if (menu_selected == 2)
-      {
-        qsy = 95;
-      }
-      // Mode menu active, Stop
-      else if (menu_selected == 3)
-      {
-        M5.Power.powerOFF();
-      }
-      // Mode menu active, Color
-      else if (menu_selected == 4)
+    { // Mode menu active, no selection
+      if (menu_selected == -1)
       {
         if (M5.BtnA.wasPressed())
         {
-          color_current -= 1;
+          menu_current -= 1;
         }
         else if (M5.BtnC.wasPressed())
         {
-          color_current += 1;
+          menu_current += 1;
         }
-        else if (M5.BtnB.wasPressed())
+        else if (M5.BtnB.pressedFor(1000))
         {
-          menu_mode = 0;
-          menu_selected = -1;
-          reset = 0;
-          refresh = 0;
+          menu_selected = menu_current;
+          menu_refresh = 0;
         }
 
-        if (color_current < 0)
+        if (menu_current < 0)
         {
-          color_current = 3;
+          menu_current = 5;
         }
-        else if (color_current > 3)
+        else if (menu_current > 5)
         {
-          color_current = 0;
+          menu_current = 0;
         }
-        preferences.putUInt("color", color_current);
+        preferences.putUInt("menu", menu_current);
       }
-      // Mode menu active, Brightness
-      else if (menu_selected == 5)
+      else
       {
-        if (M5.BtnA.wasPressed())
+        // Mode menu active, QSY
+        if (menu_selected == 0)
         {
-          brightness_current -= 2;
+          qsy = dtmf[room_current];
         }
-        else if (M5.BtnC.wasPressed())
+        // Mode menu active, Raptor
+        else if (menu_selected == 1)
         {
-          brightness_current += 2;
+          qsy = 200;
         }
-        else if (M5.BtnB.wasPressed())
+        // Mode menu active, Parrot
+        else if (menu_selected == 2)
         {
-          menu_mode = 0;
-          menu_selected = -1;
-          reset = 0;
-          refresh = 0;
+          qsy = 95;
         }
+        // Mode menu active, Stop
+        else if (menu_selected == 3)
+        {
+          M5.Power.powerOFF();
+        }
+        // Mode menu active, Color
+        else if (menu_selected == 4)
+        {
+          if (M5.BtnA.wasPressed())
+          {
+            color_current -= 1;
+          }
+          else if (M5.BtnC.wasPressed())
+          {
+            color_current += 1;
+          }
+          else if (M5.BtnB.wasPressed())
+          {
+            menu_mode = 0;
+            menu_selected = -1;
+            reset = 0;
+            refresh = 0;
+          }
 
-        if (brightness_current < 10)
-        {
-          brightness_current = 10;
+          if (color_current < 0)
+          {
+            color_current = 3;
+          }
+          else if (color_current > 3)
+          {
+            color_current = 0;
+          }
+          preferences.putUInt("color", color_current);
         }
-        else if (brightness_current > 128)
+        // Mode menu active, Brightness
+        else if (menu_selected == 5)
         {
-          brightness_current = 128;
+          if (M5.BtnA.wasPressed())
+          {
+            brightness_current -= 2;
+          }
+          else if (M5.BtnC.wasPressed())
+          {
+            brightness_current += 2;
+          }
+          else if (M5.BtnB.wasPressed())
+          {
+            menu_mode = 0;
+            menu_selected = -1;
+            reset = 0;
+            refresh = 0;
+          }
+
+          if (brightness_current < 10)
+          {
+            brightness_current = 10;
+          }
+          else if (brightness_current > 128)
+          {
+            brightness_current = 128;
+          }
+          preferences.putUInt("brightness", brightness_current);
+          M5.Lcd.setBrightness(brightness_current);
         }
-        preferences.putUInt("brightness", brightness_current);
-        M5.Lcd.setBrightness(brightness_current);
       }
     }
   }
@@ -424,11 +436,11 @@ void rrftracker(void *pvParameters)
 
       if (qsy > 0)
       {
-        http.begin(client_rrfremote, spotnik + String("?dtmf=") + String(qsy));   // Specify the URL
-        http.addHeader("Content-Type", "text/plain");                             // Specify content-type header
-        http.setTimeout(500);                                                     // Set timeout
-        int httpCode = http.GET();                                                // Make the request
-        if (httpCode == 200)                                                      // Check for the returning code
+        http.begin(client_rrfremote, endpoint_spotnik + String("?dtmf=") + String(qsy));  // Specify the URL
+        http.addHeader("Content-Type", "text/plain");                                     // Specify content-type header
+        http.setTimeout(500);                                                             // Set timeout
+        int httpCode = http.GET();                                                        // Make the request
+        if (httpCode == 200)                                                              // Check for the returning code
         {
           qsy = 0;
           refresh = 0;
@@ -439,11 +451,11 @@ void rrftracker(void *pvParameters)
         http.end(); // Free the resources
       }
 
-      http.begin(client_rrftracker, endpoint[room_current]);  // Specify the URL
-      http.addHeader("Content-Type", "text/plain");           // Specify content-type header
-      http.setTimeout(500);                                   // Set Time Out
-      int httpCode = http.GET();                              // Make the request
-      if (httpCode == 200)                                    // Check for the returning code
+      http.begin(client_rrftracker, endpoint_rrf[room_current]);    // Specify the URL
+      http.addHeader("Content-Type", "text/plain");                 // Specify content-type header
+      http.setTimeout(500);                                         // Set Time Out
+      int httpCode = http.GET();                                    // Make the request
+      if (httpCode == 200)                                          // Check for the returning code
       {
         json_data_new = http.getString(); // Get data
         timer = millis();
@@ -471,11 +483,11 @@ void hamqsl(void *pvParameters)
   {
     if ((WiFi.status() == WL_CONNECTED)) // Check the current connection status
     {
-      http.begin(client_hamqsl, "http://www.hamqsl.com/solarxml.php");  // Specify the URL
-      http.addHeader("Content-Type", "text/plain");                     // Specify content-type header
-      http.setTimeout(1000);                                             // Set Time Out
-      int httpCode = http.GET();                                        // Make the request
-      if (httpCode == 200)                                              // Check for the returning code
+      http.begin(client_hamqsl, endpoint_hamqsl);     // Specify the URL
+      http.addHeader("Content-Type", "text/plain");   // Specify content-type header
+      http.setTimeout(1000);                          // Set Time Out
+      int httpCode = http.GET();                      // Make the request
+      if (httpCode == 200)                            // Check for the returning code
       {
         xml_data = http.getString(); // Get data
         timer = millis();
