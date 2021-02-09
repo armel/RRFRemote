@@ -4,8 +4,10 @@
 
 void setup()
 {
-  // Init screensaver timer
+  // Debug
+  Serial.begin(9600); // For debug
 
+  // Init screensaver timer
   screensaver = millis();
   
   // Init M5
@@ -64,13 +66,13 @@ void setup()
       0);           /* Core where the task should run */
 
   xTaskCreatePinnedToCore(
-      hamqsl,   /* Function to implement the task */
-      "hamqsl", /* Name of the task */
-      8192,     /* Stack size in words */
-      NULL,     /* Task input parameter */
-      2,        /* Priority of the task */
-      NULL,     /* Task handle. */
-      1);       /* Core where the task should run */
+      hamqsl,       /* Function to implement the task */
+      "hamqsl",     /* Name of the task */
+      8192,         /* Stack size in words */
+      NULL,         /* Task input parameter */
+      2,            /* Priority of the task */
+      NULL,         /* Task handle. */
+      1);           /* Core where the task should run */
 
   delay(4000);
 
@@ -104,8 +106,6 @@ void loop()
   // Let's go
   M5.Lcd.setTextPadding(0);
   timer = millis();
-
-  Serial.begin(9600); // For debug
 
   optimize = json_data_new.compareTo(json_data);
 
@@ -696,8 +696,11 @@ void loop()
           Serial.println((String) "Alternance :" + alternance + " / Type :" + type);
         }
 
-        //M5.Lcd.wakeup();
-        M5.Lcd.setBrightness(128);
+        if (!M5.Power.isCharging() && screensaver_off != 1)
+        {
+          M5.Lcd.setBrightness(brightness_current);
+        }
+
         M5.Lcd.fillRect(0, 41, 320, 38, TFT_BLACK);
         M5.Lcd.fillRect(0, 0, 320, 43, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
 

@@ -8,7 +8,7 @@
 
 // Version
 
-#define VERSION "0.3.2"
+#define VERSION "0.3.3"
 
 // Debug
 
@@ -61,26 +61,11 @@ const color_t TFT_HEADER_ROUGE = {120, 40, 31};
 #define ICON_BAT000 34
 #define ICON_CHARGING 37
 
-/*
-#defile ICON_FONT       &PeaxDrawnIcons20pt7b
-#define ICON_STAT       86
-#define ICON_CLOCK      51
-#define ICON_CALL       104
-#define ICON_TOT        50
-#define ICON_SETTING    35
-#define ICON_BAT100     118
-#define ICON_BAT075     117
-#define ICON_BAT050     116 
-#define ICON_BAT025     115
-#define ICON_BAT000     34
-#define ICON_CHARGING   37
-*/
-
 // Wifi
 
 const char *ssid = "\\_(o)_/";
 const char *password = "petitchaton";
-WiFiClient client_rrftracker, client_hamqsl;
+WiFiClient client_rrfremote, client_rrftracker, client_hamqsl;
 
 // Preferences
 
@@ -204,7 +189,6 @@ void clear()
   M5.lcd.clear();
 
   // Reset color
-
   reset_color();
 
   // Grey zone
@@ -424,8 +408,6 @@ void rrftracker(void *pvParameters)
 
   for (;;)
   {
-    timer = millis();
-
     if (room_current < 0)
     {
       room_current = 5;
@@ -442,11 +424,11 @@ void rrftracker(void *pvParameters)
 
       if (qsy > 0)
       {
-        http.begin(client_rrftracker, spotnik + String("?dtmf=") + String(qsy)); // Specify the URL
-        http.addHeader("Content-Type", "text/plain");                            // Specify content-type header
-        http.setTimeout(500);                                                    // Set timeout
-        int httpCode = http.GET();                                               // Make the request
-        if (httpCode < 0)                                                        // Check for the returning code
+        http.begin(client_rrfremote, spotnik + String("?dtmf=") + String(qsy));   // Specify the URL
+        http.addHeader("Content-Type", "text/plain");                             // Specify content-type header
+        http.setTimeout(500);                                                     // Set timeout
+        int httpCode = http.GET();                                                // Make the request
+        if (httpCode == 200)                                                      // Check for the returning code
         {
           qsy = 0;
           refresh = 0;
@@ -457,13 +439,14 @@ void rrftracker(void *pvParameters)
         http.end(); // Free the resources
       }
 
-      http.begin(client_rrftracker, endpoint[room_current]); // Specify the URL
-      http.addHeader("Content-Type", "text/plain");          // Specify content-type header
-      http.setTimeout(500);                                  // Set Time Out
-      int httpCode = http.GET();                             // Make the request
-      if (httpCode > 0)                                      // Check for the returning code
+      http.begin(client_rrftracker, endpoint[room_current]);  // Specify the URL
+      http.addHeader("Content-Type", "text/plain");           // Specify content-type header
+      http.setTimeout(500);                                   // Set Time Out
+      int httpCode = http.GET();                              // Make the request
+      if (httpCode == 200)                                    // Check for the returning code
       {
         json_data_new = http.getString(); // Get data
+        timer = millis();
       }
       http.end(); // Free the resources
     }
@@ -471,6 +454,8 @@ void rrftracker(void *pvParameters)
     wait = millis() - timer;
     if (wait < limit)
     {
+      //Serial.println(limit - wait);
+      //Serial.flush();
       vTaskDelay(pdMS_TO_TICKS(limit - wait));
     }
   }
@@ -484,17 +469,16 @@ void hamqsl(void *pvParameters)
 
   for (;;)
   {
-    timer = millis();
-
     if ((WiFi.status() == WL_CONNECTED)) // Check the current connection status
     {
-      http.begin(client_hamqsl, "http://www.hamqsl.com/solarxml.php"); // Specify the URL
-      http.addHeader("Content-Type", "text/plain");                    // Specify content-type header
-      http.setTimeout(2000);                                           // Set Time Out
-      int httpCode = http.GET();                                       // Make the request
-      if (httpCode > 0)                                                // Check for the returning code
+      http.begin(client_hamqsl, "http://www.hamqsl.com/solarxml.php");  // Specify the URL
+      http.addHeader("Content-Type", "text/plain");                     // Specify content-type header
+      http.setTimeout(1000);                                             // Set Time Out
+      int httpCode = http.GET();                                        // Make the request
+      if (httpCode == 200)                                              // Check for the returning code
       {
         xml_data = http.getString(); // Get data
+        timer = millis();
       }
       http.end(); // Free the resources
     }
@@ -502,6 +486,8 @@ void hamqsl(void *pvParameters)
     wait = millis() - timer;
     if (wait < limit)
     {
+      //Serial.println(limit - wait);
+      //Serial.flush();
       vTaskDelay(pdMS_TO_TICKS(limit - wait));
     }
   }
