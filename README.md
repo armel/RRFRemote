@@ -55,12 +55,12 @@ Il est possible de :
 - régler la luminosité de l'écran,
 - allumer ou éteindre le RRFRemote.
 
-#Installation
+# Installation
 
 Le plus simple est d'installer [PlateformIO for VSCode](https://platformio.org/install/ide?install=vscode). C'est multiplateforme, en plus d'être un environnement agréable à utiliser.
 
 Ensuite, il suffit de cloner le projet RRFRemote, puis de l'ouvrir avec PlateformIO for VSCode. Il vous reste à compiler et uploader le projet sur votre M5Stack. 
 
-#That's all
+# That's all
 Bon trafic à tous, 88 & 73 de Armel F4HWN ! 
 
