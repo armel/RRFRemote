@@ -231,9 +231,9 @@ void button()
     }
   }
   else
-  {
+  { // Mode menu inactive
     if (menu_mode == 0)
-    { // Mode menu inactive
+    { 
       if (M5.BtnA.wasPressed())
       {
         screensaver = millis(); // Screensaver update !!!

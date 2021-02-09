@@ -1084,7 +1084,7 @@ void loop()
     {
       scroll(0);
       button();
-      delay(10);
+      delay(8);
     }
   }
 
