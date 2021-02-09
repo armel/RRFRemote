@@ -9,7 +9,7 @@ void setup()
 
   // Init screensaver timer
   screensaver = millis();
-  
+
   // Init M5
   M5.begin(true, false, false, false);
   M5.Power.begin();
@@ -66,13 +66,13 @@ void setup()
       0);           /* Core where the task should run */
 
   xTaskCreatePinnedToCore(
-      hamqsl,       /* Function to implement the task */
-      "hamqsl",     /* Name of the task */
-      8192,         /* Stack size in words */
-      NULL,         /* Task input parameter */
-      2,            /* Priority of the task */
-      NULL,         /* Task handle. */
-      1);           /* Core where the task should run */
+      hamqsl,   /* Function to implement the task */
+      "hamqsl", /* Name of the task */
+      8192,     /* Stack size in words */
+      NULL,     /* Task input parameter */
+      2,        /* Priority of the task */
+      NULL,     /* Task handle. */
+      1);       /* Core where the task should run */
 
   delay(4000);
 
@@ -382,7 +382,7 @@ void loop()
     if (refresh == 0)
     {
       i = 161;
-      j = 90;
+      j = 70;
       M5.Lcd.fillRoundRect(160, 117, 160, 122, 4, TFT_WHITE);
       M5.Lcd.fillRoundRect(i, 118, j, 120, 4, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
       M5.Lcd.drawFastVLine(i + j - 3, 118, 120, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
@@ -396,8 +396,8 @@ void loop()
       M5.Lcd.drawString("A-Index", 164, 149);
       M5.Lcd.drawString("K-Index", 164, 161);
       M5.Lcd.drawString("X-Ray", 164, 173);
-      M5.Lcd.drawString("Proton Flux", 164, 185);
-      M5.Lcd.drawString("Electron Flux", 164, 197);
+      M5.Lcd.drawString("Ptn Flux", 164, 185);
+      M5.Lcd.drawString("Elc Flux", 164, 197);
       M5.Lcd.drawString("Aurora", 164, 209);
       M5.Lcd.drawString("Solar Wind", 164, 221);
       M5.Lcd.drawString("Update", 164, 233);
@@ -406,7 +406,6 @@ void loop()
     }
 
     M5.Lcd.setTextColor(TFT_BLACK, TFT_WHITE);
-
     M5.Lcd.setTextDatum(CR_DATUM);
 
     tmp_str = xml_data;
@@ -679,8 +678,8 @@ void loop()
     // Transmit or no transmit
 
     if (tot != 0)
-    { // if transmit
-      screensaver = millis();   // Screensaver update !!!
+    {                         // if transmit
+      screensaver = millis(); // Screensaver update !!!
       scroll(10);
       if (DEBUG)
       {
@@ -1091,12 +1090,14 @@ void loop()
 
   // Manage screensaver
 
-  if(screensaver_off == 0 && millis() - screensaver > screensaver_limit) {
+  if (screensaver_off == 0 && millis() - screensaver > screensaver_limit)
+  {
     M5.Lcd.sleep();
     screensaver_off = 1;
     M5.Lcd.setBrightness(0);
-  } 
-  else if(screensaver_off == 1 && millis() - screensaver < screensaver_limit) {
+  }
+  else if (screensaver_off == 1 && millis() - screensaver < screensaver_limit)
+  {
     M5.Lcd.wakeup();
     screensaver_off = 0;
     M5.Lcd.setBrightness(brightness_current);
