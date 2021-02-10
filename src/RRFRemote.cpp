@@ -949,73 +949,50 @@ void loop()
       menu_refresh = 1;
     }
 
+    M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
+    M5.Lcd.setFreeFont(&dot15pt7b);
+    M5.Lcd.setTextDatum(CC_DATUM);
+    M5.Lcd.setTextPadding(220);
+
+    String menu = "";
+    String option = "";
+
     if (menu_selected == -1)
     {
-      M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
-      M5.Lcd.setFreeFont(&dot15pt7b);
-      M5.Lcd.setTextDatum(CC_DATUM);
-      M5.Lcd.setTextPadding(220);
-      M5.Lcd.drawString(String("MODE MENU"), 160, 22);
-      M5.Lcd.setTextColor(TFT_WHITE, TFT_BLACK);
-      M5.Lcd.setFreeFont(&rounded_led_board10pt7b);
-      M5.Lcd.setTextDatum(CC_DATUM);
-      M5.Lcd.setTextPadding(320);
-      M5.Lcd.drawString(String(menu[menu_current]), 160, 60);
+      menu = String("MODE MENU");
+      option = String(menu[menu_current]);
     }
     else
     {
-      M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
-      M5.Lcd.setFreeFont(&dot15pt7b);
-      M5.Lcd.setTextDatum(CC_DATUM);
-      M5.Lcd.setTextPadding(220);
-      M5.Lcd.drawString(String(menu[menu_selected]), 160, 22);
-      M5.Lcd.setTextColor(TFT_WHITE, TFT_BLACK);
-      M5.Lcd.setFreeFont(&rounded_led_board10pt7b);
-      M5.Lcd.setTextDatum(CC_DATUM);
-      M5.Lcd.setTextPadding(320);
+      menu = String(menu[menu_selected]);
 
-      if (menu_selected == 0)
+      if (menu_selected == 0 && alternance % 2 == 0)
       {
-        if (alternance % 2 == 0)
-        {
-          M5.Lcd.drawString("QSY en cours", 160, 60);
-        }
-        else
-        {
-          M5.Lcd.drawString("            ", 160, 60);
-        }
+        option = "QSY en cours";
       }
-      else if (menu_selected == 1)
+      else if (menu_selected == 1 && alternance % 2 == 0)
       {
-        if (alternance % 2 == 0)
-        {
-          M5.Lcd.drawString("Patientez", 160, 60);
-        }
-        else
-        {
-          M5.Lcd.drawString("         ", 160, 60);
-        }
+        option = "Patientez";
       }
-      else if (menu_selected == 2)
-      {
-        if (alternance % 2 == 0)
-        {
-          M5.Lcd.drawString("Patientez", 160, 60);
-        }
-        else
-        {
-          M5.Lcd.drawString("         ", 160, 60);
-        }
+      else if (menu_selected == 2 && alternance % 2 == 0)
+        option = "Patientez";
       }
       else if (menu_selected == 4)
       {
-        M5.Lcd.drawString("THEME " + String(color[color_current]), 160, 60);
+        option = "THEME " + String(color[color_current]);
       }
       else if (menu_selected == 5)
       {
-        M5.Lcd.drawString("LEVEL " + String(brightness_current), 160, 60);
+        option = "LEVEL " + String(brightness_current);
       }
     }
+
+    M5.Lcd.drawString(menu, 160, 22);
+    M5.Lcd.setTextColor(TFT_WHITE, TFT_BLACK);
+    M5.Lcd.setFreeFont(&rounded_led_board10pt7b);
+    M5.Lcd.setTextDatum(CC_DATUM);
+    M5.Lcd.setTextPadding(320);
+    M5.Lcd.drawString(option, 160, 60);
   }
 
   M5.Lcd.drawFastHLine(0, 0, 320, TFT_WHITE);
