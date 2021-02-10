@@ -74,6 +74,15 @@ void setup()
       NULL,     /* Task handle. */
       1);       /* Core where the task should run */
 
+  xTaskCreatePinnedToCore(
+      whereis,  /* Function to implement the task */
+      "whereis",/* Name of the task */
+      8192,     /* Stack size in words */
+      NULL,     /* Task input parameter */
+      2,        /* Priority of the task */
+      NULL,     /* Task handle. */
+      1);       /* Core where the task should run */
+
   delay(4000);
 
   clear();
@@ -107,6 +116,9 @@ void loop()
   M5.Lcd.setTextPadding(0);
   timer = millis();
 
+  // Scan whereis
+
+  // Continue
   optimize = json_data_new.compareTo(json_data);
 
   if (optimize == 0)
@@ -347,16 +359,15 @@ void loop()
 
       M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
       M5.Lcd.setTextDatum(CL_DATUM);
-      M5.Lcd.drawString("CPU", 164, 125);
-      M5.Lcd.drawString("CPU Cores", 164, 137);
-      M5.Lcd.drawString("CPU Freq", 164, 149);
-      M5.Lcd.drawString("Chip Rev", 164, 161);
-      M5.Lcd.drawString("Flash Speed", 164, 173);
-      M5.Lcd.drawString("Flash Size", 164, 185);
-      M5.Lcd.drawString("Free RAM", 164, 197);
-      M5.Lcd.drawString("Free Heap", 164, 209);
-      M5.Lcd.drawString("IP", 164, 221);
-      M5.Lcd.drawString("Version", 164, 233);
+
+      String system[] = {"CPU", "CPU Cores", "CPU Freq", "Chip Rev", "Flash Speed", "Flash Size", "Free RAM", "Free Heap", "IP", "Version"};
+      //size_t n = sizeof(solar) / sizeof(solar[0]);
+
+      j = 125;
+      for (uint8_t i = 0; i <= 9; i++) {
+        M5.Lcd.drawString(system[i], 164, j);
+        j += 12;
+      }
 
       refresh = 1;
     }
@@ -391,16 +402,15 @@ void loop()
 
       M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
       M5.Lcd.setTextDatum(CL_DATUM);
-      M5.Lcd.drawString("SFI", 164, 125);
-      M5.Lcd.drawString("Sunspots", 164, 137);
-      M5.Lcd.drawString("A-Index", 164, 149);
-      M5.Lcd.drawString("K-Index", 164, 161);
-      M5.Lcd.drawString("X-Ray", 164, 173);
-      M5.Lcd.drawString("Ptn Flux", 164, 185);
-      M5.Lcd.drawString("Elc Flux", 164, 197);
-      M5.Lcd.drawString("Aurora", 164, 209);
-      M5.Lcd.drawString("Solar Wind", 164, 221);
-      M5.Lcd.drawString("Update", 164, 233);
+
+      String solar[] = {"SFI", "Sunspots", "A-Index", "K-Index", "X-Ray", "Ptn Flux", "Elc Flux", "Aurora", "Solar Wind", "Update"};
+      //size_t n = sizeof(solar) / sizeof(solar[0]);
+
+      j = 125;
+      for (uint8_t i = 0; i <= 9; i++) {
+        M5.Lcd.drawString(solar[i], 164, j);
+        j += 12;
+      }
 
       refresh = 1;
     }
@@ -408,104 +418,23 @@ void loop()
     M5.Lcd.setTextColor(TFT_BLACK, TFT_WHITE);
     M5.Lcd.setTextDatum(CR_DATUM);
 
-    tmp_str = xml_data;
-    tmp_str.replace("<solarflux>", "(");
-    tmp_str.replace("</solarflux>", ")");
-    parenthesis_begin = tmp_str.indexOf("(");
-    parenthesis_last = tmp_str.indexOf(")");
-    if (parenthesis_begin > 0)
-    {
-      tmp_str = tmp_str.substring(parenthesis_begin + 1, parenthesis_last);
-    }
-    M5.Lcd.drawString(tmp_str, 318, 125);
+    String solar[] = {"solarflux", "sunspots", "aindex", "kindex", "xray", "protonflux", "electonflux", "aurora", "solarwind"};
+    //size_t n = sizeof(solar) / sizeof(solar[0]);
 
-    tmp_str = xml_data;
-    tmp_str.replace("<sunspots>", "(");
-    tmp_str.replace("</sunspots>", ")");
-    parenthesis_begin = tmp_str.indexOf("(");
-    parenthesis_last = tmp_str.indexOf(")");
-    if (parenthesis_begin > 0)
-    {
-      tmp_str = tmp_str.substring(parenthesis_begin + 1, parenthesis_last);
+    j = 125;
+    for (uint8_t i = 0; i <= 8; i++) {
+      tmp_str = xml_data;
+      tmp_str.replace("<" + solar[i] + ">", "(");
+      tmp_str.replace("</" + solar[i] + ">", ")");
+      parenthesis_begin = tmp_str.indexOf("(");
+      parenthesis_last = tmp_str.indexOf(")");
+      if (parenthesis_begin > 0)
+      {
+        tmp_str = tmp_str.substring(parenthesis_begin + 1, parenthesis_last);
+      }
+      M5.Lcd.drawString(tmp_str, 318, j);
+      j += 12;
     }
-    M5.Lcd.drawString(tmp_str, 318, 137);
-
-    tmp_str = xml_data;
-    tmp_str.replace("<aindex>", "(");
-    tmp_str.replace("</aindex>", ")");
-    parenthesis_begin = tmp_str.indexOf("(");
-    parenthesis_last = tmp_str.indexOf(")");
-    if (parenthesis_begin > 0)
-    {
-      tmp_str = tmp_str.substring(parenthesis_begin + 1, parenthesis_last);
-    }
-    M5.Lcd.drawString(tmp_str, 318, 149);
-
-    tmp_str = xml_data;
-    tmp_str.replace("<kindex>", "(");
-    tmp_str.replace("</kindex>", ")");
-    parenthesis_begin = tmp_str.indexOf("(");
-    parenthesis_last = tmp_str.indexOf(")");
-    if (parenthesis_begin > 0)
-    {
-      tmp_str = tmp_str.substring(parenthesis_begin + 1, parenthesis_last);
-    }
-    M5.Lcd.drawString(tmp_str, 318, 161);
-
-    tmp_str = xml_data;
-    tmp_str.replace("<xray>", "(");
-    tmp_str.replace("</xray>", ")");
-    parenthesis_begin = tmp_str.indexOf("(");
-    parenthesis_last = tmp_str.indexOf(")");
-    if (parenthesis_begin > 0)
-    {
-      tmp_str = tmp_str.substring(parenthesis_begin + 1, parenthesis_last);
-    }
-    M5.Lcd.drawString(tmp_str, 318, 173);
-
-    tmp_str = xml_data;
-    tmp_str.replace("<protonflux>", "(");
-    tmp_str.replace("</protonflux>", ")");
-    parenthesis_begin = tmp_str.indexOf("(");
-    parenthesis_last = tmp_str.indexOf(")");
-    if (parenthesis_begin > 0)
-    {
-      tmp_str = tmp_str.substring(parenthesis_begin + 1, parenthesis_last);
-    }
-    M5.Lcd.drawString(tmp_str, 318, 185);
-
-    tmp_str = xml_data;
-    tmp_str.replace("<electonflux>", "(");
-    tmp_str.replace("</electonflux>", ")");
-    parenthesis_begin = tmp_str.indexOf("(");
-    parenthesis_last = tmp_str.indexOf(")");
-    if (parenthesis_begin > 0)
-    {
-      tmp_str = tmp_str.substring(parenthesis_begin + 1, parenthesis_last);
-    }
-    M5.Lcd.drawString(tmp_str, 318, 197);
-
-    tmp_str = xml_data;
-    tmp_str.replace("<aurora>", "(");
-    tmp_str.replace("</aurora>", ")");
-    parenthesis_begin = tmp_str.indexOf("(");
-    parenthesis_last = tmp_str.indexOf(")");
-    if (parenthesis_begin > 0)
-    {
-      tmp_str = tmp_str.substring(parenthesis_begin + 1, parenthesis_last);
-    }
-    M5.Lcd.drawString(tmp_str, 318, 209);
-
-    tmp_str = xml_data;
-    tmp_str.replace("<solarwind>", "(");
-    tmp_str.replace("</solarwind>", ")");
-    parenthesis_begin = tmp_str.indexOf("(");
-    parenthesis_last = tmp_str.indexOf(")");
-    if (parenthesis_begin > 0)
-    {
-      tmp_str = tmp_str.substring(parenthesis_begin + 1, parenthesis_last);
-    }
-    M5.Lcd.drawString(tmp_str, 318, 221);
 
     tmp_str = xml_data;
     tmp_str.replace("<updated>", "(");
@@ -700,15 +629,19 @@ void loop()
           M5.Lcd.setBrightness(brightness_current);
         }
 
-        M5.Lcd.fillRect(0, 41, 320, 38, TFT_BLACK);
         M5.Lcd.fillRect(0, 0, 320, 43, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
 
         M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
         M5.Lcd.setFreeFont(&dot15pt7b);
         M5.Lcd.setTextDatum(CC_DATUM);
-        sprintf(swap, "%s", salon);
-        tmp_str = swap;
-        M5.Lcd.drawString(tmp_str, 160, 22);
+        M5.Lcd.drawString(String(salon), 160, 18);
+
+        M5.Lcd.drawFastHLine(0, 42, 320, TFT_WHITE);
+
+        M5.Lcd.fillRoundRect(40, 35, 240, 16, 8, TFT_WHITE);
+        M5.Lcd.fillRoundRect(41, 36, 238, 14, 8, TFT_BLACK);
+
+        M5.Lcd.fillRect(0, 43, 320, 36, TFT_BLACK); 
 
         M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
         M5.Lcd.setFreeFont(ICON_FONT);
@@ -731,6 +664,23 @@ void loop()
         transmit_off = 0;
         reset = 1;
       }
+
+      M5.Lcd.setTextPadding(220);
+      M5.Lcd.setTextColor(TFT_WHITE, TFT_BLACK);
+      M5.Lcd.setFreeFont(0);
+      M5.Lcd.setTextDatum(CC_DATUM);
+
+      tmp_str = indicatif + " / ";
+
+      if(dtmf[room_current] != whereis_current) 
+      {
+        tmp_str += whereis_str + " / ";
+      }
+
+      tmp_str += " RAPTOR " + raptor_str; 
+
+      M5.Lcd.drawString(tmp_str, 160, 42);
+      M5.Lcd.setTextPadding(0);
 
       M5.Lcd.setTextColor(TFT_WHITE, TFT_BLACK);
       M5.Lcd.setFreeFont(&rounded_led_board10pt7b);
@@ -758,18 +708,41 @@ void loop()
           M5.Lcd.setBrightness(brightness_current);
         }
 
-        M5.Lcd.fillRect(0, 41, 320, 38, TFT_BLACK);
         M5.Lcd.fillRect(0, 0, 320, 43, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
 
         M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
         M5.Lcd.setFreeFont(&dot15pt7b);
         M5.Lcd.setTextDatum(CC_DATUM);
-        M5.Lcd.drawString(String(salon), 160, 22);
+        M5.Lcd.drawString(String(salon), 160, 18);
+
+        M5.Lcd.drawFastHLine(0, 42, 320, TFT_WHITE);      
+
+        M5.Lcd.fillRoundRect(40, 35, 240, 16, 8, TFT_WHITE);
+        M5.Lcd.fillRoundRect(41, 36, 238, 14, 8, TFT_BLACK);
+
+        M5.Lcd.fillRect(0, 43, 320, 36, TFT_BLACK);
 
         transmit_on = 0;
         transmit_off = 2;
         reset = 1;
       }
+
+      M5.Lcd.setTextPadding(220);
+      M5.Lcd.setTextColor(TFT_WHITE, TFT_BLACK);
+      M5.Lcd.setFreeFont(0);
+      M5.Lcd.setTextDatum(CC_DATUM);
+
+      tmp_str = indicatif + " / ";
+
+      if(dtmf[room_current] != whereis_current) 
+      {
+        tmp_str += whereis_str + " / ";
+      }
+
+      tmp_str += " RAPTOR " + raptor_str; 
+
+      M5.Lcd.drawString(tmp_str, 160, 42);
+      M5.Lcd.setTextPadding(0);
 
       if (type == 0)
       {
@@ -1046,7 +1019,7 @@ void loop()
   }
 
   M5.Lcd.drawFastHLine(0, 0, 320, TFT_WHITE);
-  M5.Lcd.drawFastHLine(0, 43, 320, TFT_WHITE);
+  M5.Lcd.drawFastHLine(280, 42, 40, TFT_WHITE);
 
   if (alternance % 10 == 0)
   {

@@ -8,7 +8,7 @@
 
 // Version
 
-#define VERSION "0.3.3"
+#define VERSION "0.4.0"
 
 // Debug
 
@@ -65,7 +65,7 @@ const color_t TFT_HEADER_ROUGE = {120, 40, 31};
 
 const char *ssid = "\\_(o)_/";
 const char *password = "petitchaton";
-WiFiClient client_rrfremote, client_rrftracker, client_hamqsl;
+WiFiClient client_rrfremote, client_rrftracker, client_hamqsl, client_whereis;
 
 // Preferences
 
@@ -73,9 +73,10 @@ Preferences preferences;
 
 // HTTP endpoint
 
+String indicatif = "F4HWN";
+
 String endpoint_spotnik = "http://192.168.1.99:3000/";
 String endpoint_hamqsl = "http://www.hamqsl.com/solarxml.php";
-String endpoint_api = "http://137.74.192.234:4440/nodes";
 
 String endpoint_rrf[] = {
     "http://rrf.f5nlg.ovh:8080/RRFTracker/RRF-today/rrf_tiny.json",
@@ -98,7 +99,7 @@ const int dtmf[] = {96, 98, 100, 101, 99, 97};
 const char *menu[] = {"QSY", "RAPTOR", "PERROQUET", "STOP", "COULEUR", "BRIGHTNESS"};
 
 String tmp_str;
-String json_data = "", xml_data = "";
+String json_data = "", xml_data = "", whereis_data = "";
 String json_data_new = "";
 
 String date_str, date_str_old;
@@ -107,8 +108,10 @@ String link_total_str, link_total_str_old;
 String link_actif_str, link_actif_str_old;
 String tx_total_str, tx_total_str_old;
 String elsewhere_str, elsewhere_str_old;
+String whereis_str = "", raptor_str = "";
 
 int room_current = 0;
+int whereis_current = 0;
 int brightness_current = 32;
 int transmit_on = 0, transmit_off = 0;
 int reset = 0;
@@ -123,7 +126,7 @@ int menu_selected = -1;
 int menu_refresh = 0;
 
 unsigned long screensaver;
-int screensaver_limit = 1 * 60 * 1000;
+int screensaver_limit = 5 * 60 * 1000;  // 5 minutes
 int screensaver_off = 0;
 
 // Parse data
@@ -295,6 +298,11 @@ void button()
         else if (menu_selected == 1)
         {
           qsy = 200;
+          if(raptor_str == "ON") {
+            raptor_str = "OFF";
+          } else {
+            raptor_str = "ON";
+          }
         }
         // Mode menu active, Parrot
         else if (menu_selected == 2)
@@ -447,6 +455,8 @@ void rrftracker(void *pvParameters)
           reset = 0;
           menu_mode = 0;
           menu_selected = -1;
+          whereis_current = dtmf[room_current];
+          whereis_str = String(room[room_current]);
         }
         http.end(); // Free the resources
       }
@@ -500,6 +510,50 @@ void hamqsl(void *pvParameters)
     {
       //Serial.println(limit - wait);
       //Serial.flush();
+      vTaskDelay(pdMS_TO_TICKS(limit - wait));
+    }
+  }
+}
+
+// Get data from API
+void whereis(void *pvParameters)
+{
+  HTTPClient http;
+  unsigned long timer = 0, wait = 0, limit = 1 * 60 * 1000; // Retreive all hours
+
+  for (;;)
+  {
+    if ((WiFi.status() == WL_CONNECTED)) // Check the current connection status
+    {
+      http.begin(client_whereis, endpoint_spotnik + String("?dtmf=0"));             // Specify the URL
+      http.addHeader("Content-Type", "text/plain");     // Specify content-type header
+      http.setTimeout(1000);                            // Set Time Out
+      int httpCode = http.GET();                        // Make the request
+      if (httpCode == 200)                              // Check for the returning code
+      {
+        whereis_data = http.getString(); // Get data
+
+        whereis_current = whereis_data.substring(0, whereis_data.indexOf(", ")).toInt();
+        whereis_data = whereis_data.substring(whereis_data.indexOf(", ") + 2);
+
+        whereis_str = whereis_data.substring(0, whereis_data.indexOf(", "));
+        whereis_data = whereis_data.substring(whereis_data.indexOf(", ") + 2);
+
+        raptor_str = whereis_data.substring(0, whereis_data.indexOf(", "));
+    
+        //Serial.println(whereis_current);
+        //Serial.println(whereis_str);
+        //Serial.println(raptor_str);
+        //Serial.flush();
+
+        timer = millis();
+      }
+      http.end(); // Free the resources
+    }
+
+    wait = millis() - timer;
+    if (wait < limit)
+    {
       vTaskDelay(pdMS_TO_TICKS(limit - wait));
     }
   }
