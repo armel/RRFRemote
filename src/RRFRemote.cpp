@@ -954,17 +954,17 @@ void loop()
     M5.Lcd.setTextDatum(CC_DATUM);
     M5.Lcd.setTextPadding(220);
 
-    String menu = "";
+    String title = "";
     String option = "";
 
     if (menu_selected == -1)
     {
-      menu = String("MODE MENU");
+      title = "MODE MENU";
       option = String(menu[menu_current]);
     }
     else
     {
-      menu = String(menu[menu_selected]);
+      title = String(menu[menu_selected]);
 
       if (menu_selected == 0 && alternance % 2 == 0)
       {
@@ -975,6 +975,7 @@ void loop()
         option = "Patientez";
       }
       else if (menu_selected == 2 && alternance % 2 == 0)
+      {
         option = "Patientez";
       }
       else if (menu_selected == 4)
@@ -987,7 +988,7 @@ void loop()
       }
     }
 
-    M5.Lcd.drawString(menu, 160, 22);
+    M5.Lcd.drawString(title, 160, 22);
     M5.Lcd.setTextColor(TFT_WHITE, TFT_BLACK);
     M5.Lcd.setFreeFont(&rounded_led_board10pt7b);
     M5.Lcd.setTextDatum(CC_DATUM);
@@ -995,7 +996,8 @@ void loop()
     M5.Lcd.drawString(option, 160, 60);
   }
 
-  M5.Lcd.drawFastHLine(0, 0, 320, TFT_WHITE);
+  M5.Lcd.drawFastHLine(  0, 0, 320, TFT_WHITE);
+  M5.Lcd.drawFastHLine(  0, 42, 40, TFT_WHITE);
   M5.Lcd.drawFastHLine(280, 42, 40, TFT_WHITE);
 
   if (alternance % 10 == 0)
