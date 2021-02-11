@@ -23,7 +23,7 @@ String endpoint_spotnik = "http://192.168.1.99:3000/";
 // No change after, please ;)
 
 // Version
-#define VERSION "0.4.2"
+#define VERSION "0.4.3"
 
 // Preferences
 Preferences preferences;
@@ -290,6 +290,10 @@ void button()
         if (menu_selected == 0)
         {
           qsy = dtmf[room_current];
+          menu_mode = 0;
+          menu_selected = -1;
+          reset = 0;
+          refresh = 0;        
         }
         // Mode menu active, Raptor
         else if (menu_selected == 1)
@@ -300,11 +304,19 @@ void button()
           } else {
             raptor_str = "ON";
           }
+          menu_mode = 0;
+          menu_selected = -1;
+          reset = 0;
+          refresh = 0;
         }
         // Mode menu active, Parrot
         else if (menu_selected == 2)
         {
           qsy = 95;
+          menu_mode = 0;
+          menu_selected = -1;
+          reset = 0;
+          refresh = 0;
         }
         // Mode menu active, Stop
         else if (menu_selected == 3)
@@ -437,7 +449,7 @@ void rrftracker(void *pvParameters)
     if ((WiFi.status() == WL_CONNECTED)) // Check the current connection status
     {
 
-      if (qsy > 0)
+      while (qsy > 0)
       {
         http.begin(client_rrfremote, endpoint_spotnik + String("?dtmf=") + String(qsy));  // Specify the URL
         http.addHeader("Content-Type", "text/plain");                                     // Specify content-type header
@@ -447,7 +459,7 @@ void rrftracker(void *pvParameters)
         {
           qsy = 0;
           refresh = 0;
-          reset = 0;
+          menu_refresh = 1;
           menu_mode = 0;
           menu_selected = -1;
           whereis_current = dtmf[room_current];
@@ -455,7 +467,7 @@ void rrftracker(void *pvParameters)
         }
         http.end(); // Free the resources
       }
-
+ 
       http.begin(client_rrftracker, endpoint_rrf[room_current]);    // Specify the URL
       http.addHeader("Content-Type", "text/plain");                 // Specify content-type header
       http.setTimeout(500);                                         // Set Time Out
@@ -512,7 +524,7 @@ void hamqsl(void *pvParameters)
 void whereis(void *pvParameters)
 {
   HTTPClient http;
-  unsigned long timer = 0, wait = 0, limit = 1 * 60 * 1000; // Retreive all hours
+  unsigned long timer = 0, wait = 0, limit = 1 * 15 * 1000; // Retreive 15 seconds
 
   for (;;)
   {

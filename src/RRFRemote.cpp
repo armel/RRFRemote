@@ -67,17 +67,17 @@ void setup()
       0);           /* Core where the task should run */
 
   xTaskCreatePinnedToCore(
-      hamqsl,       /* Function to implement the task */
-      "hamqsl",     /* Name of the task */
+      whereis,      /* Function to implement the task */
+      "whereis",    /* Name of the task */
       8192,         /* Stack size in words */
       NULL,         /* Task input parameter */
-      2,            /* Priority of the task */
+      1,            /* Priority of the task */
       NULL,         /* Task handle. */
       1);           /* Core where the task should run */
 
-  xTaskCreatePinnedToCore(
-      whereis,      /* Function to implement the task */
-      "whereis",    /* Name of the task */
+   xTaskCreatePinnedToCore(
+      hamqsl,       /* Function to implement the task */
+      "hamqsl",     /* Name of the task */
       8192,         /* Stack size in words */
       NULL,         /* Task input parameter */
       2,            /* Priority of the task */
