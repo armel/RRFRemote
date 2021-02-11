@@ -6,16 +6,29 @@
 #include <Preferences.h>
 #include "font.h"
 
+// Personnal settings
+
+// Wifi
+const char *ssid = "\\_(o)_/";
+const char *password = "petitchaton";
+WiFiClient client_rrfremote, client_rrftracker, client_hamqsl, client_whereis;
+
+// Call
+String indicatif = "F4HWN";
+
+// Spotnik client
+String endpoint_spotnik = "http://192.168.1.99:3000/";
+
+
+// No change after, please ;)
+
 // Version
+#define VERSION "1.0.0"
 
-#define VERSION "0.3.3"
-
-// Debug
-
-#define DEBUG false
+// Preferences
+Preferences preferences;
 
 // Color (https://htmlcolorcodes.com/fr/)
-
 typedef struct __attribute__((__packed__))
 {
   uint8_t r;
@@ -24,14 +37,13 @@ typedef struct __attribute__((__packed__))
 } color_t;
 
 color_t TFT_BACK = {48, 48, 48};
+color_t TFT_GRAY = {128, 128, 128};
 color_t TFT_FRONT = {52, 152, 219};
 color_t TFT_HEADER = {27, 79, 114};
 
 const char *color[] = {"BLEU", "ORANGE", "VERT", "ROUGE"};
-
 int color_current = 0;
 
-// Color
 const color_t TFT_FRONT_BLEU = {52, 152, 219};
 const color_t TFT_HEADER_BLEU = {27, 79, 114};
 
@@ -45,7 +57,6 @@ const color_t TFT_FRONT_ROUGE = {231, 76, 60};
 const color_t TFT_HEADER_ROUGE = {120, 40, 31};
 
 // Icon
-
 #define ICON_FONT &icon_works_webfont14pt7b
 #define ICON_STAT 40
 #define ICON_CLOCK 105
@@ -61,22 +72,8 @@ const color_t TFT_HEADER_ROUGE = {120, 40, 31};
 #define ICON_BAT000 34
 #define ICON_CHARGING 37
 
-// Wifi
-
-const char *ssid = "\\_(o)_/";
-const char *password = "petitchaton";
-WiFiClient client_rrfremote, client_rrftracker, client_hamqsl;
-
-// Preferences
-
-Preferences preferences;
-
 // HTTP endpoint
-
-String endpoint_spotnik = "http://192.168.1.99:3000/";
 String endpoint_hamqsl = "http://www.hamqsl.com/solarxml.php";
-String endpoint_api = "http://137.74.192.234:4440/nodes";
-
 String endpoint_rrf[] = {
     "http://rrf.f5nlg.ovh:8080/RRFTracker/RRF-today/rrf_tiny.json",
     "http://rrf.f5nlg.ovh:8080/RRFTracker/TECHNIQUE-today/rrf_tiny.json",
@@ -86,19 +83,17 @@ String endpoint_rrf[] = {
     "http://rrf.f5nlg.ovh:8080/RRFTracker/FON-today/rrf_tiny.json"};
 
 // Scroll
-
 TFT_eSprite img = TFT_eSprite(&M5.Lcd); // Create Sprite object "img" with pointer to "tft" object
 String msg = "";
 int pos;
 
 // Misceleanous
-
 const char *room[] = {"RRF", "TECHNIQUE", "BAVARDAGE", "LOCAL", "INTERNATIONAL", "FON"};
 const int dtmf[] = {96, 98, 100, 101, 99, 97};
 const char *menu[] = {"QSY", "RAPTOR", "PERROQUET", "STOP", "COULEUR", "BRIGHTNESS"};
 
 String tmp_str;
-String json_data = "", xml_data = "";
+String json_data = "", xml_data = "", whereis_data = "";
 String json_data_new = "";
 
 String date_str, date_str_old;
@@ -107,8 +102,10 @@ String link_total_str, link_total_str_old;
 String link_actif_str, link_actif_str_old;
 String tx_total_str, tx_total_str_old;
 String elsewhere_str, elsewhere_str_old;
+String whereis_str = "", raptor_str = "";
 
 int room_current = 0;
+int whereis_current = 0;
 int brightness_current = 32;
 int transmit_on = 0, transmit_off = 0;
 int reset = 0;
@@ -123,7 +120,7 @@ int menu_selected = -1;
 int menu_refresh = 0;
 
 unsigned long screensaver;
-int screensaver_limit = 1 * 60 * 1000;
+int screensaver_limit = 5 * 60 * 1000;  // 5 minutes
 int screensaver_off = 0;
 
 // Parse data
@@ -187,11 +184,15 @@ void reset_color()
 // Clear screen
 void clear()
 {
+  // Reset
   msg = "";
   M5.lcd.clear();
-
-  // Reset color
   reset_color();
+
+  // Header
+  M5.Lcd.fillRect(0, 0, 320, 44, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
+  M5.Lcd.drawFastHLine(  0,  0, 320, TFT_WHITE);
+  M5.Lcd.drawFastHLine(  0, 44, 320, TFT_WHITE);
 
   // Grey zone
   M5.Lcd.drawLine(0, 100, 320, 100, TFT_WHITE);
@@ -206,7 +207,6 @@ void clear()
   M5.Lcd.drawFastVLine(24, 169, 69, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
 
   M5.Lcd.drawFastVLine(25, 169, 69, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
-
   M5.Lcd.drawFastVLine(96, 169, 69, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
 
   M5.Lcd.drawFastHLine(2, 182, 147, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
@@ -290,16 +290,33 @@ void button()
         if (menu_selected == 0)
         {
           qsy = dtmf[room_current];
+          menu_mode = 0;
+          menu_selected = -1;
+          reset = 0;
+          refresh = 0;        
         }
         // Mode menu active, Raptor
         else if (menu_selected == 1)
         {
           qsy = 200;
+          if(raptor_str == "ON") {
+            raptor_str = "OFF";
+          } else {
+            raptor_str = "ON";
+          }
+          menu_mode = 0;
+          menu_selected = -1;
+          reset = 0;
+          refresh = 0;
         }
         // Mode menu active, Parrot
         else if (menu_selected == 2)
         {
           qsy = 95;
+          menu_mode = 0;
+          menu_selected = -1;
+          reset = 0;
+          refresh = 0;
         }
         // Mode menu active, Stop
         else if (menu_selected == 3)
@@ -377,7 +394,6 @@ void build_scroll()
   int w = M5.Lcd.width();
 
   // We could just use fillSprite(color) but lets be a bit more creative...
-
   while (h--)
     img.drawFastHLine(0, h, w, TFT_BLACK);
 
@@ -399,7 +415,6 @@ void build_scroll()
 void scroll(int pause)
 {
   // Sprite for scroll
-
   build_scroll();
   img.pushSprite(0, 78);
 
@@ -434,7 +449,7 @@ void rrftracker(void *pvParameters)
     if ((WiFi.status() == WL_CONNECTED)) // Check the current connection status
     {
 
-      if (qsy > 0)
+      while (qsy > 0)
       {
         http.begin(client_rrfremote, endpoint_spotnik + String("?dtmf=") + String(qsy));  // Specify the URL
         http.addHeader("Content-Type", "text/plain");                                     // Specify content-type header
@@ -444,13 +459,15 @@ void rrftracker(void *pvParameters)
         {
           qsy = 0;
           refresh = 0;
-          reset = 0;
+          menu_refresh = 1;
           menu_mode = 0;
           menu_selected = -1;
+          whereis_current = dtmf[room_current];
+          whereis_str = String(room[room_current]);
         }
         http.end(); // Free the resources
       }
-
+ 
       http.begin(client_rrftracker, endpoint_rrf[room_current]);    // Specify the URL
       http.addHeader("Content-Type", "text/plain");                 // Specify content-type header
       http.setTimeout(500);                                         // Set Time Out
@@ -498,8 +515,45 @@ void hamqsl(void *pvParameters)
     wait = millis() - timer;
     if (wait < limit)
     {
-      //Serial.println(limit - wait);
-      //Serial.flush();
+      vTaskDelay(pdMS_TO_TICKS(limit - wait));
+    }
+  }
+}
+
+// Get data from API
+void whereis(void *pvParameters)
+{
+  HTTPClient http;
+  unsigned long timer = 0, wait = 0, limit = 1 * 15 * 1000; // Retreive 15 seconds
+
+  for (;;)
+  {
+    if ((WiFi.status() == WL_CONNECTED)) // Check the current connection status
+    {
+      http.begin(client_whereis, endpoint_spotnik + String("?dtmf=0")); // Specify the URL
+      http.addHeader("Content-Type", "text/plain");                     // Specify content-type header
+      http.setTimeout(1000);                                            // Set Time Out
+      int httpCode = http.GET();                                        // Make the request
+      if (httpCode == 200)                                              // Check for the returning code
+      {
+        whereis_data = http.getString(); // Get data
+
+        whereis_current = whereis_data.substring(0, whereis_data.indexOf(", ")).toInt();
+        whereis_data = whereis_data.substring(whereis_data.indexOf(", ") + 2);
+
+        whereis_str = whereis_data.substring(0, whereis_data.indexOf(", "));
+        whereis_data = whereis_data.substring(whereis_data.indexOf(", ") + 2);
+
+        raptor_str = whereis_data.substring(0, whereis_data.indexOf(", "));
+
+        timer = millis();
+      }
+      http.end(); // Free the resources
+    }
+
+    wait = millis() - timer;
+    if (wait < limit)
+    {
       vTaskDelay(pdMS_TO_TICKS(limit - wait));
     }
   }
