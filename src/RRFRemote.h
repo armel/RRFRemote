@@ -19,11 +19,10 @@ String indicatif = "F4HWN";
 // Spotnik client
 String endpoint_spotnik = "http://192.168.1.99:3000/";
 
-
 // No change after, please ;)
 
 // Version
-#define VERSION "1.0.0"
+#define VERSION "1.0.1"
 
 // Preferences
 Preferences preferences;
@@ -268,7 +267,7 @@ void button()
         {
           menu_current += 1;
         }
-        else if (M5.BtnB.pressedFor(1000))
+        else if (M5.BtnB.wasPressed())
         {
           menu_selected = menu_current;
           menu_refresh = 0;
@@ -431,6 +430,7 @@ void scroll(int pause)
 void rrftracker(void *pvParameters)
 {
   HTTPClient http;
+
   unsigned long timer = 0, wait = 0, limit = 750;
 
   for (;;)
@@ -483,8 +483,6 @@ void rrftracker(void *pvParameters)
     wait = millis() - timer;
     if (wait < limit)
     {
-      //Serial.println(limit - wait);
-      //Serial.flush();
       vTaskDelay(pdMS_TO_TICKS(limit - wait));
     }
   }
