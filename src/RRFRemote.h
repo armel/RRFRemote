@@ -22,7 +22,7 @@ String endpoint_spotnik = "http://192.168.1.99:3000/";
 // No change after, please ;)
 
 // Version
-#define VERSION "1.0.1"
+#define VERSION "1.0.2"
 
 // Preferences
 Preferences preferences;
@@ -70,6 +70,11 @@ const color_t TFT_HEADER_ROUGE = {120, 40, 31};
 #define ICON_BAT025 115
 #define ICON_BAT000 34
 #define ICON_CHARGING 37
+
+// Sleep mode
+#define TIME_TO_SLEEP   1000*1000*70
+#define TIME_TO_START   1000*55
+long int timer_shutdown = 0; 
 
 // HTTP endpoint
 String endpoint_hamqsl = "http://www.hamqsl.com/solarxml.php";

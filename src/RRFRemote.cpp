@@ -67,22 +67,22 @@ void setup()
       0);           /* Core where the task should run */
 
   xTaskCreatePinnedToCore(
-      whereis,      /* Function to implement the task */
-      "whereis",    /* Name of the task */
-      8192,         /* Stack size in words */
-      NULL,         /* Task input parameter */
-      1,            /* Priority of the task */
-      NULL,         /* Task handle. */
-      1);           /* Core where the task should run */
+      whereis,   /* Function to implement the task */
+      "whereis", /* Name of the task */
+      8192,      /* Stack size in words */
+      NULL,      /* Task input parameter */
+      1,         /* Priority of the task */
+      NULL,      /* Task handle. */
+      1);        /* Core where the task should run */
 
-   xTaskCreatePinnedToCore(
-      hamqsl,       /* Function to implement the task */
-      "hamqsl",     /* Name of the task */
-      8192,         /* Stack size in words */
-      NULL,         /* Task input parameter */
-      2,            /* Priority of the task */
-      NULL,         /* Task handle. */
-      1);           /* Core where the task should run */
+  xTaskCreatePinnedToCore(
+      hamqsl,   /* Function to implement the task */
+      "hamqsl", /* Name of the task */
+      8192,     /* Stack size in words */
+      NULL,     /* Task input parameter */
+      2,        /* Priority of the task */
+      NULL,     /* Task handle. */
+      1);       /* Core where the task should run */
 
   delay(4000);
 
@@ -122,11 +122,11 @@ void loop()
   // Continue
   optimize = json_data_new.compareTo(json_data);
 
-  if (optimize != 0)  // If change
+  if (optimize != 0) // If change
   {
     DeserializationError error = deserializeJson(doc, json_data_new); // Deserialize the JSON document
 
-    if (!error)       // And no error
+    if (!error) // And no error
     {
       json_data = json_data_new;
     }
@@ -159,6 +159,24 @@ void loop()
   sortant = doc["abstract"][0]["Links sortants"];
   tot = doc["transmit"][0]["TOT"];
 
+  // Allo Houston ? Daily shutdown because of so strange bug on ESP multitasking
+
+  tmp_str = getValue(date, ' ', 4);
+  if (tmp_str == "23:59")
+  {
+    if (timer_shutdown == 0)
+    {
+      timer_shutdown = millis();
+    }
+    if (millis() - timer_shutdown > TIME_TO_START)
+    {
+      esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP);
+      esp_light_sleep_start();
+      timer_shutdown = 0;
+    }
+  }
+
+  // Continue
   if (tot > 0 && transmit_on == 0)
   {
     transmit_on = 1;
@@ -342,7 +360,8 @@ void loop()
       //size_t n = sizeof(solar) / sizeof(solar[0]);
 
       j = 125;
-      for (uint8_t i = 0; i <= 9; i++) {
+      for (uint8_t i = 0; i <= 9; i++)
+      {
         M5.Lcd.drawString(system[i], 164, j);
         j += 12;
       }
@@ -385,7 +404,8 @@ void loop()
       //size_t n = sizeof(solar) / sizeof(solar[0]);
 
       j = 125;
-      for (uint8_t i = 0; i <= 9; i++) {
+      for (uint8_t i = 0; i <= 9; i++)
+      {
         M5.Lcd.drawString(solar[i], 164, j);
         j += 12;
       }
@@ -400,7 +420,8 @@ void loop()
     //size_t n = sizeof(solar) / sizeof(solar[0]);
 
     j = 125;
-    for (uint8_t i = 0; i <= 8; i++) {
+    for (uint8_t i = 0; i <= 8; i++)
+    {
       tmp_str = xml_data;
       tmp_str.replace("<" + solar[i] + ">", "(");
       tmp_str.replace("</" + solar[i] + ">", ")");
@@ -790,6 +811,7 @@ void loop()
     }
 
     // Baterry
+    scroll(10);
 
     M5.Lcd.setFreeFont(&Battery_Icons21pt7b);
     M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
@@ -835,7 +857,7 @@ void loop()
     {
 
       M5.Lcd.setBrightness(brightness_current);
-      
+
       M5.Lcd.fillRect(4, 4, 316, 40, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
 
       M5.Lcd.setFreeFont(ICON_FONT);
@@ -894,6 +916,7 @@ void loop()
   }
 
   // Status line
+  scroll(10);
   M5.Lcd.setFreeFont(0);
   M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
   M5.Lcd.setTextDatum(CC_DATUM);
@@ -901,17 +924,18 @@ void loop()
 
   tmp_str = indicatif + " / ";
 
-  if(dtmf[room_current] != whereis_current) 
+  if (dtmf[room_current] != whereis_current)
   {
     tmp_str += whereis_str + " / ";
   }
 
-  tmp_str += "RAPTOR " + raptor_str; 
+  tmp_str += "RAPTOR " + raptor_str;
 
   M5.Lcd.drawString(tmp_str, 160, 36);
-  M5.Lcd.drawFastHLine(  0,  0, 320, TFT_WHITE);
+  M5.Lcd.drawFastHLine(0, 0, 320, TFT_WHITE);
 
   // Alternance and type
+  scroll(10);
 
   if (alternance % 10 == 0)
   {
