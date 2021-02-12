@@ -435,6 +435,7 @@ void rrftracker(void *pvParameters)
 
   for (;;)
   {
+    timer = millis();
     if (room_current < 0)
     {
       room_current = 5;
@@ -475,7 +476,6 @@ void rrftracker(void *pvParameters)
       if (httpCode == 200)                                          // Check for the returning code
       {
         json_data_new = http.getString(); // Get data
-        timer = millis();
       }
       http.end(); // Free the resources
     }
