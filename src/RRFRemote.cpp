@@ -143,7 +143,6 @@ void loop()
     {
       salon = doc["abstract"][0]["Salon"];
     }
-    delay(100);
   }
 
   if (reset == 0)
@@ -158,7 +157,6 @@ void loop()
   tx_total = doc["abstract"][0]["TX total"];
   entrant = doc["abstract"][0]["Links entrants"];
   sortant = doc["abstract"][0]["Links sortants"];
-
   tot = doc["transmit"][0]["TOT"];
 
   if (tot > 0 && transmit_on == 0)
@@ -209,11 +207,11 @@ void loop()
   tmp_str = String(entrant);
   if (tmp_str.length() > 0)
   {
-    msg = "+ " + String(entrant);
+    msg = "+ " + tmp_str.substring(0, tmp_str.indexOf(","));
     tmp_str = String(sortant);
     if (tmp_str.length() > 0)
     {
-      msg += " - " + String(sortant);
+      msg += " - " + tmp_str.substring(0, tmp_str.indexOf(","));
     }
   }
   else
@@ -221,17 +219,18 @@ void loop()
     tmp_str = String(sortant);
     if (tmp_str.length() > 0)
     {
-      msg = "- " + String(sortant);
+      msg = "- " + tmp_str.substring(0, tmp_str.indexOf(","));
     }
   }
 
   // Histogram
+  scroll(10);
+
   j = 4;
   k = 0;
 
   for (uint8_t i = 0; i < 24; i++)
   {
-    scroll(10);
     if (tx[i] != 0)
     {
       uint8_t tmp = map(tx[i], 0, max_level, 0, 48);
@@ -269,7 +268,6 @@ void loop()
 
     while (k <= 4)
     {
-      scroll(10);
       if (strcmp(room[i], salon) != 0)
       {
         M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
@@ -330,7 +328,7 @@ void loop()
     if (refresh == 0)
     {
       i = 161;
-      j = 72;
+      j = 74;
       M5.Lcd.fillRoundRect(160, 117, 160, 122, 4, TFT_WHITE);
       M5.Lcd.fillRoundRect(i, 118, j, 120, 4, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
       M5.Lcd.drawFastVLine(i + j - 3, 118, 120, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
@@ -584,13 +582,15 @@ void loop()
 
   // Transmit or no transmit
 
+  scroll(10);
+
+  //M5.Lcd.fillRect(160, 49, 75, 28, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
+
   if (menu_mode == 0)
   {
     if (tot != 0)
     {                         // If transmit
       screensaver = millis(); // Screensaver update !!!
-      scroll(10);
-
       if (transmit_on == 1 || reset == 0)
       {
         if (!M5.Power.isCharging() && screensaver_off != 1)
@@ -623,7 +623,7 @@ void loop()
         {
           tmp_str = "RTFM";
         }
-        M5.Lcd.drawString(tmp_str, 10, 60);
+        M5.Lcd.drawString(tmp_str, 1, 60);
 
         transmit_on = 2;
         transmit_off = 0;
@@ -634,12 +634,11 @@ void loop()
       M5.Lcd.setTextColor(TFT_WHITE, TFT_BLACK);
       M5.Lcd.setTextDatum(CR_DATUM);
       M5.Lcd.setTextPadding(120);
-      M5.Lcd.drawString(String(last_d[0]), 310, 60);
+      tmp_str = String(last_d[0]);
+      M5.Lcd.drawString(tmp_str.substring(1), 318, 60);
     }
     else
     { // If no transmit
-      scroll(10);
-      
       if (transmit_off == 1 || reset == 0)
       {
         if (!M5.Power.isCharging() && screensaver_off != 1)
@@ -665,8 +664,6 @@ void loop()
 
       if (type == 0)
       {
-        sprintf(swap, "%s", date);
-        tmp_str = swap;
         date_str = getValue(date, ' ', 4);
 
         if (date_str_old != date_str)
@@ -877,19 +874,7 @@ void loop()
     {
       title = String(menu[menu_selected]);
 
-      if (menu_selected == 0 && alternance % 2 == 0)
-      {
-        option = "QSY en cours";
-      }
-      else if (menu_selected == 1 && alternance % 2 == 0)
-      {
-        option = "Patientez";
-      }
-      else if (menu_selected == 2 && alternance % 2 == 0)
-      {
-        option = "Patientez";
-      }
-      else if (menu_selected == 4)
+      if (menu_selected == 4)
       {
         option = "THEME " + String(color[color_current]);
       }
