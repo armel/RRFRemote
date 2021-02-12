@@ -22,7 +22,7 @@ String endpoint_spotnik = "http://192.168.1.99:3000/";
 // No change after, please ;)
 
 // Version
-#define VERSION "1.0.2"
+#define VERSION "1.0.3"
 
 // Preferences
 Preferences preferences;
