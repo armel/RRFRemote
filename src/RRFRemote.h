@@ -8,7 +8,7 @@
 #include "settings.h"
 
 // Version
-#define VERSION "1.0.8"
+#define VERSION "1.1.0"
 
 // Wifi
 WiFiClient client_rrfremote, client_rrftracker, client_hamqsl, client_whereis;
@@ -64,11 +64,6 @@ const color_t TFT_HEADER_ROUGE = {120, 40, 31};
 #define ICON_BAT025 115
 #define ICON_BAT000 34
 #define ICON_CHARGING 37
-
-// Sleep mode
-#define TIME_TO_SLEEP   1000*1000*80
-#define TIME_TO_START   1000*50
-long int timer_shutdown = 0; 
 
 // HTTP endpoint
 String endpoint_spotnik = SPOTNIK;

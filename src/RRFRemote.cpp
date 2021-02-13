@@ -118,8 +118,6 @@ void loop()
   M5.Lcd.setTextPadding(0);
   timer = millis();
 
-  // Scan whereis
-
   // Continue
   optimize = json_data_new.compareTo(json_data);
 
@@ -160,24 +158,6 @@ void loop()
   sortant = doc["abstract"][0]["Links sortants"];
   tot = doc["transmit"][0]["TOT"];
 
-  // Allo Houston ? Daily shutdown because of so strange bug on ESP multitasking
-
-  tmp_str = getValue(date, ' ', 4);
-  if (tmp_str == "23:59")
-  {
-    if (timer_shutdown == 0)
-    {
-      timer_shutdown = millis();
-    }
-    if (millis() - timer_shutdown > TIME_TO_START)
-    {
-      esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP);
-      esp_light_sleep_start();
-      timer_shutdown = 0;
-    }
-  }
-
-  // Continue
   if (tot > 0 && transmit_on == 0)
   {
     transmit_on = 1;
@@ -276,61 +256,63 @@ void loop()
   JsonObject obj = doc.as<JsonObject>();
   elsewhere_str = obj["elsewhere"].as<String>();
 
-  if (elsewhere_str != elsewhere_str_old || refresh == 0)
-  {
-    elsewhere_str_old = elsewhere_str;
-
-    M5.Lcd.setFreeFont(0);
-
-    i = 0;
-    j = 8;
-    k = 0;
-
-    while (k <= 4)
+  if(elsewhere_str != "null") {
+    if (elsewhere_str != elsewhere_str_old || refresh == 0)
     {
-      if (strcmp(room[i], salon) != 0)
-      {
-        M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
-        M5.Lcd.setTextDatum(CC_DATUM);
-        M5.Lcd.drawString(String(room[i]).substring(0, 3), 14, 168 + j);
+      elsewhere_str_old = elsewhere_str;
 
-        elsewhere = doc["elsewhere"][1][room[i]];
-        if (strcmp(elsewhere, "Aucune émission") != 0)
+      M5.Lcd.setFreeFont(0);
+
+      i = 0;
+      j = 8;
+      k = 0;
+
+      while (k <= 4)
+      {
+        if (strcmp(room[i], salon) != 0)
         {
-          screensaver = millis(); // Screensaver update !!!
-          tmp_str = getValue(elsewhere, ' ', 1);
-          if (tmp_str == "")
+          M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
+          M5.Lcd.setTextDatum(CC_DATUM);
+          M5.Lcd.drawString(String(room[i]).substring(0, 3), 14, 168 + j);
+
+          elsewhere = doc["elsewhere"][1][room[i]];
+          if (strcmp(elsewhere, "Aucune émission") != 0)
           {
-            tmp_str = "RTFM";
+            screensaver = millis(); // Screensaver update !!!
+            tmp_str = getValue(elsewhere, ' ', 1);
+            if (tmp_str == "")
+            {
+              tmp_str = "RTFM";
+            }
+            else
+            {
+              tmp_str = getValue(elsewhere, ' ', 1) + ' ' + getValue(elsewhere, ' ', 2);
+            }
+
+            M5.Lcd.fillRect(26, 169 + (14 * k), 70, 13, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
+            M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
           }
           else
           {
-            tmp_str = getValue(elsewhere, ' ', 1) + ' ' + getValue(elsewhere, ' ', 2);
+            M5.Lcd.fillRect(26, 169 + (14 * k), 70, 13, TFT_WHITE);
+            M5.Lcd.setTextColor(TFT_BLACK, TFT_WHITE);
+            M5.Lcd.drawString("         ", 55, 168 + j);
+            link_total_elsewhere = doc["elsewhere"][5][room[i]];
+            sprintf(swap, "%03d", link_total_elsewhere);
+            tmp_str = swap;
+            tmp_str += " links";
           }
+          M5.Lcd.drawString(tmp_str, 62, 168 + j);
 
-          M5.Lcd.fillRect(26, 169 + (14 * k), 70, 13, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
-          M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
-        }
-        else
-        {
-          M5.Lcd.fillRect(26, 169 + (14 * k), 70, 13, TFT_WHITE);
           M5.Lcd.setTextColor(TFT_BLACK, TFT_WHITE);
-          M5.Lcd.drawString("         ", 55, 168 + j);
-          link_total_elsewhere = doc["elsewhere"][5][room[i]];
-          sprintf(swap, "%03d", link_total_elsewhere);
-          tmp_str = swap;
-          tmp_str += " links";
+          elsewhere = doc["elsewhere"][3][room[i]];
+          M5.Lcd.drawString(String(elsewhere), 124, 168 + j);
+
+          j += 14;
+          k += 1;
         }
-        M5.Lcd.drawString(tmp_str, 62, 168 + j);
-
-        M5.Lcd.setTextColor(TFT_BLACK, TFT_WHITE);
-        elsewhere = doc["elsewhere"][3][room[i]];
-        M5.Lcd.drawString(String(elsewhere), 124, 168 + j);
-
-        j += 14;
-        k += 1;
+        i += 1;
       }
-      i += 1;
     }
   }
 
