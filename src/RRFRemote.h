@@ -8,7 +8,7 @@
 #include "settings.h"
 
 // Version
-#define VERSION "1.0.6"
+#define VERSION "1.0.7"
 
 // Wifi
 WiFiClient client_rrfremote, client_rrftracker, client_hamqsl, client_whereis;
