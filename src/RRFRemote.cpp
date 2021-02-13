@@ -249,6 +249,7 @@ void loop()
 
   for (uint8_t i = 0; i < 24; i++)
   {
+    scroll(10);
     if (tx[i] != 0)
     {
       uint8_t tmp = map(tx[i], 0, max_level, 0, 48);

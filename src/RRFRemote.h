@@ -9,7 +9,7 @@
 // Personnal settings
 
 // Wifi
-const char *ssid = "\\_(o)_/";
+const char *ssid = "F4HWN";
 const char *password = "petitchaton";
 WiFiClient client_rrfremote, client_rrftracker, client_hamqsl, client_whereis;
 
@@ -22,7 +22,7 @@ String endpoint_spotnik = "http://192.168.1.99:3000/";
 // No change after, please ;)
 
 // Version
-#define VERSION "1.0.3"
+#define VERSION "1.0.5"
 
 // Preferences
 Preferences preferences;
@@ -72,8 +72,8 @@ const color_t TFT_HEADER_ROUGE = {120, 40, 31};
 #define ICON_CHARGING 37
 
 // Sleep mode
-#define TIME_TO_SLEEP   1000*1000*70
-#define TIME_TO_START   1000*55
+#define TIME_TO_SLEEP   1000*1000*80
+#define TIME_TO_START   1000*50
 long int timer_shutdown = 0; 
 
 // HTTP endpoint
