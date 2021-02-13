@@ -8,7 +8,7 @@
 #include "settings.h"
 
 // Version
-#define VERSION "1.0.7"
+#define VERSION "1.0.8"
 
 // Wifi
 WiFiClient client_rrfremote, client_rrftracker, client_hamqsl, client_whereis;
@@ -89,7 +89,7 @@ int pos;
 // Misceleanous
 const char *room[] = {"RRF", "TECHNIQUE", "BAVARDAGE", "LOCAL", "INTERNATIONAL", "FON"};
 const int dtmf[] = {96, 98, 100, 101, 99, 97};
-const char *menu[] = {"QSY", "RAPTOR", "PERROQUET", "STOP", "COULEUR", "BRIGHTNESS"};
+const char *menu[] = {"QSY", "RAPTOR", "PERROQUET", "FOLLOW", "COULEUR", "BRIGHTNESS", "STOP"};
 
 String tmp_str;
 String json_data = "", xml_data = "", whereis_data = "";
@@ -101,7 +101,7 @@ String link_total_str, link_total_str_old;
 String link_actif_str, link_actif_str_old;
 String tx_total_str, tx_total_str_old;
 String elsewhere_str, elsewhere_str_old;
-String whereis_str = "", raptor_str = "";
+String whereis_str = "";
 
 int room_current = 0;
 int whereis_current = 0;
@@ -117,6 +117,8 @@ int menu_mode = 0;
 int menu_current = 0;
 int menu_selected = -1;
 int menu_refresh = 0;
+int raptor_current = 0;
+int follow_current = 0;
 
 unsigned long screensaver;
 int screensaver_limit = 5 * 60 * 1000;  // 5 minutes
@@ -233,14 +235,14 @@ void button()
   { // Mode menu inactive
     if (menu_mode == 0)
     { 
-      if (M5.BtnA.wasPressed())
+      if (M5.BtnA.wasPressed() && follow_current == 0)
       {
         screensaver = millis(); // Screensaver update !!!
         room_current -= 1;
         refresh = 0;
         reset = 0;
       }
-      else if (M5.BtnC.wasPressed())
+      else if (M5.BtnC.wasPressed() && follow_current == 0)
       {
         screensaver = millis(); // Screensaver update !!!
         room_current += 1;
@@ -275,9 +277,9 @@ void button()
 
         if (menu_current < 0)
         {
-          menu_current = 5;
+          menu_current = 6;
         }
-        else if (menu_current > 5)
+        else if (menu_current > 6)
         {
           menu_current = 0;
         }
@@ -298,10 +300,10 @@ void button()
         else if (menu_selected == 1)
         {
           qsy = 200;
-          if(raptor_str == "ON") {
-            raptor_str = "OFF";
+          if(raptor_current == 0) {
+            raptor_current = 1;
           } else {
-            raptor_str = "ON";
+            raptor_current = 0;
           }
           menu_mode = 0;
           menu_selected = -1;
@@ -317,10 +319,23 @@ void button()
           reset = 0;
           refresh = 0;
         }
-        // Mode menu active, Stop
+        // Mode menu active, Follow
         else if (menu_selected == 3)
         {
-          M5.Power.powerOFF();
+          if (follow_current == 0)
+          {
+            follow_current = 1;
+          }
+          else {
+            follow_current = 0;
+          }
+
+          menu_mode = 0;
+          menu_selected = -1;
+          reset = 0;
+          refresh = 0;
+
+          preferences.putUInt("follow", follow_current);
         }
         // Mode menu active, Color
         else if (menu_selected == 4)
@@ -380,6 +395,11 @@ void button()
           }
           preferences.putUInt("brightness", brightness_current);
           M5.Lcd.setBrightness(brightness_current);
+        }
+         // Mode menu active, Stop
+        else if (menu_selected == 6)
+        {
+          M5.Power.powerOFF();
         }
       }
     }
@@ -522,7 +542,7 @@ void hamqsl(void *pvParameters)
 void whereis(void *pvParameters)
 {
   HTTPClient http;
-  unsigned long timer = 0, wait = 0, limit = 1 * 15 * 1000; // Retreive 15 seconds
+  unsigned long timer = 0, wait = 0, limit = 1 * 10 * 1000; // Retreive 10 seconds
 
   for (;;)
   {
@@ -542,7 +562,11 @@ void whereis(void *pvParameters)
         whereis_str = whereis_data.substring(0, whereis_data.indexOf(", "));
         whereis_data = whereis_data.substring(whereis_data.indexOf(", ") + 2);
 
-        raptor_str = whereis_data.substring(0, whereis_data.indexOf(", "));
+        if(whereis_data.substring(0, whereis_data.indexOf(", ")) == "OFF") {
+          raptor_current = 0;
+        } else {
+          raptor_current = 1;
+        }
 
         timer = millis();
       }

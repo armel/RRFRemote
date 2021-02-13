@@ -21,6 +21,7 @@ void setup()
   color_current = preferences.getUInt("color", 0);
   menu_current = preferences.getUInt("menu", 0);
   brightness_current = preferences.getUInt("brightness", 128);
+  follow_current = preferences.getUInt("follow", 0);
 
   // LCD
   reset_color();
@@ -923,17 +924,36 @@ void loop()
   M5.Lcd.setTextDatum(CC_DATUM);
   M5.Lcd.setTextPadding(220);
 
-  tmp_str = indicatif + " / ";
+  tmp_str = indicatif;
 
-  if (dtmf[room_current] != whereis_current)
+  if (dtmf[room_current] != whereis_current && follow_current == 0)
   {
-    tmp_str += whereis_str + " / ";
+    tmp_str += " / " + whereis_str;
   }
 
-  tmp_str += "RAPTOR " + raptor_str;
+  if(raptor_current == 1) {
+    tmp_str += " / RAPTOR ON" ;
+  }
+
+  if(follow_current == 1) {
+    tmp_str += " / FOLLOW ON";
+  }
 
   M5.Lcd.drawString(tmp_str, 160, 36);
   M5.Lcd.drawFastHLine(0, 0, 320, TFT_WHITE);
+
+  // Manage follow
+  if(follow_current == 1) {
+    for (uint8_t i = 0; i <= 5; i++) {
+      if (dtmf[i] == whereis_current) {
+        if (i != room_current) {
+          room_current = i;
+          reset = 0;
+        }
+        break;
+      }
+    }
+  }
 
   // Alternance and type
   scroll(10);
@@ -975,7 +995,6 @@ void loop()
   }
 
   // Manage screensaver
-
   if (screensaver_off == 0 && millis() - screensaver > screensaver_limit)
   {
     M5.Lcd.sleep();

@@ -41,12 +41,15 @@ Voici la liste des fonctionnalités actuelles :
 - ventilation par nombre de TX dans la journée, sous forme d'histogramme,
 - scanner permant de suivi d'activité sur les autres salons.
 
-## Concernant le pilotage de son link ou hotspot
+## Concernant le pilotage de son link (ou hotspot)
 Voici la liste des fonctionnalités actuelles :
 
 - QSY vers un salon,
 - Activation et désactivation du RRFRaptor,
-- Bascule en mode Perroquet.
+- Bascule en mode _Perroquet_,
+- Bascule en mode _Follow_.
+
+> Si le mode _Follow_ est activé, le RRFRemote affichera les informations du salon sur lequel se trouve votre link et il le suivra au grès de ses QSY. Il ne sera pas possible de consulter les informations d'un autre salon, à l'aide des boutons gauche et droit, à moins évidement de désactiver le mode _Follow_.
 
 ## En complément 
 Il est possible de :
@@ -57,9 +60,37 @@ Il est possible de :
 
 # Installation
 
-Le plus simple est d'installer [PlateformIO for VSCode](https://platformio.org/install/ide?install=vscode). C'est multiplateforme, en plus d'être un environnement agréable à utiliser.
+## Pré-ambule
 
-Ensuite, il suffit de cloner le projet RRFRemote, puis de l'ouvrir avec PlateformIO for VSCode. Il vous reste à compiler et uploader le projet sur votre M5Stack. 
+Le plus simple est d'installer [PlateformIO for VSCode](https://platformio.org/install/ide?install=vscode) sur votre PC. C'est environnement de développement multiplateforme et multilangage, en plus d'être agréable à utiliser.
+
+Ensuite, toujours sur votre PC, cloner le projet RRFRemote via la commande :
+
+`https://github.com/armel/RRFRemote.git`
+
+## Coté Spotnik : mise en place du script de contrôle
+
+Copier le script `RRFRemote.js` situé dans le sous répertoire `src/Spotnik` sur votre Spotnik (par exemple, dans le répertoire `/root`). 
+
+Lancer le script via la commande : 
+
+`nohup node /root/RRFRemote.js &`
+
+Pour qu'il se lance automatiquement en cas de reboot, ajouter la ligne suivante dans votre `/etc/rc.local` :
+
+``
+nohup node /root/RRFRemote.js & 
+``
+
+## Coté PC : compilation et flashage du M5Stack
+
+Ouvrez le projet RRFRemote avec PlateformIO for VSCode.
+
+Editer le fichier `src/settings.h` afin de renseigner vos paramétrages Wifi, votre indicatif et l'url  d'accès au script de contrôle installé précédement. Par défaut, c'est : 
+
+`http://adresse_ip_de_votre_spotnik:3000/`
+
+Compiler et uploader le projet sur votre M5Stack. C'est terminé.
 
 # That's all
 Bon trafic à tous, 88 & 73 de Armel F4HWN ! 
