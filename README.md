@@ -1,7 +1,7 @@
 # RRFRemote
 Le projet RRFRemote permet de suivre l'activité du RRF et de piloter son point d'accès ou hotpsot. Il peut fonctionner en charge (via un connecteur USB) ou sur batterie. 
 
-![RRFRemote](https://github.com/armel/RRFRemote/blob/feature_alpha/img/RRFRemote.jpeg)
+![RRFRemote](https://github.com/armel/RRFRemote/blob/main/img/RRFRemote.jpeg)
 
 # Architecture technique en bref
 
