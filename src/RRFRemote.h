@@ -5,24 +5,18 @@
 #include <Arduino.h>
 #include <Preferences.h>
 #include "font.h"
-
-// Personnal settings
-
-// Wifi
-const char *ssid = "F4HWN";
-const char *password = "petitchaton";
-WiFiClient client_rrfremote, client_rrftracker, client_hamqsl, client_whereis;
-
-// Call
-String indicatif = "F4HWN";
-
-// Spotnik client
-String endpoint_spotnik = "http://192.168.1.99:3000/";
-
-// No change after, please ;)
+#include "settings.h"
 
 // Version
-#define VERSION "1.0.5"
+#define VERSION "1.0.6"
+
+// Wifi
+WiFiClient client_rrfremote, client_rrftracker, client_hamqsl, client_whereis;
+const char *ssid = WIFI_SSID;
+const char *password = WIFI_PASSWORD;
+
+// Indicatif
+String indicatif = INDICATIF;
 
 // Preferences
 Preferences preferences;
@@ -77,6 +71,7 @@ const color_t TFT_HEADER_ROUGE = {120, 40, 31};
 long int timer_shutdown = 0; 
 
 // HTTP endpoint
+String endpoint_spotnik = SPOTNIK;
 String endpoint_hamqsl = "http://www.hamqsl.com/solarxml.php";
 String endpoint_rrf[] = {
     "http://rrf.f5nlg.ovh:8080/RRFTracker/RRF-today/rrf_tiny.json",
