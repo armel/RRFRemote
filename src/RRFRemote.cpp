@@ -68,22 +68,22 @@ void setup()
       0);           /* Core where the task should run */
 
   xTaskCreatePinnedToCore(
-      whereis,   /* Function to implement the task */
-      "whereis", /* Name of the task */
-      8192,      /* Stack size in words */
-      NULL,      /* Task input parameter */
-      1,         /* Priority of the task */
-      NULL,      /* Task handle. */
-      1);        /* Core where the task should run */
+      whereis,      /* Function to implement the task */
+      "whereis",    /* Name of the task */
+      8192,         /* Stack size in words */
+      NULL,         /* Task input parameter */
+      1,            /* Priority of the task */
+      NULL,         /* Task handle. */
+      1);           /* Core where the task should run */
 
   xTaskCreatePinnedToCore(
-      hamqsl,   /* Function to implement the task */
-      "hamqsl", /* Name of the task */
-      8192,     /* Stack size in words */
-      NULL,     /* Task input parameter */
-      2,        /* Priority of the task */
-      NULL,     /* Task handle. */
-      1);       /* Core where the task should run */
+      hamqsl,       /* Function to implement the task */
+      "hamqsl",     /* Name of the task */
+      8192,         /* Stack size in words */
+      NULL,         /* Task input parameter */
+      2,            /* Priority of the task */
+      NULL,         /* Task handle. */
+      1);           /* Core where the task should run */
 
   delay(4000);
 
@@ -280,14 +280,7 @@ void loop()
           {
             screensaver = millis(); // Screensaver update !!!
             tmp_str = getValue(elsewhere, ' ', 1);
-            if (tmp_str == "")
-            {
-              tmp_str = "RTFM";
-            }
-            else
-            {
-              tmp_str = getValue(elsewhere, ' ', 1) + ' ' + getValue(elsewhere, ' ', 2);
-            }
+            tmp_str = (tmp_str == "") ? "RTFM" : getValue(elsewhere, ' ', 1) + ' ' + getValue(elsewhere, ' ', 2);
 
             M5.Lcd.fillRect(26, 169 + (14 * k), 70, 13, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
             M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
@@ -341,7 +334,6 @@ void loop()
       M5.Lcd.setTextDatum(CL_DATUM);
 
       String system[] = {"CPU", "CPU Cores", "CPU Freq", "Chip Rev", "Flash Speed", "Flash Size", "Free RAM", "Free Heap", "IP", "Version"};
-      //size_t n = sizeof(solar) / sizeof(solar[0]);
 
       j = 125;
       for (uint8_t i = 0; i <= 9; i++)
@@ -385,7 +377,6 @@ void loop()
       M5.Lcd.setTextDatum(CL_DATUM);
 
       String solar[] = {"SFI", "Sunspots", "A-Index", "K-Index", "X-Ray", "Ptn Flux", "Elc Flux", "Aurora", "Solar Wind", "Update"};
-      //size_t n = sizeof(solar) / sizeof(solar[0]);
 
       j = 125;
       for (uint8_t i = 0; i <= 9; i++)
@@ -462,14 +453,8 @@ void loop()
       M5.Lcd.setTextColor(TFT_BLACK, TFT_WHITE);
       M5.Lcd.setTextDatum(CC_DATUM);
       tmp_str = getValue(all_c[i], ' ', 1);
-      if (tmp_str == "")
-      {
-        tmp_str = "RTFM";
-      }
-      else
-      {
-        tmp_str = getValue(all_c[i], ' ', 1) + ' ' + getValue(all_c[i], ' ', 2);
-      }
+      tmp_str = (tmp_str == "") ? "RTFM" : getValue(all_c[i], ' ', 1) + ' ' + getValue(all_c[i], ' ', 2);
+ 
       M5.Lcd.drawString(tmp_str, 240, k + j);
       M5.Lcd.setTextPadding(0);
       M5.Lcd.setTextDatum(CR_DATUM);
@@ -518,14 +503,8 @@ void loop()
       M5.Lcd.setTextColor(TFT_BLACK, TFT_WHITE);
       M5.Lcd.setTextDatum(CR_DATUM);
       tmp_str = getValue(iptable_c[i], ' ', 1);
-      if (tmp_str == "")
-      {
-        tmp_str = "RTFM";
-      }
-      else
-      {
-        tmp_str = getValue(iptable_c[i], ' ', 1) + ' ' + getValue(iptable_c[i], ' ', 2);
-      }
+      tmp_str = (tmp_str == "") ? "RTFM" : getValue(iptable_c[i], ' ', 1) + ' ' + getValue(iptable_c[i], ' ', 2);
+
       M5.Lcd.drawString(tmp_str, 318, k + j);
       M5.Lcd.setTextPadding(0);
 
@@ -568,14 +547,8 @@ void loop()
       M5.Lcd.setTextColor(TFT_BLACK, TFT_WHITE);
       M5.Lcd.setTextDatum(CC_DATUM);
       tmp_str = getValue(last_c[i], ' ', 1);
-      if (tmp_str == "")
-      {
-        tmp_str = "RTFM";
-      }
-      else
-      {
-        tmp_str = getValue(last_c[i], ' ', 1) + ' ' + getValue(last_c[i], ' ', 2);
-      }
+      tmp_str = (tmp_str == "") ? "RTFM" : getValue(last_c[i], ' ', 1) + ' ' + getValue(last_c[i], ' ', 2);
+
       M5.Lcd.drawString(tmp_str, 240, k + j);
       M5.Lcd.setTextPadding(0);
       M5.Lcd.setTextDatum(CR_DATUM);
@@ -593,6 +566,7 @@ void loop()
 
   if (menu_mode == 0)
   {
+    menu_selected = -1;
     if (tot != 0)
     {                         // If transmit
       screensaver = millis(); // Screensaver update !!!
@@ -624,10 +598,7 @@ void loop()
         M5.Lcd.setTextDatum(CL_DATUM);
         M5.Lcd.setTextPadding(200);
         tmp_str = getValue(last_c[0], ' ', 1);
-        if (tmp_str == "")
-        {
-          tmp_str = "RTFM";
-        }
+        tmp_str = (tmp_str == "") ? "RTFM" : tmp_str;
         M5.Lcd.drawString(tmp_str, 1, 60);
 
         transmit_on = 2;
@@ -811,25 +782,14 @@ void loop()
     }
     else
     {
-      if (M5.Power.getBatteryLevel() == 100)
+      i = M5.Power.getBatteryLevel();
+      switch(i)
       {
-        sprintf(swap, "%c", ICON_BAT100);
-      }
-      else if (M5.Power.getBatteryLevel() == 75)
-      {
-        sprintf(swap, "%c", ICON_BAT075);
-      }
-      else if (M5.Power.getBatteryLevel() == 50)
-      {
-        sprintf(swap, "%c", ICON_BAT050);
-      }
-      else if (M5.Power.getBatteryLevel() == 25)
-      {
-        sprintf(swap, "%c", ICON_BAT025);
-      }
-      else
-      {
-        sprintf(swap, "%c", ICON_BAT000);
+        case 100: sprintf(swap, "%c", ICON_BAT100); break;
+        case  75: sprintf(swap, "%c", ICON_BAT075); break;
+        case  50: sprintf(swap, "%c", ICON_BAT050); break;
+        case  25: sprintf(swap, "%c", ICON_BAT025); break;
+        default:  sprintf(swap, "%c", ICON_BAT000); break;
       }
       tmp_str = swap;
       M5.Lcd.drawString(tmp_str, 310, 18);
@@ -880,13 +840,10 @@ void loop()
     {
       title = String(menu[menu_selected]);
 
-      if (menu_selected == 4)
+      switch(menu_selected)
       {
-        option = "THEME " + String(color[color_current]);
-      }
-      else if (menu_selected == 5)
-      {
-        option = "LEVEL " + String(brightness_current);
+        case 4: option = "THEME " + String(color[color_current]); break;
+        case 5: option = "LEVEL " + String(brightness_current); break;
       }
     }
 
@@ -948,34 +905,25 @@ void loop()
       transmit_off = 1;
     }
 
-    type += 1;
-
-    if (type == 5)
-    {
-      type = 0;
-    }
+    type = (type++ < 4) ? type : 0;
   }
 
-  alternance += 1;
-  if (alternance == 51)
-  {
-    alternance = 1;
-  }
+  alternance = (alternance++ < 50) ? alternance : 1;
 
   // Temporisation
-
   wait = millis() - timer;
   if (wait < limit)
   {
     uint8_t j = int((limit - wait) / 10);
     for (uint8_t i = 0; i <= j; i++)
     {
-      scroll(0);
-      button();
-      delay(8);
+      scroll(10);
     }
   }
 
+  // Manage button
+  button();
+  
   // Manage screensaver
   if (screensaver_off == 0 && millis() - screensaver > screensaver_limit)
   {

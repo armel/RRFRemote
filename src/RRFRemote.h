@@ -8,7 +8,7 @@
 #include "settings.h"
 
 // Version
-#define VERSION "1.1.0"
+#define VERSION "1.1.1"
 
 // Wifi
 WiFiClient client_rrfremote, client_rrftracker, client_hamqsl, client_whereis;
@@ -84,7 +84,7 @@ int pos;
 // Misceleanous
 const char *room[] = {"RRF", "TECHNIQUE", "BAVARDAGE", "LOCAL", "INTERNATIONAL", "FON"};
 const int dtmf[] = {96, 98, 100, 101, 99, 97};
-const char *menu[] = {"QSY", "RAPTOR", "PERROQUET", "FOLLOW", "COULEUR", "BRIGHTNESS", "STOP"};
+const char *menu[] = {"QSY", "RAPTOR", "PERROQUET", "FOLLOW", "COULEUR", "BRIGHTNESS", "SHUTDOWN", "ESCAPE"};
 
 String tmp_str;
 String json_data = "", xml_data = "", whereis_data = "";
@@ -118,6 +118,8 @@ int follow_current = 0;
 unsigned long screensaver;
 int screensaver_limit = 5 * 60 * 1000;  // 5 minutes
 int screensaver_off = 0;
+
+int btn_a, btn_b, btn_c = 0;
 
 // Parse data
 String getValue(String data, char separator, int index)
@@ -215,13 +217,12 @@ void clear()
 }
 
 // Manage buttons
+
 void button()
 {
-  M5.update(); // Read the state of button
-
   if (screensaver_off == 1)
   {
-    if (M5.BtnA.wasPressed() || M5.BtnB.wasPressed() || M5.BtnC.wasPressed())
+    if (btn_a || btn_b || btn_c)
     {
       screensaver = millis(); // Screensaver update !!!
     }
@@ -229,55 +230,54 @@ void button()
   else
   { // Mode menu inactive
     if (menu_mode == 0)
-    { 
-      if (M5.BtnA.wasPressed() && follow_current == 0)
-      {
-        screensaver = millis(); // Screensaver update !!!
-        room_current -= 1;
-        refresh = 0;
-        reset = 0;
+    {
+      if(follow_current == 0) {
+        if (btn_a && follow_current == 0)
+        {
+          screensaver = millis(); // Screensaver update !!!
+          room_current -= 1;
+          refresh = 0;
+          reset = 0;
+        }
+        else if (btn_c && follow_current == 0)
+        {
+          screensaver = millis(); // Screensaver update !!!
+          room_current += 1;
+          refresh = 0;
+          reset = 0;
+        }
+
+        room_current = (room_current < 0) ? 5 : room_current;
+        room_current = (room_current > 5) ? 0 : room_current;
+        preferences.putUInt("room", room_current);
       }
-      else if (M5.BtnC.wasPressed() && follow_current == 0)
-      {
-        screensaver = millis(); // Screensaver update !!!
-        room_current += 1;
-        refresh = 0;
-        reset = 0;
-      }
-      else if (M5.BtnB.wasPressed())
+      if (btn_b)
       {
         screensaver = millis(); // Screensaver update !!!
         menu_mode = 1;
         menu_refresh = 0;
-        menu_selected = -1;
       }
     }
     else
     { // Mode menu active, no selection
       if (menu_selected == -1)
       {
-        if (M5.BtnA.wasPressed())
+        if (btn_a)
         {
           menu_current -= 1;
         }
-        else if (M5.BtnC.wasPressed())
+        else if (btn_c)
         {
           menu_current += 1;
         }
-        else if (M5.BtnB.wasPressed())
+        else if (btn_b)
         {
           menu_selected = menu_current;
           menu_refresh = 0;
         }
 
-        if (menu_current < 0)
-        {
-          menu_current = 6;
-        }
-        else if (menu_current > 6)
-        {
-          menu_current = 0;
-        }
+        menu_current = (menu_current < 0) ? 7 : menu_current;
+        menu_current = (menu_current > 7) ? 0 : menu_current;
         preferences.putUInt("menu", menu_current);
       }
       else
@@ -286,8 +286,8 @@ void button()
         if (menu_selected == 0)
         {
           qsy = dtmf[room_current];
+         
           menu_mode = 0;
-          menu_selected = -1;
           reset = 0;
           refresh = 0;        
         }
@@ -295,13 +295,9 @@ void button()
         else if (menu_selected == 1)
         {
           qsy = 200;
-          if(raptor_current == 0) {
-            raptor_current = 1;
-          } else {
-            raptor_current = 0;
-          }
+          raptor_current = (raptor_current == 0) ? 1 : 0;
+          
           menu_mode = 0;
-          menu_selected = -1;
           reset = 0;
           refresh = 0;
         }
@@ -309,24 +305,17 @@ void button()
         else if (menu_selected == 2)
         {
           qsy = 95;
+
           menu_mode = 0;
-          menu_selected = -1;
           reset = 0;
           refresh = 0;
         }
         // Mode menu active, Follow
         else if (menu_selected == 3)
         {
-          if (follow_current == 0)
-          {
-            follow_current = 1;
-          }
-          else {
-            follow_current = 0;
-          }
+          follow_current = (follow_current == 0) ? 1 : 0;
 
           menu_mode = 0;
-          menu_selected = -1;
           reset = 0;
           refresh = 0;
 
@@ -335,70 +324,68 @@ void button()
         // Mode menu active, Color
         else if (menu_selected == 4)
         {
-          if (M5.BtnA.wasPressed())
+          if (btn_a)
           {
             color_current -= 1;
           }
-          else if (M5.BtnC.wasPressed())
+          else if (btn_c)
           {
             color_current += 1;
           }
-          else if (M5.BtnB.wasPressed())
+          else if (btn_b)
           {
             menu_mode = 0;
-            menu_selected = -1;
             reset = 0;
             refresh = 0;
           }
 
-          if (color_current < 0)
-          {
-            color_current = 3;
-          }
-          else if (color_current > 3)
-          {
-            color_current = 0;
-          }
+          color_current = (color_current < 0) ? 3 : color_current;
+          color_current = (color_current > 3) ? 0 : color_current;
           preferences.putUInt("color", color_current);
         }
         // Mode menu active, Brightness
         else if (menu_selected == 5)
         {
-          if (M5.BtnA.wasPressed())
+          if (btn_a)
           {
-            brightness_current -= 2;
+            brightness_current -= 1;
           }
-          else if (M5.BtnC.wasPressed())
+          else if (btn_c)
           {
-            brightness_current += 2;
+            brightness_current += 1;
           }
-          else if (M5.BtnB.wasPressed())
+          else if (btn_b)
           {
             menu_mode = 0;
-            menu_selected = -1;
             reset = 0;
             refresh = 0;
           }
 
-          if (brightness_current < 10)
-          {
-            brightness_current = 10;
-          }
-          else if (brightness_current > 128)
-          {
-            brightness_current = 128;
-          }
+          brightness_current = (brightness_current < 10) ? 10 : brightness_current;
+          brightness_current = (brightness_current > 128) ? 128 : brightness_current;
           preferences.putUInt("brightness", brightness_current);
           M5.Lcd.setBrightness(brightness_current);
         }
-         // Mode menu active, Stop
+        // Mode menu active, Shutdown
         else if (menu_selected == 6)
         {
           M5.Power.powerOFF();
         }
+        // Mode menu active, Escape
+        else if (menu_selected == 7)
+        {
+          menu_mode = 0;
+          reset = 0;
+          refresh = 0;
+        }
       }
     }
   }
+
+  // Clean current value
+  btn_a = 0;
+  btn_b = 0;
+  btn_c = 0;
 }
 
 // Build scroll
@@ -428,6 +415,17 @@ void build_scroll()
 // Scroll
 void scroll(int pause)
 {
+  if(btn_a == 0 && btn_b == 0 && btn_c == 0) {
+    M5.update();
+    btn_a = M5.BtnA.read();
+    btn_b = M5.BtnB.read();
+    btn_c = M5.BtnC.read();
+    //Serial.println(a);
+    //Serial.println(b);
+    //Serial.println(c);
+    //Serial.println("------------");
+  }
+
   // Sprite for scroll
   build_scroll();
   img.pushSprite(0, 78);
@@ -451,17 +449,6 @@ void rrftracker(void *pvParameters)
   for (;;)
   {
     timer = millis();
-    if (room_current < 0)
-    {
-      room_current = 5;
-    }
-    else if (room_current > 5)
-    {
-      room_current = 0;
-    }
-
-    preferences.putUInt("room", room_current);
-
     if ((WiFi.status() == WL_CONNECTED)) // Check the current connection status
     {
 
@@ -475,9 +462,7 @@ void rrftracker(void *pvParameters)
         {
           qsy = 0;
           refresh = 0;
-          menu_refresh = 1;
           menu_mode = 0;
-          menu_selected = -1;
           whereis_current = dtmf[room_current];
           whereis_str = String(room[room_current]);
         }
@@ -533,7 +518,7 @@ void hamqsl(void *pvParameters)
   }
 }
 
-// Get data from API
+// Get data from Spotnik
 void whereis(void *pvParameters)
 {
   HTTPClient http;
