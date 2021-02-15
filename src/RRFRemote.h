@@ -420,10 +420,13 @@ void scroll(int pause)
     btn_a = M5.BtnA.read();
     btn_b = M5.BtnB.read();
     btn_c = M5.BtnC.read();
-    //Serial.println(a);
-    //Serial.println(b);
-    //Serial.println(c);
-    //Serial.println("------------");
+    /*
+    if(btn_b) {
+      Serial.print("Bouton B (scroll) : ");
+      Serial.println(btn_b);
+      Serial.println("--------------------");
+    }
+    */
   }
 
   // Sprite for scroll

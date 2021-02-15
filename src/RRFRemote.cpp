@@ -279,8 +279,14 @@ void loop()
           if (strcmp(elsewhere, "Aucune émission") != 0)
           {
             screensaver = millis(); // Screensaver update !!!
-            tmp_str = getValue(elsewhere, ' ', 1);
-            tmp_str = (tmp_str == "") ? "RTFM" : getValue(elsewhere, ' ', 1) + ' ' + getValue(elsewhere, ' ', 2);
+            tmp_str = String(elsewhere);
+            if(tmp_str.substring(0, 3) == "GW-") {
+              tmp_str = "GATEWAY";
+            }
+            else {
+              tmp_str = getValue(elsewhere, ' ', 1);
+              tmp_str = (tmp_str == "") ? "RTFM" : getValue(elsewhere, ' ', 1) + ' ' + getValue(elsewhere, ' ', 2);
+            }
 
             M5.Lcd.fillRect(26, 169 + (14 * k), 70, 13, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
             M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
@@ -452,8 +458,15 @@ void loop()
       M5.Lcd.setTextPadding(74);
       M5.Lcd.setTextColor(TFT_BLACK, TFT_WHITE);
       M5.Lcd.setTextDatum(CC_DATUM);
-      tmp_str = getValue(all_c[i], ' ', 1);
-      tmp_str = (tmp_str == "") ? "RTFM" : getValue(all_c[i], ' ', 1) + ' ' + getValue(all_c[i], ' ', 2);
+
+      tmp_str = String(all_c[i]);
+      if(tmp_str.substring(0, 3) == "GW-") {
+        tmp_str = "GATEWAY";
+      }
+      else {
+        tmp_str = getValue(all_c[i], ' ', 1);
+        tmp_str = (tmp_str == "") ? "RTFM" : getValue(all_c[i], ' ', 1) + ' ' + getValue(all_c[i], ' ', 2);
+      }
  
       M5.Lcd.drawString(tmp_str, 240, k + j);
       M5.Lcd.setTextPadding(0);
@@ -502,8 +515,15 @@ void loop()
       M5.Lcd.setTextPadding(74);
       M5.Lcd.setTextColor(TFT_BLACK, TFT_WHITE);
       M5.Lcd.setTextDatum(CR_DATUM);
-      tmp_str = getValue(iptable_c[i], ' ', 1);
-      tmp_str = (tmp_str == "") ? "RTFM" : getValue(iptable_c[i], ' ', 1) + ' ' + getValue(iptable_c[i], ' ', 2);
+
+      tmp_str = String(iptable_c[i]);
+      if(tmp_str.substring(0, 3) == "GW-") {
+        tmp_str = "GATEWAY";
+      }
+      else {
+        tmp_str = getValue(iptable_c[i], ' ', 1);
+        tmp_str = (tmp_str == "") ? "RTFM" : getValue(iptable_c[i], ' ', 1) + ' ' + getValue(iptable_c[i], ' ', 2);
+      }
 
       M5.Lcd.drawString(tmp_str, 318, k + j);
       M5.Lcd.setTextPadding(0);
@@ -546,8 +566,15 @@ void loop()
       M5.Lcd.setTextPadding(87);
       M5.Lcd.setTextColor(TFT_BLACK, TFT_WHITE);
       M5.Lcd.setTextDatum(CC_DATUM);
-      tmp_str = getValue(last_c[i], ' ', 1);
-      tmp_str = (tmp_str == "") ? "RTFM" : getValue(last_c[i], ' ', 1) + ' ' + getValue(last_c[i], ' ', 2);
+
+      tmp_str = String(last_c[i]);
+      if(tmp_str.substring(0, 3) == "GW-") {
+        tmp_str = "GATEWAY";
+      }
+      else {
+        tmp_str = getValue(last_c[i], ' ', 1);
+        tmp_str = (tmp_str == "") ? "RTFM" : getValue(last_c[i], ' ', 1) + ' ' + getValue(last_c[i], ' ', 2);
+      }
 
       M5.Lcd.drawString(tmp_str, 240, k + j);
       M5.Lcd.setTextPadding(0);
@@ -597,8 +624,16 @@ void loop()
         M5.Lcd.setTextColor(TFT_WHITE, TFT_BLACK);
         M5.Lcd.setTextDatum(CL_DATUM);
         M5.Lcd.setTextPadding(200);
-        tmp_str = getValue(last_c[0], ' ', 1);
-        tmp_str = (tmp_str == "") ? "RTFM" : tmp_str;
+
+        tmp_str = String(last_c[0]);
+        if(tmp_str.substring(0, 3) == "GW-") {
+          tmp_str = "GATEWAY";
+        }
+        else {
+          tmp_str = getValue(last_c[0], ' ', 1);
+          tmp_str = (tmp_str == "") ? "RTFM" : tmp_str;
+        }
+
         M5.Lcd.drawString(tmp_str, 1, 60);
 
         transmit_on = 2;
