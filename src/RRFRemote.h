@@ -34,7 +34,7 @@ color_t TFT_GRAY = {128, 128, 128};
 color_t TFT_FRONT = {52, 152, 219};
 color_t TFT_HEADER = {27, 79, 114};
 
-const char *color[] = {"BLEU", "ORANGE", "VERT", "ROUGE"};
+const char *color[] = {"BLEU", "ORANGE", "VERT", "ROUGE", "VIOLET", "GRIS"};
 int color_current = 0;
 
 const color_t TFT_FRONT_BLEU = {52, 152, 219};
@@ -48,6 +48,12 @@ const color_t TFT_HEADER_VERT = {20, 90, 50};
 
 const color_t TFT_FRONT_ROUGE = {231, 76, 60};
 const color_t TFT_HEADER_ROUGE = {120, 40, 31};
+
+const color_t TFT_FRONT_VIOLET = {165, 105, 189};
+const color_t TFT_HEADER_VIOLET = {91, 44, 111};
+
+const color_t TFT_FRONT_GRIS = {174, 182, 191};
+const color_t TFT_HEADER_GRIS = {52, 73, 94};
 
 // Icon
 #define ICON_FONT &icon_works_webfont14pt7b
@@ -157,25 +163,13 @@ int interpolation(int value, int in_min, int in_max, int out_min, int out_max)
 // Reset color
 void reset_color()
 {
-  if (color_current == 0)
-  {
-    TFT_FRONT = TFT_FRONT_BLEU;
-    TFT_HEADER = TFT_HEADER_BLEU;
-  }
-  else if (color_current == 1)
-  {
-    TFT_FRONT = TFT_FRONT_ORANGE;
-    TFT_HEADER = TFT_HEADER_ORANGE;
-  }
-  else if (color_current == 2)
-  {
-    TFT_FRONT = TFT_FRONT_VERT;
-    TFT_HEADER = TFT_HEADER_VERT;
-  }
-  else if (color_current == 3)
-  {
-    TFT_FRONT = TFT_FRONT_ROUGE;
-    TFT_HEADER = TFT_HEADER_ROUGE;
+  switch(color_current) {
+    case 0: TFT_FRONT = TFT_FRONT_BLEU; TFT_HEADER = TFT_HEADER_BLEU; break;
+    case 1: TFT_FRONT = TFT_FRONT_ORANGE; TFT_HEADER = TFT_HEADER_ORANGE; break;
+    case 2: TFT_FRONT = TFT_FRONT_VERT; TFT_HEADER = TFT_HEADER_VERT; break;
+    case 3: TFT_FRONT = TFT_FRONT_ROUGE; TFT_HEADER = TFT_HEADER_ROUGE; break;
+    case 4: TFT_FRONT = TFT_FRONT_VIOLET; TFT_HEADER = TFT_HEADER_VIOLET; break;
+    case 5: TFT_FRONT = TFT_FRONT_GRIS; TFT_HEADER = TFT_HEADER_GRIS; break;
   }
 }
 
@@ -324,13 +318,16 @@ void button()
         // Mode menu active, Color
         else if (menu_selected == 4)
         {
+          int change = 0;
           if (btn_a)
           {
             color_current -= 1;
+            change = 1;
           }
           else if (btn_c)
           {
             color_current += 1;
+            change = 1;
           }
           else if (btn_b)
           {
@@ -339,8 +336,15 @@ void button()
             refresh = 0;
           }
 
-          color_current = (color_current < 0) ? 3 : color_current;
-          color_current = (color_current > 3) ? 0 : color_current;
+          color_current = (color_current < 0) ? 5 : color_current;
+          color_current = (color_current > 5) ? 0 : color_current;
+
+          if(change == 1) {
+            clear();
+            refresh = 0;
+            change = 0;
+          }
+
           preferences.putUInt("color", color_current);
         }
         // Mode menu active, Brightness
