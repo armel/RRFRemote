@@ -8,7 +8,7 @@
 #include "settings.h"
 
 // Version
-#define VERSION "1.1.1"
+#define VERSION "1.1.2"
 
 // Wifi
 WiFiClient client_rrfremote, client_rrftracker, client_hamqsl, client_whereis;
@@ -446,8 +446,7 @@ void scroll(int pause)
 void rrftracker(void *pvParameters)
 {
   HTTPClient http;
-
-  unsigned long timer = 0, wait = 0, limit = 750;
+  unsigned long timer = 0, wait = 0, limit = 750; // Retry all 750ms
 
   for (;;)
   {
@@ -495,7 +494,8 @@ void rrftracker(void *pvParameters)
 void hamqsl(void *pvParameters)
 {
   HTTPClient http;
-  unsigned long timer = 0, wait = 0, limit = 60 * 60 * 1000; // Retreive all hours
+  unsigned int limit_short = 1 * 60 * 1000; // Retry all minute
+  unsigned int limit_long = 60 * 60 * 1000; // Retry all hours
 
   for (;;)
   {
@@ -508,15 +508,13 @@ void hamqsl(void *pvParameters)
       if (httpCode == 200)                            // Check for the returning code
       {
         xml_data = http.getString(); // Get data
-        timer = millis();
+        http.end(); // Free the resources
+        vTaskDelay(pdMS_TO_TICKS(limit_long));
       }
-      http.end(); // Free the resources
-    }
-
-    wait = millis() - timer;
-    if (wait < limit)
-    {
-      vTaskDelay(pdMS_TO_TICKS(limit - wait));
+      else {
+        http.end(); // Free the resources
+        vTaskDelay(pdMS_TO_TICKS(limit_short));
+      }
     }
   }
 }
@@ -525,10 +523,11 @@ void hamqsl(void *pvParameters)
 void whereis(void *pvParameters)
 {
   HTTPClient http;
-  unsigned long timer = 0, wait = 0, limit = 1 * 10 * 1000; // Retreive 10 seconds
+  unsigned long timer = 0, wait = 0, limit = 1 * 10 * 1000; // Retry all 10 seconds
 
   for (;;)
   {
+    timer = millis();
     if ((WiFi.status() == WL_CONNECTED)) // Check the current connection status
     {
       http.begin(client_whereis, endpoint_spotnik + String("?dtmf=0")); // Specify the URL
@@ -550,8 +549,6 @@ void whereis(void *pvParameters)
         } else {
           raptor_current = 1;
         }
-
-        timer = millis();
       }
       http.end(); // Free the resources
     }

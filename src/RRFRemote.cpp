@@ -230,7 +230,6 @@ void loop()
 
   for (uint8_t i = 0; i < 24; i++)
   {
-    scroll(10);
     if (tx[i] != 0)
     {
       uint8_t tmp = map(tx[i], 0, max_level, 0, 48);
@@ -240,6 +239,8 @@ void loop()
     j += 6;
     k += 2;
   }
+
+  scroll(10);
 
   M5.Lcd.setFreeFont(0);
   M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
@@ -304,8 +305,11 @@ void loop()
           M5.Lcd.drawString(tmp_str, 62, 168 + j);
 
           M5.Lcd.setTextColor(TFT_BLACK, TFT_WHITE);
+          M5.Lcd.setTextPadding(50);
           elsewhere = doc["elsewhere"][3][room[i]];
           M5.Lcd.drawString(String(elsewhere), 124, 168 + j);
+
+          M5.Lcd.setTextPadding(0);
 
           j += 14;
           k += 1;
@@ -589,8 +593,6 @@ void loop()
 
   scroll(10);
 
-  //M5.Lcd.fillRect(160, 49, 75, 28, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
-
   if (menu_mode == 0)
   {
     menu_selected = -1;
@@ -646,6 +648,13 @@ void loop()
       M5.Lcd.setTextDatum(CR_DATUM);
       M5.Lcd.setTextPadding(120);
       tmp_str = String(last_d[0]);
+
+      /*
+      String minute = tmp_str.substring(1, 2);
+      String seconde = tmp_str.substring(3, 5);
+      int duree = (minute.toInt() * 60) + seconde.toInt();
+      */
+
       M5.Lcd.drawString(tmp_str.substring(1), 318, 60);
     }
     else
@@ -922,7 +931,9 @@ void loop()
       if (dtmf[i] == whereis_current) {
         if (i != room_current) {
           room_current = i;
+          preferences.putUInt("room", room_current);
           reset = 0;
+          refresh = 0;
         }
         break;
       }
@@ -960,6 +971,8 @@ void loop()
   button();
   
   // Manage screensaver
+  scroll(10);
+
   if (screensaver_off == 0 && millis() - screensaver > screensaver_limit)
   {
     M5.Lcd.sleep();
