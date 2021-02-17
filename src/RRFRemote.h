@@ -34,7 +34,7 @@ color_t TFT_GRAY = {128, 128, 128};
 color_t TFT_FRONT = {52, 152, 219};
 color_t TFT_HEADER = {27, 79, 114};
 
-const char *color[] = {"BLEU", "ORANGE", "VERT", "ROUGE", "VIOLET", "GRIS"};
+const char *color[] = {"BLEU", "ORANGE", "VERT", "ROUGE", "ROSE", "VIOLET", "GRIS"};
 int color_current = 0;
 
 const color_t TFT_FRONT_BLEU = {52, 152, 219};
@@ -48,6 +48,9 @@ const color_t TFT_HEADER_VERT = {20, 90, 50};
 
 const color_t TFT_FRONT_ROUGE = {231, 76, 60};
 const color_t TFT_HEADER_ROUGE = {120, 40, 31};
+
+const color_t TFT_FRONT_ROSE = {219, 112, 147};
+const color_t TFT_HEADER_ROSE = {199, 21, 133};
 
 const color_t TFT_FRONT_VIOLET = {165, 105, 189};
 const color_t TFT_HEADER_VIOLET = {91, 44, 111};
@@ -168,8 +171,9 @@ void reset_color()
     case 1: TFT_FRONT = TFT_FRONT_ORANGE; TFT_HEADER = TFT_HEADER_ORANGE; break;
     case 2: TFT_FRONT = TFT_FRONT_VERT; TFT_HEADER = TFT_HEADER_VERT; break;
     case 3: TFT_FRONT = TFT_FRONT_ROUGE; TFT_HEADER = TFT_HEADER_ROUGE; break;
-    case 4: TFT_FRONT = TFT_FRONT_VIOLET; TFT_HEADER = TFT_HEADER_VIOLET; break;
-    case 5: TFT_FRONT = TFT_FRONT_GRIS; TFT_HEADER = TFT_HEADER_GRIS; break;
+    case 4: TFT_FRONT = TFT_FRONT_ROSE; TFT_HEADER = TFT_HEADER_ROSE; break;
+    case 5: TFT_FRONT = TFT_FRONT_VIOLET; TFT_HEADER = TFT_HEADER_VIOLET; break;
+    case 6: TFT_FRONT = TFT_FRONT_GRIS; TFT_HEADER = TFT_HEADER_GRIS; break;
   }
 }
 
@@ -350,6 +354,7 @@ void button()
 
           if(change == 1) {
             clear();
+            menu_refresh = 0;
             refresh = 0;
             change = 0;
           }
