@@ -8,7 +8,7 @@
 #include "settings.h"
 
 // Version
-#define VERSION "1.1.2"
+#define VERSION "1.1.3"
 
 // Wifi
 WiFiClient client_rrfremote, client_rrftracker, client_hamqsl, client_whereis;
@@ -214,6 +214,15 @@ void clear()
 
 void button()
 {
+  static int btn_b_last = 0;
+
+  // Manage button bump
+  if(btn_b && btn_b_last) {
+    btn_b = 0;
+  }
+  btn_b_last = btn_b;
+
+  // Manage screensaver
   if (screensaver_off == 1)
   {
     if (btn_a || btn_b || btn_c)
@@ -424,13 +433,6 @@ void scroll(int pause)
     btn_a = M5.BtnA.read();
     btn_b = M5.BtnB.read();
     btn_c = M5.BtnC.read();
-    /*
-    if(btn_b) {
-      Serial.print("Bouton B (scroll) : ");
-      Serial.println(btn_b);
-      Serial.println("--------------------");
-    }
-    */
   }
 
   // Sprite for scroll

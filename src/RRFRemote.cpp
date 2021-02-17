@@ -969,7 +969,7 @@ void loop()
 
   // Manage button
   button();
-  
+
   // Manage screensaver
   scroll(10);
 
