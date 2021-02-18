@@ -8,10 +8,10 @@
 #include "settings.h"
 
 // Version
-#define VERSION "1.1.0"
+#define VERSION "1.1.4"
 
 // Wifi
-WiFiClient client_rrfremote, client_rrftracker, client_hamqsl, client_whereis;
+WiFiClient clientRemote, clientTracker, clientHamSQL, clientWhereis;
 const char *ssid = WIFI_SSID;
 const char *password = WIFI_PASSWORD;
 
@@ -27,27 +27,36 @@ typedef struct __attribute__((__packed__))
   uint8_t r;
   uint8_t g;
   uint8_t b;
-} color_t;
+} colorType;
 
-color_t TFT_BACK = {48, 48, 48};
-color_t TFT_GRAY = {128, 128, 128};
-color_t TFT_FRONT = {52, 152, 219};
-color_t TFT_HEADER = {27, 79, 114};
+colorType TFT_BACK = {48, 48, 48};
+colorType TFT_GRAY = {128, 128, 128};
+colorType TFT_FRONT = {52, 152, 219};
+colorType TFT_HEADER = {27, 79, 114};
 
-const char *color[] = {"BLEU", "ORANGE", "VERT", "ROUGE"};
-int color_current = 0;
+const char *color[] = {"BLEU", "ORANGE", "VERT", "ROUGE", "ROSE", "VIOLET", "GRIS"};
+int colorCurrent = 0;
 
-const color_t TFT_FRONT_BLEU = {52, 152, 219};
-const color_t TFT_HEADER_BLEU = {27, 79, 114};
+const colorType TFT_FRONT_BLEU = {52, 152, 219};
+const colorType TFT_HEADER_BLEU = {27, 79, 114};
 
-const color_t TFT_FRONT_ORANGE = {245, 176, 65};
-const color_t TFT_HEADER_ORANGE = {186, 74, 0};
+const colorType TFT_FRONT_ORANGE = {245, 176, 65};
+const colorType TFT_HEADER_ORANGE = {186, 74, 0};
 
-const color_t TFT_FRONT_VERT = {52, 174, 96};
-const color_t TFT_HEADER_VERT = {20, 90, 50};
+const colorType TFT_FRONT_VERT = {52, 174, 96};
+const colorType TFT_HEADER_VERT = {20, 90, 50};
 
-const color_t TFT_FRONT_ROUGE = {231, 76, 60};
-const color_t TFT_HEADER_ROUGE = {120, 40, 31};
+const colorType TFT_FRONT_ROUGE = {231, 76, 60};
+const colorType TFT_HEADER_ROUGE = {120, 40, 31};
+
+const colorType TFT_FRONT_ROSE = {219, 112, 147};
+const colorType TFT_HEADER_ROSE = {199, 21, 133};
+
+const colorType TFT_FRONT_VIOLET = {165, 105, 189};
+const colorType TFT_HEADER_VIOLET = {91, 44, 111};
+
+const colorType TFT_FRONT_GRIS = {174, 182, 191};
+const colorType TFT_HEADER_GRIS = {52, 73, 94};
 
 // Icon
 #define ICON_FONT &icon_works_webfont14pt7b
@@ -66,9 +75,9 @@ const color_t TFT_HEADER_ROUGE = {120, 40, 31};
 #define ICON_CHARGING 37
 
 // HTTP endpoint
-String endpoint_spotnik = SPOTNIK;
-String endpoint_hamqsl = "http://www.hamqsl.com/solarxml.php";
-String endpoint_rrf[] = {
+String endpointSpotnik = SPOTNIK;
+String endpointHamQSL = "http://www.hamqsl.com/solarxml.php";
+String endpointRRF[] = {
     "http://rrf.f5nlg.ovh:8080/RRFTracker/RRF-today/rrf_tiny.json",
     "http://rrf.f5nlg.ovh:8080/RRFTracker/TECHNIQUE-today/rrf_tiny.json",
     "http://rrf.f5nlg.ovh:8080/RRFTracker/BAVARDAGE-today/rrf_tiny.json",
@@ -78,46 +87,49 @@ String endpoint_rrf[] = {
 
 // Scroll
 TFT_eSprite img = TFT_eSprite(&M5.Lcd); // Create Sprite object "img" with pointer to "tft" object
-String msg = "";
+String message = "";
 int pos;
 
 // Misceleanous
 const char *room[] = {"RRF", "TECHNIQUE", "BAVARDAGE", "LOCAL", "INTERNATIONAL", "FON"};
 const int dtmf[] = {96, 98, 100, 101, 99, 97};
-const char *menu[] = {"QSY", "RAPTOR", "PERROQUET", "FOLLOW", "COULEUR", "BRIGHTNESS", "STOP"};
+const char *menu[] = {"QSY", "RAPTOR", "PERROQUET", "FOLLOW", "COULEUR", "LUMINOSITE", "ARRET", "QUITTER"};
 
-String tmp_str;
-String json_data = "", xml_data = "", whereis_data = "";
-String json_data_new = "";
+String tmpString;
+String jsonData = "", xmlData = "", whereisData = "";
+String jsonDataNew = "";
 
-String date_str, date_str_old;
-String emission_str, emission_str_old;
-String link_total_str, link_total_str_old;
-String link_actif_str, link_actif_str_old;
-String tx_total_str, tx_total_str_old;
-String elsewhere_str, elsewhere_str_old;
-String whereis_str = "";
+String dateString, dateStringOld;
+String dureeString, dureeStringOld;
+String emissionString, emissionStringOld;
+String linkTotalString, linkTotalStringOld;
+String linkActifString, linkActifStringOld;
+String txTotalString, txTotalStringOld;
+String elsewhereString, elsewhereStringOld;
+String whereisString = "";
 
-int room_current = 0;
-int whereis_current = 0;
-int brightness_current = 32;
-int transmit_on = 0, transmit_off = 0;
+int roomCurrent = 0;
+int whereisCurrent = 0;
+int brightnessCurrent = 32;
+int transmitOn = 0, transmitOff = 0;
 int reset = 0;
 int alternance = 0;
 int refresh = 0;
 int type = 0;
-int battery_current = -1;
+int batteryCurrent = -1;
 int qsy = 0;
-int menu_mode = 0;
-int menu_current = 0;
-int menu_selected = -1;
-int menu_refresh = 0;
-int raptor_current = 0;
-int follow_current = 0;
+int menuMode = 0;
+int menuCurrent = 0;
+int menuSelected = -1;
+int menuRefresh = 0;
+int raptorCurrent = 0;
+int followCurrent = 0;
 
 unsigned long screensaver;
-int screensaver_limit = 5 * 60 * 1000;  // 5 minutes
-int screensaver_off = 0;
+int screensaverLimit = 5 * 60 * 1000;  // 5 minutes
+int screensaverOff = 0;
+
+int btnA, btnB, btnC = 0;
 
 // Parse data
 String getValue(String data, char separator, int index)
@@ -140,11 +152,11 @@ String getValue(String data, char separator, int index)
 }
 
 // Compute interpolation
-int interpolation(int value, int in_min, int in_max, int out_min, int out_max)
+int interpolation(int value, int inMin, int inMax, int outMin, int outMax)
 {
-  if ((in_max - in_min) != 0)
+  if ((inMax - inMin) != 0)
   {
-    return int((value - in_min) * (out_max - out_min) / (in_max - in_min) + out_min);
+    return int((value - inMin) * (outMax - outMin) / (inMax - inMin) + outMin);
   }
   else
   {
@@ -153,27 +165,16 @@ int interpolation(int value, int in_min, int in_max, int out_min, int out_max)
 }
 
 // Reset color
-void reset_color()
+void resetColor()
 {
-  if (color_current == 0)
-  {
-    TFT_FRONT = TFT_FRONT_BLEU;
-    TFT_HEADER = TFT_HEADER_BLEU;
-  }
-  else if (color_current == 1)
-  {
-    TFT_FRONT = TFT_FRONT_ORANGE;
-    TFT_HEADER = TFT_HEADER_ORANGE;
-  }
-  else if (color_current == 2)
-  {
-    TFT_FRONT = TFT_FRONT_VERT;
-    TFT_HEADER = TFT_HEADER_VERT;
-  }
-  else if (color_current == 3)
-  {
-    TFT_FRONT = TFT_FRONT_ROUGE;
-    TFT_HEADER = TFT_HEADER_ROUGE;
+  switch(colorCurrent) {
+    case 0: TFT_FRONT = TFT_FRONT_BLEU; TFT_HEADER = TFT_HEADER_BLEU; break;
+    case 1: TFT_FRONT = TFT_FRONT_ORANGE; TFT_HEADER = TFT_HEADER_ORANGE; break;
+    case 2: TFT_FRONT = TFT_FRONT_VERT; TFT_HEADER = TFT_HEADER_VERT; break;
+    case 3: TFT_FRONT = TFT_FRONT_ROUGE; TFT_HEADER = TFT_HEADER_ROUGE; break;
+    case 4: TFT_FRONT = TFT_FRONT_ROSE; TFT_HEADER = TFT_HEADER_ROSE; break;
+    case 5: TFT_FRONT = TFT_FRONT_VIOLET; TFT_HEADER = TFT_HEADER_VIOLET; break;
+    case 6: TFT_FRONT = TFT_FRONT_GRIS; TFT_HEADER = TFT_HEADER_GRIS; break;
   }
 }
 
@@ -181,9 +182,9 @@ void reset_color()
 void clear()
 {
   // Reset
-  msg = "";
+  message = "";
   M5.lcd.clear();
-  reset_color();
+  resetColor();
 
   // Header
   M5.Lcd.fillRect(0, 0, 320, 44, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
@@ -215,194 +216,199 @@ void clear()
 }
 
 // Manage buttons
+
 void button()
 {
-  M5.update(); // Read the state of button
+  static int btnBLast = 0;
 
-  if (screensaver_off == 1)
+  // Manage button bump
+  if(btnB && btnBLast) {
+    btnB = 0;
+  }
+  btnBLast = btnB;
+
+  // Manage screensaver
+  if (screensaverOff == 1)
   {
-    if (M5.BtnA.wasPressed() || M5.BtnB.wasPressed() || M5.BtnC.wasPressed())
+    if (btnA || btnB || btnC)
     {
       screensaver = millis(); // Screensaver update !!!
     }
   }
   else
   { // Mode menu inactive
-    if (menu_mode == 0)
-    { 
-      if (M5.BtnA.wasPressed() && follow_current == 0)
-      {
-        screensaver = millis(); // Screensaver update !!!
-        room_current -= 1;
-        refresh = 0;
-        reset = 0;
+    if (menuMode == 0)
+    {
+      if(followCurrent == 0) {
+        if (btnA && followCurrent == 0)
+        {
+          screensaver = millis(); // Screensaver update !!!
+          roomCurrent -= 1;
+          refresh = 0;
+          reset = 0;
+        }
+        else if (btnC && followCurrent == 0)
+        {
+          screensaver = millis(); // Screensaver update !!!
+          roomCurrent += 1;
+          refresh = 0;
+          reset = 0;
+        }
+
+        roomCurrent = (roomCurrent < 0) ? 5 : roomCurrent;
+        roomCurrent = (roomCurrent > 5) ? 0 : roomCurrent;
+        preferences.putUInt("room", roomCurrent);
       }
-      else if (M5.BtnC.wasPressed() && follow_current == 0)
+      if (btnB)
       {
         screensaver = millis(); // Screensaver update !!!
-        room_current += 1;
-        refresh = 0;
-        reset = 0;
-      }
-      else if (M5.BtnB.wasPressed())
-      {
-        screensaver = millis(); // Screensaver update !!!
-        menu_mode = 1;
-        menu_refresh = 0;
-        menu_selected = -1;
+        menuMode = 1;
+        menuRefresh = 0;
       }
     }
     else
     { // Mode menu active, no selection
-      if (menu_selected == -1)
+      if (menuSelected == -1)
       {
-        if (M5.BtnA.wasPressed())
+        if (btnA)
         {
-          menu_current -= 1;
+          menuCurrent -= 1;
         }
-        else if (M5.BtnC.wasPressed())
+        else if (btnC)
         {
-          menu_current += 1;
+          menuCurrent += 1;
         }
-        else if (M5.BtnB.wasPressed())
+        else if (btnB)
         {
-          menu_selected = menu_current;
-          menu_refresh = 0;
+          menuSelected = menuCurrent;
+          menuRefresh = 0;
         }
 
-        if (menu_current < 0)
-        {
-          menu_current = 6;
-        }
-        else if (menu_current > 6)
-        {
-          menu_current = 0;
-        }
-        preferences.putUInt("menu", menu_current);
+        menuCurrent = (menuCurrent < 0) ? 7 : menuCurrent;
+        menuCurrent = (menuCurrent > 7) ? 0 : menuCurrent;
+        preferences.putUInt("menu", menuCurrent);
       }
       else
       {
         // Mode menu active, QSY
-        if (menu_selected == 0)
+        if (menuSelected == 0)
         {
-          qsy = dtmf[room_current];
-          menu_mode = 0;
-          menu_selected = -1;
+          qsy = dtmf[roomCurrent];
+         
+          menuMode = 0;
           reset = 0;
           refresh = 0;        
         }
         // Mode menu active, Raptor
-        else if (menu_selected == 1)
+        else if (menuSelected == 1)
         {
           qsy = 200;
-          if(raptor_current == 0) {
-            raptor_current = 1;
-          } else {
-            raptor_current = 0;
-          }
-          menu_mode = 0;
-          menu_selected = -1;
+          raptorCurrent = (raptorCurrent == 0) ? 1 : 0;
+          
+          menuMode = 0;
           reset = 0;
           refresh = 0;
         }
         // Mode menu active, Parrot
-        else if (menu_selected == 2)
+        else if (menuSelected == 2)
         {
           qsy = 95;
-          menu_mode = 0;
-          menu_selected = -1;
+
+          menuMode = 0;
           reset = 0;
           refresh = 0;
         }
         // Mode menu active, Follow
-        else if (menu_selected == 3)
+        else if (menuSelected == 3)
         {
-          if (follow_current == 0)
-          {
-            follow_current = 1;
-          }
-          else {
-            follow_current = 0;
-          }
+          followCurrent = (followCurrent == 0) ? 1 : 0;
 
-          menu_mode = 0;
-          menu_selected = -1;
+          menuMode = 0;
           reset = 0;
           refresh = 0;
 
-          preferences.putUInt("follow", follow_current);
+          preferences.putUInt("follow", followCurrent);
         }
         // Mode menu active, Color
-        else if (menu_selected == 4)
+        else if (menuSelected == 4)
         {
-          if (M5.BtnA.wasPressed())
+          int change = 0;
+          if (btnA)
           {
-            color_current -= 1;
+            colorCurrent -= 1;
+            change = 1;
           }
-          else if (M5.BtnC.wasPressed())
+          else if (btnC)
           {
-            color_current += 1;
+            colorCurrent += 1;
+            change = 1;
           }
-          else if (M5.BtnB.wasPressed())
+          else if (btnB)
           {
-            menu_mode = 0;
-            menu_selected = -1;
+            menuMode = 0;
             reset = 0;
             refresh = 0;
           }
 
-          if (color_current < 0)
-          {
-            color_current = 3;
+          colorCurrent = (colorCurrent < 0) ? 6 : colorCurrent;
+          colorCurrent = (colorCurrent > 6) ? 0 : colorCurrent;
+
+          if(change == 1) {
+            clear();
+            menuRefresh = 0;
+            refresh = 0;
+            change = 0;
           }
-          else if (color_current > 3)
-          {
-            color_current = 0;
-          }
-          preferences.putUInt("color", color_current);
+
+          preferences.putUInt("color", colorCurrent);
         }
         // Mode menu active, Brightness
-        else if (menu_selected == 5)
+        else if (menuSelected == 5)
         {
-          if (M5.BtnA.wasPressed())
+          if (btnA)
           {
-            brightness_current -= 2;
+            brightnessCurrent -= 1;
           }
-          else if (M5.BtnC.wasPressed())
+          else if (btnC)
           {
-            brightness_current += 2;
+            brightnessCurrent += 1;
           }
-          else if (M5.BtnB.wasPressed())
+          else if (btnB)
           {
-            menu_mode = 0;
-            menu_selected = -1;
+            menuMode = 0;
             reset = 0;
             refresh = 0;
           }
 
-          if (brightness_current < 10)
-          {
-            brightness_current = 10;
-          }
-          else if (brightness_current > 128)
-          {
-            brightness_current = 128;
-          }
-          preferences.putUInt("brightness", brightness_current);
-          M5.Lcd.setBrightness(brightness_current);
+          brightnessCurrent = (brightnessCurrent < 10) ? 10 : brightnessCurrent;
+          brightnessCurrent = (brightnessCurrent > 128) ? 128 : brightnessCurrent;
+          preferences.putUInt("brightness", brightnessCurrent);
+          M5.Lcd.setBrightness(brightnessCurrent);
         }
-         // Mode menu active, Stop
-        else if (menu_selected == 6)
+        // Mode menu active, Shutdown
+        else if (menuSelected == 6)
         {
           M5.Power.powerOFF();
+        }
+        // Mode menu active, Escape
+        else if (menuSelected == 7)
+        {
+          menuMode = 0;
+          reset = 0;
+          refresh = 0;
         }
       }
     }
   }
+
+  // Clean current value
+  btnA = 0;
+  btnB = 0;
+  btnC = 0;
 }
 
 // Build scroll
-void build_scroll()
+void buildScroll()
 {
   int h = 20;
   int w = M5.Lcd.width();
@@ -419,17 +425,24 @@ void build_scroll()
 
   // Need to print twice so text appears to wrap around at left and right edges
   img.setCursor(pos, 2); // Print text at xpos
-  img.print(msg);
+  img.print(message);
 
   img.setCursor(pos - w, 2); // Print text at xpos - sprite width
-  img.print(msg);
+  img.print(message);
 }
 
 // Scroll
 void scroll(int pause)
 {
+  if(btnA == 0 && btnB == 0 && btnC == 0) {
+    M5.update();
+    btnA = M5.BtnA.read();
+    btnB = M5.BtnB.read();
+    btnC = M5.BtnC.read();
+  }
+
   // Sprite for scroll
-  build_scroll();
+  buildScroll();
   img.pushSprite(0, 78);
 
   pos -= 1;
@@ -445,29 +458,17 @@ void scroll(int pause)
 void rrftracker(void *pvParameters)
 {
   HTTPClient http;
-
-  unsigned long timer = 0, wait = 0, limit = 750;
+  unsigned long timer = 0, wait = 0, limit = 750; // Retry all 750ms
 
   for (;;)
   {
     timer = millis();
-    if (room_current < 0)
-    {
-      room_current = 5;
-    }
-    else if (room_current > 5)
-    {
-      room_current = 0;
-    }
-
-    preferences.putUInt("room", room_current);
-
     if ((WiFi.status() == WL_CONNECTED)) // Check the current connection status
     {
 
       while (qsy > 0)
       {
-        http.begin(client_rrfremote, endpoint_spotnik + String("?dtmf=") + String(qsy));  // Specify the URL
+        http.begin(clientRemote, endpointSpotnik + String("?dtmf=") + String(qsy));  // Specify the URL
         http.addHeader("Content-Type", "text/plain");                                     // Specify content-type header
         http.setTimeout(500);                                                             // Set timeout
         int httpCode = http.GET();                                                        // Make the request
@@ -475,22 +476,20 @@ void rrftracker(void *pvParameters)
         {
           qsy = 0;
           refresh = 0;
-          menu_refresh = 1;
-          menu_mode = 0;
-          menu_selected = -1;
-          whereis_current = dtmf[room_current];
-          whereis_str = String(room[room_current]);
+          menuMode = 0;
+          whereisCurrent = dtmf[roomCurrent];
+          whereisString = String(room[roomCurrent]);
         }
         http.end(); // Free the resources
       }
  
-      http.begin(client_rrftracker, endpoint_rrf[room_current]);    // Specify the URL
+      http.begin(clientTracker, endpointRRF[roomCurrent]);    // Specify the URL
       http.addHeader("Content-Type", "text/plain");                 // Specify content-type header
       http.setTimeout(500);                                         // Set Time Out
       int httpCode = http.GET();                                    // Make the request
       if (httpCode == 200)                                          // Check for the returning code
       {
-        json_data_new = http.getString(); // Get data
+        jsonDataNew = http.getString(); // Get data
       }
       http.end(); // Free the resources
     }
@@ -507,63 +506,62 @@ void rrftracker(void *pvParameters)
 void hamqsl(void *pvParameters)
 {
   HTTPClient http;
-  unsigned long timer = 0, wait = 0, limit = 60 * 60 * 1000; // Retreive all hours
+  unsigned int limitShort = 1 * 60 * 1000; // Retry all minute
+  unsigned int limitLong = 60 * 60 * 1000; // Retry all hours
 
   for (;;)
   {
     if ((WiFi.status() == WL_CONNECTED)) // Check the current connection status
     {
-      http.begin(client_hamqsl, endpoint_hamqsl);     // Specify the URL
+      http.begin(clientHamSQL, endpointHamQSL);     // Specify the URL
       http.addHeader("Content-Type", "text/plain");   // Specify content-type header
       http.setTimeout(1000);                          // Set Time Out
       int httpCode = http.GET();                      // Make the request
       if (httpCode == 200)                            // Check for the returning code
       {
-        xml_data = http.getString(); // Get data
-        timer = millis();
+        xmlData = http.getString(); // Get data
+        http.end(); // Free the resources
+        vTaskDelay(pdMS_TO_TICKS(limitLong));
       }
-      http.end(); // Free the resources
-    }
-
-    wait = millis() - timer;
-    if (wait < limit)
-    {
-      vTaskDelay(pdMS_TO_TICKS(limit - wait));
+      else {
+        http.end(); // Free the resources
+        vTaskDelay(pdMS_TO_TICKS(limitShort));
+      }
     }
   }
 }
 
-// Get data from API
+// Get data from Spotnik
 void whereis(void *pvParameters)
 {
   HTTPClient http;
-  unsigned long timer = 0, wait = 0, limit = 1 * 10 * 1000; // Retreive 10 seconds
+  unsigned long timer = 0, wait = 0, limit = 1 * 10 * 1000; // Retry all 10 seconds
 
   for (;;)
   {
+    timer = millis();
     if ((WiFi.status() == WL_CONNECTED)) // Check the current connection status
     {
-      http.begin(client_whereis, endpoint_spotnik + String("?dtmf=0")); // Specify the URL
+      http.begin(clientWhereis, endpointSpotnik + String("?dtmf=0")); // Specify the URL
       http.addHeader("Content-Type", "text/plain");                     // Specify content-type header
       http.setTimeout(1000);                                            // Set Time Out
       int httpCode = http.GET();                                        // Make the request
       if (httpCode == 200)                                              // Check for the returning code
       {
-        whereis_data = http.getString(); // Get data
+        whereisData = http.getString(); // Get data
 
-        whereis_current = whereis_data.substring(0, whereis_data.indexOf(", ")).toInt();
-        whereis_data = whereis_data.substring(whereis_data.indexOf(", ") + 2);
+        whereisCurrent = whereisData.substring(0, whereisData.indexOf(", ")).toInt();
 
-        whereis_str = whereis_data.substring(0, whereis_data.indexOf(", "));
-        whereis_data = whereis_data.substring(whereis_data.indexOf(", ") + 2);
+        whereisData = whereisData.substring(whereisData.indexOf(", ") + 2);
+        whereisString = whereisData.substring(0, whereisData.indexOf(", "));
+        
+        whereisData = whereisData.substring(whereisData.indexOf(", ") + 2);
 
-        if(whereis_data.substring(0, whereis_data.indexOf(", ")) == "OFF") {
-          raptor_current = 0;
+        if(whereisData.substring(0, whereisData.indexOf(", ")) == "OFF") {
+          raptorCurrent = 0;
         } else {
-          raptor_current = 1;
+          raptorCurrent = 1;
         }
-
-        timer = millis();
       }
       http.end(); // Free the resources
     }
