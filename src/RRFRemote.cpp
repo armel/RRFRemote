@@ -5,7 +5,7 @@
 void setup()
 {
   // Debug
-  Serial.begin(9600);
+  Serial.begin(115200);
 
   // Init screensaver timer
   screensaver = millis();
@@ -83,6 +83,13 @@ void setup()
       1);           /* Core where the task should run */
 
   delay(4000);
+
+  for (uint8_t i = 0; i < 120; i++)
+  {
+    M5.Lcd.drawFastHLine(0, i, 320, TFT_BLACK);
+    M5.Lcd.drawFastHLine(0, 240 - i, 320, TFT_BLACK);
+    delay(5);
+  }
 
   clear();
 }
