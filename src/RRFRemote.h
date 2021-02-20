@@ -2,13 +2,12 @@
 #include <WiFi.h>
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
-#include <Arduino.h>
 #include <Preferences.h>
 #include "font.h"
 #include "settings.h"
 
 // Version
-#define VERSION "1.1.4"
+#define VERSION "1.1.5"
 
 // Wifi
 WiFiClient clientRemote, clientTracker, clientHamSQL, clientWhereis;
@@ -116,7 +115,8 @@ int reset = 0;
 int alternance = 0;
 int refresh = 0;
 int type = 0;
-int batteryCurrent = -1;
+int batteryChargeCurrent = 0;
+int batteryLevelCurrent = 0;
 int qsy = 0;
 int menuMode = 0;
 int menuCurrent = 0;

@@ -642,7 +642,7 @@ void loop()
 
         transmitOn = 2;
         transmitOff = 0;
-        reset = 1;
+        //reset = 1;
       }
 
       M5.Lcd.setFreeFont(&rounded_led_board10pt7b);
@@ -653,18 +653,6 @@ void loop()
       if (dureeStringOld != dureeString) 
       {
         dureeStringOld = dureeString;
-
-        /*
-        String minute = dureeString.substring(1, 2);
-        String seconde = dureeString.substring(3, 5);
-        int duree = (minute.toInt() * 60) + seconde.toInt();
-        if(String(salon) == "RRF" && duree > 135) {
-          M5.Lcd.setTextColor(M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b), TFT_BLACK);
-        }
-        else if(duree > 245) {
-          M5.Lcd.setTextColor(M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b), TFT_BLACK);
-        }
-        */
         M5.Lcd.drawString(dureeString.substring(1), 318, 60);
       }
 
@@ -693,7 +681,7 @@ void loop()
 
         transmitOn = 0;
         transmitOff = 2;
-        reset = 1;
+        //reset = 1;
       }
 
       M5.Lcd.setFreeFont(ICON_FONT);
@@ -797,14 +785,7 @@ void loop()
       else if (type == 4)
       {
         tmpString = String(emission);
-        if (strlen(emission) == 5)
-        {
-          emissionString = "BF 00:" + tmpString;
-        }
-        else
-        {
-          emissionString = "BF " + tmpString;
-        }
+        emissionString = (strlen(emission) == 5) ? "BF 00:" + tmpString : "BF " + tmpString;
 
         if (emissionStringOld != emissionString)
         {
@@ -827,33 +808,41 @@ void loop()
     }
 
     // Baterry
-    scroll(10);
 
-    M5.Lcd.setFreeFont(&Battery_Icons21pt7b);
-    M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
-    M5.Lcd.setTextDatum(CR_DATUM);
-    M5.Lcd.setTextPadding(0);
+    if(reset == 0 || batteryLevelCurrent != M5.Power.getBatteryLevel() || batteryChargeCurrent != M5.Power.isCharging())
+    {
+      scroll(10);
 
-    if (M5.Power.isCharging() && screensaverOff != 1)
-    {
-      sprintf(swap, "%c", ICON_CHARGING);
-      tmpString = swap;
-      M5.Lcd.drawString(tmpString, 310, 18);
-      M5.Lcd.setBrightness(128);
-    }
-    else
-    {
-      i = M5.Power.getBatteryLevel();
-      switch(i)
+      reset = (reset == 0) ? 1 : 1;
+      batteryLevelCurrent = M5.Power.getBatteryLevel();
+      batteryChargeCurrent = M5.Power.isCharging();
+
+      M5.Lcd.setFreeFont(&Battery_Icons21pt7b);
+      M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
+      M5.Lcd.setTextDatum(CR_DATUM);
+      M5.Lcd.setTextPadding(0);
+
+      if (M5.Power.isCharging() && screensaverOff != 1)
       {
-        case 100: sprintf(swap, "%c", ICON_BAT100); break;
-        case  75: sprintf(swap, "%c", ICON_BAT075); break;
-        case  50: sprintf(swap, "%c", ICON_BAT050); break;
-        case  25: sprintf(swap, "%c", ICON_BAT025); break;
-        default:  sprintf(swap, "%c", ICON_BAT000); break;
+        sprintf(swap, "%c", ICON_CHARGING);
+        tmpString = swap;
+        M5.Lcd.drawString(tmpString, 310, 18);
+        M5.Lcd.setBrightness(128);
       }
-      tmpString = swap;
-      M5.Lcd.drawString(tmpString, 310, 18);
+      else
+      {
+        i = M5.Power.getBatteryLevel();
+        switch(i)
+        {
+          case 100: sprintf(swap, "%c", ICON_BAT100); break;
+          case  75: sprintf(swap, "%c", ICON_BAT075); break;
+          case  50: sprintf(swap, "%c", ICON_BAT050); break;
+          case  25: sprintf(swap, "%c", ICON_BAT025); break;
+          default:  sprintf(swap, "%c", ICON_BAT000); break;
+        }
+        tmpString = swap;
+        M5.Lcd.drawString(tmpString, 310, 18);
+      }
     }
   }
   else
