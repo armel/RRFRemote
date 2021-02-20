@@ -1,3 +1,6 @@
+// Copyright (c) F4HWN Armel. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 #include <M5Stack.h>
 #include <WiFi.h>
 #include <HTTPClient.h>
@@ -7,7 +10,7 @@
 #include "settings.h"
 
 // Version
-#define VERSION "1.1.5"
+#define VERSION "1.1.6"
 
 // Wifi
 WiFiClient clientRemote, clientTracker, clientHamSQL, clientWhereis;
@@ -20,7 +23,7 @@ String indicatif = INDICATIF;
 // Preferences
 Preferences preferences;
 
-// Color (https://htmlcolorcodes.com/fr/)
+// Color (https://www.rapidtables.com/web/color/RGB_Color.html)
 typedef struct __attribute__((__packed__))
 {
   uint8_t r;
@@ -30,32 +33,36 @@ typedef struct __attribute__((__packed__))
 
 colorType TFT_BACK = {48, 48, 48};
 colorType TFT_GRAY = {128, 128, 128};
-colorType TFT_FRONT = {52, 152, 219};
-colorType TFT_HEADER = {27, 79, 114};
+colorType TFT_FRONT = {51, 153, 255};
+colorType TFT_HEADER = {0, 76, 153};
 
-const char *color[] = {"BLEU", "ORANGE", "VERT", "ROUGE", "ROSE", "VIOLET", "GRIS"};
+const char *color[] = {"ROUGE", "ORANGE", "VERT", "TURQUOISE", "BLEU", "ROSE", "VIOLET", "GRIS"};
+
 int colorCurrent = 0;
 
-const colorType TFT_FRONT_BLEU = {52, 152, 219};
-const colorType TFT_HEADER_BLEU = {27, 79, 114};
+const colorType TFT_FRONT_ROUGE = {255, 102, 102};
+const colorType TFT_HEADER_ROUGE = {153, 0, 0};
 
-const colorType TFT_FRONT_ORANGE = {245, 176, 65};
-const colorType TFT_HEADER_ORANGE = {186, 74, 0};
+const colorType TFT_FRONT_ORANGE = {255, 178, 102};
+const colorType TFT_HEADER_ORANGE = {255, 128, 0};
 
-const colorType TFT_FRONT_VERT = {52, 174, 96};
-const colorType TFT_HEADER_VERT = {20, 90, 50};
+const colorType TFT_FRONT_VERT = {51, 204, 102};
+const colorType TFT_HEADER_VERT = {0, 102, 51};
 
-const colorType TFT_FRONT_ROUGE = {231, 76, 60};
-const colorType TFT_HEADER_ROUGE = {120, 40, 31};
+const colorType TFT_FRONT_TURQUOISE = {51, 204, 204};
+const colorType TFT_HEADER_TURQUOISE = {0, 102, 102};
 
-const colorType TFT_FRONT_ROSE = {219, 112, 147};
-const colorType TFT_HEADER_ROSE = {199, 21, 133};
+const colorType TFT_FRONT_BLEU = {51, 153, 255};
+const colorType TFT_HEADER_BLEU = {0, 76, 153};
+
+const colorType TFT_FRONT_ROSE = {255, 102, 178};
+const colorType TFT_HEADER_ROSE = {204, 0, 102};
 
 const colorType TFT_FRONT_VIOLET = {165, 105, 189};
 const colorType TFT_HEADER_VIOLET = {91, 44, 111};
 
-const colorType TFT_FRONT_GRIS = {174, 182, 191};
-const colorType TFT_HEADER_GRIS = {52, 73, 94};
+const colorType TFT_FRONT_GRIS = {192, 192, 192};
+const colorType TFT_HEADER_GRIS = {96, 96, 96};
 
 // Icon
 #define ICON_FONT &icon_works_webfont14pt7b
@@ -92,7 +99,7 @@ int pos;
 // Misceleanous
 const char *room[] = {"RRF", "TECHNIQUE", "BAVARDAGE", "LOCAL", "INTERNATIONAL", "FON"};
 const int dtmf[] = {96, 98, 100, 101, 99, 97};
-const char *menu[] = {"QSY", "RAPTOR", "PERROQUET", "FOLLOW", "COULEUR", "LUMINOSITE", "ARRET", "QUITTER"};
+const char *menu[] = {"QSY", "RAPTOR", "PERROQUET", "FOLLOW", "COULEUR", "LUMINOSITE", "QUITTER"};
 
 String tmpString;
 String jsonData = "", xmlData = "", whereisData = "";
@@ -107,27 +114,29 @@ String txTotalString, txTotalStringOld;
 String elsewhereString, elsewhereStringOld;
 String whereisString = "";
 
-int roomCurrent = 0;
-int whereisCurrent = 0;
-int brightnessCurrent = 32;
-int transmitOn = 0, transmitOff = 0;
 int reset = 0;
 int alternance = 0;
 int refresh = 0;
 int type = 0;
-int batteryChargeCurrent = 0;
-int batteryLevelCurrent = 0;
 int qsy = 0;
-int menuMode = 0;
-int menuCurrent = 0;
-int menuSelected = -1;
-int menuRefresh = 0;
+
+int transmitOn = 0, transmitOff = 0;
+
+int roomCurrent = 0;
+int whereisCurrent = 0;
+int brightnessCurrent = 32;
 int raptorCurrent = 0;
 int followCurrent = 0;
+int batteryChargeCurrent = 0;
+int batteryLevelCurrent = 0;
+int menuCurrent = 0;
+int menuMode = 0;
+int menuSelected = -1;
+int menuRefresh = 0;
 
 unsigned long screensaver;
 int screensaverLimit = 5 * 60 * 1000;  // 5 minutes
-int screensaverOff = 0;
+int screensaverMode = 0;
 
 int btnA, btnB, btnC = 0;
 
@@ -168,13 +177,14 @@ int interpolation(int value, int inMin, int inMax, int outMin, int outMax)
 void resetColor()
 {
   switch(colorCurrent) {
-    case 0: TFT_FRONT = TFT_FRONT_BLEU; TFT_HEADER = TFT_HEADER_BLEU; break;
+    case 0: TFT_FRONT = TFT_FRONT_ROUGE; TFT_HEADER = TFT_HEADER_ROUGE; break;
     case 1: TFT_FRONT = TFT_FRONT_ORANGE; TFT_HEADER = TFT_HEADER_ORANGE; break;
     case 2: TFT_FRONT = TFT_FRONT_VERT; TFT_HEADER = TFT_HEADER_VERT; break;
-    case 3: TFT_FRONT = TFT_FRONT_ROUGE; TFT_HEADER = TFT_HEADER_ROUGE; break;
-    case 4: TFT_FRONT = TFT_FRONT_ROSE; TFT_HEADER = TFT_HEADER_ROSE; break;
-    case 5: TFT_FRONT = TFT_FRONT_VIOLET; TFT_HEADER = TFT_HEADER_VIOLET; break;
-    case 6: TFT_FRONT = TFT_FRONT_GRIS; TFT_HEADER = TFT_HEADER_GRIS; break;
+    case 3: TFT_FRONT = TFT_FRONT_TURQUOISE; TFT_HEADER = TFT_HEADER_TURQUOISE; break;
+    case 4: TFT_FRONT = TFT_FRONT_BLEU; TFT_HEADER = TFT_HEADER_BLEU; break;
+    case 5: TFT_FRONT = TFT_FRONT_ROSE; TFT_HEADER = TFT_HEADER_ROSE; break;
+    case 6: TFT_FRONT = TFT_FRONT_VIOLET; TFT_HEADER = TFT_HEADER_VIOLET; break;
+    case 7: TFT_FRONT = TFT_FRONT_GRIS; TFT_HEADER = TFT_HEADER_GRIS; break;
   }
 }
 
@@ -228,7 +238,7 @@ void button()
   btnBLast = btnB;
 
   // Manage screensaver
-  if (screensaverOff == 1)
+  if (screensaverMode == 1)
   {
     if (btnA || btnB || btnC)
     {
@@ -284,8 +294,8 @@ void button()
           menuRefresh = 0;
         }
 
-        menuCurrent = (menuCurrent < 0) ? 7 : menuCurrent;
-        menuCurrent = (menuCurrent > 7) ? 0 : menuCurrent;
+        menuCurrent = (menuCurrent < 0) ? 6 : menuCurrent;
+        menuCurrent = (menuCurrent > 6) ? 0 : menuCurrent;
         preferences.putUInt("menu", menuCurrent);
       }
       else
@@ -350,8 +360,8 @@ void button()
             refresh = 0;
           }
 
-          colorCurrent = (colorCurrent < 0) ? 6 : colorCurrent;
-          colorCurrent = (colorCurrent > 6) ? 0 : colorCurrent;
+          colorCurrent = (colorCurrent < 0) ? 7 : colorCurrent;
+          colorCurrent = (colorCurrent > 7) ? 0 : colorCurrent;
 
           if(change == 1) {
             clear();
@@ -385,13 +395,8 @@ void button()
           preferences.putUInt("brightness", brightnessCurrent);
           M5.Lcd.setBrightness(brightnessCurrent);
         }
-        // Mode menu active, Shutdown
-        else if (menuSelected == 6)
-        {
-          M5.Power.powerOFF();
-        }
         // Mode menu active, Escape
-        else if (menuSelected == 7)
+        else if (menuSelected == 6)
         {
           menuMode = 0;
           reset = 0;
@@ -419,15 +424,15 @@ void buildScroll()
 
   // Now print text on top of the graphics
   img.setTextSize(1);          // Font size scaling is x1
-  img.setTextFont(2);          // Font 4 selected
-  img.setTextColor(TFT_WHITE); // Black text, no background colour
+  img.setTextFont(2);          // Font 2 selected
+  img.setTextColor(TFT_WHITE); // White text, no background colour
   img.setTextWrap(false);      // Turn of wrap so we can print past end of sprite
 
   // Need to print twice so text appears to wrap around at left and right edges
-  img.setCursor(pos, 2); // Print text at xpos
+  img.setCursor(pos, 2); // Print text at pos
   img.print(message);
 
-  img.setCursor(pos - w, 2); // Print text at xpos - sprite width
+  img.setCursor(pos - w, 2); // Print text at pos - sprite width
   img.print(message);
 }
 

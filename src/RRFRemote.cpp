@@ -1,3 +1,6 @@
+// Copyright (c) F4HWN Armel. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 #include "RRFRemote.h"
 
 // Setup
@@ -603,7 +606,7 @@ void loop()
       screensaver = millis(); // Screensaver update !!!
       if (transmitOn == 1 || reset == 0)
       {
-        if (!M5.Power.isCharging() && screensaverOff != 1)
+        if (!M5.Power.isCharging() && screensaverMode == 0)
         {
           M5.Lcd.setBrightness(brightnessCurrent);
         }
@@ -661,7 +664,7 @@ void loop()
     { // If no transmit
       if (transmitOff == 1 || reset == 0)
       {
-        if (!M5.Power.isCharging() && screensaverOff != 1)
+        if (!M5.Power.isCharging() && screensaverMode == 0)
         {
           M5.Lcd.setBrightness(brightnessCurrent);
         }
@@ -822,7 +825,7 @@ void loop()
       M5.Lcd.setTextDatum(CR_DATUM);
       M5.Lcd.setTextPadding(0);
 
-      if (M5.Power.isCharging() && screensaverOff != 1)
+      if (M5.Power.isCharging() && screensaverMode == 0)
       {
         sprintf(swap, "%c", ICON_CHARGING);
         tmpString = swap;
@@ -892,7 +895,7 @@ void loop()
 
       switch(menuSelected)
       {
-        case 4: option = "THEME " + String(color[colorCurrent]); break;
+        case 4: option = String(color[colorCurrent]); break;
         case 5: option = "LEVEL " + String(brightnessCurrent); break;
       }
     }
@@ -979,16 +982,16 @@ void loop()
   // Manage screensaver
   scroll(10);
 
-  if (screensaverOff == 0 && millis() - screensaver > screensaverLimit)
+  if (screensaverMode == 0 && millis() - screensaver > screensaverLimit)
   {
     M5.Lcd.sleep();
-    screensaverOff = 1;
+    screensaverMode = 1;
     M5.Lcd.setBrightness(0);
   }
-  else if (screensaverOff == 1 && millis() - screensaver < screensaverLimit)
+  else if (screensaverMode == 1 && millis() - screensaver < screensaverLimit)
   {
     M5.Lcd.wakeup();
-    screensaverOff = 0;
+    screensaverMode = 0;
     M5.Lcd.setBrightness(brightnessCurrent);
   }
 }
