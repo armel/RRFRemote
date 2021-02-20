@@ -240,6 +240,7 @@ void loop()
     if (tx[i] != 0)
     {
       uint8_t tmp = map(tx[i], 0, maxLevel, 0, 48);
+      M5.Lcd.fillRect(j, 153 - 48, 5, 48, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
       M5.Lcd.fillRect(j, 153 - tmp, 5, tmp, M5.Lcd.color565(TFT_FRONT.r - k, TFT_FRONT.g - k, TFT_FRONT.b - k));
     }
     M5.Lcd.fillRect(j, 154, 5, 1, TFT_LIGHTGREY);
