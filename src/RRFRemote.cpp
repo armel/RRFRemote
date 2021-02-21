@@ -15,7 +15,7 @@ void setup()
 
   // Init M5
   M5.begin(true, false, false, false);
-  M5.Power.begin();
+  power();
 
   // Preferences
   preferences.begin("RRFRemote");
@@ -607,7 +607,7 @@ void loop()
       screensaver = millis(); // Screensaver update !!!
       if (transmitOn == 1 || reset == 0)
       {
-        if (!M5.Power.isCharging() && screensaverMode == 0)
+        if (!isCharging() && screensaverMode == 0)
         {
           M5.Lcd.setBrightness(brightnessCurrent);
         }
@@ -665,7 +665,7 @@ void loop()
     { // If no transmit
       if (transmitOff == 1 || reset == 0)
       {
-        if (!M5.Power.isCharging() && screensaverMode == 0)
+        if (!isCharging() && screensaverMode == 0)
         {
           M5.Lcd.setBrightness(brightnessCurrent);
         }
@@ -813,20 +813,20 @@ void loop()
 
     // Baterry
 
-    if(reset == 0 || batteryLevelCurrent != M5.Power.getBatteryLevel() || batteryChargeCurrent != M5.Power.isCharging())
+    if(reset == 0 || batteryLevelCurrent != getBatteryLevel() || batteryChargeCurrent != isCharging())
     {
       scroll(10);
 
       reset = (reset == 0) ? 1 : 1;
-      batteryLevelCurrent = M5.Power.getBatteryLevel();
-      batteryChargeCurrent = M5.Power.isCharging();
+      batteryLevelCurrent = getBatteryLevel();
+      batteryChargeCurrent = isCharging();
 
       M5.Lcd.setFreeFont(&Battery_Icons21pt7b);
       M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
       M5.Lcd.setTextDatum(CR_DATUM);
       M5.Lcd.setTextPadding(0);
 
-      if (M5.Power.isCharging() && screensaverMode == 0)
+      if (isCharging() && screensaverMode == 0)
       {
         sprintf(swap, "%c", ICON_CHARGING);
         tmpString = swap;
@@ -835,7 +835,7 @@ void loop()
       }
       else
       {
-        i = M5.Power.getBatteryLevel();
+        i = getBatteryLevel();
         switch(i)
         {
           case 100: sprintf(swap, "%c", ICON_BAT100); break;

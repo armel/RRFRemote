@@ -1,7 +1,25 @@
 // Copyright (c) F4HWN Armel. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-#include <M5Stack.h>
+// Board
+
+#define BOARD BASIC
+
+#define BASIC 1
+#define GREY  2
+#define CORE2 3
+
+#if BOARD == BASIC
+  #include <M5Stack.h>
+  #include "BasicAndGrey.h"
+#elif BOARD == GREY
+  #include <M5Stack.h>
+  #include "BasicAndGrey.h"
+#elif BOARD == CORE2
+  #include <M5Core2.h>
+  #include "Core2.h"
+#endif
+
 #include <WiFi.h>
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
@@ -10,7 +28,7 @@
 #include "settings.h"
 
 // Version
-#define VERSION "1.1.6"
+#define VERSION "1.1.7"
 
 // Wifi
 WiFiClient clientRemote, clientTracker, clientHamSQL, clientWhereis;
@@ -137,8 +155,6 @@ int menuRefresh = 0;
 unsigned long screensaver;
 int screensaverLimit = 5 * 60 * 1000;  // 5 minutes
 int screensaverMode = 0;
-
-int btnA, btnB, btnC = 0;
 
 // Parse data
 String getValue(String data, char separator, int index)
@@ -440,10 +456,7 @@ void buildScroll()
 void scroll(int pause)
 {
   if(btnA == 0 && btnB == 0 && btnC == 0) {
-    M5.update();
-    btnA = M5.BtnA.read();
-    btnB = M5.BtnB.read();
-    btnC = M5.BtnC.read();
+    getButton();
   }
 
   // Sprite for scroll

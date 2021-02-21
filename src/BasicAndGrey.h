@@ -1,0 +1,31 @@
+// Copyright (c) F4HWN Armel. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+int btnA, btnB, btnC = 0;
+
+// Power init
+void power()
+{
+    M5.Power.begin();
+}
+
+// Get Battery level
+int8_t getBatteryLevel()
+{
+    return M5.Power.getBatteryLevel();
+}
+
+// Control if charging
+bool isCharging()
+{
+    return M5.Power.isCharging();
+}
+
+// Get button
+void getButton()
+{
+    M5.update();
+    btnA = M5.BtnA.read();
+    btnB = M5.BtnB.read();
+    btnC = M5.BtnC.read();
+}

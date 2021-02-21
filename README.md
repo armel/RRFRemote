@@ -42,9 +42,7 @@ Ce QSJ est à comparer à celui d'un écran Nextion type NX4832K035, neurasthén
 
 ## Versions supportées actuellement
 
-Le développement actuel du RRFRemote prend en charge le [M5Stack Basic](https://m5stack.com/collections/m5-core/products/basic-core-iot-development-kit) et le [M5Stack Grey](https://m5stack.com/collections/m5-core/products/grey-development-core). Je n'ai pas testé le M5Stack Fire, mais ca devrait fonctionner.
-
-Attention, le développement actuel ne fonctionne pas (encore) totalement sur les M5Stack Core2 (le plus récent de la gamme). Je ne recommmande pas ce modèle, plus honéreux et encore instable. Mais ce n'est qu'une question de temps et de maturité. Il apportera des évolutions intéressantes avec, en particulier, un écran tactile !
+Le développement actuel du RRFRemote prend en charge le [M5Stack Basic](https://m5stack.com/collections/m5-core/products/basic-core-iot-development-kit), le [M5Stack Grey](https://m5stack.com/collections/m5-core/products/grey-development-core) ainsi que le [M5Stack Core2](https://m5stack.com/products/m5stack-core2-esp32-iot-development-kit). Je n'ai pas testé le M5Stack Fire, mais ca devrait fonctionner.
 
 # Fonctionnalités
 
@@ -122,6 +120,40 @@ Ouvrez le projet RRFRemote avec PlateformIO for VSCode.
 Editer le fichier `src/settings.h` afin de renseigner vos paramétrages Wifi, votre indicatif et l'url  d'accès au script de contrôle que vous avez installé précédement. Par défaut, c'est : 
 
 `http://adresse_ip_de_votre_spotnik:3000/`
+
+### Modèle M5Stack Basic et M5Stack Grey
+
+Compiler et uploader le projet sur votre M5Stack. C'est terminé.
+
+### Modèle M5Core2
+
+Si et seulement si __vous utilisez le M5Stack Core2__, éditer le fichier `plateformio.io` et modifier les lignes,
+
+```
+default_envs = m5stack-grey
+;default_envs = m5stack-core-esp32
+```
+
+Par,
+
+```
+;default_envs = m5stack-grey
+default_envs = m5stack-core-esp32
+```
+
+Cela revient à changer la plate-forme cible, le point-virgule étant un commentaire.
+
+En complément, éditer le fichier `src/RRFRemote.h` et modifier la ligne,
+
+```
+#define BOARD BASIC
+```
+
+Par,
+
+```
+#define BOARD CORE2
+```
 
 Compiler et uploader le projet sur votre M5Stack. C'est terminé.
 
