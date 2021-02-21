@@ -272,6 +272,10 @@ void button()
           roomCurrent -= 1;
           refresh = 0;
           reset = 0;
+
+          roomCurrent = (roomCurrent < 0) ? 5 : roomCurrent;
+          roomCurrent = (roomCurrent > 5) ? 0 : roomCurrent;
+          preferences.putUInt("room", roomCurrent);
         }
         else if (btnC && followCurrent == 0)
         {
@@ -279,11 +283,11 @@ void button()
           roomCurrent += 1;
           refresh = 0;
           reset = 0;
-        }
 
-        roomCurrent = (roomCurrent < 0) ? 5 : roomCurrent;
-        roomCurrent = (roomCurrent > 5) ? 0 : roomCurrent;
-        preferences.putUInt("room", roomCurrent);
+          roomCurrent = (roomCurrent < 0) ? 5 : roomCurrent;
+          roomCurrent = (roomCurrent > 5) ? 0 : roomCurrent;
+          preferences.putUInt("room", roomCurrent);
+        }
       }
       if (btnB)
       {
@@ -503,12 +507,12 @@ void rrftracker(void *pvParameters)
  
       http.begin(clientTracker, endpointRRF[roomCurrent]);    // Specify the URL
       http.addHeader("Content-Type", "text/plain");                 // Specify content-type header
-      http.setTimeout(500);                                         // Set Time Out
+      http.setTimeout(750);                                         // Set Time Out
       int httpCode = http.GET();                                    // Make the request
       if (httpCode == 200)                                          // Check for the returning code
       {
         jsonDataNew = http.getString(); // Get data
-      }
+      } 
       http.end(); // Free the resources
     }
 

@@ -1,13 +1,47 @@
 // Copyright (c) F4HWN Armel. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-int btnA, btnB, btnC = 0;
+int btnA, btnB, btnC, btnD, btnE = 0;
+
+TouchZone left(0, 0, 160, 240);
+TouchZone right(160, 0, 160, 240);
+TouchZone top(0, 0, 320, 120);
+TouchZone bottom(0, 120, 320, 240);
+
+Gesture swipeLeft(right, left, "Swipe left");
+Gesture swipeRight(left, right, "Swipe right");
+Gesture swipeBottom(top, bottom, "Swipe down");
+Gesture swipeTop(bottom, top, "Swipe top");
+
+// Swipe left manage
+void detectSwipeLeft(TouchEvent& e) {
+    btnD = -10;
+}
+
+// Swipe right manage
+void detectSwipeRight(TouchEvent& e) {
+    btnD = 10;
+}
+
+// Swipe bottom manage
+void detectSwipeBottom(TouchEvent& e) {
+    btnE = -10;
+}
+
+// Swipe top manage
+void detectSwipeTop(TouchEvent& e) {
+    btnE = 10;
+}
 
 // Power init
 void power()
 {
     //By default, M5.begin() will initialize AXP192 chip on Core2
     M5.Axp.SetLed(0);
+    swipeLeft.addHandler(detectSwipeLeft);
+    swipeRight.addHandler(detectSwipeRight);
+    swipeBottom.addHandler(detectSwipeBottom);
+    swipeTop.addHandler(detectSwipeTop);
 }
 
 // Get Battery level
@@ -49,4 +83,18 @@ void getButton()
     btnA = M5.BtnA.isPressed();
     btnB = M5.BtnB.isPressed();
     btnC = M5.BtnC.isPressed();
+
+    if(btnD < 0) {
+        btnA = 1;
+        btnD = 0;
+    }
+    else if(btnD > 0) {
+        btnC = 1;
+        btnD = 0;
+    }
+
+    if(btnE < 0 || btnE > 0) {
+        btnB = 1;
+        btnE = 0;
+    }
 }
