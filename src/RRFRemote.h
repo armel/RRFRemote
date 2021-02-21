@@ -3,7 +3,7 @@
 
 // Board
 
-#define BOARD BASIC
+#define BOARD CORE2
 
 #define BASIC 1
 #define GREY  2
@@ -28,7 +28,7 @@
 #include "settings.h"
 
 // Version
-#define VERSION "1.1.7"
+#define VERSION "1.1.8"
 
 // Wifi
 WiFiClient clientRemote, clientTracker, clientHamSQL, clientWhereis;
@@ -245,13 +245,27 @@ void clear()
 
 void button()
 {
+  static int btnALast = 0;
   static int btnBLast = 0;
+  static int btnCLast = 0;
 
   // Manage button bump
   if(btnB && btnBLast) {
     btnB = 0;
   }
   btnBLast = btnB;
+
+  if(menuMode == 0) {
+    if(btnA && btnALast) {
+      btnA = 0;
+    }
+    btnALast = btnA;
+
+    if(btnC && btnCLast) {
+      btnC = 0;
+    }
+    btnCLast = btnC;
+  }
 
   // Manage screensaver
   if (screensaverMode == 1)
