@@ -3,9 +3,9 @@ const port = 3000;
 
 const requestHandler = (request, response) => {
   console.log(request.url);
-  const input = new URL('https://localhost/' + request.url);
-  const dtmf = input.searchParams.get('dtmf');
   const { exec } = require('child_process');
+  const input = new URL('https://localhost/' + request.url);
+  const dtmf = parseInt(input.searchParams.get('dtmf'));
 
   var room = {"rrf":      "96, RRF", 
               "fon":      "97, FON", 
