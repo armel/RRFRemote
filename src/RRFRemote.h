@@ -3,7 +3,7 @@
 
 // Board
 
-#define BOARD CORE2
+#define BOARD BASIC
 
 #define BASIC 1
 #define GREY  2
