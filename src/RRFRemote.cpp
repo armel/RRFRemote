@@ -116,6 +116,9 @@ void loop()
 
   uint8_t i, j, k;
 
+  static uint8_t lengthData = 0;
+  static uint8_t centerData = 0;
+
   int16_t parenthesisBegin = 0;
   int16_t parenthesisLast = 0;
 
@@ -336,7 +339,9 @@ void loop()
 
   if (type == 1)
   {
-    M5.Lcd.drawString("   RRFRemote   ", 240, 110);
+    M5.Lcd.setTextPadding(160);
+    M5.Lcd.drawString("RRFRemote " + String(VERSION), 240, 110);
+    M5.Lcd.setTextPadding(0);
 
     if (refresh == 0)
     {
@@ -351,7 +356,7 @@ void loop()
       M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
       M5.Lcd.setTextDatum(CL_DATUM);
 
-      String system[] = {"CPU", "CPU Cores", "CPU Freq", "Chip Rev", "Flash Speed", "Flash Size", "Free RAM", "Free Heap", "IP", "Version"};
+      String system[] = {"CPU", "CPU Cores", "CPU Freq", "Chip Rev", "Flash Speed", "Flash Size", "Free RAM", "Free Heap", "IP", "Battery"};
 
       j = 125;
       for (uint8_t i = 0; i <= 9; i++)
@@ -375,11 +380,13 @@ void loop()
     M5.Lcd.drawString(String(ESP.getFreeHeap() / 1024) + " kb", 318, 197);
     M5.Lcd.drawString(String(esp_get_minimum_free_heap_size() / 1024) + " kb", 318, 209);
     M5.Lcd.drawString((WiFi.localIP().toString()), 318, 221);
-    M5.Lcd.drawString(VERSION, 318, 233);
+    M5.Lcd.drawString(String(getBatteryLevel(1)) + " %", 318, 233);
   }
   else if (type == 2)
   {
-    M5.Lcd.drawString("  PROPAGATION  ", 240, 110);
+    M5.Lcd.setTextPadding(160);
+    M5.Lcd.drawString("PROPAGATION", 240, 110);
+    M5.Lcd.setTextPadding(0);
 
     if (refresh == 0)
     {
@@ -441,7 +448,9 @@ void loop()
   }
   else if (type == 3 && doc["all"].size() != 0)
   {
-    M5.Lcd.drawString("   TOP LINKS   ", 240, 110);
+    M5.Lcd.setTextPadding(160);
+    M5.Lcd.drawString("TOP LINKS", 240, 110);
+    M5.Lcd.setTextPadding(0);
 
     if (refresh == 0)
     {
@@ -490,7 +499,9 @@ void loop()
   }
   else if (type == 4 && doc["iptable"].size() != 0)
   {
-    M5.Lcd.drawString("   BLOCAGES    ", 240, 110);
+    M5.Lcd.setTextPadding(160);
+    M5.Lcd.drawString("BLOCAGES", 240, 110);
+    M5.Lcd.setTextPadding(0);
 
     if (refresh == 0)
     {
@@ -549,7 +560,9 @@ void loop()
   }
   else
   {
+    M5.Lcd.setTextPadding(160);
     M5.Lcd.drawString("DERNIERS LINKS", 240, 110);
+    M5.Lcd.setTextPadding(0);
 
     if (refresh == 0)
     {
@@ -628,10 +641,11 @@ void loop()
         tmpString = swap;
         M5.Lcd.drawString(tmpString, 10, 20);
 
+        M5.Lcd.fillRect(0, 46, 320, 32, TFT_BLACK);
+
         M5.Lcd.setFreeFont(&rounded_led_board10pt7b);
         M5.Lcd.setTextColor(TFT_WHITE, TFT_BLACK);
         M5.Lcd.setTextDatum(CL_DATUM);
-        M5.Lcd.setTextPadding(200);
 
         tmpString = String(lastIndicatif[0]);
         if(tmpString.substring(0, 3) == "GW-") {
@@ -642,7 +656,11 @@ void loop()
           tmpString = (tmpString == "") ? "RTFM" : tmpString;
         }
 
-        M5.Lcd.drawString(tmpString, 1, 60);
+        tmpString += " 0:00";
+        lengthData = M5.Lcd.textWidth(tmpString);
+        centerData = (320 - lengthData) / 2;
+
+        M5.Lcd.drawString(tmpString, centerData, 60);
 
         transmitOn = 2;
         transmitOff = 0;
@@ -651,13 +669,12 @@ void loop()
 
       M5.Lcd.setFreeFont(&rounded_led_board10pt7b);
       M5.Lcd.setTextColor(TFT_WHITE, TFT_BLACK);
-      M5.Lcd.setTextDatum(CR_DATUM);
-      M5.Lcd.setTextPadding(120);
+      M5.Lcd.setTextDatum(CL_DATUM);
       dureeString = String(lastDuree[0]);
       if (dureeStringOld != dureeString) 
       {
         dureeStringOld = dureeString;
-        M5.Lcd.drawString(dureeString.substring(1), 318, 60);
+        M5.Lcd.drawString(dureeString.substring(1), (centerData + lengthData - 75), 60);
       }
 
     }
@@ -700,7 +717,7 @@ void loop()
         {
           sprintf(swap, "%c", ICON_CLOCK);
           tmpString = swap;
-          M5.Lcd.drawString(tmpString, 10, 20);
+          M5.Lcd.drawString(tmpString, 10, 18);
 
           M5.Lcd.setTextPadding(320);
           M5.Lcd.setFreeFont(&rounded_led_board10pt7b);
@@ -795,7 +812,7 @@ void loop()
         {
           sprintf(swap, "%c", ICON_CLOCK);
           tmpString = swap;
-          M5.Lcd.drawString(tmpString, 10, 20);
+          M5.Lcd.drawString(tmpString, 10, 18);
 
           M5.Lcd.setTextPadding(320);
           M5.Lcd.setFreeFont(&rounded_led_board10pt7b);
@@ -813,12 +830,12 @@ void loop()
 
     // Baterry
 
-    if(reset == 0 || batteryLevelCurrent != getBatteryLevel() || batteryChargeCurrent != isCharging())
+    if(reset == 0 || batteryLevelCurrent != getBatteryLevel(0) || batteryChargeCurrent != isCharging())
     {
       scroll(10);
 
       reset = (reset == 0) ? 1 : 1;
-      batteryLevelCurrent = getBatteryLevel();
+      batteryLevelCurrent = getBatteryLevel(0);
       batteryChargeCurrent = isCharging();
 
       M5.Lcd.setFreeFont(&Battery_Icons21pt7b);
@@ -835,7 +852,7 @@ void loop()
       }
       else
       {
-        i = getBatteryLevel();
+        i = getBatteryLevel(0);
         switch(i)
         {
           case 100: sprintf(swap, "%c", ICON_BAT100); break;

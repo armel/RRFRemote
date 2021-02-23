@@ -10,7 +10,7 @@ void power()
 }
 
 // Get Battery level
-int8_t getBatteryLevel()
+int8_t getBatteryLevel(bool type)
 {
     return M5.Power.getBatteryLevel();
 }

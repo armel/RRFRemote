@@ -3,7 +3,7 @@
 
 // Board
 
-#define BOARD BASIC
+#define BOARD CORE2
 
 #define BASIC 1
 #define GREY  2
@@ -28,7 +28,7 @@
 #include "settings.h"
 
 // Version
-#define VERSION "1.1.8"
+#define VERSION "1.1.9"
 
 // Wifi
 WiFiClient clientRemote, clientTracker, clientHamSQL, clientWhereis;
