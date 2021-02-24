@@ -45,29 +45,34 @@ void power()
 }
 
 // Get Battery level
-int8_t getBatteryLevel()
+int8_t getBatteryLevel(bool type)
 {
     float baterryVoltage = M5.Axp.GetBatVoltage();
     int8_t batteryPercentage = ( baterryVoltage < 3.2 ) ? 0 : ( baterryVoltage - 3.2 ) * 100;
 
-    if(batteryPercentage > 80)
-    {
-        return 100;
+    if(type == 0) {
+        if(batteryPercentage > 80)
+        {
+            return 100;
+        }
+        else if (batteryPercentage > 60)
+        {
+            return 75;
+        }
+        else if (batteryPercentage > 40)
+        {
+            return 50;
+        }
+        else if (batteryPercentage > 20)
+        {
+            return 25;
+        }
+        return 0;
     }
-    else if (batteryPercentage > 60)
+    else 
     {
-        return 75;
+        return batteryPercentage;
     }
-    else if (batteryPercentage > 40)
-    {
-        return 50;
-    }
-    else if (batteryPercentage > 20)
-    {
-        return 25;
-    }
-
-    return 0;
 }
 
 // Control if charging
