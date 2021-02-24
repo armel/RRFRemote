@@ -668,7 +668,6 @@ void loop()
 
         transmitOn = 2;
         transmitOff = 0;
-        //reset = 1;
       }
 
       M5.Lcd.setFreeFont(&rounded_led_board10pt7b);
@@ -704,7 +703,6 @@ void loop()
 
         transmitOn = 0;
         transmitOff = 2;
-        //reset = 1;
       }
 
       M5.Lcd.setFreeFont(ICON_FONT);
