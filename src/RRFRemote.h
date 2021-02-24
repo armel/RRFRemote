@@ -28,7 +28,7 @@
 #include "settings.h"
 
 // Version
-#define VERSION "1.1.9"
+#define VERSION "1.2.0"
 
 // Wifi
 WiFiClient clientRemote, clientTracker, clientHamSQL, clientWhereis;
@@ -130,7 +130,8 @@ String linkTotalString, linkTotalStringOld;
 String linkActifString, linkActifStringOld;
 String txTotalString, txTotalStringOld;
 String elsewhereString, elsewhereStringOld;
-String whereisString = "";
+String indicatifString;
+String whereisString;
 
 int reset = 0;
 int alternance = 0;

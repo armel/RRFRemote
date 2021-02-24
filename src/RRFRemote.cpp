@@ -168,16 +168,6 @@ void loop()
   sortant = doc["abstract"][0]["Links sortants"];
   tot = doc["transmit"][0]["TOT"];
 
-  if (tot > 0 && transmitOn == 0)
-  {
-    transmitOn = 1;
-  }
-
-  if (tot == 0 && transmitOff == 0)
-  {
-    transmitOff = 1;
-  }
-
   for (uint8_t i = 0; i < doc["last"].size(); i++)
   {
     lastIndicatif[i] = doc["last"][i]["Indicatif"];
@@ -230,6 +220,18 @@ void loop()
     {
       message = "- " + tmpString.substring(0, tmpString.indexOf(","));
     }
+  }
+
+  // Transmit or not transmit
+
+  if ((tot > 0 && transmitOn == 0) || (tot > 0 && String(lastIndicatif[0]) != indicatifString))
+  {
+    transmitOn = 1;
+  }
+
+  if (tot == 0 && transmitOff == 0)
+  {
+    transmitOff = 1;
   }
 
   // Histogram
@@ -369,7 +371,7 @@ void loop()
     }
 
     M5.Lcd.setTextColor(TFT_BLACK, TFT_WHITE);
-
+    M5.Lcd.setTextPadding(70);
     M5.Lcd.setTextDatum(CR_DATUM);
     M5.Lcd.drawString("ESP32", 318, 125);
     M5.Lcd.drawString("2", 318, 137);
@@ -648,6 +650,8 @@ void loop()
         M5.Lcd.setTextDatum(CL_DATUM);
 
         tmpString = String(lastIndicatif[0]);
+        indicatifString = tmpString;
+
         if(tmpString.substring(0, 3) == "GW-") {
           tmpString = "GATEWAY";
         }
@@ -687,8 +691,6 @@ void loop()
           M5.Lcd.setBrightness(brightnessCurrent);
         }
 
-        M5.Lcd.fillRect(4, 2, 36, 42, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
-
         M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
         M5.Lcd.setFreeFont(&dot15pt7b);
         M5.Lcd.setTextDatum(CC_DATUM);
@@ -715,6 +717,7 @@ void loop()
 
         if (dateStringOld != dateString)
         {
+          M5.Lcd.fillRect(4, 2, 36, 42, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
           sprintf(swap, "%c", ICON_CLOCK);
           tmpString = swap;
           M5.Lcd.drawString(tmpString, 10, 18);
@@ -810,6 +813,7 @@ void loop()
 
         if (emissionStringOld != emissionString)
         {
+          M5.Lcd.fillRect(4, 2, 36, 42, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
           sprintf(swap, "%c", ICON_CLOCK);
           tmpString = swap;
           M5.Lcd.drawString(tmpString, 10, 18);
@@ -881,7 +885,7 @@ void loop()
       M5.Lcd.setTextPadding(40);
       sprintf(swap, "%c", ICON_LEFT);
       tmpString = swap;
-      M5.Lcd.drawString(tmpString, 10, 20);
+      M5.Lcd.drawString(tmpString, 10, 18);
 
       M5.Lcd.setFreeFont(ICON_FONT);
       M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
@@ -889,7 +893,7 @@ void loop()
       M5.Lcd.setTextPadding(40);
       sprintf(swap, "%c", ICON_RIGHT);
       tmpString = swap;
-      M5.Lcd.drawString(tmpString, 310, 20);
+      M5.Lcd.drawString(tmpString, 310, 18);
 
       menuRefresh = 1;
     }
@@ -973,10 +977,12 @@ void loop()
   if (alternance % 10 == 0)
   {
     refresh = 0;
+    /*
     if (tot == 0)
     {
       transmitOff = 1;
     }
+    */
 
     type = (type++ < 4) ? type : 0;
   }
