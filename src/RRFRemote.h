@@ -10,10 +10,11 @@
 #define CORE2 3
 
 #if BOARD == BASIC
-  #define M5STACK_MPU6886 
+  #define M5STACK_MPU6886
   #include <M5Stack.h>
   #include "BasicAndGrey.h"
 #elif BOARD == GREY
+  #define M5STACK_MPU6886
   #include <M5Stack.h>
   #include "BasicAndGrey.h"
 #elif BOARD == CORE2
