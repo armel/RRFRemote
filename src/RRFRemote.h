@@ -10,6 +10,7 @@
 #define CORE2 3
 
 #if BOARD == BASIC
+  #define M5STACK_MPU6886 
   #include <M5Stack.h>
   #include "BasicAndGrey.h"
 #elif BOARD == GREY
@@ -28,7 +29,7 @@
 #include "settings.h"
 
 // Version
-#define VERSION "1.2.0"
+#define VERSION "1.2.1"
 
 // Wifi
 WiFiClient clientRemote, clientTracker, clientHamSQL, clientWhereis;
@@ -249,6 +250,16 @@ void button()
   static int btnALast = 0;
   static int btnBLast = 0;
   static int btnCLast = 0;
+  int right;
+  int left;
+
+  if (M5.Lcd.getRotation() == 1) {
+    right = 1;
+    left = -1;
+  } else {
+    right = -1;
+    left = 1;
+  }
 
   // Manage button bump
   if(btnB && btnBLast) {
@@ -284,7 +295,7 @@ void button()
         if (btnA && followCurrent == 0)
         {
           screensaver = millis(); // Screensaver update !!!
-          roomCurrent -= 1;
+          roomCurrent += left;
           refresh = 0;
           reset = 0;
 
@@ -295,7 +306,7 @@ void button()
         else if (btnC && followCurrent == 0)
         {
           screensaver = millis(); // Screensaver update !!!
-          roomCurrent += 1;
+          roomCurrent += right;
           refresh = 0;
           reset = 0;
 
@@ -317,11 +328,11 @@ void button()
       {
         if (btnA)
         {
-          menuCurrent -= 1;
+          menuCurrent += left;
         }
         else if (btnC)
         {
-          menuCurrent += 1;
+          menuCurrent += right;
         }
         else if (btnB)
         {
@@ -380,12 +391,12 @@ void button()
           int change = 0;
           if (btnA)
           {
-            colorCurrent -= 1;
+            colorCurrent += left;
             change = 1;
           }
           else if (btnC)
           {
-            colorCurrent += 1;
+            colorCurrent += right;
             change = 1;
           }
           else if (btnB)
@@ -412,11 +423,11 @@ void button()
         {
           if (btnA)
           {
-            brightnessCurrent -= 1;
+            brightnessCurrent += left;
           }
           else if (btnC)
           {
-            brightnessCurrent += 1;
+            brightnessCurrent += right;
           }
           else if (btnB)
           {
@@ -489,6 +500,27 @@ void scroll(int pause)
   }
 
   delay(pause);
+}
+
+// Detect rotation
+void getAcceleration()
+{
+  float accX = 0.0F;
+  float accY = 0.0F;
+  float accZ = 0.0F;
+
+  M5.IMU.getAccelData(&accX,&accY,&accZ);
+
+  if(int(accY * 1000) < -500 && M5.Lcd.getRotation() != 3) {
+    reset = 0;
+    refresh = 0;
+    M5.Lcd.setRotation(3);
+  }
+  else if(int(accY * 1000) > 500 && M5.Lcd.getRotation() != 1) {
+    reset = 0;
+    refresh = 0;
+    M5.Lcd.setRotation(1);
+  }
 }
 
 // Get data from RRFTracker and manage QSY
