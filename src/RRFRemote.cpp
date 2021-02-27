@@ -712,6 +712,7 @@ void loop()
       M5.Lcd.setFreeFont(ICON_FONT);
       M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
       M5.Lcd.setTextDatum(CL_DATUM);
+      M5.Lcd.setTextPadding(0);
 
       if (type == 0)
       {
