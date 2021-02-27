@@ -85,7 +85,11 @@ void setup()
       NULL,         /* Task handle. */
       1);           /* Core where the task should run */
 
-  delay(4000);
+  // Accelelerometer
+  M5.IMU.Init();
+
+  // Let's go after temporisation
+  delay(3000);
 
   for (uint8_t i = 0; i < 120; i++)
   {
@@ -708,6 +712,7 @@ void loop()
       M5.Lcd.setFreeFont(ICON_FONT);
       M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
       M5.Lcd.setTextDatum(CL_DATUM);
+      M5.Lcd.setTextPadding(0);
 
       if (type == 0)
       {
@@ -872,7 +877,6 @@ void loop()
   {
     if (menuRefresh == 0)
     {
-
       M5.Lcd.setBrightness(brightnessCurrent);
 
       M5.Lcd.fillRect(4, 4, 316, 40, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
@@ -896,6 +900,8 @@ void loop()
       menuRefresh = 1;
     }
 
+    reset = (reset == 0) ? 1 : 1;
+    
     M5.Lcd.setFreeFont(&dot15pt7b);
     M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
     M5.Lcd.setTextDatum(CC_DATUM);
@@ -975,13 +981,6 @@ void loop()
   if (alternance % 10 == 0)
   {
     refresh = 0;
-    /*
-    if (tot == 0)
-    {
-      transmitOff = 1;
-    }
-    */
-
     type = (type++ < 4) ? type : 0;
   }
 
@@ -1016,4 +1015,7 @@ void loop()
     screensaverMode = 0;
     M5.Lcd.setBrightness(brightnessCurrent);
   }
+
+  // Manage rotation
+  getAcceleration();
 }
