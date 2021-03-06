@@ -30,7 +30,7 @@
 #include "settings.h"
 
 // Version
-#define VERSION "1.2.3"
+#define VERSION "1.2.4"
 
 // Wifi
 WiFiClient clientRemote, clientTracker, clientHamSQL, clientWhereis;
@@ -510,17 +510,19 @@ void getAcceleration()
   float accY = 0.0F;
   float accZ = 0.0F;
 
-  M5.IMU.getAccelData(&accX,&accY,&accZ);
+  if(BOARD == GREY || BOARD == CORE2) {
+    M5.IMU.getAccelData(&accX,&accY,&accZ);
 
-  if(int(accY * 1000) < -500 && M5.Lcd.getRotation() != 3) {
-    reset = 0;
-    refresh = 0;
-    M5.Lcd.setRotation(3);
-  }
-  else if(int(accY * 1000) > 500 && M5.Lcd.getRotation() != 1) {
-    reset = 0;
-    refresh = 0;
-    M5.Lcd.setRotation(1);
+    if(int(accY * 1000) < -500 && M5.Lcd.getRotation() != 3) {
+      reset = 0;
+      refresh = 0;
+      M5.Lcd.setRotation(3);
+    }
+    else if(int(accY * 1000) > 500 && M5.Lcd.getRotation() != 1) {
+      reset = 0;
+      refresh = 0;
+      M5.Lcd.setRotation(1);
+    }
   }
 }
 
