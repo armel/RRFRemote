@@ -661,7 +661,7 @@ void loop()
         indicatifString = tmpString;
 
         if(tmpString.substring(0, 3) == "GW-") {
-          tmpString = "GATEWAY";
+          tmpString = "GW";
         }
         else {
           tmpString = getValue(lastIndicatif[0], ' ', 1);
