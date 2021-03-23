@@ -30,7 +30,7 @@
 #include "settings.h"
 
 // Version
-#define VERSION "1.2.4"
+#define VERSION "2.0.0"
 
 // Wifi
 WiFiClient clientRemote, clientTracker, clientHamSQL, clientWhereis;
@@ -119,7 +119,7 @@ int pos;
 // Misceleanous
 const char *room[] = {"RRF", "TECHNIQUE", "BAVARDAGE", "LOCAL", "INTERNATIONAL", "FON"};
 const int dtmf[] = {96, 98, 100, 101, 99, 97};
-const char *menu[] = {"QSY", "RAPTOR", "PERROQUET", "FOLLOW", "COULEUR", "LUMINOSITE", "QUITTER"};
+const char *menu[] = {"QSY", "RAPTOR", "PERROQUET", "REBOOT", "FOLLOW", "COULEUR", "LUMINOSITE", "QUITTER"};
 
 String tmpString;
 String jsonData = "", xmlData = "", whereisData = "";
@@ -341,8 +341,8 @@ void button()
           menuRefresh = 0;
         }
 
-        menuCurrent = (menuCurrent < 0) ? 6 : menuCurrent;
-        menuCurrent = (menuCurrent > 6) ? 0 : menuCurrent;
+        menuCurrent = (menuCurrent < 0) ? 7 : menuCurrent;
+        menuCurrent = (menuCurrent > 7) ? 0 : menuCurrent;
         preferences.putUInt("menu", menuCurrent);
       }
       else
@@ -375,8 +375,17 @@ void button()
           reset = 0;
           refresh = 0;
         }
-        // Mode menu active, Follow
+      // Mode menu active, Reboot
         else if (menuSelected == 3)
+        {
+          qsy = 1000;
+
+          menuMode = 0;
+          reset = 0;
+          refresh = 0;
+        }
+        // Mode menu active, Follow
+        else if (menuSelected == 4)
         {
           followCurrent = (followCurrent == 0) ? 1 : 0;
 
@@ -387,7 +396,7 @@ void button()
           preferences.putUInt("follow", followCurrent);
         }
         // Mode menu active, Color
-        else if (menuSelected == 4)
+        else if (menuSelected == 5)
         {
           int change = 0;
           if (btnA)
@@ -420,7 +429,7 @@ void button()
           preferences.putUInt("color", colorCurrent);
         }
         // Mode menu active, Brightness
-        else if (menuSelected == 5)
+        else if (menuSelected == 6)
         {
           if (btnA)
           {
@@ -443,7 +452,7 @@ void button()
           M5.Lcd.setBrightness(brightnessCurrent);
         }
         // Mode menu active, Escape
-        else if (menuSelected == 6)
+        else if (menuSelected == 7)
         {
           menuMode = 0;
           reset = 0;

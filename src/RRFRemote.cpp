@@ -925,8 +925,8 @@ void loop()
 
       switch(menuSelected)
       {
-        case 4: option = String(color[colorCurrent]); break;
-        case 5: option = "LEVEL " + String(brightnessCurrent); break;
+        case 5: option = String(color[colorCurrent]); break;
+        case 6: option = "LEVEL " + String(brightnessCurrent); break;
       }
     }
 
