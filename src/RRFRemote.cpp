@@ -20,6 +20,16 @@ void setup()
   // Preferences
   preferences.begin("RRFRemote");
 
+  size_t n = sizeof(spotnik) / sizeof(spotnik[0]);
+  n = n / 2;
+
+  configCurrent = preferences.getUInt("config", 0);
+
+  if(configCurrent > n) {
+    configCurrent = 0;
+    preferences.putUInt("config", configCurrent);
+  }
+
   roomCurrent = preferences.getUInt("room", 0);
   colorCurrent = preferences.getUInt("color", 0);
   menuCurrent = preferences.getUInt("menu", 0);
@@ -43,9 +53,9 @@ void setup()
   M5.Lcd.qrcode("https://github.com/armel/RRFRemote", 90, 80, 140, 6);
 
   // We start by connecting to the WiFi network
-  M5.Lcd.drawString(String(ssid), 160, 60);
+  M5.Lcd.drawString(String(wifi[configCurrent]), 160, 60);
 
-  WiFi.begin(ssid, password);
+  WiFi.begin(wifi[configCurrent], wifi[configCurrent + 1]);
   while (WiFi.status() != WL_CONNECTED)
   {
     delay(500);
@@ -927,6 +937,7 @@ void loop()
       {
         case 5: option = String(color[colorCurrent]); break;
         case 6: option = "LEVEL " + String(brightnessCurrent); break;
+        case 7: option = String(spotnik[configCurrent]); break;
       }
     }
 
@@ -946,7 +957,7 @@ void loop()
   M5.Lcd.setTextDatum(CC_DATUM);
   M5.Lcd.setTextPadding(220);
 
-  tmpString = indicatif;
+  tmpString = spotnik[configCurrent];
 
   if (dtmf[roomCurrent] != whereisCurrent && followCurrent == 0)
   {

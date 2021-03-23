@@ -34,11 +34,6 @@
 
 // Wifi
 WiFiClient clientRemote, clientTracker, clientHamSQL, clientWhereis;
-const char *ssid = WIFI_SSID;
-const char *password = WIFI_PASSWORD;
-
-// Indicatif
-String indicatif = INDICATIF;
 
 // Preferences
 Preferences preferences;
@@ -101,7 +96,6 @@ const colorType TFT_HEADER_GRIS = {96, 96, 96};
 #define ICON_CHARGING 37
 
 // HTTP endpoint
-String endpointSpotnik = SPOTNIK;
 String endpointHamQSL = "http://www.hamqsl.com/solarxml.php";
 String endpointRRF[] = {
     "http://rrf.f5nlg.ovh:8080/RRFTracker/RRF-today/rrf_tiny.json",
@@ -119,7 +113,7 @@ int pos;
 // Misceleanous
 const char *room[] = {"RRF", "TECHNIQUE", "BAVARDAGE", "LOCAL", "INTERNATIONAL", "FON"};
 const int dtmf[] = {96, 98, 100, 101, 99, 97};
-const char *menu[] = {"QSY", "RAPTOR", "PERROQUET", "REBOOT", "FOLLOW", "COULEUR", "LUMINOSITE", "QUITTER"};
+const char *menu[] = {"QSY", "RAPTOR", "PERROQUET", "REBOOT", "FOLLOW", "COULEUR", "LUMINOSITE", "CONFIG", "QUITTER"};
 
 String tmpString;
 String jsonData = "", xmlData = "", whereisData = "";
@@ -143,6 +137,7 @@ int qsy = 0;
 
 int transmitOn = 0, transmitOff = 0;
 
+int configCurrent = 0;
 int roomCurrent = 0;
 int whereisCurrent = 0;
 int brightnessCurrent = 32;
@@ -451,8 +446,33 @@ void button()
           preferences.putUInt("brightness", brightnessCurrent);
           M5.Lcd.setBrightness(brightnessCurrent);
         }
-        // Mode menu active, Escape
+        // Mode menu active, Config
         else if (menuSelected == 7)
+        {
+          if (btnA)
+          {
+            configCurrent += (left * 2);
+          }
+          else if (btnC)
+          {
+            configCurrent += (right * 2);
+          }
+          else if (btnB)
+          {
+            menuMode = 0;
+            reset = 0;
+            refresh = 0;
+          }
+
+          size_t n = sizeof(spotnik) / sizeof(spotnik[0]);
+          n = n / 2;
+
+          configCurrent = (configCurrent < 0) ? n: configCurrent;
+          configCurrent = (configCurrent > n + 1) ? 0 : configCurrent;
+          preferences.putUInt("config", configCurrent);
+        }        
+        // Mode menu active, Escape
+        else if (menuSelected == 8)
         {
           menuMode = 0;
           reset = 0;
@@ -549,7 +569,7 @@ void rrftracker(void *pvParameters)
 
       while (qsy > 0)
       {
-        http.begin(clientRemote, endpointSpotnik + String("?dtmf=") + String(qsy));  // Specify the URL
+        http.begin(clientRemote, spotnik[configCurrent + 1] + String("?dtmf=") + String(qsy));  // Specify the URL
         http.addHeader("Content-Type", "text/plain");                                     // Specify content-type header
         http.setTimeout(500);                                                             // Set timeout
         int httpCode = http.GET();                                                        // Make the request
@@ -623,7 +643,7 @@ void whereis(void *pvParameters)
     timer = millis();
     if ((WiFi.status() == WL_CONNECTED)) // Check the current connection status
     {
-      http.begin(clientWhereis, endpointSpotnik + String("?dtmf=0")); // Specify the URL
+      http.begin(clientWhereis, spotnik[configCurrent + 1] + String("?dtmf=0")); // Specify the URL
       http.addHeader("Content-Type", "text/plain");                     // Specify content-type header
       http.setTimeout(1000);                                            // Set Time Out
       int httpCode = http.GET();                                        // Make the request
