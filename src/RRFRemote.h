@@ -336,8 +336,8 @@ void button()
           menuRefresh = 0;
         }
 
-        menuCurrent = (menuCurrent < 0) ? 7 : menuCurrent;
-        menuCurrent = (menuCurrent > 7) ? 0 : menuCurrent;
+        menuCurrent = (menuCurrent < 0) ? 8 : menuCurrent;
+        menuCurrent = (menuCurrent > 8) ? 0 : menuCurrent;
         preferences.putUInt("menu", menuCurrent);
       }
       else
