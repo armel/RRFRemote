@@ -451,11 +451,11 @@ void button()
         {
           if (btnA)
           {
-            configCurrent += (left * 2);
+            configCurrent += left;
           }
           else if (btnC)
           {
-            configCurrent += (right * 2);
+            configCurrent += right;
           }
           else if (btnB)
           {
@@ -465,19 +465,20 @@ void button()
           }
 
           size_t n = sizeof(spotnik) / sizeof(spotnik[0]);
-          n = n / 2;
+          n = (n / 2) - 1;
 
-          //Serial.println(n);
-          //Serial.println(configCurrent);
-
-          configCurrent = (configCurrent < 0) ? n - 1: configCurrent;
-          configCurrent = (configCurrent > n + 1) ? 0 : configCurrent;
+          configCurrent = (configCurrent < 0) ? n : configCurrent;
+          configCurrent = (configCurrent > n) ? 0 : configCurrent;
           preferences.putUInt("config", configCurrent);
 
-          WiFi.begin(wifi[configCurrent], wifi[configCurrent + 1]);
-          while (WiFi.status() != WL_CONNECTED)
-          {
-            delay(500);
+          //Serial.println(configCurrent);
+
+          if(btnB) {
+            WiFi.begin(wifi[(configCurrent * 2)], wifi[(configCurrent * 2) + 1]);
+            while (WiFi.status() != WL_CONNECTED)
+            {
+              delay(500);
+            }
           }
         }        
         // Mode menu active, Escape
@@ -578,11 +579,11 @@ void rrftracker(void *pvParameters)
 
       while (qsy > 0)
       {
-        http.begin(clientRemote, spotnik[configCurrent + 1] + String("?dtmf=") + String(qsy));  // Specify the URL
+        http.begin(clientRemote, spotnik[(configCurrent * 2) + 1] + String("?dtmf=") + String(qsy));  // Specify the URL
         http.addHeader("Content-Type", "text/plain");                                     // Specify content-type header
         http.setTimeout(500);                                                             // Set timeout
         int httpCode = http.GET();                                                        // Make the request
-        if (httpCode == 200)                                                              // Check for the returning code
+        if (httpCode == 200 || qsy == 1000) // Check for the returning code
         {
           qsy = 0;
           refresh = 0;
@@ -593,7 +594,7 @@ void rrftracker(void *pvParameters)
         http.end(); // Free the resources
       }
  
-      http.begin(clientTracker, endpointRRF[roomCurrent]);    // Specify the URL
+      http.begin(clientTracker, endpointRRF[roomCurrent]);          // Specify the URL
       http.addHeader("Content-Type", "text/plain");                 // Specify content-type header
       http.setTimeout(750);                                         // Set Time Out
       int httpCode = http.GET();                                    // Make the request
@@ -652,7 +653,7 @@ void whereis(void *pvParameters)
     timer = millis();
     if ((WiFi.status() == WL_CONNECTED)) // Check the current connection status
     {
-      http.begin(clientWhereis, spotnik[configCurrent + 1] + String("?dtmf=0")); // Specify the URL
+      http.begin(clientWhereis, spotnik[(configCurrent * 2) + 1] + String("?dtmf=0")); // Specify the URL
       http.addHeader("Content-Type", "text/plain");                     // Specify content-type header
       http.setTimeout(1000);                                            // Set Time Out
       int httpCode = http.GET();                                        // Make the request
