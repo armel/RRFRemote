@@ -20,6 +20,18 @@ void setup()
   // Preferences
   preferences.begin("RRFRemote");
 
+  size_t n = sizeof(config) / sizeof(config[0]);
+  n = (n / 4) - 1;
+
+  //preferences.putUInt("config", 0);
+
+  configCurrent = preferences.getUInt("config", 0);
+
+  if(configCurrent > n) {
+    configCurrent = 0;
+    preferences.putUInt("config", configCurrent);
+  }
+
   roomCurrent = preferences.getUInt("room", 0);
   colorCurrent = preferences.getUInt("color", 0);
   menuCurrent = preferences.getUInt("menu", 0);
@@ -43,9 +55,9 @@ void setup()
   M5.Lcd.qrcode("https://github.com/armel/RRFRemote", 90, 80, 140, 6);
 
   // We start by connecting to the WiFi network
-  M5.Lcd.drawString(String(ssid), 160, 60);
+  M5.Lcd.drawString(String(config[(configCurrent * 4)]), 160, 60);
 
-  WiFi.begin(ssid, password);
+  WiFi.begin(config[(configCurrent * 4)], config[(configCurrent * 4) + 1]);
   while (WiFi.status() != WL_CONNECTED)
   {
     delay(500);
@@ -89,7 +101,7 @@ void setup()
   M5.IMU.Init();
 
   // Let's go after temporisation
-  delay(3000);
+  delay(1000);
 
   for (uint8_t i = 0; i < 120; i++)
   {
@@ -912,21 +924,27 @@ void loop()
     M5.Lcd.setTextPadding(220);
 
     String title = "";
-    String option = "";
+    String option = String(menu[menuCurrent]);
 
     if (menuSelected == -1)
     {
       title = "MODE MENU";
-      option = String(menu[menuCurrent]);
     }
     else
     {
       title = String(menu[menuSelected]);
 
-      switch(menuSelected)
+      if(option == "COULEUR") 
       {
-        case 4: option = String(color[colorCurrent]); break;
-        case 5: option = "LEVEL " + String(brightnessCurrent); break;
+        option = String(color[colorCurrent]);
+      }
+      else if(option == "LUMINOSITE") 
+      {
+        option = "LEVEL " + String(brightnessCurrent);      
+      }
+      else if(option == "CONFIG") 
+      {
+        option = String(config[(configCurrent * 4) + 2]);   
       }
     }
 
@@ -946,7 +964,7 @@ void loop()
   M5.Lcd.setTextDatum(CC_DATUM);
   M5.Lcd.setTextPadding(220);
 
-  tmpString = indicatif;
+  tmpString = config[(configCurrent * 4) + 2];
 
   if (dtmf[roomCurrent] != whereisCurrent && followCurrent == 0)
   {

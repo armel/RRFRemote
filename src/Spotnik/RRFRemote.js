@@ -18,8 +18,21 @@ const requestHandler = (request, response) => {
               "default":  "95, PERROQUET"
             };
 
-  if(dtmf > 0) {
-    exec('echo "' + dtmf + '#" > /tmp/dtmf_uhf', (error, stdout, stderr) => {
+  if (dtmf == 1000) {
+    exec('reboot', (error, stdout, stderr) => {
+      if (error || stderr) {
+        //console.log(`error: ${error.message}`);
+        //console.log(`stderr: ${stderr}`);
+        response.writeHead(500);
+      }
+      else {
+        //console.log(`stdout: ${stdout}`);
+        response.writeHead(200);
+        response.end('Reboot done');
+      }
+    });
+  } else if (dtmf > 0) {
+      exec('echo "' + dtmf + '#" > /tmp/dtmf_uhf', (error, stdout, stderr) => {
       if (error || stderr) {
         //console.log(`error: ${error.message}`);
         //console.log(`stderr: ${stderr}`);

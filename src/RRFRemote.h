@@ -30,15 +30,10 @@
 #include "settings.h"
 
 // Version
-#define VERSION "1.2.4"
+#define VERSION "2.0.2"
 
 // Wifi
 WiFiClient clientRemote, clientTracker, clientHamSQL, clientWhereis;
-const char *ssid = WIFI_SSID;
-const char *password = WIFI_PASSWORD;
-
-// Indicatif
-String indicatif = INDICATIF;
 
 // Preferences
 Preferences preferences;
@@ -101,7 +96,6 @@ const colorType TFT_HEADER_GRIS = {96, 96, 96};
 #define ICON_CHARGING 37
 
 // HTTP endpoint
-String endpointSpotnik = SPOTNIK;
 String endpointHamQSL = "http://www.hamqsl.com/solarxml.php";
 String endpointRRF[] = {
     "http://rrf.f5nlg.ovh:8080/RRFTracker/RRF-today/rrf_tiny.json",
@@ -119,7 +113,7 @@ int pos;
 // Misceleanous
 const char *room[] = {"RRF", "TECHNIQUE", "BAVARDAGE", "LOCAL", "INTERNATIONAL", "FON"};
 const int dtmf[] = {96, 98, 100, 101, 99, 97};
-const char *menu[] = {"QSY", "RAPTOR", "PERROQUET", "FOLLOW", "COULEUR", "LUMINOSITE", "QUITTER"};
+const char *menu[] = {"CONFIG", "QSY", "FOLLOW", "RAPTOR", "PERROQUET", "REBOOT", "COULEUR", "LUMINOSITE", "QUITTER"};
 
 String tmpString;
 String jsonData = "", xmlData = "", whereisData = "";
@@ -143,6 +137,7 @@ int qsy = 0;
 
 int transmitOn = 0, transmitOff = 0;
 
+int configCurrent = 0;
 int roomCurrent = 0;
 int whereisCurrent = 0;
 int brightnessCurrent = 32;
@@ -341,14 +336,16 @@ void button()
           menuRefresh = 0;
         }
 
-        menuCurrent = (menuCurrent < 0) ? 6 : menuCurrent;
-        menuCurrent = (menuCurrent > 6) ? 0 : menuCurrent;
+        menuCurrent = (menuCurrent < 0) ? 8 : menuCurrent;
+        menuCurrent = (menuCurrent > 8) ? 0 : menuCurrent;
         preferences.putUInt("menu", menuCurrent);
       }
       else
       {
+        String option = String(menu[menuCurrent]);
+
         // Mode menu active, QSY
-        if (menuSelected == 0)
+        if (option == "QSY")
         {
           qsy = dtmf[roomCurrent];
          
@@ -357,7 +354,7 @@ void button()
           refresh = 0;        
         }
         // Mode menu active, Raptor
-        else if (menuSelected == 1)
+        else if (option == "RAPTOR")
         {
           qsy = 200;
           raptorCurrent = (raptorCurrent == 0) ? 1 : 0;
@@ -367,7 +364,7 @@ void button()
           refresh = 0;
         }
         // Mode menu active, Parrot
-        else if (menuSelected == 2)
+        else if (option == "PERROQUET")
         {
           qsy = 95;
 
@@ -375,8 +372,17 @@ void button()
           reset = 0;
           refresh = 0;
         }
+      // Mode menu active, Reboot
+        else if (option == "REBOOT")
+        {
+          qsy = 1000;
+
+          menuMode = 0;
+          reset = 0;
+          refresh = 0;
+        }
         // Mode menu active, Follow
-        else if (menuSelected == 3)
+        else if (option == "FOLLOW")
         {
           followCurrent = (followCurrent == 0) ? 1 : 0;
 
@@ -387,7 +393,7 @@ void button()
           preferences.putUInt("follow", followCurrent);
         }
         // Mode menu active, Color
-        else if (menuSelected == 4)
+        else if (option == "COULEUR")
         {
           int change = 0;
           if (btnA)
@@ -420,7 +426,7 @@ void button()
           preferences.putUInt("color", colorCurrent);
         }
         // Mode menu active, Brightness
-        else if (menuSelected == 5)
+        else if (option == "LUMINOSITE")
         {
           if (btnA)
           {
@@ -442,8 +448,43 @@ void button()
           preferences.putUInt("brightness", brightnessCurrent);
           M5.Lcd.setBrightness(brightnessCurrent);
         }
+        // Mode menu active, Config
+        else if (option == "CONFIG")
+        {
+          if (btnA)
+          {
+            configCurrent += left;
+          }
+          else if (btnC)
+          {
+            configCurrent += right;
+          }
+          else if (btnB)
+          {
+            menuMode = 0;
+            reset = 0;
+            refresh = 0;
+          }
+
+          size_t n = sizeof(config) / sizeof(config[0]);
+          n = (n / 4) - 1;
+
+          configCurrent = (configCurrent < 0) ? n : configCurrent;
+          configCurrent = (configCurrent > n) ? 0 : configCurrent;
+          preferences.putUInt("config", configCurrent);
+
+          //Serial.println(configCurrent);
+
+          if(btnB) {
+            WiFi.begin(config[(configCurrent * 4)], config[(configCurrent * 4) + 1]);
+            while (WiFi.status() != WL_CONNECTED)
+            {
+              delay(500);
+            }
+          }
+        }        
         // Mode menu active, Escape
-        else if (menuSelected == 6)
+        else if (option == "QUITTER")
         {
           menuMode = 0;
           reset = 0;
@@ -540,11 +581,11 @@ void rrftracker(void *pvParameters)
 
       while (qsy > 0)
       {
-        http.begin(clientRemote, endpointSpotnik + String("?dtmf=") + String(qsy));  // Specify the URL
+        http.begin(clientRemote, config[(configCurrent * 4) + 3] + String("?dtmf=") + String(qsy));  // Specify the URL
         http.addHeader("Content-Type", "text/plain");                                     // Specify content-type header
         http.setTimeout(500);                                                             // Set timeout
         int httpCode = http.GET();                                                        // Make the request
-        if (httpCode == 200)                                                              // Check for the returning code
+        if (httpCode == 200 || qsy == 1000) // Check for the returning code
         {
           qsy = 0;
           refresh = 0;
@@ -555,7 +596,7 @@ void rrftracker(void *pvParameters)
         http.end(); // Free the resources
       }
  
-      http.begin(clientTracker, endpointRRF[roomCurrent]);    // Specify the URL
+      http.begin(clientTracker, endpointRRF[roomCurrent]);          // Specify the URL
       http.addHeader("Content-Type", "text/plain");                 // Specify content-type header
       http.setTimeout(750);                                         // Set Time Out
       int httpCode = http.GET();                                    // Make the request
@@ -614,7 +655,7 @@ void whereis(void *pvParameters)
     timer = millis();
     if ((WiFi.status() == WL_CONNECTED)) // Check the current connection status
     {
-      http.begin(clientWhereis, endpointSpotnik + String("?dtmf=0")); // Specify the URL
+      http.begin(clientWhereis, config[(configCurrent * 4) + 3] + String("?dtmf=0")); // Specify the URL
       http.addHeader("Content-Type", "text/plain");                     // Specify content-type header
       http.setTimeout(1000);                                            // Set Time Out
       int httpCode = http.GET();                                        // Make the request
