@@ -113,7 +113,7 @@ int pos;
 // Misceleanous
 const char *room[] = {"RRF", "TECHNIQUE", "BAVARDAGE", "LOCAL", "INTERNATIONAL", "FON"};
 const int dtmf[] = {96, 98, 100, 101, 99, 97};
-const char *menu[] = {"QSY", "RAPTOR", "PERROQUET", "REBOOT", "FOLLOW", "COULEUR", "LUMINOSITE", "CONFIG", "QUITTER"};
+const char *menu[] = {"CONFIG", "QSY", "FOLLOW", "RAPTOR", "PERROQUET", "REBOOT", "COULEUR", "LUMINOSITE", "QUITTER"};
 
 String tmpString;
 String jsonData = "", xmlData = "", whereisData = "";
@@ -342,8 +342,10 @@ void button()
       }
       else
       {
+        String option = String(menu[menuCurrent]);
+
         // Mode menu active, QSY
-        if (menuSelected == 0)
+        if (option == "QSY")
         {
           qsy = dtmf[roomCurrent];
          
@@ -352,7 +354,7 @@ void button()
           refresh = 0;        
         }
         // Mode menu active, Raptor
-        else if (menuSelected == 1)
+        else if (option == "RAPTOR")
         {
           qsy = 200;
           raptorCurrent = (raptorCurrent == 0) ? 1 : 0;
@@ -362,7 +364,7 @@ void button()
           refresh = 0;
         }
         // Mode menu active, Parrot
-        else if (menuSelected == 2)
+        else if (option == "PERROQUET")
         {
           qsy = 95;
 
@@ -371,7 +373,7 @@ void button()
           refresh = 0;
         }
       // Mode menu active, Reboot
-        else if (menuSelected == 3)
+        else if (option == "REBOOT")
         {
           qsy = 1000;
 
@@ -380,7 +382,7 @@ void button()
           refresh = 0;
         }
         // Mode menu active, Follow
-        else if (menuSelected == 4)
+        else if (option == "FOLLOW")
         {
           followCurrent = (followCurrent == 0) ? 1 : 0;
 
@@ -391,7 +393,7 @@ void button()
           preferences.putUInt("follow", followCurrent);
         }
         // Mode menu active, Color
-        else if (menuSelected == 5)
+        else if (option == "COULEUR")
         {
           int change = 0;
           if (btnA)
@@ -424,7 +426,7 @@ void button()
           preferences.putUInt("color", colorCurrent);
         }
         // Mode menu active, Brightness
-        else if (menuSelected == 6)
+        else if (option == "LUMINOSITE")
         {
           if (btnA)
           {
@@ -447,7 +449,7 @@ void button()
           M5.Lcd.setBrightness(brightnessCurrent);
         }
         // Mode menu active, Config
-        else if (menuSelected == 7)
+        else if (option == "CONFIG")
         {
           if (btnA)
           {
@@ -482,7 +484,7 @@ void button()
           }
         }        
         // Mode menu active, Escape
-        else if (menuSelected == 8)
+        else if (option == "QUITTER")
         {
           menuMode = 0;
           reset = 0;

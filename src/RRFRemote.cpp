@@ -924,22 +924,27 @@ void loop()
     M5.Lcd.setTextPadding(220);
 
     String title = "";
-    String option = "";
+    String option = String(menu[menuCurrent]);
 
     if (menuSelected == -1)
     {
       title = "MODE MENU";
-      option = String(menu[menuCurrent]);
     }
     else
     {
       title = String(menu[menuSelected]);
 
-      switch(menuSelected)
+      if(option == "COULEUR") 
       {
-        case 5: option = String(color[colorCurrent]); break;
-        case 6: option = "LEVEL " + String(brightnessCurrent); break;
-        case 7: option = String(config[(configCurrent * 4) + 2]); break;
+        option = String(color[colorCurrent]);
+      }
+      else if(option == "LUMINOSITE") 
+      {
+        option = "LEVEL " + String(brightnessCurrent);      
+      }
+      else if(option == "CONFIG") 
+      {
+        option = String(config[(configCurrent * 4) + 2]);   
       }
     }
 
