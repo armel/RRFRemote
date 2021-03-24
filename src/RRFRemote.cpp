@@ -23,7 +23,7 @@ void setup()
   size_t n = sizeof(config) / sizeof(config[0]);
   n = (n / 4) - 1;
 
-  preferences.putUInt("config", 0);
+  //preferences.putUInt("config", 0);
 
   configCurrent = preferences.getUInt("config", 0);
 
@@ -31,8 +31,6 @@ void setup()
     configCurrent = 0;
     preferences.putUInt("config", configCurrent);
   }
-
-  //Serial.println(configCurrent);
 
   roomCurrent = preferences.getUInt("room", 0);
   colorCurrent = preferences.getUInt("color", 0);
