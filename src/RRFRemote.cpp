@@ -55,7 +55,7 @@ void setup()
   M5.Lcd.qrcode("https://github.com/armel/RRFRemote", 90, 80, 140, 6);
 
   // We start by connecting to the WiFi network
-  M5.Lcd.drawString(String(config[(configCurrent * 2)]), 160, 60);
+  M5.Lcd.drawString(String(config[(configCurrent * 4)]), 160, 60);
 
   WiFi.begin(config[(configCurrent * 4)], config[(configCurrent * 4) + 1]);
   while (WiFi.status() != WL_CONNECTED)
@@ -101,7 +101,7 @@ void setup()
   M5.IMU.Init();
 
   // Let's go after temporisation
-  delay(3000);
+  delay(1000);
 
   for (uint8_t i = 0; i < 120; i++)
   {
