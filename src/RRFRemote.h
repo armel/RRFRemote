@@ -464,8 +464,8 @@ void button()
             refresh = 0;
           }
 
-          size_t n = sizeof(spotnik) / sizeof(spotnik[0]);
-          n = (n / 2) - 1;
+          size_t n = sizeof(config) / sizeof(config[0]);
+          n = (n / 4) - 1;
 
           configCurrent = (configCurrent < 0) ? n : configCurrent;
           configCurrent = (configCurrent > n) ? 0 : configCurrent;
@@ -474,7 +474,7 @@ void button()
           //Serial.println(configCurrent);
 
           if(btnB) {
-            WiFi.begin(wifi[(configCurrent * 2)], wifi[(configCurrent * 2) + 1]);
+            WiFi.begin(config[(configCurrent * 4)], config[(configCurrent * 4) + 1]);
             while (WiFi.status() != WL_CONNECTED)
             {
               delay(500);
@@ -579,7 +579,7 @@ void rrftracker(void *pvParameters)
 
       while (qsy > 0)
       {
-        http.begin(clientRemote, spotnik[(configCurrent * 2) + 1] + String("?dtmf=") + String(qsy));  // Specify the URL
+        http.begin(clientRemote, config[(configCurrent * 4) + 3] + String("?dtmf=") + String(qsy));  // Specify the URL
         http.addHeader("Content-Type", "text/plain");                                     // Specify content-type header
         http.setTimeout(500);                                                             // Set timeout
         int httpCode = http.GET();                                                        // Make the request
@@ -653,7 +653,7 @@ void whereis(void *pvParameters)
     timer = millis();
     if ((WiFi.status() == WL_CONNECTED)) // Check the current connection status
     {
-      http.begin(clientWhereis, spotnik[(configCurrent * 2) + 1] + String("?dtmf=0")); // Specify the URL
+      http.begin(clientWhereis, config[(configCurrent * 4) + 3] + String("?dtmf=0")); // Specify the URL
       http.addHeader("Content-Type", "text/plain");                     // Specify content-type header
       http.setTimeout(1000);                                            // Set Time Out
       int httpCode = http.GET();                                        // Make the request
