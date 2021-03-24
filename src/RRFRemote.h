@@ -30,7 +30,7 @@
 #include "settings.h"
 
 // Version
-#define VERSION "2.0.0"
+#define VERSION "2.0.1"
 
 // Wifi
 WiFiClient clientRemote, clientTracker, clientHamSQL, clientWhereis;
@@ -467,9 +467,18 @@ void button()
           size_t n = sizeof(spotnik) / sizeof(spotnik[0]);
           n = n / 2;
 
-          configCurrent = (configCurrent < 0) ? n: configCurrent;
+          //Serial.println(n);
+          //Serial.println(configCurrent);
+
+          configCurrent = (configCurrent < 0) ? n - 1: configCurrent;
           configCurrent = (configCurrent > n + 1) ? 0 : configCurrent;
           preferences.putUInt("config", configCurrent);
+
+          WiFi.begin(wifi[configCurrent], wifi[configCurrent + 1]);
+          while (WiFi.status() != WL_CONNECTED)
+          {
+            delay(500);
+          }
         }        
         // Mode menu active, Escape
         else if (menuSelected == 8)

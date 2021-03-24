@@ -23,6 +23,8 @@ void setup()
   size_t n = sizeof(spotnik) / sizeof(spotnik[0]);
   n = n / 2;
 
+  //preferences.putUInt("config", 0);
+
   configCurrent = preferences.getUInt("config", 0);
 
   if(configCurrent > n) {
