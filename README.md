@@ -118,7 +118,7 @@ nohup node /root/RRFRemote.js &
 
 Ouvrez le projet RRFRemote avec PlateformIO for VSCode.
 
-Editer le fichier `src/settings.h` afin de renseigner vos paramétrages Wifi, votre indicatif et l'url  d'accès au script de contrôle que vous avez installé précédement. Par défaut, c'est : 
+Editer le fichier `src/settings.h` afin de renseigner vos paramétrages Wifi (SSID et mot de passe associé), votre indicatif et l'url  d'accès au script de contrôle que vous avez installé précédement. Par défaut, c'est : 
 
 `http://adresse_ip_de_votre_spotnik:3000/`
 
