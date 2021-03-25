@@ -379,6 +379,16 @@ void loop()
   M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
   M5.Lcd.setTextDatum(CC_DATUM);
 
+  if (tot > 0) 
+  {
+    if (type != 0) {
+      refresh = 0;
+    }
+
+    alternance = 5;
+    type = 0;
+  }
+
   if (type == 1)
   {
     M5.Lcd.setTextPadding(160);
@@ -1042,13 +1052,12 @@ void loop()
   // Alternance and type
   scroll(10);
 
-  if (alternance % 10 == 0)
-  {
+  alternance++;
+  if(alternance == 10) {
     refresh = 0;
     type = (type++ < 4) ? type : 0;
+    alternance = 0;
   }
-
-  alternance = (alternance++ < 50) ? alternance : 1;
 
   // Temporisation
   wait = millis() - timer;
