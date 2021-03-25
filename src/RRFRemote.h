@@ -30,7 +30,7 @@
 #include "settings.h"
 
 // Version
-#define VERSION "2.0.2"
+#define VERSION "2.0.3"
 
 // Wifi
 WiFiClient clientRemote, clientTracker, clientHamSQL, clientWhereis;
@@ -113,7 +113,7 @@ int pos;
 // Misceleanous
 const char *room[] = {"RRF", "TECHNIQUE", "BAVARDAGE", "LOCAL", "INTERNATIONAL", "FON"};
 const int dtmf[] = {96, 98, 100, 101, 99, 97};
-const char *menu[] = {"CONFIG", "QSY", "FOLLOW", "RAPTOR", "PERROQUET", "REBOOT", "COULEUR", "LUMINOSITE", "QUITTER"};
+const char *menu[] = {"CONFIG", "QSY", "FOLLOW", "RAPTOR", "PERROQUET", "REBOOT", "TOT", "COULEUR", "LUMINOSITE", "QUITTER"};
 
 String tmpString;
 String jsonData = "", xmlData = "", whereisData = "";
@@ -128,6 +128,7 @@ String txTotalString, txTotalStringOld;
 String elsewhereString, elsewhereStringOld;
 String indicatifString;
 String whereisString;
+String departmentString;
 
 int reset = 0;
 int alternance = 0;
@@ -141,6 +142,7 @@ int configCurrent = 0;
 int roomCurrent = 0;
 int whereisCurrent = 0;
 int brightnessCurrent = 32;
+int totCurrent = 0;
 int raptorCurrent = 0;
 int followCurrent = 0;
 int batteryChargeCurrent = 0;
@@ -392,6 +394,17 @@ void button()
 
           preferences.putUInt("follow", followCurrent);
         }
+        // Mode menu active, TOT
+        else if (option == "TOT")
+        {
+          totCurrent = (totCurrent == 0) ? 1 : 0;
+
+          menuMode = 0;
+          reset = 0;
+          refresh = 0;
+
+          preferences.putUInt("tot", totCurrent);
+        }
         // Mode menu active, Color
         else if (option == "COULEUR")
         {
@@ -476,7 +489,7 @@ void button()
           //Serial.println(configCurrent);
 
           if(btnB) {
-            WiFi.begin(config[(configCurrent * 4)], config[(configCurrent * 4) + 1]);
+            WiFi.begin(config[(configCurrent * 6)], config[(configCurrent * 6) + 1]);
             while (WiFi.status() != WL_CONNECTED)
             {
               delay(500);
@@ -567,6 +580,25 @@ void getAcceleration()
   }
 }
 
+// Compute distance
+int computeDistance(float latitudeLink, float longitudeLink) {
+    float latitudeUser = config[(configCurrent * 6) + 2]
+    float longitudeUser = config[(configCurrent * 6) + 3]
+    float p, a, r;
+
+    p = PI / 180; // Approximation Pi/180
+    a = 0.5 - cos((latitudeUser - latitudeLink) * p) / 2 + cos(latitudeLink * p) * cos(latitudeUser * p) * (1 - cos((longitudeUser - longitudeLink) * p)) / 2;
+    r = (12742 * asin(sqrt(a)));
+    if (r < 100) {
+        r = round(12742 * asin(sqrt(a)));
+    }
+    else {
+        r = ceil(12742 * asin(sqrt(a)));
+    }
+
+    return int(r);
+}
+
 // Get data from RRFTracker and manage QSY
 void rrftracker(void *pvParameters)
 {
@@ -581,7 +613,7 @@ void rrftracker(void *pvParameters)
 
       while (qsy > 0)
       {
-        http.begin(clientRemote, config[(configCurrent * 4) + 3] + String("?dtmf=") + String(qsy));  // Specify the URL
+        http.begin(clientRemote, config[(configCurrent * 6) + 5] + String("?dtmf=") + String(qsy));  // Specify the URL
         http.addHeader("Content-Type", "text/plain");                                     // Specify content-type header
         http.setTimeout(500);                                                             // Set timeout
         int httpCode = http.GET();                                                        // Make the request
@@ -655,7 +687,7 @@ void whereis(void *pvParameters)
     timer = millis();
     if ((WiFi.status() == WL_CONNECTED)) // Check the current connection status
     {
-      http.begin(clientWhereis, config[(configCurrent * 4) + 3] + String("?dtmf=0")); // Specify the URL
+      http.begin(clientWhereis, config[(configCurrent * 6) + 5] + String("?dtmf=0")); // Specify the URL
       http.addHeader("Content-Type", "text/plain");                     // Specify content-type header
       http.setTimeout(1000);                                            // Set Time Out
       int httpCode = http.GET();                                        // Make the request

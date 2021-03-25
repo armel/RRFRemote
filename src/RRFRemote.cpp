@@ -17,6 +17,10 @@ void setup()
   M5.begin(true, false, false, false);
   power();
 
+  // Init Speaker
+  M5.Speaker.setVolume(1);
+  M5.Speaker.update();
+
   // Preferences
   preferences.begin("RRFRemote");
 
@@ -37,6 +41,7 @@ void setup()
   menuCurrent = preferences.getUInt("menu", 0);
   brightnessCurrent = preferences.getUInt("brightness", 128);
   followCurrent = preferences.getUInt("follow", 0);
+  totCurrent = preferences.getUInt("tot", 0);
 
   // LCD
   resetColor();
@@ -55,9 +60,9 @@ void setup()
   M5.Lcd.qrcode("https://github.com/armel/RRFRemote", 90, 80, 140, 6);
 
   // We start by connecting to the WiFi network
-  M5.Lcd.drawString(String(config[(configCurrent * 4)]), 160, 60);
+  M5.Lcd.drawString(String(config[(configCurrent * 6)]), 160, 60);
 
-  WiFi.begin(config[(configCurrent * 4)], config[(configCurrent * 4) + 1]);
+  WiFi.begin(config[(configCurrent * 6)], config[(configCurrent * 6) + 1]);
   while (WiFi.status() != WL_CONNECTED)
   {
     delay(500);
@@ -121,16 +126,18 @@ void loop()
   char swap[32];
 
   const char *emission = "", *date = "", *salon = "", *elsewhere = "", *entrant = "", *sortant = "";
-  const char *lastIndicatif[10], *lastDuree[10], *lastHeure[10];
+  const char *lastIndicatif[10], *lastDuree[10], *lastHeure[10], *lastLocator[10], *lastRegion[10];
   const char *allIndicatif[10], *allDuree[10];
   const char *iptableIndicatif[10], *iptableType[10];
   const char *legende[] = {"00", "06", "12", "18", "23"};
 
+  float lastLatitude[10], lastLongitude[10];
   int allTx[10];
   int tot = 0, linkTotal = 0, linkActif = 0, linkTotalElsewhere = 0, txTotal = 0, maxLevel = 0, tx[24] = {0};
   int optimize = 0;
 
   uint8_t i, j, k;
+  uint8_t distance = 0;
 
   static uint8_t lengthData = 0;
   static uint8_t centerData = 0;
@@ -189,6 +196,10 @@ void loop()
     lastIndicatif[i] = doc["last"][i]["Indicatif"];
     lastHeure[i] = doc["last"][i]["Heure"];
     lastDuree[i] = doc["last"][i]["Durée"];
+    lastLatitude[i] = doc["last"][i]["Latitude"];
+    lastLongitude[i] = doc["last"][i]["Longitude"];
+    lastLocator[i] = doc["last"][i]["Locator"];
+    lastRegion[i] = doc["last"][i]["Region"];
   }
 
   for (uint8_t i = 0; i < doc["all"].size(); i++)
@@ -219,23 +230,32 @@ void loop()
     tx[i] = tmp;
   }
 
-  tmpString = String(entrant);
-  if (tmpString.length() > 0)
+  // Prepare message
+  if(tot == 0 || lastLatitude[0] == 0)
   {
-    message = "+ " + tmpString.substring(0, tmpString.indexOf(","));
-    tmpString = String(sortant);
+    tmpString = String(entrant);
     if (tmpString.length() > 0)
     {
-      message += " - " + tmpString.substring(0, tmpString.indexOf(","));
+      message = "+ " + tmpString.substring(0, tmpString.indexOf(","));
+      tmpString = String(sortant);
+      if (tmpString.length() > 0)
+      {
+        message += " - " + tmpString.substring(0, tmpString.indexOf(","));
+      }
+    }
+    else
+    {
+      tmpString = String(sortant);
+      if (tmpString.length() > 0)
+      {
+        message = "- " + tmpString.substring(0, tmpString.indexOf(","));
+      }
     }
   }
-  else
+  else 
   {
-    tmpString = String(sortant);
-    if (tmpString.length() > 0)
-    {
-      message = "- " + tmpString.substring(0, tmpString.indexOf(","));
-    }
+    distance = computeDistance(lastLatitude[0], lastLongitude[0]);
+    message = String(lastRegion[0]) + " - "  + String(lastLocator[0]) + " - " + String(distance) + " Km";
   }
 
   // Transmit or not transmit
@@ -676,6 +696,7 @@ void loop()
           tmpString = "GW";
         }
         else {
+          departmentString = getValue(lastIndicatif[0], ' ', 0);
           tmpString = getValue(lastIndicatif[0], ' ', 1);
           tmpString = (tmpString == "") ? "RTFM" : tmpString;
         }
@@ -700,6 +721,16 @@ void loop()
         M5.Lcd.drawString(dureeString.substring(1), (centerData + lengthData - 75), 60);
       }
 
+      if(totCurrent) {
+        if((String(salon) == "RRF" && tot > 135) || (tot > 285))
+        {
+          M5.Speaker.tone(2000);
+          scroll(10);
+          M5.Speaker.tone(2000);
+          scroll(10);
+          M5.Speaker.mute();
+        }
+      }
     }
     else
     { // If no transmit
@@ -944,7 +975,18 @@ void loop()
       }
       else if(option == "CONFIG") 
       {
-        option = String(config[(configCurrent * 4) + 2]);   
+        option = String(config[(configCurrent * 6) + 4]);   
+      }
+      else if(option == "TOT") 
+      {
+        if (totCurrent == 0)
+        {
+          option = "TOT ON";
+        } 
+        else 
+        {
+          option = "TOT OFF";
+        }   
       }
     }
 
@@ -964,7 +1006,7 @@ void loop()
   M5.Lcd.setTextDatum(CC_DATUM);
   M5.Lcd.setTextPadding(220);
 
-  tmpString = config[(configCurrent * 4) + 2];
+  tmpString = config[(configCurrent * 6) + 4];
 
   if (dtmf[roomCurrent] != whereisCurrent && followCurrent == 0)
   {
