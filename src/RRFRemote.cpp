@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 #include "RRFRemote.h"
+#include "functions.h"
 
 // Setup
 
