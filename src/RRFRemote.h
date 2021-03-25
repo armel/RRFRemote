@@ -480,7 +480,7 @@ void button()
           }
 
           size_t n = sizeof(config) / sizeof(config[0]);
-          n = (n / 4) - 1;
+          n = (n / 6) - 1;
 
           configCurrent = (configCurrent < 0) ? n : configCurrent;
           configCurrent = (configCurrent > n) ? 0 : configCurrent;
@@ -582,8 +582,8 @@ void getAcceleration()
 
 // Compute distance
 int computeDistance(float latitudeLink, float longitudeLink) {
-    float latitudeUser = config[(configCurrent * 6) + 2]
-    float longitudeUser = config[(configCurrent * 6) + 3]
+    float latitudeUser = atof(config[(configCurrent * 6) + 2]);
+    float longitudeUser = atof(config[(configCurrent * 6) + 3]);
     float p, a, r;
 
     p = PI / 180; // Approximation Pi/180
