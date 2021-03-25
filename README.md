@@ -132,8 +132,8 @@ Editer le fichier `src/settings.h` afin de renseigner vos paramétrages, à savo
 
 ```
 const char *config[] = {
-	"Livebox-814C", "passe_livebox", "48.8482855", "2.2708201", "F1ZPX", "http://192.168.1.10:3000/",
-	"iPhone 8", "passe_iphone", "48.8482855", "2.2708201", "F1ZPX", "http://82.167.56.2:3000/" 
+	"Livebox", "mdp_Livebox", "48.8482855", "2.2708201", "F1ZPX H", "http://192.168.1.10:3000/",
+	"iPhone8", "mdp_iphone", "48.8482855", "2.2708201", "F1ZPX M", "http://82.167.56.2:3000/" 
 };
 ```
 
