@@ -118,17 +118,22 @@ nohup node /root/RRFRemote.js &
 
 Ouvrez le projet RRFRemote avec PlateformIO for VSCode.
 
-Editer le fichier `src/settings.h` afin de renseigner vos paramétrages Wifi (SSID et mot de passe associé), votre indicatif et l'url  d'accès au script de contrôle que vous avez installé précédement. Par défaut, c'est : 
+Editer le fichier `src/settings.h` afin de renseigner vos paramétrages, à savoir :
 
-`http://adresse_ip_de_votre_spotnik:3000/`
+* votre SSID Wifi,
+* votre mot de passe Wifi,
+* votre latitude,
+* votre longitude,
+* votre indicatif,
+* et pour finir, l'url d'accès au script de contrôle que vous avez installé précédement (par défaut, c'est `http://adresse_ip_de_votre_spotnik:3000/`).
 
 > À noter que, depuis la version 2.0.0, il est possible de gérer autant de configurations que vous le souhaitez ! Cela vous permet, par exemple, de préconfigurer vos paramétrages pour une utilisation locale sur le Wifi de votre QRA et une configuration mobile sur le Wifi de votre Smartphone. Une telle configuration pourrait ressemble à ceci :
 > 
 
 ```
 const char *config[] = {
-	"Livebox-814C", "monsupermotdepassewifi", "F1ZPX", "http://192.168.1.10:3000/",
-	"iPhone 8", "monhypermotdepassewifi", "F1ZPX", "http://82.167.56.2:3000/" 
+	"Livebox-814C", "passe_livebox", "48.8482855", "2.2708201", "F1ZPX", "http://192.168.1.10:3000/",
+	"iPhone 8", "passe_iphone", "48.8482855", "2.2708201", "F1ZPX", "http://82.167.56.2:3000/" 
 };
 ```
 
