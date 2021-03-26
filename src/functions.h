@@ -425,7 +425,7 @@ void getAcceleration()
 }
 
 // Compute distance
-long computeDistance(float latitudeLink, float longitudeLink) {
+int computeDistance(float latitudeLink, float longitudeLink) {
     float latitudeUser = atof(config[(configCurrent * 6) + 2]);
     float longitudeUser = atof(config[(configCurrent * 6) + 3]);
     float p, a;

@@ -134,9 +134,9 @@ void loop()
   int allTx[10];
   int tot = 0, linkTotal = 0, linkActif = 0, linkTotalElsewhere = 0, txTotal = 0, maxLevel = 0, tx[24] = {0};
   int optimize = 0;
+  int distance = 0;
 
   uint8_t i, j, k;
-  uint8_t distance = 0;
 
   static uint8_t lengthData = 0;
   static uint8_t centerData = 0;
