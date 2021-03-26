@@ -18,8 +18,7 @@ void setup()
   power();
 
   // Init Speaker
-  M5.Speaker.setVolume(1);
-  M5.Speaker.update();
+  speaker();
 
   // Preferences
   preferences.begin("RRFRemote");
@@ -734,11 +733,11 @@ void loop()
       if(totCurrent) {
         if((String(salon) == "RRF" && tot > 135) || (tot > 285))
         {
-          M5.Speaker.tone(2000);
+          totTone();
           scroll(10);
-          M5.Speaker.tone(2000);
+          totTone();
           scroll(10);
-          M5.Speaker.mute();
+          totMute();
         }
       }
     }
