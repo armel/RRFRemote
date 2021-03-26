@@ -88,13 +88,18 @@ Il est possible de :
 
 - changer les couleurs du thème,
 - régler la luminosité de l'écran,
+- activer une alerte sonore TOT,
 - allumer ou éteindre le RRFRemote.
 
 # Installation
 
+> En complément des instructions probablement trop succintes que je décris ci-dessous, je ne peux que vous conseiller de lire l'excellent [message](https://groups.io/g/RRF/message/2444) publié par F6FDY Eddie, sur le groupe RRF. Il donnera de précieux conseils aux OMs qui n'ont pas l'habitude de déployer des environnements de développement. 
+
 ## Pré-ambule
 
 Le plus simple est d'installer [PlateformIO for VSCode](https://platformio.org/install/ide?install=vscode) sur votre PC (Linux ou Windows) ou sur votre Mac (Intel ou M1). C'est un environnement de développement multiplateforme et multilangage performant, en plus d'être agréable à utiliser.
+
+> Quelques OMs ont eu des difficultés à installer PlateformIO sous Windows. Dans la majorité des cas, une réinstallation de Python règle le problème. 
 
 Ensuite, toujours sur votre PC ou Mac, cloner le projet RRFRemote via la commande :
 
@@ -122,8 +127,8 @@ Editer le fichier `src/settings.h` afin de renseigner vos paramétrages, à savo
 
 * votre SSID Wifi,
 * votre mot de passe Wifi,
-* votre latitude,
-* votre longitude,
+* votre latitude (format décimale),
+* votre longitude (format décimale),
 * votre indicatif,
 * et pour finir, l'url d'accès au script de contrôle que vous avez installé précédement (par défaut, c'est `http://adresse_ip_de_votre_spotnik:3000/`).
 
@@ -174,6 +179,10 @@ Par,
 ```
 
 Compiler et uploader le projet sur votre M5Stack. C'est terminé.
+
+# Remerciements
+
+Un grand merci à F4ICR Pascal, F6FDY Eddie, F4IGC Philippe et tous les autres, pour la confiance, les idées et l'aide qu'ils m'ont apporté depuis le début de ce projet. Avoir des OMs impliqués qui suivent de près mes développements est toujours stimulant ;)
 
 # That's all
 Bon trafic à tous, 88 & 73 de Armel F4HWN ! 

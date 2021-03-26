@@ -87,7 +87,6 @@ void clear()
 }
 
 // Manage buttons
-
 void button()
 {
   static int btnALast = 0;

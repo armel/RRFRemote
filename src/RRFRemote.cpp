@@ -5,7 +5,6 @@
 #include "functions.h"
 
 // Setup
-
 void setup()
 {
   // Debug
@@ -26,7 +25,7 @@ void setup()
   preferences.begin("RRFRemote");
 
   size_t n = sizeof(config) / sizeof(config[0]);
-  n = (n / 4) - 1;
+  n = (n / 6) - 1;
 
   //preferences.putUInt("config", 0);
 
@@ -1059,7 +1058,7 @@ void loop()
     type = (type++ < 4) ? type : 0;
     alternance = 0;
   }
-
+  
   // Temporisation
   wait = millis() - timer;
   if (wait < limit)
