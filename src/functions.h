@@ -426,16 +426,16 @@ void getAcceleration()
 
 // Compute distance
 int computeDistance(float latitudeLink, float longitudeLink) {
-    float latitudeUser = atof(config[(configCurrent * 6) + 2]);
-    float longitudeUser = atof(config[(configCurrent * 6) + 3]);
-    float p, a;
-    long r;
+  float latitudeUser = atof(config[(configCurrent * 6) + 2]);
+  float longitudeUser = atof(config[(configCurrent * 6) + 3]);
+  float p, a;
+  long r;
 
-    p = PI / 180.0; // Approximation Pi/180
-    a = 0.5 - cos((latitudeUser - latitudeLink) * p) / 2.0 + cos(latitudeLink * p) * cos(latitudeUser * p) * (1 - cos((longitudeUser - longitudeLink) * p)) / 2.0;
-    r = round(12742 * asin(sqrt(a)));
-    
-    return r;
+  p = PI / 180.0; // Approximation Pi/180
+  a = 0.5 - cos((latitudeUser - latitudeLink) * p) / 2.0 + cos(latitudeLink * p) * cos(latitudeUser * p) * (1 - cos((longitudeUser - longitudeLink) * p)) / 2.0;
+  r = round(12742 * asin(sqrt(a)));
+  
+  return r;
 }
 
 // Get data from RRFTracker and manage QSY
