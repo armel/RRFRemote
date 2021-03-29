@@ -105,7 +105,7 @@ void setup()
   M5.IMU.Init();
 
   // Let's go after temporisation
-  delay(1000);
+  delay(2000);
 
   for (uint8_t i = 0; i < 120; i++)
   {
@@ -269,396 +269,427 @@ void loop()
     transmitOff = 1;
   }
 
-  // Histogram
-  scroll(10);
+  if (screenMode == 0) {
 
-  j = 4;
-  k = 0;
+    // Histogram
+    scroll(10);
 
-  for (uint8_t i = 0; i < 24; i++)
-  {
-    if (tx[i] != 0)
+    j = 4;
+    k = 0;
+
+    for (uint8_t i = 0; i < 24; i++)
     {
-      uint8_t tmp = map(tx[i], 0, maxLevel, 0, 48);
-      M5.Lcd.fillRect(j, 153 - tmp, 5, tmp, M5.Lcd.color565(TFT_FRONT.r - k, TFT_FRONT.g - k, TFT_FRONT.b - k));
-      M5.Lcd.fillRect(j, 153 - 48, 5, 48 - tmp, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
-    }
-    else
-    {
-      M5.Lcd.fillRect(j, 153 - 48, 5, 48, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
-    }
-    M5.Lcd.fillRect(j, 154, 5, 1, TFT_LIGHTGREY);
-    j += 6;
-    k += 2;
-  }
-
-  scroll(10);
-
-  M5.Lcd.setFreeFont(0);
-  M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
-  M5.Lcd.setTextDatum(CL_DATUM);
-
-  for (uint8_t i = 0; i < 5; i++)
-  {
-    M5.Lcd.drawString(String(legende[i]), 4 + (i * 34), 162);
-  }
-
-  // Elsewhere
-  scroll(10);
-
-  JsonObject obj = doc.as<JsonObject>();
-  elsewhereString = obj["elsewhere"].as<String>();
-
-  if(elsewhereString != "null") {
-    if (elsewhereString != elsewhereStringOld || refresh == 0)
-    {
-      elsewhereStringOld = elsewhereString;
-
-      M5.Lcd.setFreeFont(0);
-
-      i = 0;
-      j = 8;
-      k = 0;
-
-      while (k <= 4)
+      if (tx[i] != 0)
       {
-        if (strcmp(room[i], salon) != 0)
+        uint8_t tmp = map(tx[i], 0, maxLevel, 0, 48);
+        M5.Lcd.fillRect(j, 153 - tmp, 5, tmp, M5.Lcd.color565(TFT_FRONT.r - k, TFT_FRONT.g - k, TFT_FRONT.b - k));
+        M5.Lcd.fillRect(j, 153 - 48, 5, 48 - tmp, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
+      }
+      else
+      {
+        M5.Lcd.fillRect(j, 153 - 48, 5, 48, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
+      }
+      M5.Lcd.fillRect(j, 154, 5, 1, TFT_LIGHTGREY);
+      j += 6;
+      k += 2;
+    }
+
+    scroll(10);
+
+    M5.Lcd.setFreeFont(0);
+    M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
+    M5.Lcd.setTextDatum(CL_DATUM);
+
+    for (uint8_t i = 0; i < 5; i++)
+    {
+      M5.Lcd.drawString(String(legende[i]), 4 + (i * 34), 162);
+    }
+
+    // Elsewhere
+    scroll(10);
+
+    JsonObject obj = doc.as<JsonObject>();
+    elsewhereString = obj["elsewhere"].as<String>();
+
+    if(elsewhereString != "null") {
+      if (elsewhereString != elsewhereStringOld || refresh == 0)
+      {
+        elsewhereStringOld = elsewhereString;
+
+        M5.Lcd.setFreeFont(&tahoma6pt7b);
+        i = 0;
+        j = 6;
+        k = 0;
+
+        while (k <= 4)
         {
-          M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
-          M5.Lcd.setTextDatum(CC_DATUM);
-          M5.Lcd.drawString(String(room[i]).substring(0, 3), 14, 168 + j);
-
-          elsewhere = doc["elsewhere"][1][room[i]];
-          if (strcmp(elsewhere, "Aucune émission") != 0)
+          if (strcmp(room[i], salon) != 0)
           {
-            screensaver = millis(); // Screensaver update !!!
-            tmpString = String(elsewhere);
-            if(tmpString.substring(0, 3) == "GW-") {
-              tmpString = "GATEWAY";
-            }
-            else {
-              tmpString = getValue(elsewhere, ' ', 1);
-              tmpString = (tmpString == "") ? "RTFM" : getValue(elsewhere, ' ', 1) + ' ' + getValue(elsewhere, ' ', 2);
-            }
-
-            M5.Lcd.fillRect(26, 169 + (14 * k), 70, 13, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
             M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
-          }
-          else
-          {
-            M5.Lcd.fillRect(26, 169 + (14 * k), 70, 13, TFT_WHITE);
+            M5.Lcd.setTextDatum(CC_DATUM);
+            M5.Lcd.drawString(String(room[i]).substring(0, 3), 14, 168 + j);
+
+            M5.Lcd.setTextDatum(CC_DATUM);
             M5.Lcd.setTextColor(TFT_BLACK, TFT_WHITE);
-            M5.Lcd.drawString("         ", 55, 168 + j);
-            linkTotalElsewhere = doc["elsewhere"][5][room[i]];
-            sprintf(swap, "%03d", linkTotalElsewhere);
-            tmpString = swap;
-            tmpString += " links";
+
+            elsewhere = doc["elsewhere"][1][room[i]];
+            //elsewhere = "GW-ALLSTAR-40020";
+            //elsewhere = "(67) F1ZRZ T10M";
+            //elsewhere = "(67) F1ZRZ S";
+
+            if (strcmp(elsewhere, "Aucune émission") != 0)
+            {
+              screensaver = millis(); // Screensaver update !!!
+              tmpString = String(elsewhere);
+              if(tmpString.substring(0, 3) == "GW-") {
+                tmpString = "GATEWAY";
+              }
+              else {
+                tmpString = getValue(elsewhere, ' ', 1);
+                tmpString = (tmpString == "") ? "RTFM" : getValue(elsewhere, ' ', 1) + ' ' + getValue(elsewhere, ' ', 2);
+              }
+
+              M5.Lcd.fillRect(28, 169 + (14 * k), 72, 13, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
+              M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
+            }
+            else
+            {
+              M5.Lcd.fillRect(28, 169 + (14 * k), 72, 13, TFT_WHITE);
+              M5.Lcd.setTextPadding(70);
+              linkTotalElsewhere = doc["elsewhere"][5][room[i]];
+              sprintf(swap, "%d", linkTotalElsewhere);
+              tmpString = swap;
+              tmpString += " LINK";
+              if(linkTotalElsewhere > 1)
+              {
+                tmpString += "S";
+              }
+            }
+            M5.Lcd.drawString(tmpString, 64, 168 + j);
+
+            M5.Lcd.setTextColor(TFT_BLACK, TFT_WHITE);
+            M5.Lcd.setTextDatum(CC_DATUM);
+            M5.Lcd.setTextPadding(52);
+            elsewhere = doc["elsewhere"][3][room[i]];
+            M5.Lcd.drawString(String(elsewhere), 128, 168 + j);
+
+            M5.Lcd.setTextPadding(0);
+
+            j += 14;
+            k += 1;
           }
-          M5.Lcd.drawString(tmpString, 62, 168 + j);
-
-          M5.Lcd.setTextColor(TFT_BLACK, TFT_WHITE);
-          M5.Lcd.setTextPadding(50);
-          elsewhere = doc["elsewhere"][3][room[i]];
-          M5.Lcd.drawString(String(elsewhere), 124, 168 + j);
-
-          M5.Lcd.setTextPadding(0);
-
-          j += 14;
-          k += 1;
+          i += 1;
         }
-        i += 1;
       }
     }
-  }
 
-  // Log
-  scroll(10);
+    // Log
+    scroll(10);
 
-  M5.Lcd.setFreeFont(0);
-  M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
-  M5.Lcd.setTextDatum(CC_DATUM);
+    M5.Lcd.setFreeFont(&tahoma6pt7b);
+    //M5.Lcd.setFreeFont(&arial6pt7b);
 
-  if (tot > 0) 
-  {
-    if (type != 0) {
-      refresh = 0;
+    M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
+    M5.Lcd.setTextDatum(CC_DATUM);
+
+    if (tot > 0) 
+    {
+      if (type != 0) {
+        refresh = 0;
+      }
+
+      alternance = 5;
+      type = 0;
     }
 
-    alternance = 5;
-    type = 0;
-  }
+    //type = 3;
 
-  if (type == 1)
-  {
-    M5.Lcd.setTextPadding(160);
-    M5.Lcd.drawString("RRFRemote " + String(VERSION), 240, 110);
-    M5.Lcd.setTextPadding(0);
-
-    if (refresh == 0)
+    if (type == 1)
     {
-      i = 161;
-      j = 74;
-      M5.Lcd.fillRoundRect(160, 117, 160, 122, 4, TFT_WHITE);
-      M5.Lcd.fillRoundRect(i, 118, j, 120, 4, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
-      M5.Lcd.drawFastVLine(i + j - 3, 118, 120, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
-      M5.Lcd.drawFastVLine(i + j - 2, 118, 120, TFT_WHITE);
-      M5.Lcd.drawFastVLine(i + j - 1, 118, 120, TFT_WHITE);
-
-      M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
-      M5.Lcd.setTextDatum(CL_DATUM);
-
-      String system[] = {"CPU", "CPU Cores", "CPU Freq", "Chip Rev", "Flash Speed", "Flash Size", "Free RAM", "Free Heap", "IP", "Battery"};
-
-      j = 125;
-      for (uint8_t i = 0; i <= 9; i++)
+      if (refresh == 0)
       {
-        M5.Lcd.drawString(system[i], 164, j);
+        M5.Lcd.setTextPadding(160);
+        M5.Lcd.drawString("RRFRemote " + String(VERSION), 240, 108);
+        M5.Lcd.setTextPadding(0);
+
+        i = 161;
+        j = 74;
+        M5.Lcd.fillRoundRect(160, 117, 160, 122, 4, TFT_WHITE);
+        M5.Lcd.fillRoundRect(i, 118, j, 120, 4, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
+        M5.Lcd.drawFastVLine(i + j - 3, 118, 120, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
+        M5.Lcd.drawFastVLine(i + j - 2, 118, 120, TFT_WHITE);
+        M5.Lcd.drawFastVLine(i + j - 1, 118, 120, TFT_WHITE);
+
+        M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
+        M5.Lcd.setTextDatum(CL_DATUM);
+
+        String system[] = {"CPU", "CPU Cores", "CPU Freq", "Chip Rev", "Flash Speed", "Flash Size", "Free RAM", "Free Heap", "IP", "Battery"};
+
+        j = 122;
+        for (uint8_t i = 0; i <= 9; i++)
+        {
+          M5.Lcd.drawString(system[i], 164, j);
+          j += 12;
+        }
+
+        refresh = 1;
+      }
+
+      M5.Lcd.setTextColor(TFT_BLACK, TFT_WHITE);
+      M5.Lcd.setTextPadding(70);
+      M5.Lcd.setTextDatum(CR_DATUM);
+      M5.Lcd.drawString("ESP32", 318, 122 + (12 * 0));
+      M5.Lcd.drawString("2", 318, 122 + (12 * 1));
+      M5.Lcd.drawString(String(ESP.getCpuFreqMHz()) + " Mhz", 318, 122 + (12 * 2));
+      M5.Lcd.drawNumber(ESP.getChipRevision(), 318, 122 + (12 * 3));
+      M5.Lcd.drawString(String(ESP.getFlashChipSpeed() / 1000000) + " Mhz", 318, 122 + (12 * 4));
+      M5.Lcd.drawString(String(ESP.getFlashChipSize() / (1024 * 1024)) + " Mb", 318, 122 + (12 * 5));
+      M5.Lcd.drawString(String(ESP.getFreeHeap() / 1024) + " kb", 318, 122 + (12 * 6));
+      M5.Lcd.drawString(String(esp_get_minimum_free_heap_size() / 1024) + " kb", 318, 122 + (12 * 7));
+      M5.Lcd.drawString((WiFi.localIP().toString()), 318, 122 + (12 * 8));
+      M5.Lcd.drawString(String(getBatteryLevel(1)) + " %", 318, 122 + (12 * 9));
+    }
+    else if (type == 2)
+    {
+      if (refresh == 0)
+      {
+        M5.Lcd.setTextPadding(160);
+        M5.Lcd.drawString("PROPAGATION", 240, 108);
+        M5.Lcd.setTextPadding(0);
+
+        i = 161;
+        j = 66;
+        M5.Lcd.fillRoundRect(160, 117, 160, 122, 4, TFT_WHITE);
+        M5.Lcd.fillRoundRect(i, 118, j, 120, 4, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
+        M5.Lcd.drawFastVLine(i + j - 3, 118, 120, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
+        M5.Lcd.drawFastVLine(i + j - 2, 118, 120, TFT_WHITE);
+        M5.Lcd.drawFastVLine(i + j - 1, 118, 120, TFT_WHITE);
+
+        M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
+        M5.Lcd.setTextDatum(CL_DATUM);
+
+        String solar[] = {"SFI", "Sunspots", "A-Index", "K-Index", "X-Ray", "Ptn Flux", "Elc Flux", "Aurora", "Solar Wind", "Update"};
+
+        j = 122;
+        for (uint8_t i = 0; i <= 9; i++)
+        {
+          M5.Lcd.drawString(solar[i], 164, j);
+          j += 12;
+        }
+
+        refresh = 1;
+      }
+
+      M5.Lcd.setTextColor(TFT_BLACK, TFT_WHITE);
+      M5.Lcd.setTextDatum(CR_DATUM);
+
+      String solar[] = {"solarflux", "sunspots", "aindex", "kindex", "xray", "protonflux", "electonflux", "aurora", "solarwind"};
+      //size_t n = sizeof(solar) / sizeof(solar[0]);
+
+      j = 122;
+      for (uint8_t i = 0; i <= 8; i++)
+      {
+        tmpString = xmlData;
+        tmpString.replace("<" + solar[i] + ">", "(");
+        tmpString.replace("</" + solar[i] + ">", ")");
+        parenthesisBegin = tmpString.indexOf("(");
+        parenthesisLast = tmpString.indexOf(")");
+        if (parenthesisBegin > 0)
+        {
+          tmpString = tmpString.substring(parenthesisBegin + 1, parenthesisLast);
+        }
+        M5.Lcd.drawString(tmpString, 318, j);
         j += 12;
       }
 
-      refresh = 1;
-    }
-
-    M5.Lcd.setTextColor(TFT_BLACK, TFT_WHITE);
-    M5.Lcd.setTextPadding(70);
-    M5.Lcd.setTextDatum(CR_DATUM);
-    M5.Lcd.drawString("ESP32", 318, 125);
-    M5.Lcd.drawString("2", 318, 137);
-    M5.Lcd.drawString(String(ESP.getCpuFreqMHz()) + " Mhz", 318, 149);
-    M5.Lcd.drawNumber(ESP.getChipRevision(), 318, 161);
-    M5.Lcd.drawString(String(ESP.getFlashChipSpeed() / 1000000) + " Mhz", 318, 173);
-    M5.Lcd.drawString(String(ESP.getFlashChipSize() / (1024 * 1024)) + " Mb", 318, 185);
-    M5.Lcd.drawString(String(ESP.getFreeHeap() / 1024) + " kb", 318, 197);
-    M5.Lcd.drawString(String(esp_get_minimum_free_heap_size() / 1024) + " kb", 318, 209);
-    M5.Lcd.drawString((WiFi.localIP().toString()), 318, 221);
-    M5.Lcd.drawString(String(getBatteryLevel(1)) + " %", 318, 233);
-  }
-  else if (type == 2)
-  {
-    M5.Lcd.setTextPadding(160);
-    M5.Lcd.drawString("PROPAGATION", 240, 110);
-    M5.Lcd.setTextPadding(0);
-
-    if (refresh == 0)
-    {
-      i = 161;
-      j = 70;
-      M5.Lcd.fillRoundRect(160, 117, 160, 122, 4, TFT_WHITE);
-      M5.Lcd.fillRoundRect(i, 118, j, 120, 4, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
-      M5.Lcd.drawFastVLine(i + j - 3, 118, 120, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
-      M5.Lcd.drawFastVLine(i + j - 2, 118, 120, TFT_WHITE);
-      M5.Lcd.drawFastVLine(i + j - 1, 118, 120, TFT_WHITE);
-
-      M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
-      M5.Lcd.setTextDatum(CL_DATUM);
-
-      String solar[] = {"SFI", "Sunspots", "A-Index", "K-Index", "X-Ray", "Ptn Flux", "Elc Flux", "Aurora", "Solar Wind", "Update"};
-
-      j = 125;
-      for (uint8_t i = 0; i <= 9; i++)
-      {
-        M5.Lcd.drawString(solar[i], 164, j);
-        j += 12;
-      }
-
-      refresh = 1;
-    }
-
-    M5.Lcd.setTextColor(TFT_BLACK, TFT_WHITE);
-    M5.Lcd.setTextDatum(CR_DATUM);
-
-    String solar[] = {"solarflux", "sunspots", "aindex", "kindex", "xray", "protonflux", "electonflux", "aurora", "solarwind"};
-    //size_t n = sizeof(solar) / sizeof(solar[0]);
-
-    j = 125;
-    for (uint8_t i = 0; i <= 8; i++)
-    {
       tmpString = xmlData;
-      tmpString.replace("<" + solar[i] + ">", "(");
-      tmpString.replace("</" + solar[i] + ">", ")");
+      tmpString.replace("<updated>", "(");
+      tmpString.replace("</updated>", ")");
       parenthesisBegin = tmpString.indexOf("(");
       parenthesisLast = tmpString.indexOf(")");
       if (parenthesisBegin > 0)
       {
-        tmpString = tmpString.substring(parenthesisBegin + 1, parenthesisLast);
+        tmpString = tmpString.substring(parenthesisBegin + 13, parenthesisLast);
       }
-      M5.Lcd.drawString(tmpString, 318, j);
-      j += 12;
+      M5.Lcd.drawString(tmpString.substring(1, 3) + ":" + tmpString.substring(3), 318, 230);
     }
-
-    tmpString = xmlData;
-    tmpString.replace("<updated>", "(");
-    tmpString.replace("</updated>", ")");
-    parenthesisBegin = tmpString.indexOf("(");
-    parenthesisLast = tmpString.indexOf(")");
-    if (parenthesisBegin > 0)
+    else if (type == 3 && doc["all"].size() != 0)
     {
-      tmpString = tmpString.substring(parenthesisBegin + 13, parenthesisLast);
-    }
-    M5.Lcd.drawString(tmpString.substring(1, 3) + ":" + tmpString.substring(3), 318, 233);
-  }
-  else if (type == 3 && doc["all"].size() != 0)
-  {
-    M5.Lcd.setTextPadding(160);
-    M5.Lcd.drawString("TOP LINKS", 240, 110);
-    M5.Lcd.setTextPadding(0);
-
-    if (refresh == 0)
-    {
-      i = 161;
-      j = 44;
-      M5.Lcd.fillRoundRect(160, 117, 160, 122, 4, TFT_WHITE);
-      M5.Lcd.fillRoundRect(i, 118, j, 120, 4, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
-      M5.Lcd.drawFastVLine(i + j - 3, 118, 120, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
-      M5.Lcd.drawFastVLine(i + j - 2, 118, 120, TFT_WHITE);
-      M5.Lcd.drawFastVLine(i + j - 1, 118, 120, TFT_WHITE);
-
-      refresh = 1;
-    }
-
-    j = 0;
-    k = 125; // 110
-
-    for (uint8_t i = 0; i < doc["all"].size(); i++)
-    {
-      M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
-      M5.Lcd.setTextDatum(CL_DATUM);
-      sprintf(swap, "%03d", allTx[i]);
-      tmpString = swap;
-      tmpString += " TX";
-      M5.Lcd.drawString(tmpString, 164, k + j);
-      M5.Lcd.setTextPadding(74);
-      M5.Lcd.setTextColor(TFT_BLACK, TFT_WHITE);
-      M5.Lcd.setTextDatum(CC_DATUM);
-
-      tmpString = String(allIndicatif[i]);
-      if(tmpString.substring(0, 3) == "GW-") {
-        tmpString = "GATEWAY";
-      }
-      else {
-        tmpString = getValue(allIndicatif[i], ' ', 1);
-        tmpString = (tmpString == "") ? "RTFM" : getValue(allIndicatif[i], ' ', 1) + ' ' + getValue(allIndicatif[i], ' ', 2);
-      }
- 
-      M5.Lcd.drawString(tmpString, 240, k + j);
-      M5.Lcd.setTextPadding(0);
-      M5.Lcd.setTextDatum(CR_DATUM);
-      M5.Lcd.drawString(String(allDuree[i]), 318, k + j);
-
-      j += 12;
-    }
-  }
-  else if (type == 4 && doc["iptable"].size() != 0)
-  {
-    M5.Lcd.setTextPadding(160);
-    M5.Lcd.drawString("BLOCAGES", 240, 110);
-    M5.Lcd.setTextPadding(0);
-
-    if (refresh == 0)
-    {
-      i = 161;
-      j = 79;
-      M5.Lcd.fillRoundRect(160, 117, 160, 122, 4, TFT_WHITE);
-      M5.Lcd.fillRoundRect(i, 118, j, 120, 4, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
-      M5.Lcd.drawFastVLine(i + j - 3, 118, 120, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
-      M5.Lcd.drawFastVLine(i + j - 2, 118, 120, TFT_WHITE);
-      M5.Lcd.drawFastVLine(i + j - 1, 118, 120, TFT_WHITE);
-
-      refresh = 1;
-    }
-
-    j = 0;
-    k = 125; // 110
-
-    for (uint8_t i = 0; i < doc["iptable"].size(); i++)
-    {
-      M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
-      M5.Lcd.setTextDatum(CL_DATUM);
-      tmpString = String(iptableType[i]);
-
-      parenthesisBegin = tmpString.indexOf('(');
-      parenthesisLast = tmpString.indexOf(')');
-
-      if (parenthesisBegin > 0)
+      if (refresh == 0)
       {
-        tmpString = tmpString.substring(parenthesisBegin + 1, parenthesisLast);
+        M5.Lcd.setTextPadding(160);
+        M5.Lcd.drawString("TOP LINKS", 240, 108);
+        M5.Lcd.setTextPadding(0);
+
+        i = 161;
+        j = 40;
+        M5.Lcd.fillRoundRect(160, 117, 160, 122, 4, TFT_WHITE);
+        M5.Lcd.fillRoundRect(i, 118, j, 120, 4, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
+        M5.Lcd.drawFastVLine(i + j - 3, 118, 120, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
+        M5.Lcd.drawFastVLine(i + j - 2, 118, 120, TFT_WHITE);
+        M5.Lcd.drawFastVLine(i + j - 1, 118, 120, TFT_WHITE);
+
+        refresh = 1;
       }
 
-      M5.Lcd.drawString(tmpString, 164, k + j);
-      M5.Lcd.setTextPadding(74);
-      M5.Lcd.setTextColor(TFT_BLACK, TFT_WHITE);
-      M5.Lcd.setTextDatum(CR_DATUM);
+      j = 0;
+      k = 122; // 110
 
-      tmpString = String(iptableIndicatif[i]);
-      if(tmpString.substring(0, 3) == "GW-") {
-        tmpString = "GATEWAY";
-      }
-      else {
-        tmpString = getValue(iptableIndicatif[i], ' ', 1);
-        tmpString = (tmpString == "") ? "RTFM" : getValue(iptableIndicatif[i], ' ', 1) + ' ' + getValue(iptableIndicatif[i], ' ', 2);
-      }
-
-      M5.Lcd.drawString(tmpString, 318, k + j);
-      M5.Lcd.setTextPadding(0);
-
-      if (i == 9)
+      for (uint8_t i = 0; i < doc["all"].size(); i++)
       {
-        break;
+        M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
+        M5.Lcd.setTextDatum(CL_DATUM);
+        if(allTx[i] > 99)
+        {
+          allTx[i] = 99;
+        }
+
+        sprintf(swap, "%02d", allTx[i]);
+        tmpString = swap;
+        tmpString += " TX";
+        M5.Lcd.drawString(tmpString, 164, k + j);
+        M5.Lcd.setTextPadding(70);
+        M5.Lcd.setTextColor(TFT_BLACK, TFT_WHITE);
+        M5.Lcd.setTextDatum(CL_DATUM);
+
+        tmpString = String(allIndicatif[i]);
+        if(tmpString.substring(0, 3) == "GW-") {
+          tmpString = "GATEWAY";
+        }
+        else {
+          tmpString = getValue(allIndicatif[i], ' ', 1);
+          tmpString = (tmpString == "") ? "RTFM" : getValue(allIndicatif[i], ' ', 1) + ' ' + getValue(allIndicatif[i], ' ', 2);
+        }
+  
+        M5.Lcd.drawString(tmpString, 210, k + j);
+        M5.Lcd.setTextPadding(0);
+        M5.Lcd.setTextDatum(CR_DATUM);
+        M5.Lcd.drawString(String(allDuree[i]), 318, k + j);
+
+        j += 12;
+      }
+    }
+    else if (type == 4 && doc["iptable"].size() != 0)
+    {
+      if (refresh == 0)
+      {
+        M5.Lcd.setTextPadding(160);
+        M5.Lcd.drawString("BLOCAGES", 240, 108);
+        M5.Lcd.setTextPadding(0);
+
+        i = 161;
+        j = 82;
+        M5.Lcd.fillRoundRect(160, 117, 160, 122, 4, TFT_WHITE);
+        M5.Lcd.fillRoundRect(i, 118, j, 120, 4, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
+        M5.Lcd.drawFastVLine(i + j - 3, 118, 120, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
+        M5.Lcd.drawFastVLine(i + j - 2, 118, 120, TFT_WHITE);
+        M5.Lcd.drawFastVLine(i + j - 1, 118, 120, TFT_WHITE);
+
+        refresh = 1;
       }
 
-      j += 12;
+      j = 0;
+      k = 122; // 110
+
+      for (uint8_t i = 0; i < doc["iptable"].size(); i++)
+      {
+        M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
+        M5.Lcd.setTextDatum(CL_DATUM);
+        tmpString = String(iptableType[i]);
+
+        parenthesisBegin = tmpString.indexOf('(');
+        parenthesisLast = tmpString.indexOf(')');
+
+        if (parenthesisBegin > 0)
+        {
+          tmpString = tmpString.substring(parenthesisBegin + 1, parenthesisLast);
+        }
+
+        M5.Lcd.drawString(tmpString, 164, k + j);
+        M5.Lcd.setTextPadding(74);
+        M5.Lcd.setTextColor(TFT_BLACK, TFT_WHITE);
+        M5.Lcd.setTextDatum(CR_DATUM);
+
+        tmpString = String(iptableIndicatif[i]);
+        if(tmpString.substring(0, 3) == "GW-") {
+          tmpString = "GATEWAY";
+        }
+        else {
+          tmpString = getValue(iptableIndicatif[i], ' ', 1);
+          tmpString = (tmpString == "") ? "RTFM" : getValue(iptableIndicatif[i], ' ', 1) + ' ' + getValue(iptableIndicatif[i], ' ', 2);
+        }
+
+        M5.Lcd.drawString(tmpString, 318, k + j);
+        M5.Lcd.setTextPadding(0);
+
+        if (i == 9)
+        {
+          break;
+        }
+
+        j += 12;
+      }
+    }
+    else
+    {
+      if (refresh == 0)
+      {
+        M5.Lcd.setTextPadding(160);
+        M5.Lcd.drawString("DERNIERS LINKS", 240, 108);
+        M5.Lcd.setTextPadding(0);
+
+        i = 161;
+        j = 40;
+        M5.Lcd.fillRoundRect(160, 117, 160, 122, 4, TFT_WHITE);
+        M5.Lcd.fillRoundRect(i, 118, j, 120, 4, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
+        M5.Lcd.drawFastVLine(i + j - 3, 118, 120, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
+        M5.Lcd.drawFastVLine(i + j - 2, 118, 120, TFT_WHITE);
+        M5.Lcd.drawFastVLine(i + j - 1, 118, 120, TFT_WHITE);
+        refresh = 1;
+      }
+
+      j = 0;
+      k = 122; // 110
+
+      for (uint8_t i = 0; i < doc["last"].size(); i++)
+      {
+        M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
+        M5.Lcd.setTextDatum(CL_DATUM);
+        tmpString = String(lastHeure[i]);
+        tmpString = tmpString.substring(0, 5);
+        M5.Lcd.drawString(tmpString, 164, k + j);
+
+        M5.Lcd.setTextPadding(80);
+        M5.Lcd.setTextColor(TFT_BLACK, TFT_WHITE);
+        
+        /*
+        if(i % 2 != 0)
+        {
+          M5.Lcd.setTextColor(TFT_BLACK, M5.Lcd.color565(225, 225, 225));
+        }
+        */
+        
+        M5.Lcd.setTextDatum(CC_DATUM);
+
+        tmpString = String(lastIndicatif[i]);
+        if(tmpString.substring(0, 3) == "GW-") {
+          tmpString = "GATEWAY";
+        }
+        else {
+          tmpString = getValue(lastIndicatif[i], ' ', 1);
+          tmpString = (tmpString == "") ? "RTFM" : getValue(lastIndicatif[i], ' ', 1) + ' ' + getValue(lastIndicatif[i], ' ', 2);
+        }
+
+        M5.Lcd.drawString(tmpString, 240, k + j);
+        M5.Lcd.setTextPadding(0);
+        M5.Lcd.setTextDatum(CR_DATUM);
+        M5.Lcd.drawString(String(lastDuree[i]), 318, k + j);
+
+        j += 12;
+      }
     }
   }
-  else
-  {
-    M5.Lcd.setTextPadding(160);
-    M5.Lcd.drawString("DERNIERS LINKS", 240, 110);
-    M5.Lcd.setTextPadding(0);
-
-    if (refresh == 0)
-    {
-      i = 161;
-      j = 38;
-      M5.Lcd.fillRoundRect(160, 117, 160, 122, 4, TFT_WHITE);
-      M5.Lcd.fillRoundRect(i, 118, j, 120, 4, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
-      M5.Lcd.drawFastVLine(i + j - 3, 118, 120, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
-      M5.Lcd.drawFastVLine(i + j - 2, 118, 120, TFT_WHITE);
-      M5.Lcd.drawFastVLine(i + j - 1, 118, 120, TFT_WHITE);
-      refresh = 1;
-    }
-
-    j = 0;
-    k = 125; // 110
-
-    for (uint8_t i = 0; i < doc["last"].size(); i++)
-    {
-      M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
-      M5.Lcd.setTextDatum(CL_DATUM);
-      tmpString = String(lastHeure[i]);
-      tmpString = tmpString.substring(0, 5);
-      M5.Lcd.drawString(tmpString, 164, k + j);
-      M5.Lcd.setTextPadding(87);
-      M5.Lcd.setTextColor(TFT_BLACK, TFT_WHITE);
-      M5.Lcd.setTextDatum(CC_DATUM);
-
-      tmpString = String(lastIndicatif[i]);
-      if(tmpString.substring(0, 3) == "GW-") {
-        tmpString = "GATEWAY";
-      }
-      else {
-        tmpString = getValue(lastIndicatif[i], ' ', 1);
-        tmpString = (tmpString == "") ? "RTFM" : getValue(lastIndicatif[i], ' ', 1) + ' ' + getValue(lastIndicatif[i], ' ', 2);
-      }
-
-      M5.Lcd.drawString(tmpString, 240, k + j);
-      M5.Lcd.setTextPadding(0);
-      M5.Lcd.setTextDatum(CR_DATUM);
-      M5.Lcd.drawString(String(lastDuree[i]), 318, k + j);
-
-      j += 12;
-    }
-  }
-
+  
   // Transmit or no transmit
 
   scroll(10);
@@ -1010,7 +1041,8 @@ void loop()
 
   // Status line
   scroll(10);
-  M5.Lcd.setFreeFont(0);
+
+  M5.Lcd.setFreeFont(&tahoma6pt7b);
   M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
   M5.Lcd.setTextDatum(CC_DATUM);
   M5.Lcd.setTextPadding(220);
@@ -1030,7 +1062,7 @@ void loop()
     tmpString += " / FOLLOW ON";
   }
 
-  M5.Lcd.drawString(tmpString, 160, 36);
+  M5.Lcd.drawString(tmpString, 160, 34);
   M5.Lcd.drawFastHLine(0, 0, 320, TFT_WHITE);
 
   // Manage follow
