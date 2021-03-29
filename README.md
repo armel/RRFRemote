@@ -132,7 +132,7 @@ Editer le fichier `src/settings.h` afin de renseigner vos paramétrages, à savo
 * votre indicatif,
 * et pour finir, l'url d'accès au script de contrôle que vous avez installé précédement (par défaut, c'est `http://adresse_ip_de_votre_spotnik:3000/`).
 
-> À noter que, depuis la version 2.0.0, il est possible de gérer autant de configurations que vous le souhaitez ! Cela vous permet, par exemple, de préconfigurer vos paramétrages pour une utilisation locale sur le Wifi de votre QRA et une configuration mobile sur le Wifi de votre Smartphone. Une telle configuration pourrait ressemble à ceci :
+> À noter que, depuis la version 2.0.0, il est possible de gérer autant de configurations que vous le souhaitez ! Cela vous permet, par exemple, de préconfigurer vos paramétrages pour une utilisation locale sur le Wifi de votre QRA et une configuration mobile sur le Wifi de votre Smartphone. Une telle configuration pourrait ressembler à ceci :
 > 
 
 ```
@@ -142,7 +142,7 @@ const char *config[] = {
 };
 ```
 
-> Notez au passage l'utilisation d'une adresse IP public pour la configuration mobile sur le Wifi du Smartphone...
+> Notez au passage l'utilisation d'une adresse IP publique pour la configuration mobile sur le Wifi du Smartphone...
 
 ### Modèle M5Stack Basic et M5Stack Grey
 

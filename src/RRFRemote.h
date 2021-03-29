@@ -29,7 +29,7 @@
 #include "settings.h"
 
 // Version
-#define VERSION "2.1.2"
+#define VERSION "2.1.3"
 
 // Wifi
 WiFiClient clientRemote, clientTracker, clientHamSQL, clientWhereis;
@@ -125,6 +125,7 @@ String linkTotalString, linkTotalStringOld;
 String linkActifString, linkActifStringOld;
 String txTotalString, txTotalStringOld;
 String elsewhereString, elsewhereStringOld;
+String baselineString, baselineStringOld;
 String indicatifString;
 String whereisString;
 String departmentString;
