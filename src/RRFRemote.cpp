@@ -296,13 +296,15 @@ void loop()
 
     scroll(10);
 
-    M5.Lcd.setFreeFont(0);
+    //M5.Lcd.setFreeFont(0);
+    M5.Lcd.setFreeFont(&tahoma6pt7b);
+
     M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
     M5.Lcd.setTextDatum(CL_DATUM);
 
     for (uint8_t i = 0; i < 5; i++)
     {
-      M5.Lcd.drawString(String(legende[i]), 4 + (i * 34), 162);
+      M5.Lcd.drawString(String(legende[i]), 4 + (i * 34), 160);
     }
 
     // Elsewhere
@@ -391,6 +393,8 @@ void loop()
     //M5.Lcd.setFreeFont(&Ubuntu_Medium6pt7b);
     //M5.Lcd.setFreeFont(&Ubuntu_Light6pt7b);
     //M5.Lcd.setFreeFont(&fixed_014pt7b);
+    //M5.Lcd.setFreeFont(&DroidSansMono6pt7b);
+    //M5.Lcd.setFreeFont(&UbuntuMono_R7pt7b);
 
     M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
     M5.Lcd.setTextDatum(CC_DATUM);
@@ -405,7 +409,7 @@ void loop()
       type = 0;
     }
 
-    //type = 3;
+    //type = 5;
 
     if (type == 1)
     {
@@ -679,14 +683,6 @@ void loop()
 
         M5.Lcd.setTextPadding(80);
         M5.Lcd.setTextColor(TFT_BLACK, TFT_WHITE);
-        
-        /*
-        if(i % 2 != 0)
-        {
-          M5.Lcd.setTextColor(TFT_BLACK, M5.Lcd.color565(225, 225, 225));
-        }
-        */
-        
         M5.Lcd.setTextDatum(CC_DATUM);
 
         tmpString = String(lastIndicatif[i]);
@@ -698,6 +694,7 @@ void loop()
           tmpString = (tmpString == "") ? "RTFM" : getValue(lastIndicatif[i], ' ', 1) + ' ' + getValue(lastIndicatif[i], ' ', 2);
         }
 
+  
         M5.Lcd.drawString(tmpString, 242, k + j);
         M5.Lcd.setTextPadding(0);
         M5.Lcd.setTextDatum(CR_DATUM);
@@ -1073,6 +1070,7 @@ void loop()
   scroll(10);
 
   M5.Lcd.setFreeFont(0);
+
   M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
   M5.Lcd.setTextDatum(CC_DATUM);
   M5.Lcd.setTextPadding(220);
