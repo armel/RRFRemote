@@ -564,7 +564,7 @@ void whereis(void *pvParameters)
 void iss(void *pvParameters)
 {
   HTTPClient http;
-  unsigned int limit = 1 * 15 * 1000; // Retry 15 secondes
+  unsigned int limit = 1 * 5 * 1000; // Retry 15 secondes
   DynamicJsonDocument doc(1024);
   float issLatitude, issLongitude;
     
@@ -572,7 +572,7 @@ void iss(void *pvParameters)
   {
     if ((WiFi.status() == WL_CONNECTED)) // Check the current connection status
     {
-      http.begin(clientISS, endpointISS);     // Specify the URL
+      http.begin(clientISS, hostISS, 443, endpointISS, false);    // Specify the URL
       http.addHeader("Content-Type", "text/plain");   // Specify content-type header
       http.setTimeout(1000);                          // Set Time Out
       int httpCode = http.GET();                      // Make the request
@@ -580,9 +580,11 @@ void iss(void *pvParameters)
       {
         issData = http.getString(); // Get data
 
+        Serial.println(issData);
+
         deserializeJson(doc, issData);
-        issLatitude = (float)(doc["iss_position"]["latitude"]);
-        issLongitude = (float)(doc["iss_position"]["longitude"]);
+        issLatitude = (float)(doc["latitude"]);
+        issLongitude = (float)(doc["longitude"]);
 
         issDistance = computeDistance(issLatitude, issLongitude);
 

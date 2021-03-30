@@ -29,10 +29,11 @@
 #include "settings.h"
 
 // Version
-#define VERSION "2.1.4"
+#define VERSION "2.1.5"
 
 // Wifi
-WiFiClient clientRemote, clientTracker, clientHamSQL, clientWhereis, clientISS;
+WiFiClient clientRemote, clientTracker, clientHamSQL, clientWhereis;
+WiFiClientSecure clientISS;
 
 // Preferences
 Preferences preferences;
@@ -97,7 +98,9 @@ const colorType TFT_HEADER_GRIS = {96, 96, 96};
 
 // HTTP endpoint
 String endpointHamQSL = "http://www.hamqsl.com/solarxml.php";
-String endpointISS = "http://api.open-notify.org/iss-now.json";
+String hostISS = "api.wheretheiss.at";
+
+String endpointISS = "/v1/satellites/25544";
 
 String endpointRRF[] = {
     "http://rrf.f5nlg.ovh:8080/RRFTracker/RRF-today/rrf_tiny.json",
@@ -164,3 +167,35 @@ int menuRefresh = 0;
 unsigned long screensaver;
 int screensaverLimit = 5 * 60 * 1000;  // 5 minutes
 int screensaverMode = 0;
+
+const char* root_ca = \
+"-----BEGIN CERTIFICATE-----\n" \
+"MIIFKjCCBBKgAwIBAgISBKxoLgxtncFch3tEy2GLkx4uMA0GCSqGSIb3DQEBCwUA\n" \
+"MDIxCzAJBgNVBAYTAlVTMRYwFAYDVQQKEw1MZXQncyBFbmNyeXB0MQswCQYDVQQD\n" \
+"EwJSMzAeFw0yMTAyMDgxNTA1MTlaFw0yMTA1MDkxNTA1MTlaMB0xGzAZBgNVBAMT\n" \
+"EmFwaS53aGVyZXRoZWlzcy5hdDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoC\n" \
+"ggEBAMmF4L4Cnkct06Zz0ui8W9BcAZ8P6od20lnWcSWjZB/cuN5xN8iUDbiNG6Yg\n" \
+"O+t9XQq+546lyc9b+Osm/4a13LEylhaWktZhxFn7p7kAtbCYaxoczxZAdcF6Shen\n" \
+"++fw7yi7nZLAFGNv8cqUhR9H2lBF7dyHzOQQm57dEjyyrGanQ2ofUfjWiPfmgSi1\n" \
+"CJKc/DHfPZq+niMnNgttfEM/l/a9VhYOFs1l3zNcTCvvkeECx4YyggBDO+2ZmDqZ\n" \
+"EVNCTW2LFBqG3TMUR9Ax7TLf8wFKv8jULsHr3Ru4UBcuY0TGlAkVloL1e2zrSgwz\n" \
+"V49zL50AhkO8cUJAZbWEBcPuyvECAwEAAaOCAk0wggJJMA4GA1UdDwEB/wQEAwIF\n" \
+"oDAdBgNVHSUEFjAUBggrBgEFBQcDAQYIKwYBBQUHAwIwDAYDVR0TAQH/BAIwADAd\n" \
+"BgNVHQ4EFgQUKHCZB1ZIXTr+jdCbKseRf0Bl5B4wHwYDVR0jBBgwFoAUFC6zF7dY\n" \
+"VsuuUAlA5h+vnYsUwsYwVQYIKwYBBQUHAQEESTBHMCEGCCsGAQUFBzABhhVodHRw\n" \
+"Oi8vcjMuby5sZW5jci5vcmcwIgYIKwYBBQUHMAKGFmh0dHA6Ly9yMy5pLmxlbmNy\n" \
+"Lm9yZy8wHQYDVR0RBBYwFIISYXBpLndoZXJldGhlaXNzLmF0MEwGA1UdIARFMEMw\n" \
+"CAYGZ4EMAQIBMDcGCysGAQQBgt8TAQEBMCgwJgYIKwYBBQUHAgEWGmh0dHA6Ly9j\n" \
+"cHMubGV0c2VuY3J5cHQub3JnMIIBBAYKKwYBBAHWeQIEAgSB9QSB8gDwAHYAfT7y\n" \
+"+I//iFVoJMLAyp5SiXkrxQ54CX8uapdomX4i8NcAAAF3gmPf+QAABAMARzBFAiEA\n" \
+"p8h/GOjOJ8MjHE21DeIPZVLaoCw4EJ4HAmPMD8ahBmYCIBM63aMj9xkwxwAMnHE4\n" \
+"84EcdczLL1DsCAKZYckbVTZ8AHYAXNxDkv7mq0VEsV6a1FbmEDf71fpH3KFzlLJe\n" \
+"5vbHDsoAAAF3gmPgdwAABAMARzBFAiB5StisrWnR/1x228LuF80Itb47YcJ3QfHW\n" \
+"lfT0ulzo+QIhAN0ci1uigC3yMO+24eSIRkVjyou1V8986UrmixRtj8snMA0GCSqG\n" \
+"SIb3DQEBCwUAA4IBAQBKpjRGaUM22SG7adXL0HPvgERPGlfjPHG9hEjQlsjXZWks\n" \
+"d2sow9tm+2Eyy/r+I+rhYBw63u0Zsen05t5hLN9/axiF+GTDk23YUN3fbGHdcL4U\n" \
+"ygSvQoG5Ya+3s10Y3i5vtvRYagpztglyqDz+XeYMxwge1DghFeRQTa9xPRrE04f7\n" \
+"FqKFpBPne0St5LUOfcUdKzEDusXgR6rV03sK5kHXQ7yYzX56ttSkvlKc2T+1UPe8\n" \
+"g9kcmRe6F2PpB4DHLYkgH/gTQpzcHii7NO6nf5zFw/ZOu8lY2UzFcqw4d8KfmONw\n" \
+"QQC6PBhcnSrM7//otlIcMpN0GH7RFXmQMWMx4cO/\n" \
+"-----END CERTIFICATE-----\n";
