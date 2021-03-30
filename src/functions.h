@@ -559,3 +559,40 @@ void whereis(void *pvParameters)
     }
   }
 }
+
+// Get data from ISS
+void iss(void *pvParameters)
+{
+  HTTPClient http;
+  unsigned int limit = 1 * 15 * 1000; // Retry 15 secondes
+  DynamicJsonDocument doc(1024);
+  float issLatitude, issLongitude;
+    
+  for (;;)
+  {
+    if ((WiFi.status() == WL_CONNECTED)) // Check the current connection status
+    {
+      http.begin(clientISS, endpointISS);     // Specify the URL
+      http.addHeader("Content-Type", "text/plain");   // Specify content-type header
+      http.setTimeout(1000);                          // Set Time Out
+      int httpCode = http.GET();                      // Make the request
+      if (httpCode == 200)                            // Check for the returning code
+      {
+        issData = http.getString(); // Get data
+
+        deserializeJson(doc, issData);
+        issLatitude = (float)(doc["iss_position"]["latitude"]);
+        issLongitude = (float)(doc["iss_position"]["longitude"]);
+
+        issDistance = computeDistance(issLatitude, issLongitude);
+
+        http.end(); // Free the resources
+        vTaskDelay(pdMS_TO_TICKS(limit));
+      }
+      else {
+        http.end(); // Free the resources
+        vTaskDelay(pdMS_TO_TICKS(limit));
+      }
+    }
+  }
+}

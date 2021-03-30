@@ -101,6 +101,15 @@ void setup()
       NULL,         /* Task handle. */
       1);           /* Core where the task should run */
 
+   xTaskCreatePinnedToCore(
+      iss,          /* Function to implement the task */
+      "iss",        /* Name of the task */
+      8192,         /* Stack size in words */
+      NULL,         /* Task input parameter */
+      2,            /* Priority of the task */
+      NULL,         /* Task handle. */
+      1);           /* Core where the task should run */
+
   // Accelelerometer
   M5.IMU.Init();
 
@@ -820,6 +829,7 @@ void loop()
         linkActifStringOld = "";
         txTotalStringOld = "";
         emissionStringOld = "";
+        issStringOld = "";
 
         transmitOn = 0;
         transmitOff = 2;
@@ -851,6 +861,7 @@ void loop()
           linkActifStringOld = "";
           txTotalStringOld = "";
           emissionStringOld = "";
+          issStringOld = "";
         }
       }
       else if (type == 1)
@@ -875,6 +886,7 @@ void loop()
           dateStringOld = "";
           txTotalStringOld = "";
           emissionStringOld = "";
+          issStringOld = "";
         }
       }
       else if (type == 2)
@@ -899,6 +911,7 @@ void loop()
           txTotalStringOld = "";
           emissionStringOld = "";
           linkTotalStringOld = "";
+          issStringOld = "";
         }
       }
       else if (type == 3)
@@ -923,6 +936,7 @@ void loop()
           linkActifStringOld = "";
           dateStringOld = "";
           emissionStringOld = "";
+          issStringOld = "";
         }
       }
       else if (type == 4)
@@ -947,6 +961,32 @@ void loop()
           linkTotalStringOld = "";
           linkActifStringOld = "";
           dateStringOld = "";
+          issStringOld = "";
+        }
+      }
+      else if (type == 5)
+      {
+        tmpString = String(issDistance);
+        issString =  "ISS " + tmpString + " Km";
+
+        if (issStringOld != issString)
+        {
+          M5.Lcd.fillRect(4, 2, 36, 42, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
+          sprintf(swap, "%c", ICON_CLOCK);
+          tmpString = swap;
+          M5.Lcd.drawString(tmpString, 10, 18);
+
+          M5.Lcd.setTextPadding(320);
+          M5.Lcd.setFreeFont(&rounded_led_board10pt7b);
+          M5.Lcd.setTextColor(TFT_WHITE, TFT_BLACK);
+          M5.Lcd.setTextDatum(CC_DATUM);
+          M5.Lcd.drawString(issString, 160, 60);
+          issStringOld = issString;
+          txTotalStringOld = "";
+          linkTotalStringOld = "";
+          linkActifStringOld = "";
+          dateStringOld = "";
+          emissionStringOld = "";
         }
       }
     }
@@ -1136,7 +1176,7 @@ void loop()
   alternance++;
   if(alternance == 10) {
     refresh = 0;
-    type = (type++ < 4) ? type : 0;
+    type = (type++ < 5) ? type : 0;
     alternance = 0;
   }
   

@@ -32,7 +32,7 @@
 #define VERSION "2.1.4"
 
 // Wifi
-WiFiClient clientRemote, clientTracker, clientHamSQL, clientWhereis;
+WiFiClient clientRemote, clientTracker, clientHamSQL, clientWhereis, clientISS;
 
 // Preferences
 Preferences preferences;
@@ -96,6 +96,8 @@ const colorType TFT_HEADER_GRIS = {96, 96, 96};
 
 // HTTP endpoint
 String endpointHamQSL = "http://www.hamqsl.com/solarxml.php";
+String endpointISS = "http://api.open-notify.org/iss-now.json";
+
 String endpointRRF[] = {
     "http://rrf.f5nlg.ovh:8080/RRFTracker/RRF-today/rrf_tiny.json",
     "http://rrf.f5nlg.ovh:8080/RRFTracker/TECHNIQUE-today/rrf_tiny.json",
@@ -115,7 +117,7 @@ const int dtmf[] = {96, 98, 100, 101, 99, 97};
 const char *menu[] = {"CONFIG", "QSY", "FOLLOW", "RAPTOR", "PERROQUET", "REBOOT", "TOT", "COULEUR", "LUMINOSITE", "QUITTER"};
 
 String tmpString;
-String jsonData = "", xmlData = "", whereisData = "";
+String jsonData = "", xmlData = "", whereisData = "", issData = "";
 String jsonDataNew = "";
 
 String dateString, dateStringOld;
@@ -126,6 +128,8 @@ String linkActifString, linkActifStringOld;
 String txTotalString, txTotalStringOld;
 String elsewhereString, elsewhereStringOld;
 String baselineString, baselineStringOld;
+String issString, issStringOld;
+
 String indicatifString;
 String whereisString;
 String departmentString;
@@ -137,6 +141,8 @@ int alternance = 0;
 int refresh = 0;
 int type = 0;
 int qsy = 0;
+
+int issDistance = 0;
 
 int transmitOn = 0, transmitOff = 0;
 
