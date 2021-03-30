@@ -296,15 +296,15 @@ void loop()
 
     scroll(10);
 
-    //M5.Lcd.setFreeFont(0);
-    M5.Lcd.setFreeFont(&tahoma6pt7b);
+    M5.Lcd.setFreeFont(0);
+    //M5.Lcd.setFreeFont(&tahoma6pt7b);
 
     M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
     M5.Lcd.setTextDatum(CL_DATUM);
 
     for (uint8_t i = 0; i < 5; i++)
     {
-      M5.Lcd.drawString(String(legende[i]), 4 + (i * 34), 160);
+      M5.Lcd.drawString(String(legende[i]), 4 + (i * 34), 162);
     }
 
     // Elsewhere
@@ -409,7 +409,7 @@ void loop()
       type = 0;
     }
 
-    //type = 5;
+    //type = 4;
 
     if (type == 1)
     {
@@ -417,7 +417,6 @@ void loop()
       {
         M5.Lcd.setTextPadding(160);
         M5.Lcd.drawString("RRFRemote " + String(VERSION), 240, 108);
-        M5.Lcd.setTextPadding(0);
 
         i = 161;
         j = 74;
@@ -429,6 +428,7 @@ void loop()
 
         M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
         M5.Lcd.setTextDatum(CL_DATUM);
+        M5.Lcd.setTextPadding(0);
 
         String system[] = {"CPU", "CPU Cores", "CPU Freq", "Chip Rev", "Flash Speed", "Flash Size", "Free RAM", "Free Heap", "IP", "Battery"};
 
@@ -443,8 +443,9 @@ void loop()
       }
 
       M5.Lcd.setTextColor(TFT_BLACK, TFT_WHITE);
-      M5.Lcd.setTextPadding(70);
       M5.Lcd.setTextDatum(CR_DATUM);
+      M5.Lcd.setTextPadding(70);
+
       M5.Lcd.drawString("ESP32", 318, 122 + (12 * 0));
       M5.Lcd.drawString("2", 318, 122 + (12 * 1));
       M5.Lcd.drawString(String(ESP.getCpuFreqMHz()) + " Mhz", 318, 122 + (12 * 2));
@@ -462,7 +463,6 @@ void loop()
       {
         M5.Lcd.setTextPadding(160);
         M5.Lcd.drawString("PROPAGATION", 240, 108);
-        M5.Lcd.setTextPadding(0);
 
         i = 161;
         j = 70;
@@ -474,6 +474,7 @@ void loop()
 
         M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
         M5.Lcd.setTextDatum(CL_DATUM);
+        M5.Lcd.setTextPadding(0);
 
         String solar[] = {"SFI", "Sunspots", "A-Index", "K-Index", "X-Ray", "Ptn Flux", "Elc Flux", "Aurora", "Solar Wind", "Update"};
 
@@ -528,7 +529,6 @@ void loop()
       {
         M5.Lcd.setTextPadding(160);
         M5.Lcd.drawString("TOP LINKS", 240, 108);
-        M5.Lcd.setTextPadding(0);
 
         i = 161;
         j = 38;
@@ -550,6 +550,8 @@ void loop()
       {
         M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
         M5.Lcd.setTextDatum(CL_DATUM);
+        M5.Lcd.setTextPadding(0);
+
         if(allTx[i] > 99)
         {
           allTx[i] = 99;
@@ -559,9 +561,10 @@ void loop()
         tmpString = swap;
         tmpString += " TX";
         M5.Lcd.drawString(tmpString, 163, k + j);
-        M5.Lcd.setTextPadding(70);
+
         M5.Lcd.setTextColor(TFT_BLACK, TFT_WHITE);
         M5.Lcd.setTextDatum(CC_DATUM);
+        M5.Lcd.setTextPadding(70);
 
         tmpString = String(allIndicatif[i]);
         if(tmpString.substring(0, 3) == "GW-") {
@@ -572,11 +575,10 @@ void loop()
           tmpString = (tmpString == "") ? "RTFM" : getValue(allIndicatif[i], ' ', 1) + ' ' + getValue(allIndicatif[i], ' ', 2);
         }
   
-        //allDuree[0] = "01:23:45";
-
         M5.Lcd.drawString(tmpString, 234, k + j);
-        M5.Lcd.setTextPadding(0);
+
         M5.Lcd.setTextDatum(CR_DATUM);
+        M5.Lcd.setTextPadding(0);
         M5.Lcd.drawString(String(allDuree[i]), 318, k + j);
 
         j += 12;
@@ -590,10 +592,18 @@ void loop()
       {
         M5.Lcd.setTextPadding(160);
         M5.Lcd.drawString("BLOCAGES", 240, 108);
-        M5.Lcd.setTextPadding(0);
 
         i = 161;
-        j = 84;
+        j = 50;
+
+        for (uint8_t k = 0; k < doc["iptable"].size(); k++) {
+          tmpString = String(iptableType[k]);
+          if(tmpString == "INTEMPESTIF") {
+            j = 80;
+            break;
+          }
+        }
+
         M5.Lcd.fillRoundRect(160, 117, 160, 122, 4, TFT_WHITE);
         M5.Lcd.fillRoundRect(i, 118, j, 120, 4, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
         M5.Lcd.drawFastVLine(i + j - 3, 118, 120, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
@@ -612,20 +622,22 @@ void loop()
       {
         M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
         M5.Lcd.setTextDatum(CL_DATUM);
+        M5.Lcd.setTextPadding(0);
+
         tmpString = String(iptableType[i]);
 
         parenthesisBegin = tmpString.indexOf('(');
         parenthesisLast = tmpString.indexOf(')');
-
         if (parenthesisBegin > 0)
         {
           tmpString = tmpString.substring(parenthesisBegin + 1, parenthesisLast);
         }
 
         M5.Lcd.drawString(tmpString, 163, k + j);
-        M5.Lcd.setTextPadding(74);
+
         M5.Lcd.setTextColor(TFT_BLACK, TFT_WHITE);
         M5.Lcd.setTextDatum(CR_DATUM);
+        M5.Lcd.setTextPadding(74);
 
         tmpString = String(iptableIndicatif[i]);
         if(tmpString.substring(0, 3) == "GW-") {
@@ -637,7 +649,6 @@ void loop()
         }
 
         M5.Lcd.drawString(tmpString, 318, k + j);
-        M5.Lcd.setTextPadding(0);
 
         if (i == 9)
         {
@@ -655,7 +666,6 @@ void loop()
       {
         M5.Lcd.setTextPadding(160);
         M5.Lcd.drawString("DERNIERS LINKS", 240, 108);
-        M5.Lcd.setTextPadding(0);
 
         i = 161;
         j = 38;
@@ -677,13 +687,16 @@ void loop()
       {
         M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
         M5.Lcd.setTextDatum(CL_DATUM);
+        M5.Lcd.setTextPadding(0);
+
         tmpString = String(lastHeure[i]);
         tmpString = tmpString.substring(0, 5);
+
         M5.Lcd.drawString(tmpString, 163, k + j);
 
-        M5.Lcd.setTextPadding(80);
         M5.Lcd.setTextColor(TFT_BLACK, TFT_WHITE);
         M5.Lcd.setTextDatum(CC_DATUM);
+        M5.Lcd.setTextPadding(80);
 
         tmpString = String(lastIndicatif[i]);
         if(tmpString.substring(0, 3) == "GW-") {
@@ -694,10 +707,10 @@ void loop()
           tmpString = (tmpString == "") ? "RTFM" : getValue(lastIndicatif[i], ' ', 1) + ' ' + getValue(lastIndicatif[i], ' ', 2);
         }
 
-  
         M5.Lcd.drawString(tmpString, 242, k + j);
-        M5.Lcd.setTextPadding(0);
+
         M5.Lcd.setTextDatum(CR_DATUM);
+        M5.Lcd.setTextPadding(0);
         M5.Lcd.drawString(String(lastDuree[i]), 318, k + j);
 
         j += 12;
