@@ -972,7 +972,7 @@ void loop()
         if (issStringOld != issString)
         {
           M5.Lcd.fillRect(4, 2, 36, 42, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
-          sprintf(swap, "%c", ICON_CLOCK);
+          sprintf(swap, "%c", ICON_ISS);
           tmpString = swap;
           M5.Lcd.drawString(tmpString, 10, 18);
 

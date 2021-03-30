@@ -87,6 +87,7 @@ const colorType TFT_HEADER_GRIS = {96, 96, 96};
 #define ICON_SETTING 106
 #define ICON_LEFT 119
 #define ICON_RIGHT 87
+#define ICON_ISS 51
 #define ICON_BAT100 118
 #define ICON_BAT075 117
 #define ICON_BAT050 116
