@@ -564,7 +564,7 @@ void whereis(void *pvParameters)
 void iss(void *pvParameters)
 {
   HTTPClient http;
-  unsigned int limit = 1 * 15 * 1000; // Retry 15 secondes
+  unsigned int limit = 1 * 10 * 1000; // Retry 10 secondes
     
   for (;;)
   {

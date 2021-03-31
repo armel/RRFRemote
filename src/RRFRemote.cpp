@@ -425,7 +425,7 @@ void loop()
       type = 0;
     }
 
-    //type = 1;
+    //type = 5;
 
     if (type == 1)
     {
