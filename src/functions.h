@@ -564,13 +564,13 @@ void whereis(void *pvParameters)
 void iss(void *pvParameters)
 {
   HTTPClient http;
-  unsigned int limit = 1 * 5 * 1000; // Retry 15 secondes
+  unsigned int limit = 1 * 15 * 1000; // Retry 15 secondes
     
   for (;;)
   {
     if ((WiFi.status() == WL_CONNECTED)) // Check the current connection status
     {
-      http.begin(clientISS, hostISS, 443, endpointISS, false);    // Specify the URL
+      http.begin(clientISS, hostISS, 443, endpointISS, true);    // Specify the URL
       http.addHeader("Content-Type", "text/plain");   // Specify content-type header
       http.setTimeout(1000);                          // Set Time Out
       int httpCode = http.GET();                      // Make the request

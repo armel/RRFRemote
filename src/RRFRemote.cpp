@@ -130,7 +130,7 @@ void setup()
 void loop()
 {
   DynamicJsonDocument doc(8192);
-  DynamicJsonDocument docISS(1024);
+  DynamicJsonDocument docISS(2048);
 
   char swap[32];
 
@@ -422,7 +422,7 @@ void loop()
       type = 0;
     }
 
-    type = 5;
+    //type = 5;
 
     if (type == 1)
     {
@@ -706,8 +706,6 @@ void loop()
       M5.Lcd.setTextDatum(CR_DATUM);
 
       String iss[] = {"distance", "units", "visibility", "latitude", "longitude", "altitude", "velocity",  "footprint", "solar_lat", "solar_lon"};
-
-      Serial.println(issData);
 
       DeserializationError error = deserializeJson(docISS, issData); // Deserialize the JSON document
       if (!error) // And no error

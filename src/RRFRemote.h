@@ -99,7 +99,6 @@ const colorType TFT_HEADER_GRIS = {96, 96, 96};
 // HTTP endpoint
 String endpointHamQSL = "http://www.hamqsl.com/solarxml.php";
 String hostISS = "api.wheretheiss.at";
-
 String endpointISS = "/v1/satellites/25544";
 
 String endpointRRF[] = {
@@ -121,8 +120,8 @@ const int dtmf[] = {96, 98, 100, 101, 99, 97};
 const char *menu[] = {"CONFIG", "QSY", "FOLLOW", "RAPTOR", "PERROQUET", "REBOOT", "TOT", "COULEUR", "LUMINOSITE", "QUITTER"};
 
 String tmpString;
-String jsonData = "", xmlData = "", whereisData = "", issData = "";
-String jsonDataNew = "";
+String jsonData = "", issData = "", xmlData = "", whereisData = "";
+String jsonDataNew = "", issDataNew = "";
 
 String dateString, dateStringOld;
 String dureeString, dureeStringOld;
