@@ -92,23 +92,26 @@ void setup()
       NULL,         /* Task handle. */
       0);           /* Core where the task should run */
 
-   xTaskCreatePinnedToCore(
-      iss,          /* Function to implement the task */
-      "iss",        /* Name of the task */
+  xTaskCreatePinnedToCore(
+      hamqsl,       /* Function to implement the task */
+      "hamqsl",     /* Name of the task */
       8192,         /* Stack size in words */
       NULL,         /* Task input parameter */
       1,            /* Priority of the task */
       NULL,         /* Task handle. */
       1);           /* Core where the task should run */
 
-  xTaskCreatePinnedToCore(
-      hamqsl,       /* Function to implement the task */
-      "hamqsl",     /* Name of the task */
-      8192,         /* Stack size in words */
-      NULL,         /* Task input parameter */
-      2,            /* Priority of the task */
-      NULL,         /* Task handle. */
-      1);           /* Core where the task should run */
+  if (ISS)
+  {
+    xTaskCreatePinnedToCore(
+        iss,          /* Function to implement the task */
+        "iss",        /* Name of the task */
+        8192,         /* Stack size in words */
+        NULL,         /* Task input parameter */
+        2,            /* Priority of the task */
+        NULL,         /* Task handle. */
+        1);           /* Core where the task should run */
+  }
 
   // Accelelerometer
   M5.IMU.Init();
@@ -422,7 +425,7 @@ void loop()
       type = 0;
     }
 
-    //type = 5;
+    //type = 1;
 
     if (type == 1)
     {
@@ -1242,7 +1245,14 @@ void loop()
   alternance++;
   if(alternance == 10) {
     refresh = 0;
-    type = (type++ < 5) ? type : 0;
+    if(ISS)
+    {
+      type = (type++ < 5) ? type : 0;
+    }
+    else
+    {
+      type = (type++ < 4) ? type : 0;
+    }
     alternance = 0;
   }
   
