@@ -565,8 +565,6 @@ void iss(void *pvParameters)
 {
   HTTPClient http;
   unsigned int limit = 1 * 5 * 1000; // Retry 15 secondes
-  DynamicJsonDocument doc(1024);
-  float issLatitude, issLongitude;
     
   for (;;)
   {
@@ -580,14 +578,8 @@ void iss(void *pvParameters)
       {
         issData = http.getString(); // Get data
 
-        Serial.println(issData);
-
-        deserializeJson(doc, issData);
-        issLatitude = (float)(doc["latitude"]);
-        issLongitude = (float)(doc["longitude"]);
-
-        issDistance = computeDistance(issLatitude, issLongitude);
-
+        //Serial.println(issData);
+        
         http.end(); // Free the resources
         vTaskDelay(pdMS_TO_TICKS(limit));
       }
