@@ -707,6 +707,8 @@ void loop()
 
       String iss[] = {"distance", "units", "visibility", "latitude", "longitude", "altitude", "velocity",  "footprint", "solar_lat", "solar_lon"};
 
+      Serial.println(issData);
+
       DeserializationError error = deserializeJson(docISS, issData); // Deserialize the JSON document
       if (!error) // And no error
       {
