@@ -88,6 +88,15 @@ void setup()
       "whereis",    /* Name of the task */
       8192,         /* Stack size in words */
       NULL,         /* Task input parameter */
+      2,            /* Priority of the task */
+      NULL,         /* Task handle. */
+      0);           /* Core where the task should run */
+
+   xTaskCreatePinnedToCore(
+      iss,          /* Function to implement the task */
+      "iss",        /* Name of the task */
+      8192,         /* Stack size in words */
+      NULL,         /* Task input parameter */
       1,            /* Priority of the task */
       NULL,         /* Task handle. */
       1);           /* Core where the task should run */
@@ -95,15 +104,6 @@ void setup()
   xTaskCreatePinnedToCore(
       hamqsl,       /* Function to implement the task */
       "hamqsl",     /* Name of the task */
-      8192,         /* Stack size in words */
-      NULL,         /* Task input parameter */
-      2,            /* Priority of the task */
-      NULL,         /* Task handle. */
-      1);           /* Core where the task should run */
-
-   xTaskCreatePinnedToCore(
-      iss,          /* Function to implement the task */
-      "iss",        /* Name of the task */
       8192,         /* Stack size in words */
       NULL,         /* Task input parameter */
       2,            /* Priority of the task */
@@ -422,7 +422,7 @@ void loop()
       type = 0;
     }
 
-    //type = 5;
+    type = 5;
 
     if (type == 1)
     {
@@ -706,31 +706,31 @@ void loop()
       M5.Lcd.setTextDatum(CR_DATUM);
 
       String iss[] = {"distance", "units", "visibility", "latitude", "longitude", "altitude", "velocity",  "footprint", "solar_lat", "solar_lon"};
-      //size_t n = sizeof(solar) / sizeof(solar[0]);
 
-      deserializeJson(docISS, issData);
-
-      j = 122;
-      for (uint8_t i = 0; i <= 9; i++)
+      DeserializationError error = deserializeJson(docISS, issData); // Deserialize the JSON document
+      if (!error) // And no error
       {
-        if(i == 0) {
-          issDistance = computeDistance((float)(docISS["latitude"]), (float)(docISS["longitude"]));
-          tmpString = String(issDistance);
-        }
-        else if (i > 0 && i < 3) 
-        { 
-          issDataString = docISS[iss[i]];
-          tmpString = String(issDataString);
-          tmpString[0] = toupper(tmpString[0]);
-        }
-        else 
+        j = 122;
+        for (uint8_t i = 0; i <= 9; i++)
         {
-          issDataNum = docISS[iss[i]];
-          tmpString = String(issDataNum);
+          if(i == 0) {
+            issDistance = computeDistance((float)(docISS["latitude"]), (float)(docISS["longitude"]));
+            tmpString = String(issDistance);
+          }
+          else if (i > 0 && i < 3) 
+          { 
+            issDataString = docISS[iss[i]];
+            tmpString = String(issDataString);
+            tmpString[0] = toupper(tmpString[0]);
+          }
+          else 
+          {
+            issDataNum = docISS[iss[i]];
+            tmpString = String(issDataNum);
+          }
+          M5.Lcd.drawString(tmpString, 318, j);
+          j += 12;
         }
-
-        M5.Lcd.drawString(tmpString, 318, j);
-        j += 12;
       }
     }
     else    
