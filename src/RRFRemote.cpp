@@ -508,7 +508,6 @@ void loop()
       M5.Lcd.setTextDatum(CR_DATUM);
 
       String solar[] = {"solarflux", "sunspots", "aindex", "kindex", "xray", "protonflux", "electonflux", "aurora", "solarwind"};
-      //size_t n = sizeof(solar) / sizeof(solar[0]);
 
       j = 122;
       for (uint8_t i = 0; i <= 8; i++)
@@ -925,6 +924,7 @@ void loop()
           M5.Lcd.setTextColor(TFT_WHITE, TFT_BLACK);
           M5.Lcd.setTextDatum(CC_DATUM);
           M5.Lcd.drawString(dateString, 160, 60);
+
           dateStringOld = dateString;
           linkTotalStringOld = "";
           linkActifStringOld = "";
@@ -950,9 +950,10 @@ void loop()
           M5.Lcd.setTextColor(TFT_WHITE, TFT_BLACK);
           M5.Lcd.setTextDatum(CC_DATUM);
           M5.Lcd.drawString(linkTotalString, 160, 60);
+
+          dateStringOld = "";
           linkTotalStringOld = linkTotalString;
           linkActifStringOld = "";
-          dateStringOld = "";
           txTotalStringOld = "";
           emissionStringOld = "";
           issStringOld = "";
@@ -975,11 +976,12 @@ void loop()
           M5.Lcd.setTextColor(TFT_WHITE, TFT_BLACK);
           M5.Lcd.setTextDatum(CC_DATUM);
           M5.Lcd.drawString(linkActifString, 160, 60);
-          linkActifStringOld = linkActifString;
+
           dateStringOld = "";
+          linkTotalStringOld = "";
+          linkActifStringOld = linkActifString;
           txTotalStringOld = "";
           emissionStringOld = "";
-          linkTotalStringOld = "";
           issStringOld = "";
         }
       }
@@ -1000,10 +1002,11 @@ void loop()
           M5.Lcd.setTextColor(TFT_WHITE, TFT_BLACK);
           M5.Lcd.setTextDatum(CC_DATUM);
           M5.Lcd.drawString(txTotalString, 160, 60);
-          txTotalStringOld = txTotalString;
+
+          dateStringOld = "";
           linkTotalStringOld = "";
           linkActifStringOld = "";
-          dateStringOld = "";
+          txTotalStringOld = txTotalString;
           emissionStringOld = "";
           issStringOld = "";
         }
@@ -1025,11 +1028,12 @@ void loop()
           M5.Lcd.setTextColor(TFT_WHITE, TFT_BLACK);
           M5.Lcd.setTextDatum(CC_DATUM);
           M5.Lcd.drawString(emissionString, 160, 60);
-          emissionStringOld = emissionString;
-          txTotalStringOld = "";
+
+          dateStringOld = "";
           linkTotalStringOld = "";
           linkActifStringOld = "";
-          dateStringOld = "";
+          txTotalStringOld = "";
+          emissionStringOld = emissionString;
           issStringOld = "";
         }
       }
@@ -1050,12 +1054,13 @@ void loop()
           M5.Lcd.setTextColor(TFT_WHITE, TFT_BLACK);
           M5.Lcd.setTextDatum(CC_DATUM);
           M5.Lcd.drawString(issString, 160, 60);
-          issStringOld = issString;
-          txTotalStringOld = "";
+
+          dateStringOld = "";
           linkTotalStringOld = "";
           linkActifStringOld = "";
-          dateStringOld = "";
+          txTotalStringOld = "";
           emissionStringOld = "";
+          issStringOld = issString;
         }
       }
     }
