@@ -101,17 +101,14 @@ void setup()
       NULL,         /* Task handle. */
       1);           /* Core where the task should run */
 
-  if (ISS)
-  {
-    xTaskCreatePinnedToCore(
-        iss,          /* Function to implement the task */
-        "iss",        /* Name of the task */
-        8192,         /* Stack size in words */
-        NULL,         /* Task input parameter */
-        2,            /* Priority of the task */
-        NULL,         /* Task handle. */
-        1);           /* Core where the task should run */
-  }
+  xTaskCreatePinnedToCore(
+      iss,          /* Function to implement the task */
+      "iss",        /* Name of the task */
+      8192,         /* Stack size in words */
+      NULL,         /* Task input parameter */
+      2,            /* Priority of the task */
+      NULL,         /* Task handle. */
+      1);           /* Core where the task should run */
 
   // Accelelerometer
   M5.IMU.Init();
@@ -1162,25 +1159,11 @@ void loop()
       }
       else if(option == "TOT") 
       {
-        if (totCurrent == 0)
-        {
-          option = "TOT ON";
-        } 
-        else 
-        {
-          option = "TOT OFF";
-        }   
+        option = (totCurrent == 0) ? "TOT ON" : "TOT OFF";
       }
       else if(option == "FOLLOW") 
       {
-        if (followCurrent == 0)
-        {
-          option = "FOLLOW ON";
-        } 
-        else 
-        {
-          option = "FOLLOW OFF";
-        }   
+        option = (followCurrent == 0) ? "FOLLOW ON" : "FOLLOW OFF";
       }
     }
 
@@ -1217,15 +1200,6 @@ void loop()
     baselineString += " / FOLLOW ON";
   }
 
-  /*
-  if(baselineString != baselineStringOld) 
-  {
-    baselineStringOld = baselineString;
-    M5.Lcd.drawString(baselineString, 160, 34);
-    M5.Lcd.drawFastHLine(0, 0, 320, TFT_WHITE);
-  }
-  */
-
   M5.Lcd.drawString(baselineString, 160, 36);
   M5.Lcd.drawFastHLine(0, 0, 320, TFT_WHITE);
 
@@ -1250,14 +1224,7 @@ void loop()
   alternance++;
   if(alternance == 10) {
     refresh = 0;
-    if(ISS)
-    {
-      type = (type++ < 5) ? type : 0;
-    }
-    else
-    {
-      type = (type++ < 4) ? type : 0;
-    }
+    type = (type++ < 5) ? type : 0;
     alternance = 0;
   }
   

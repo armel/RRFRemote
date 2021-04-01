@@ -29,10 +29,7 @@
 #include "settings.h"
 
 // Version
-#define VERSION "2.1.9"
-
-// ISS
-#define ISS 1
+#define VERSION "2.1.10"
 
 // Wifi
 WiFiClient clientRemote, clientTracker, clientHamSQL, clientWhereis;
