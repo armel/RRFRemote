@@ -21,7 +21,6 @@
   #include "Core2.h"
 #endif
 
-#include <WiFi.h>
 #include <WiFiClientSecure.h>
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
@@ -30,10 +29,10 @@
 #include "settings.h"
 
 // Version
-#define VERSION "2.1.7"
+#define VERSION "2.1.8"
 
 // ISS
-#define ISS 0
+#define ISS 1
 
 // Wifi
 WiFiClient clientRemote, clientTracker, clientHamSQL, clientWhereis;
@@ -102,8 +101,7 @@ const colorType TFT_HEADER_GRIS = {96, 96, 96};
 
 // HTTP endpoint
 String endpointHamQSL = "http://www.hamqsl.com/solarxml.php";
-String hostISS = "api.wheretheiss.at";
-String endpointISS = "/v1/satellites/25544";
+String endpointISS = "https://api.wheretheiss.at/v1/satellites/25544";
 
 String endpointRRF[] = {
     "http://rrf.f5nlg.ovh:8080/RRFTracker/RRF-today/rrf_tiny.json",

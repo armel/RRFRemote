@@ -570,7 +570,7 @@ void iss(void *pvParameters)
   {
     if ((WiFi.status() == WL_CONNECTED)) // Check the current connection status
     {
-      http.begin(clientISS, hostISS, 443, endpointISS, true);    // Specify the URL
+      http.begin(clientISS, endpointISS);     // Specify the URL
       http.addHeader("Content-Type", "text/plain");   // Specify content-type header
       http.setTimeout(1000);                          // Set Time Out
       int httpCode = http.GET();                      // Make the request
