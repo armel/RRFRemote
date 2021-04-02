@@ -53,18 +53,47 @@ void setup()
   M5.Lcd.setTextDatum(CC_DATUM);
   M5.Lcd.drawString("RRFRemote", 160, 20);
   M5.Lcd.setFreeFont(0);
-  M5.Lcd.drawString("Version " + String(VERSION) + " by F4HWN", 160, 50);
+  M5.Lcd.drawString("Version " + String(VERSION) + " par F4HWN", 160, 50);
 
   // QRCode
   M5.Lcd.qrcode("https://github.com/armel/RRFRemote", 90, 80, 140, 6);
 
   // We start by connecting to the WiFi network
-  M5.Lcd.drawString(String(config[(configCurrent * 6)]), 160, 60);
 
-  WiFi.begin(config[(configCurrent * 6)], config[(configCurrent * 6) + 1]);
-  while (WiFi.status() != WL_CONNECTED)
+  M5.Lcd.setTextPadding(320);
+
+  while(true)
   {
-    delay(500);
+    uint8_t attempt = 1;
+    M5.Lcd.drawString(String(config[(configCurrent * 6)]), 160, 60);
+    WiFi.begin(config[(configCurrent * 6)], config[(configCurrent * 6) + 1]);
+    while (WiFi.status() != WL_CONNECTED)
+    {
+      delay(500);
+      if(attempt % 2 == 0)
+      {
+        M5.Lcd.drawString("Connexion en cours", 160, 70);
+      }
+      else 
+      {
+        M5.Lcd.drawString(" ", 160, 70);
+      }
+      attempt++;
+      if(attempt > 10) {
+        break;
+      }
+    }
+    if(WiFi.status() != WL_CONNECTED)
+    {
+      configCurrent += 1;
+      if(configCurrent > n) {
+        configCurrent = 0;
+        preferences.putUInt("config", configCurrent);
+      }
+    }
+    else {
+      break;    
+    }
   }
 
   M5.Lcd.drawString(String(WiFi.localIP().toString().c_str()), 160, 70);
@@ -114,7 +143,7 @@ void setup()
   M5.IMU.Init();
 
   // Let's go after temporisation
-  delay(2000);
+  delay(1000);
 
   for (uint8_t i = 0; i < 120; i++)
   {
