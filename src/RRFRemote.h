@@ -21,7 +21,7 @@
   #include "Core2.h"
 #endif
 
-#include <WiFi.h>
+#include <WiFiClientSecure.h>
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
 #include <Preferences.h>
@@ -29,10 +29,11 @@
 #include "settings.h"
 
 // Version
-#define VERSION "2.1.0"
+#define VERSION "2.2.0"
 
 // Wifi
 WiFiClient clientRemote, clientTracker, clientHamSQL, clientWhereis;
+WiFiClientSecure clientISS;
 
 // Preferences
 Preferences preferences;
@@ -87,6 +88,7 @@ const colorType TFT_HEADER_GRIS = {96, 96, 96};
 #define ICON_SETTING 106
 #define ICON_LEFT 119
 #define ICON_RIGHT 87
+#define ICON_ISS 51
 #define ICON_BAT100 118
 #define ICON_BAT075 117
 #define ICON_BAT050 116
@@ -96,6 +98,8 @@ const colorType TFT_HEADER_GRIS = {96, 96, 96};
 
 // HTTP endpoint
 String endpointHamQSL = "http://www.hamqsl.com/solarxml.php";
+String endpointISS = "https://api.wheretheiss.at/v1/satellites/25544";
+
 String endpointRRF[] = {
     "http://rrf.f5nlg.ovh:8080/RRFTracker/RRF-today/rrf_tiny.json",
     "http://rrf.f5nlg.ovh:8080/RRFTracker/TECHNIQUE-today/rrf_tiny.json",
@@ -115,8 +119,8 @@ const int dtmf[] = {96, 98, 100, 101, 99, 97};
 const char *menu[] = {"CONFIG", "QSY", "FOLLOW", "RAPTOR", "PERROQUET", "REBOOT", "TOT", "COULEUR", "LUMINOSITE", "QUITTER"};
 
 String tmpString;
-String jsonData = "", xmlData = "", whereisData = "";
-String jsonDataNew = "";
+String jsonData = "", issData = "", xmlData = "", whereisData = "";
+String jsonDataNew = "", issDataNew = "";
 
 String dateString, dateStringOld;
 String dureeString, dureeStringOld;
@@ -125,15 +129,22 @@ String linkTotalString, linkTotalStringOld;
 String linkActifString, linkActifStringOld;
 String txTotalString, txTotalStringOld;
 String elsewhereString, elsewhereStringOld;
+String baselineString, baselineStringOld;
+String issString, issStringOld;
+
 String indicatifString;
 String whereisString;
 String departmentString;
+
+int screenMode = 0;
 
 int reset = 0;
 int alternance = 0;
 int refresh = 0;
 int type = 0;
 int qsy = 0;
+
+int issDistance = 0;
 
 int transmitOn = 0, transmitOff = 0;
 

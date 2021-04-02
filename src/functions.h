@@ -67,20 +67,20 @@ void clear()
   M5.Lcd.fillRect(0, 101, 320, 239, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
 
   // Elsewhere
-  M5.Lcd.fillRoundRect(0, 168, 150, 71, 4, TFT_WHITE);
-  M5.Lcd.fillRoundRect(1, 169, 24, 69, 4, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
+  M5.Lcd.fillRoundRect(0, 168, 155, 71, 4, TFT_WHITE);
+  M5.Lcd.fillRoundRect(1, 169, 26, 69, 4, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
 
-  M5.Lcd.drawFastVLine(22, 169, 69, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
-  M5.Lcd.drawFastVLine(23, 169, 69, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
   M5.Lcd.drawFastVLine(24, 169, 69, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
+  M5.Lcd.drawFastVLine(25, 169, 69, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
+  M5.Lcd.drawFastVLine(26, 169, 69, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
 
-  M5.Lcd.drawFastVLine(25, 169, 69, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
-  M5.Lcd.drawFastVLine(96, 169, 69, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
+  M5.Lcd.drawFastVLine(27, 169, 69, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
+  M5.Lcd.drawFastVLine(100, 169, 69, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
 
-  M5.Lcd.drawFastHLine(2, 182, 147, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
-  M5.Lcd.drawFastHLine(2, 196, 147, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
-  M5.Lcd.drawFastHLine(2, 210, 147, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
-  M5.Lcd.drawFastHLine(2, 224, 147, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
+  M5.Lcd.drawFastHLine(2, 182, 152, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
+  M5.Lcd.drawFastHLine(2, 196, 152, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
+  M5.Lcd.drawFastHLine(2, 210, 152, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
+  M5.Lcd.drawFastHLine(2, 224, 152, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
 
   // Log
   M5.Lcd.fillRoundRect(160, 117, 160, 122, 4, TFT_WHITE);
@@ -182,8 +182,8 @@ void button()
           menuRefresh = 0;
         }
 
-        menuCurrent = (menuCurrent < 0) ? 8 : menuCurrent;
-        menuCurrent = (menuCurrent > 8) ? 0 : menuCurrent;
+        menuCurrent = (menuCurrent < 0) ? 9 : menuCurrent;
+        menuCurrent = (menuCurrent > 9) ? 0 : menuCurrent;
         preferences.putUInt("menu", menuCurrent);
       }
       else
@@ -370,6 +370,8 @@ void buildScroll()
   // Now print text on top of the graphics
   img.setTextSize(1);          // Font size scaling is x1
   img.setTextFont(2);          // Font 2 selected
+  //img.setFreeFont(&tahoma6pt7b);
+  
   img.setTextColor(TFT_WHITE); // White text, no background colour
   img.setTextWrap(false);      // Turn of wrap so we can print past end of sprite
 
@@ -554,6 +556,38 @@ void whereis(void *pvParameters)
     if (wait < limit)
     {
       vTaskDelay(pdMS_TO_TICKS(limit - wait));
+    }
+  }
+}
+
+// Get data from ISS
+void iss(void *pvParameters)
+{
+  HTTPClient http;
+  unsigned int limit = 1 * 10 * 1000; // Retry 10 secondes
+    
+  for (;;)
+  {
+    if ((WiFi.status() == WL_CONNECTED)) // Check the current connection status
+    {
+      clientISS.setInsecure();
+      http.begin(clientISS, endpointISS);     // Specify the URL
+      http.addHeader("Content-Type", "text/plain");   // Specify content-type header
+      http.setTimeout(1000);                          // Set Time Out
+      int httpCode = http.GET();                      // Make the request
+      if (httpCode == 200)                            // Check for the returning code
+      {
+        issData = http.getString(); // Get data
+
+        //Serial.println(issData);
+        
+        http.end(); // Free the resources
+        vTaskDelay(pdMS_TO_TICKS(limit));
+      }
+      else {
+        http.end(); // Free the resources
+        vTaskDelay(pdMS_TO_TICKS(limit));
+      }
     }
   }
 }

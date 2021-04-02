@@ -59,15 +59,18 @@ Voici la liste des fonctionnalités actuelles :
 	- du nombre de links actifs,
 	- du nombre de passages en émission depuis le début de la journée,
 	- du temps d'émission cumulé depuis le début de la journée,
-	- de l'heure.
+	- de l'heure,
+	- de la distance avec l'ISS.
 	
 - affichage des links entrants et sortants, via scrolling horizontal,
+- affichage du département, du locator et de la distance du link en cours d'émission, via scrolling horizontal,
 - affichage alterné complémentaire :
 	- du top 10 des links les plus actifs,
 	- de l'historique des 10 derniers links passés en émission,
 	- des blocages RRFSentinel en cours,
 	- des données techniques de l'ESP32,
-	- des données techniques de l'activité du Soleil (propagation, SFI, SN, A Index, K Index, etc.)
+	- des données techniques de l'activité du Soleil (propagation, SFI, SN, A Index, K Index, etc.),
+	- des données techniques du positionnement de l'ISS (altitude, longitude, latitude, visibilité, etc.),
 - ventilation par nombre de TX dans la journée, sous forme d'histogramme,
 - scanner permanent de suivi d'activité sur les autres salons,
 - mise en veille automatique de l'écran, en cas d'absence d'activité pendant un temps donné.
@@ -89,7 +92,7 @@ Il est possible de :
 - changer les couleurs du thème,
 - régler la luminosité de l'écran,
 - activer une alerte sonore TOT,
-- allumer ou éteindre le RRFRemote.
+- passer d'une configuration à une autre.
 
 # Installation
 
@@ -127,12 +130,12 @@ Editer le fichier `src/settings.h` afin de renseigner vos paramétrages, à savo
 
 * votre SSID Wifi,
 * votre mot de passe Wifi,
-* votre latitude (format décimale),
-* votre longitude (format décimale),
+* votre latitude (format décimale, par exemple 48.8482855),
+* votre longitude (format décimale, par exemple 2.2708201),
 * votre indicatif,
 * et pour finir, l'url d'accès au script de contrôle que vous avez installé précédement (par défaut, c'est `http://adresse_ip_de_votre_spotnik:3000/`).
 
-> À noter que, depuis la version 2.0.0, il est possible de gérer autant de configurations que vous le souhaitez ! Cela vous permet, par exemple, de préconfigurer vos paramétrages pour une utilisation locale sur le Wifi de votre QRA et une configuration mobile sur le Wifi de votre Smartphone. Une telle configuration pourrait ressemble à ceci :
+> À noter que, depuis la version 2.0.0, il est possible de gérer autant de configurations que vous le souhaitez ! Cela vous permet, par exemple, de préconfigurer vos paramétrages pour une utilisation locale sur le Wifi de votre QRA et une configuration mobile sur le Wifi de votre Smartphone. Une telle configuration pourrait ressembler à ceci :
 > 
 
 ```
@@ -142,7 +145,7 @@ const char *config[] = {
 };
 ```
 
-> Notez au passage l'utilisation d'une adresse IP public pour la configuration mobile sur le Wifi du Smartphone...
+> Notez au passage l'utilisation d'une adresse IP publique pour la configuration mobile sur le Wifi du Smartphone...
 
 ### Modèle M5Stack Basic et M5Stack Grey
 
