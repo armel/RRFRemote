@@ -104,9 +104,11 @@ Le plus simple est d'installer [PlateformIO for VSCode](https://platformio.org/i
 
 > Quelques OMs ont eu des difficultés à installer PlateformIO sous Windows. Dans la majorité des cas, une réinstallation de Python règle le problème. 
 
-Ensuite, toujours sur votre PC ou Mac, cloner le projet RRFRemote via la commande :
+Ensuite, toujours sur votre PC ou Mac, cloner le projet RRFRemote via la commande `git` :
 
 `git clone https://github.com/armel/RRFRemote.git`
+
+Vous pouvez aussi récuppérer une archive zip, avec l'ensemble du projet, si vous n'avez pas `git`.
 
 ## Coté Spotnik : mise en place du script de contrôle
 
@@ -183,9 +185,26 @@ Par,
 
 Compiler et uploader le projet sur votre M5Stack. C'est terminé.
 
+## Mise à jour
+
+>Je ne peux que vous conseiller de garder une copie de votre ancien fichier `settings.h`. Ca vous fera probablement gagner du temps. Attention cependant, le fichier `settings.h` a changé depuis la version 2.0.0. 
+
+Si vous souhaitez mettre à jour la version de votre RRFRemote, vous pouvez :
+
+* soit télécharger l'archive zip, si vous n'avez pas `git`,
+* soit effacer le répertoire existant, utiliser les commandes `git` et cloner à nouveau le projet, comme lors de la première installation,
+* soit se positionner dans le répertoire existant, utiliser les commandes `git` et mettre à jour le code à l'aide des commandes suivantes :
+
+```
+git reset --hard
+git pull
+```
+Evidement, vous devrez recompiler et uploader le projet sur votre M5Stack.
+
+
 # Remerciements
 
-Un grand merci à F4ICR Pascal, F6FDY Eddie, F4IGC Philippe et tous les autres, pour la confiance, les idées et l'aide qu'ils m'ont apporté depuis le début de ce projet. Avoir des OMs impliqués qui suivent de près mes développements est toujours stimulant ;)
+Un grand merci à F4ICR Pascal, F6FDY Eddie, F5LGW Stéphane, F4IGC Philippe et tous les autres, pour la confiance, les idées et l'aide qu'ils m'ont apporté depuis le début de ce projet. Avoir des OMs impliqués qui suivent de près mes développements est toujours stimulant ;)
 
 # That's all
 Bon trafic à tous, 88 & 73 de Armel F4HWN ! 
