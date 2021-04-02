@@ -127,8 +127,8 @@ Editer le fichier `src/settings.h` afin de renseigner vos paramétrages, à savo
 
 * votre SSID Wifi,
 * votre mot de passe Wifi,
-* votre latitude (format décimale),
-* votre longitude (format décimale),
+* votre latitude (format décimale, par exemple 48.8482855),
+* votre longitude (format décimale, par exemple 2.2708201),
 * votre indicatif,
 * et pour finir, l'url d'accès au script de contrôle que vous avez installé précédement (par défaut, c'est `http://adresse_ip_de_votre_spotnik:3000/`).
 
