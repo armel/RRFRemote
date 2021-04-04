@@ -59,11 +59,11 @@ void clear()
 
   // Header
   M5.Lcd.fillRect(0, 0, 320, 44, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
-  M5.Lcd.drawFastHLine(  0,  0, 320, TFT_WHITE);
-  M5.Lcd.drawFastHLine(  0, 44, 320, TFT_WHITE);
+  M5.Lcd.drawFastHLine(  0,   0, 320, TFT_WHITE);
+  M5.Lcd.drawFastHLine(  0,  44, 320, TFT_WHITE);
 
   // Grey zone
-  M5.Lcd.drawLine(0, 100, 320, 100, TFT_WHITE);
+  M5.Lcd.drawFastHLine(  0, 100, 320, TFT_WHITE);
   M5.Lcd.fillRect(0, 101, 320, 239, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
 
   // Elsewhere

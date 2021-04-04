@@ -380,6 +380,7 @@ void loop()
             //elsewhere = "GW-ALLSTAR-40020";
             //elsewhere = "(67) F1ZRZ T10M";
             //elsewhere = "(67) F1ZRZ S";
+            //elsewhere = "(76) TM100SHT H";
 
             if (strcmp(elsewhere, "Aucune émission") != 0)
             {
@@ -869,6 +870,10 @@ void loop()
         else {
           departmentString = getValue(lastIndicatif[0], ' ', 0);
           tmpString = getValue(lastIndicatif[0], ' ', 1);
+          if(tmpString.length() > 6)
+          {
+            tmpString = tmpString.substring(0, 6);
+          }
           tmpString = (tmpString == "") ? "RTFM" : tmpString;
         }
 
