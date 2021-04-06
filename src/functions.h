@@ -76,10 +76,6 @@ void clear()
 // Manage buttons
 void button()
 {
-  static uint8_t btnALast = 0;
-  static uint8_t btnBLast = 0;
-  static uint8_t btnCLast = 0;
-
   uint8_t right;
   uint8_t left;
 
@@ -90,23 +86,6 @@ void button()
     right = -1;
     left = 1;
   }
-
-  // Manage button bump
-  if(btnALast && !M5.BtnA.wasReleasefor(50)) {
-    btnA = 0;
-  }
-
-  if(btnBLast && !M5.BtnB.wasReleasefor(50)) {
-    btnB = 0;
-  }
-
-  if(btnCLast && !M5.BtnC.wasReleasefor(50)) {
-    btnC = 0;
-  }
-
-  btnALast = btnA;
-  btnBLast = btnB;
-  btnCLast = btnC;
 
   // Manage screensaver
   if (screensaverMode == 1)
@@ -172,6 +151,8 @@ void button()
         menuCurrent = (menuCurrent < 0) ? 9 : menuCurrent;
         menuCurrent = (menuCurrent > 9) ? 0 : menuCurrent;
         preferences.putUInt("menu", menuCurrent);
+
+        delay(100); // Special pause on menu select
       }
       else
       {
