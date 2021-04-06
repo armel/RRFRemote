@@ -2,13 +2,13 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 // Parse data
-String getValue(String data, char separator, int index)
+String getValue(String data, char separator, uint8_t index)
 {
-  int found = 0;
-  int strIndex[] = {0, -1};
-  int maxIndex = data.length() - 1;
+  int8_t strIndex[] = {0, -1};
+  int8_t found = 0;
+  int8_t maxIndex = data.length() - 1;
 
-  for (int i = 0; i <= maxIndex && found <= index; i++)
+  for (uint8_t i = 0; i <= maxIndex && found <= index; i++)
   {
     if (data.charAt(i) == separator || i == maxIndex)
     {
@@ -19,19 +19,6 @@ String getValue(String data, char separator, int index)
   }
 
   return found > index ? data.substring(strIndex[0], strIndex[1]) : "";
-}
-
-// Compute interpolation
-int interpolation(int value, int inMin, int inMax, int outMin, int outMax)
-{
-  if ((inMax - inMin) != 0)
-  {
-    return int((value - inMin) * (outMax - outMin) / (inMax - inMin) + outMin);
-  }
-  else
-  {
-    return 0;
-  }
 }
 
 // Reset color
@@ -59,11 +46,11 @@ void clear()
 
   // Header
   M5.Lcd.fillRect(0, 0, 320, 44, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
-  M5.Lcd.drawFastHLine(  0,  0, 320, TFT_WHITE);
-  M5.Lcd.drawFastHLine(  0, 44, 320, TFT_WHITE);
+  M5.Lcd.drawFastHLine(  0,   0, 320, TFT_WHITE);
+  M5.Lcd.drawFastHLine(  0,  44, 320, TFT_WHITE);
 
   // Grey zone
-  M5.Lcd.drawLine(0, 100, 320, 100, TFT_WHITE);
+  M5.Lcd.drawFastHLine(  0, 100, 320, TFT_WHITE);
   M5.Lcd.fillRect(0, 101, 320, 239, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
 
   // Elsewhere
@@ -89,11 +76,8 @@ void clear()
 // Manage buttons
 void button()
 {
-  static int btnALast = 0;
-  static int btnBLast = 0;
-  static int btnCLast = 0;
-  int right;
-  int left;
+  uint8_t right;
+  uint8_t left;
 
   if (M5.Lcd.getRotation() == 1) {
     right = 1;
@@ -101,24 +85,6 @@ void button()
   } else {
     right = -1;
     left = 1;
-  }
-
-  // Manage button bump
-  if(btnB && btnBLast) {
-    btnB = 0;
-  }
-  btnBLast = btnB;
-
-  if(menuMode == 0) {
-    if(btnA && btnALast) {
-      btnA = 0;
-    }
-    btnALast = btnA;
-
-    if(btnC && btnCLast) {
-      btnC = 0;
-    }
-    btnCLast = btnC;
   }
 
   // Manage screensaver
@@ -156,6 +122,7 @@ void button()
           roomCurrent = (roomCurrent > 5) ? 0 : roomCurrent;
           preferences.putUInt("room", roomCurrent);
         }
+        delay(100); // Special pause
       }
       if (btnB)
       {
@@ -185,6 +152,8 @@ void button()
         menuCurrent = (menuCurrent < 0) ? 9 : menuCurrent;
         menuCurrent = (menuCurrent > 9) ? 0 : menuCurrent;
         preferences.putUInt("menu", menuCurrent);
+
+        delay(100); // Special pause
       }
       else
       {
@@ -330,8 +299,6 @@ void button()
           configCurrent = (configCurrent > n) ? 0 : configCurrent;
           preferences.putUInt("config", configCurrent);
 
-          //Serial.println(configCurrent);
-
           if(btnB) {
             WiFi.begin(config[(configCurrent * 6)], config[(configCurrent * 6) + 1]);
             while (WiFi.status() != WL_CONNECTED)
@@ -360,8 +327,8 @@ void button()
 // Build scroll
 void buildScroll()
 {
-  int h = 20;
-  int w = M5.Lcd.width();
+  int16_t h = 20;
+  int16_t w = M5.Lcd.width();
 
   // We could just use fillSprite(color) but lets be a bit more creative...
   while (h--)
@@ -384,7 +351,7 @@ void buildScroll()
 }
 
 // Scroll
-void scroll(int pause)
+void scroll(uint8_t pause)
 {
   if(btnA == 0 && btnB == 0 && btnC == 0) {
     getButton();
@@ -577,10 +544,7 @@ void iss(void *pvParameters)
       int httpCode = http.GET();                      // Make the request
       if (httpCode == 200)                            // Check for the returning code
       {
-        issData = http.getString(); // Get data
-
-        //Serial.println(issData);
-        
+        issData = http.getString(); // Get data        
         http.end(); // Free the resources
         vTaskDelay(pdMS_TO_TICKS(limit));
       }

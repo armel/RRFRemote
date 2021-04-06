@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 // Board
-#define BOARD BASIC
+#define BOARD GREY
 
 #define BASIC 1
 #define GREY  2
@@ -29,11 +29,14 @@
 #include "settings.h"
 
 // Version
-#define VERSION "2.2.0"
+#define VERSION "2.2.2"
 
 // Wifi
 WiFiClient clientRemote, clientTracker, clientHamSQL, clientWhereis;
 WiFiClientSecure clientISS;
+
+// Temporisation
+#define LIMIT 750
 
 // Preferences
 Preferences preferences;
@@ -52,8 +55,6 @@ colorType TFT_FRONT = {51, 153, 255};
 colorType TFT_HEADER = {0, 76, 153};
 
 const char *color[] = {"ROUGE", "ORANGE", "VERT", "TURQUOISE", "BLEU", "ROSE", "VIOLET", "GRIS"};
-
-int colorCurrent = 0;
 
 const colorType TFT_FRONT_ROUGE = {255, 102, 102};
 const colorType TFT_HEADER_ROUGE = {153, 0, 0};
@@ -111,14 +112,15 @@ String endpointRRF[] = {
 // Scroll
 TFT_eSprite img = TFT_eSprite(&M5.Lcd); // Create Sprite object "img" with pointer to "tft" object
 String message = "";
-int pos;
+int16_t pos;
 
 // Misceleanous
 const char *room[] = {"RRF", "TECHNIQUE", "BAVARDAGE", "LOCAL", "INTERNATIONAL", "FON"};
-const int dtmf[] = {96, 98, 100, 101, 99, 97};
+const uint8_t dtmf[] = {96, 98, 100, 101, 99, 97};
 const char *menu[] = {"CONFIG", "QSY", "FOLLOW", "RAPTOR", "PERROQUET", "REBOOT", "TOT", "COULEUR", "LUMINOSITE", "QUITTER"};
 
 String tmpString;
+
 String jsonData = "", issData = "", xmlData = "", whereisData = "";
 String jsonDataNew = "", issDataNew = "";
 
@@ -131,37 +133,40 @@ String txTotalString, txTotalStringOld;
 String elsewhereString, elsewhereStringOld;
 String baselineString, baselineStringOld;
 String issString, issStringOld;
+String optionString, optionStringOld;
+String titleString, titleStringOld;
 
 String indicatifString;
 String whereisString;
-String departmentString;
 
-int screenMode = 0;
+bool reset = 0;
+bool refresh = 0;
+bool menuMode = 0;
+bool menuRefresh = 0;
+bool screensaverMode = 0;
 
-int reset = 0;
-int alternance = 0;
-int refresh = 0;
-int type = 0;
-int qsy = 0;
+uint16_t qsy = 0;
+uint16_t issDistance = 0;
 
-int issDistance = 0;
+int8_t menuSelected = -1;
+int8_t menuCurrent = 0;
+int8_t colorCurrent = 0;
+int8_t configCurrent = 0;
+int8_t roomCurrent = 0;
 
-int transmitOn = 0, transmitOff = 0;
+uint8_t screenMode = 0;
+uint8_t alternance = 0;
+uint8_t type = 0;
 
-int configCurrent = 0;
-int roomCurrent = 0;
-int whereisCurrent = 0;
-int brightnessCurrent = 32;
-int totCurrent = 0;
-int raptorCurrent = 0;
-int followCurrent = 0;
-int batteryChargeCurrent = 0;
-int batteryLevelCurrent = 0;
-int menuCurrent = 0;
-int menuMode = 0;
-int menuSelected = -1;
-int menuRefresh = 0;
+uint8_t transmitOn = 0;
+uint8_t transmitOff = 0;
+uint8_t whereisCurrent = 0;
+uint8_t brightnessCurrent = 32;
+uint8_t totCurrent = 0;
+uint8_t raptorCurrent = 0;
+uint8_t followCurrent = 0;
+uint8_t batteryChargeCurrent = 0;
+uint8_t batteryLevelCurrent = 0;
 
 unsigned long screensaver;
 int screensaverLimit = 5 * 60 * 1000;  // 5 minutes
-int screensaverMode = 0;

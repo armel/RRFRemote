@@ -1,7 +1,7 @@
 // Copyright (c) F4HWN Armel. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-int btnA, btnB, btnC = 0;
+uint8_t btnA, btnB, btnC = 0;
 
 // Power init
 void power()
@@ -10,7 +10,7 @@ void power()
 }
 
 // Get Battery level
-int8_t getBatteryLevel(bool type)
+uint8_t getBatteryLevel(bool type)
 {
     return M5.Power.getBatteryLevel();
 }
