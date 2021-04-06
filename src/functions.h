@@ -122,6 +122,7 @@ void button()
           roomCurrent = (roomCurrent > 5) ? 0 : roomCurrent;
           preferences.putUInt("room", roomCurrent);
         }
+        delay(100); // Special pause
       }
       if (btnB)
       {
@@ -152,7 +153,7 @@ void button()
         menuCurrent = (menuCurrent > 9) ? 0 : menuCurrent;
         preferences.putUInt("menu", menuCurrent);
 
-        delay(100); // Special pause on menu select
+        delay(100); // Special pause
       }
       else
       {
