@@ -173,11 +173,12 @@ void loop()
   float lastLatitude[10], lastLongitude[10];
   float issDataNum;
 
-  int allTx[10];
-  int tot = 0, linkTotal = 0, linkActif = 0, linkTotalElsewhere = 0, txTotal = 0, maxLevel = 0, tx[24] = {0};
-  int optimize = 0;
-  int distance = 0;
+  uint16_t allTx[10];
+  uint16_t tot = 0, linkTotal = 0, linkActif = 0, linkTotalElsewhere = 0, txTotal = 0, maxLevel = 0, tx[24] = {0};
+  uint16_t distance = 0;
 
+  int8_t optimize = 0;
+  
   uint8_t i, j, k;
 
   static uint8_t lengthData = 0;
@@ -186,7 +187,7 @@ void loop()
   int16_t parenthesisBegin = 0;
   int16_t parenthesisLast = 0;
 
-  unsigned long timer = 0, wait = 0, limit = 750;
+  unsigned long timer = 0, wait = 0;
 
   // Let's go
   M5.Lcd.setTextPadding(0);
@@ -203,9 +204,14 @@ void loop()
     {
       jsonData = jsonDataNew;
     }
+    else {
+      deserializeJson(doc, jsonData); // Read last valid jsonData
+    }
+  }
+  else {
+    deserializeJson(doc, jsonData);   // Read last valid jsonData
   }
 
-  deserializeJson(doc, jsonData);
   salon = doc["abstract"][0]["Salon"];
 
   while (strcmp(room[roomCurrent], salon) != 0)
@@ -868,7 +874,6 @@ void loop()
           tmpString = "GW";
         }
         else {
-          departmentString = getValue(lastIndicatif[0], ' ', 0);
           tmpString = getValue(lastIndicatif[0], ' ', 1);
           if(tmpString.length() > 6)
           {
@@ -1158,6 +1163,9 @@ void loop()
       tmpString = swap;
       M5.Lcd.drawString(tmpString, 310, 18);
 
+      titleStringOld = "";
+      optionStringOld = "";
+
       menuRefresh = 1;
     }
 
@@ -1168,46 +1176,54 @@ void loop()
     M5.Lcd.setTextDatum(CC_DATUM);
     M5.Lcd.setTextPadding(220);
 
-    String title = "";
-    String option = String(menu[menuCurrent]);
+    titleString = "";
+    optionString = String(menu[menuCurrent]);
 
     if (menuSelected == -1)
     {
-      title = "MODE MENU";
+      titleString = "MODE MENU";
     }
     else
     {
-      title = String(menu[menuSelected]);
+      titleString = String(menu[menuSelected]);
 
-      if(option == "COULEUR") 
+      if(optionString == "COULEUR") 
       {
-        option = String(color[colorCurrent]);
+        optionString = String(color[colorCurrent]);
       }
-      else if(option == "LUMINOSITE") 
+      else if(optionString == "LUMINOSITE") 
       {
-        option = "LEVEL " + String(brightnessCurrent);      
+        optionString = "LEVEL " + String(brightnessCurrent);      
       }
-      else if(option == "CONFIG") 
+      else if(optionString == "CONFIG") 
       {
-        option = String(config[(configCurrent * 6) + 4]);   
+        optionString = String(config[(configCurrent * 6) + 4]);   
       }
-      else if(option == "TOT") 
+      else if(optionString == "TOT") 
       {
-        option = (totCurrent == 0) ? "TOT ON" : "TOT OFF";
+        optionString = (totCurrent == 0) ? "TOT ON" : "TOT OFF";
       }
-      else if(option == "FOLLOW") 
+      else if(optionString == "FOLLOW") 
       {
-        option = (followCurrent == 0) ? "FOLLOW ON" : "FOLLOW OFF";
+        optionString = (followCurrent == 0) ? "FOLLOW ON" : "FOLLOW OFF";
       }
     }
 
-    M5.Lcd.drawString(title, 160, 16);
+    if(titleString != titleStringOld) 
+    {
+      titleStringOld = titleString;
+      M5.Lcd.drawString(titleString, 160, 16);
+    }
 
-    M5.Lcd.setFreeFont(&rounded_led_board10pt7b);
-    M5.Lcd.setTextColor(TFT_WHITE, TFT_BLACK);
-    M5.Lcd.setTextDatum(CC_DATUM);
-    M5.Lcd.setTextPadding(320);
-    M5.Lcd.drawString(option, 160, 60);
+    if(optionString != optionStringOld)
+    {
+      optionStringOld = optionString;
+      M5.Lcd.setFreeFont(&rounded_led_board10pt7b);
+      M5.Lcd.setTextColor(TFT_WHITE, TFT_BLACK);
+      M5.Lcd.setTextDatum(CC_DATUM);
+      M5.Lcd.setTextPadding(320);
+      M5.Lcd.drawString(optionString, 160, 60);
+    }
   }
 
   // Status line
@@ -1263,10 +1279,17 @@ void loop()
   }
   
   // Temporisation
-  wait = millis() - timer;
-  if (wait < limit)
+  if(btnA || btnB || btnC)
   {
-    uint8_t j = int((limit - wait) / 10);
+    wait = LIMIT - 10;
+  }
+  else {
+    wait = millis() - timer;
+  }
+
+  if (wait < LIMIT)
+  {
+    uint8_t j = int((LIMIT - wait) / 10);
     for (uint8_t i = 0; i <= j; i++)
     {
       scroll(10);

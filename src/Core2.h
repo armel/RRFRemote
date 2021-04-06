@@ -1,7 +1,7 @@
 // Copyright (c) F4HWN Armel. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-int btnA, btnB, btnC, btnD, btnE = 0;
+uint8_t btnA, btnB, btnC, btnD, btnE = 0;
 
 TouchZone left(0, 0, 160, 240);
 TouchZone right(160, 0, 160, 240);
@@ -45,10 +45,10 @@ void power()
 }
 
 // Get Battery level
-int8_t getBatteryLevel(bool type)
+uint8_t getBatteryLevel(bool type)
 {
     float baterryVoltage = M5.Axp.GetBatVoltage();
-    int8_t batteryPercentage = ( baterryVoltage < 3.2 ) ? 0 : ( baterryVoltage - 3.2 ) * 100;
+    uint8_t batteryPercentage = ( baterryVoltage < 3.2 ) ? 0 : ( baterryVoltage - 3.2 ) * 100;
 
     if(type == 0) {
         if(batteryPercentage > 80)
