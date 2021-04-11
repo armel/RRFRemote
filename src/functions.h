@@ -25,14 +25,14 @@ String getValue(String data, char separator, uint8_t index)
 void resetColor()
 {
   switch(colorCurrent) {
-    case 0: TFT_FRONT = TFT_FRONT_ROUGE; TFT_HEADER = TFT_HEADER_ROUGE; break;
-    case 1: TFT_FRONT = TFT_FRONT_ORANGE; TFT_HEADER = TFT_HEADER_ORANGE; break;
-    case 2: TFT_FRONT = TFT_FRONT_VERT; TFT_HEADER = TFT_HEADER_VERT; break;
-    case 3: TFT_FRONT = TFT_FRONT_TURQUOISE; TFT_HEADER = TFT_HEADER_TURQUOISE; break;
-    case 4: TFT_FRONT = TFT_FRONT_BLEU; TFT_HEADER = TFT_HEADER_BLEU; break;
-    case 5: TFT_FRONT = TFT_FRONT_ROSE; TFT_HEADER = TFT_HEADER_ROSE; break;
-    case 6: TFT_FRONT = TFT_FRONT_VIOLET; TFT_HEADER = TFT_HEADER_VIOLET; break;
-    case 7: TFT_FRONT = TFT_FRONT_GRIS; TFT_HEADER = TFT_HEADER_GRIS; break;
+    case 0: TFT_FRONT = TFT_FRONT_ROUGE; TFT_HEADER = TFT_HEADER_ROUGE; TFT_BACK = TFT_BACK_ROUGE; break;
+    case 1: TFT_FRONT = TFT_FRONT_ORANGE; TFT_HEADER = TFT_HEADER_ORANGE; TFT_BACK = TFT_BACK_ORANGE; break;
+    case 2: TFT_FRONT = TFT_FRONT_VERT; TFT_HEADER = TFT_HEADER_VERT; TFT_BACK = TFT_BACK_VERT; break;
+    case 3: TFT_FRONT = TFT_FRONT_TURQUOISE; TFT_HEADER = TFT_HEADER_TURQUOISE; TFT_BACK = TFT_BACK_TURQUOISE; break;
+    case 4: TFT_FRONT = TFT_FRONT_BLEU; TFT_HEADER = TFT_HEADER_BLEU; TFT_BACK = TFT_BACK_BLEU; break;
+    case 5: TFT_FRONT = TFT_FRONT_ROSE; TFT_HEADER = TFT_HEADER_ROSE; TFT_BACK = TFT_BACK_ROSE; break;
+    case 6: TFT_FRONT = TFT_FRONT_VIOLET; TFT_HEADER = TFT_HEADER_VIOLET; TFT_BACK = TFT_BACK_VIOLET; break;
+    case 7: TFT_FRONT = TFT_FRONT_GRIS; TFT_HEADER = TFT_HEADER_GRIS; TFT_BACK = TFT_BACK_GRIS; break;
   }
 }
 
@@ -170,7 +170,7 @@ void rrftracker(void *pvParameters)
         http.addHeader("Content-Type", "text/plain");                                     // Specify content-type header
         http.setTimeout(500);                                                             // Set timeout
         int httpCode = http.GET();                                                        // Make the request
-        if (httpCode == 200 || qsy == 1000) // Check for the returning code
+        if (httpCode == 200 || qsy == 2000 || qsy == 2001 || qsy == 2002 || qsy == 2003)  // Check for the returning code
         {
           qsy = 0;
           refresh = 0;
@@ -594,18 +594,26 @@ void button(void *pvParameters)
         {
           if(btnA || btnC)
           {
+            //Serial.print("-");
+            vTaskDelay(pdMS_TO_TICKS(100));
+          }
+          else if(btnB)
+          {
+            //Serial.print("+");
             vTaskDelay(pdMS_TO_TICKS(100));
           }
         }
         else
         {
-          if(btnB) 
+          if(btnA || btnC)
           {
+            //Serial.print("+");
             vTaskDelay(pdMS_TO_TICKS(100));
           }
-          else
+          else if(btnB)
           {
-            vTaskDelay(pdMS_TO_TICKS(50));
+            //Serial.print("+");
+            vTaskDelay(pdMS_TO_TICKS(100));
           }      
         } 
       }
