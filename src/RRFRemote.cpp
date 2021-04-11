@@ -29,18 +29,23 @@ void setup()
   //preferences.putUInt("config", 0);
 
   configCurrent = preferences.getUInt("config", 0);
-
-  if(configCurrent > n) {
+  if(configCurrent < 0 || configCurrent > n) {
     configCurrent = 0;
     preferences.putUInt("config", configCurrent);
   }
 
   roomCurrent = preferences.getUInt("room", 0);
+  if(roomCurrent < 0 || roomCurrent > 5) {
+    roomCurrent = 0;
+    preferences.putUInt("config", roomCurrent);
+  }
+
   colorCurrent = preferences.getUInt("color", 0);
   menuCurrent = preferences.getUInt("menu", 0);
   brightnessCurrent = preferences.getUInt("brightness", 128);
   followCurrent = preferences.getUInt("follow", 0);
   totCurrent = preferences.getUInt("tot", 0);
+  sysopCurrent = preferences.getUInt("sysop", 0);
 
   // LCD
   resetColor();
@@ -104,40 +109,51 @@ void setup()
 
   // Multitasking task for retreive rrf, spotnik and propag data
   xTaskCreatePinnedToCore(
-      rrftracker,   /* Function to implement the task */
-      "rrftracker", /* Name of the task */
-      8192,         /* Stack size in words */
-      NULL,         /* Task input parameter */
-      1,            /* Priority of the task */
-      NULL,         /* Task handle. */
-      0);           /* Core where the task should run */
+      rrftracker,   // Function to implement the task
+      "rrftracker", // Name of the task
+      8192,         // Stack size in words
+      NULL,         // Task input parameter
+      1,            // Priority of the task
+      NULL,         // Task handle
+      0);           // Core where the task should run
 
   xTaskCreatePinnedToCore(
-      whereis,      /* Function to implement the task */
-      "whereis",    /* Name of the task */
-      8192,         /* Stack size in words */
-      NULL,         /* Task input parameter */
-      2,            /* Priority of the task */
-      NULL,         /* Task handle. */
-      0);           /* Core where the task should run */
+      whereis,      // Function to implement the task
+      "whereis",    // Name of the task
+      8192,         // Stack size in words
+      NULL,         // Task input parameter
+      2,            // Priority of the task
+      NULL,         // Task handle
+      0);           // Core where the task should run
 
   xTaskCreatePinnedToCore(
-      hamqsl,       /* Function to implement the task */
-      "hamqsl",     /* Name of the task */
-      8192,         /* Stack size in words */
-      NULL,         /* Task input parameter */
-      1,            /* Priority of the task */
-      NULL,         /* Task handle. */
-      1);           /* Core where the task should run */
+      hamqsl,       // Function to implement the task
+      "hamqsl",     // Name of the task
+      8192,         // Stack size in words
+      NULL,         // Task input parameter
+      1,            // Priority of the task
+      NULL,         // Task handle
+      1);           // Core where the task should run
 
   xTaskCreatePinnedToCore(
-      iss,          /* Function to implement the task */
-      "iss",        /* Name of the task */
-      8192,         /* Stack size in words */
-      NULL,         /* Task input parameter */
-      2,            /* Priority of the task */
-      NULL,         /* Task handle. */
-      1);           /* Core where the task should run */
+      button,       // Function to implement the task
+      "button",     // Name of the task
+      8192,         // Stack size in words
+      NULL,         // Task input parameter
+      2,            // Priority of the task
+      NULL,         // Task handle
+      1);           // Core where the task should run
+
+  /*
+  xTaskCreatePinnedToCore(
+      iss,          // Function to implement the task
+      "iss",        // Name of the task
+      8192,         // Stack size in words
+      NULL,         // Task input parameter
+      2,            // Priority of the task
+      NULL,         // Task handle
+      1);           // Core where the task should run
+  */
 
   // Accelelerometer
   M5.IMU.Init();
@@ -190,8 +206,31 @@ void loop()
   unsigned long timer = 0, wait = 0;
 
   // Let's go
+  if (reset == 0)
+  {
+    clear();
+  }
+
   M5.Lcd.setTextPadding(0);
   timer = millis();
+
+  // Create menu
+
+  if ((String)config[(configCurrent * 6) + 5] != "")
+  {
+    menuSize = sizeof(menuSpotnikOn);
+    menu = (char **)malloc(menuSize);
+    memcpy(menu, menuSpotnikOn, menuSize);
+  }
+  else
+  {
+    menuSize = sizeof(menuSpotnikOff);
+    menu = (char **)malloc(menuSize);
+    memcpy(menu, menuSpotnikOff, menuSize);
+    
+    followCurrent = (followCurrent == 1) ? 0 : 0;
+    preferences.putUInt("follow", followCurrent);
+  }
 
   // Continue
   optimize = jsonDataNew.compareTo(jsonData);
@@ -214,19 +253,17 @@ void loop()
 
   salon = doc["abstract"][0]["Salon"];
 
-  while (strcmp(room[roomCurrent], salon) != 0)
+  if(strcmp(room[roomCurrent], salon) != 0)
   {
-    jsonData = jsonDataNew;
-    DeserializationError error = deserializeJson(doc, jsonData);
-    if (!error)
+    while (strcmp(room[roomCurrent], salon) != 0)
     {
-      salon = doc["abstract"][0]["Salon"];
+      jsonData = jsonDataNew;
+      DeserializationError error = deserializeJson(doc, jsonData);
+      if (!error)
+      {
+        salon = doc["abstract"][0]["Salon"];
+      }
     }
-  }
-
-  if (reset == 0)
-  {
-    clear();
   }
 
   emission = doc["abstract"][0]["Emission cumulée"];
@@ -458,7 +495,7 @@ void loop()
       type = 0;
     }
 
-    //type = 5;
+    //type = 4;
 
     if (type == 1)
     {
@@ -829,7 +866,6 @@ void loop()
   }
   
   // Transmit or no transmit
-
   scroll(10);
 
   if (menuMode == 0)
@@ -1107,7 +1143,7 @@ void loop()
     {
       scroll(10);
 
-      reset = (reset == 0) ? 1 : 1;
+      //reset = (reset == 0) ? 1 : 1;
       batteryLevelCurrent = getBatteryLevel(0);
       batteryChargeCurrent = isCharging();
 
@@ -1168,8 +1204,6 @@ void loop()
 
       menuRefresh = 1;
     }
-
-    reset = (reset == 0) ? 1 : 1;
     
     M5.Lcd.setFreeFont(&dot15pt7b);
     M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
@@ -1187,7 +1221,11 @@ void loop()
     {
       titleString = String(menu[menuSelected]);
 
-      if(optionString == "COULEUR") 
+      if(optionString == "SYSOP") 
+      {
+        optionString = String(sysop[sysopCurrent]);
+      }
+      else if(optionString == "COULEUR") 
       {
         optionString = String(color[colorCurrent]);
       }
@@ -1198,6 +1236,10 @@ void loop()
       else if(optionString == "CONFIG") 
       {
         optionString = String(config[(configCurrent * 6) + 4]);   
+      }
+      else if(optionString == "RAPTOR") 
+      {
+        optionString = (raptorCurrent == 0) ? "RAPTOR ON" : "RAPTOR OFF";
       }
       else if(optionString == "TOT") 
       {
@@ -1237,71 +1279,70 @@ void loop()
 
   baselineString = config[(configCurrent * 6) + 4];
 
-  if (dtmf[roomCurrent] != whereisCurrent && followCurrent == 0)
+  if ((String)config[(configCurrent * 6) + 5] != "")
   {
-    baselineString += " / " + whereisString;
-  }
+    if (dtmf[roomCurrent] != whereisCurrent && followCurrent == 0)
+    {
+      baselineString += " / " + whereisString;
+    }
 
-  if(raptorCurrent == 1) {
-    baselineString += " / RAPTOR ON" ;
-  }
+    if(raptorCurrent == 1) {
+      baselineString += " / RAPTOR ON" ;
+    }
 
-  if(followCurrent == 1) {
-    baselineString += " / FOLLOW ON";
+    if(followCurrent == 1) {
+      baselineString += " / FOLLOW ON";
+    }
+
+    // Manage follow
+    /*
+    if(followCurrent == 1) {
+      for (uint8_t i = 0; i <= 5; i++) {
+        if (dtmf[i] == whereisCurrent) {
+          if (i != roomCurrent) {
+            roomCurrent = i;
+            preferences.putUInt("room", roomCurrent);
+            reset = 0;
+            refresh = 0;
+          }
+          break;
+        }
+      }
+    }
+    */
   }
 
   M5.Lcd.drawString(baselineString, 160, 36);
   M5.Lcd.drawFastHLine(0, 0, 320, TFT_WHITE);
 
-  // Manage follow
-  if(followCurrent == 1) {
-    for (uint8_t i = 0; i <= 5; i++) {
-      if (dtmf[i] == whereisCurrent) {
-        if (i != roomCurrent) {
-          roomCurrent = i;
-          preferences.putUInt("room", roomCurrent);
-          reset = 0;
-          refresh = 0;
-        }
-        break;
-      }
-    }
-  }
-
   // Alternance and type
   scroll(10);
-
-  alternance++;
-  if(alternance == 10) {
-    refresh = 0;
-    type = (type++ < 5) ? type : 0;
-    alternance = 0;
+  if(menuMode == 0) {
+    alternance++;
+    if(alternance == 10) {
+      refresh = 0;
+      type = (type++ < 4) ? type : 0;
+      alternance = 0;
+    }
   }
   
   // Temporisation
-  if(btnA || btnB || btnC)
-  {
-    wait = LIMIT - 10;
-  }
-  else {
+  scroll(10);
+  if(menuMode == 0) {
     wait = millis() - timer;
-  }
 
-  if (wait < LIMIT)
-  {
-    uint8_t j = int((LIMIT - wait) / 10);
-    for (uint8_t i = 0; i <= j; i++)
+    if (wait < LIMIT)
     {
-      scroll(10);
+      uint8_t j = int((LIMIT - wait) / 10);
+      for (uint8_t i = 0; i <= j; i++)
+      {
+        scroll(10);
+      }
     }
   }
-
-  // Manage button
-  button();
-
+  
   // Manage screensaver
   scroll(10);
-
   if (screensaverMode == 0 && millis() - screensaver > screensaverLimit)
   {
     M5.Lcd.sleep();
@@ -1315,6 +1356,42 @@ void loop()
     M5.Lcd.setBrightness(brightnessCurrent);
   }
 
+  // Manage action
+  scroll(10);
+  reset = (reset == 0) ? 1 : 1;
+
+  if(action > 0)
+  {
+    if(action == 2) 
+    {
+      reset = 0;
+    }
+    refresh = 0;
+    action = 0;
+
+    if(menuMode)
+    {
+      menuRefresh = 0;
+    }
+  }
+
   // Manage rotation
+  scroll(10);
   getAcceleration();
+
+  // Manage follow
+  scroll(10);
+  if(followCurrent == 1) {
+    for (uint8_t i = 0; i <= 5; i++) {
+      if (dtmf[i] == whereisCurrent) {
+        if (i != roomCurrent) {
+          roomCurrent = i;
+          preferences.putUInt("room", roomCurrent);
+          reset = 0;
+          refresh = 0;
+        }
+        break;
+      }
+    }
+  }
 }

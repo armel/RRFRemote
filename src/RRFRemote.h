@@ -29,14 +29,14 @@
 #include "settings.h"
 
 // Version
-#define VERSION "2.2.2"
+#define VERSION "2.2.4"
 
 // Wifi
 WiFiClient clientRemote, clientTracker, clientHamSQL, clientWhereis;
 WiFiClientSecure clientISS;
 
 // Temporisation
-#define LIMIT 750
+#define LIMIT 500
 
 // Preferences
 Preferences preferences;
@@ -117,7 +117,11 @@ int16_t pos;
 // Misceleanous
 const char *room[] = {"RRF", "TECHNIQUE", "BAVARDAGE", "LOCAL", "INTERNATIONAL", "FON"};
 const uint8_t dtmf[] = {96, 98, 100, 101, 99, 97};
-const char *menu[] = {"CONFIG", "QSY", "FOLLOW", "RAPTOR", "PERROQUET", "REBOOT", "TOT", "COULEUR", "LUMINOSITE", "QUITTER"};
+const char *menuSpotnikOn[]  = {"CONFIG", "QSY", "FOLLOW", "RAPTOR", "PERROQUET", "SYSOP", "TOT", "COULEUR", "LUMINOSITE", "QUITTER"};
+const char *menuSpotnikOff[] = {"CONFIG", "TOT", "COULEUR", "LUMINOSITE", "QUITTER"};
+const char *sysop[] = {"REBOOT", "IP", "ACTION C", "ACTION D"};
+char **menu;
+int8_t menuSize;
 
 String tmpString;
 
@@ -152,11 +156,13 @@ int8_t menuSelected = -1;
 int8_t menuCurrent = 0;
 int8_t colorCurrent = 0;
 int8_t configCurrent = 0;
+int8_t sysopCurrent = 0;
 int8_t roomCurrent = 0;
 
 uint8_t screenMode = 0;
 uint8_t alternance = 0;
 uint8_t type = 0;
+uint8_t action = 0; 
 
 uint8_t transmitOn = 0;
 uint8_t transmitOff = 0;
