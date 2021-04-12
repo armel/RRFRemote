@@ -570,6 +570,23 @@ void button(void *pvParameters)
           {
             vTaskDelay(pdMS_TO_TICKS(250));
           }
+
+          // Create menu
+          if ((String)config[(configCurrent * 6) + 5] != "")
+          {
+            menuSize = sizeof(menuSpotnikOn);
+            menu = (char **)malloc(menuSize);
+            memcpy(menu, menuSpotnikOn, menuSize);
+          }
+          else
+          {
+            menuSize = sizeof(menuSpotnikOff);
+            menu = (char **)malloc(menuSize);
+            memcpy(menu, menuSpotnikOff, menuSize);
+            
+            followCurrent = (followCurrent == 1) ? 0 : 0;
+            preferences.putUInt("follow", followCurrent);
+          }
           menuMode = 2;
         }
 

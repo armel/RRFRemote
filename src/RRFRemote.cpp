@@ -103,6 +103,23 @@ void setup()
 
   M5.Lcd.drawString(String(WiFi.localIP().toString().c_str()), 160, 70);
 
+  // Create menu
+  if ((String)config[(configCurrent * 6) + 5] != "")
+  {
+    menuSize = sizeof(menuSpotnikOn);
+    menu = (char **)malloc(menuSize);
+    memcpy(menu, menuSpotnikOn, menuSize);
+  }
+  else
+  {
+    menuSize = sizeof(menuSpotnikOff);
+    menu = (char **)malloc(menuSize);
+    memcpy(menu, menuSpotnikOff, menuSize);
+    
+    followCurrent = (followCurrent == 1) ? 0 : 0;
+    preferences.putUInt("follow", followCurrent);
+  } 
+
   // Scroll
   pos = M5.Lcd.width();
   img.createSprite(M5.Lcd.width(), 20);
@@ -214,24 +231,6 @@ void loop()
   M5.Lcd.setTextPadding(0);
   timer = millis();
 
-  // Create menu
-
-  if ((String)config[(configCurrent * 6) + 5] != "")
-  {
-    menuSize = sizeof(menuSpotnikOn);
-    menu = (char **)malloc(menuSize);
-    memcpy(menu, menuSpotnikOn, menuSize);
-  }
-  else
-  {
-    menuSize = sizeof(menuSpotnikOff);
-    menu = (char **)malloc(menuSize);
-    memcpy(menu, menuSpotnikOff, menuSize);
-    
-    followCurrent = (followCurrent == 1) ? 0 : 0;
-    preferences.putUInt("follow", followCurrent);
-  }
-
   // Continue
   optimize = jsonDataNew.compareTo(jsonData);
 
@@ -313,17 +312,6 @@ void loop()
     }
     tx[i] = tmp;
   }
-
-  /*
-  tot = 12;
-  if(foo % 2 == 0) {
-    lastDuree[0] = "00:57";
-  } else {
-    lastDuree[0] = "00:56";
-  }
-
-  foo += 1;
-  */
 
   // Prepare message
   if(tot == 0 || lastLatitude[0] == 0)
