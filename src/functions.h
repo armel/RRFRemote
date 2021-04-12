@@ -128,11 +128,13 @@ void getAcceleration()
     if(int(accY * 1000) < -500 && M5.Lcd.getRotation() != 3) {
       reset = 0;
       refresh = 0;
+      menuRefresh = 0;
       M5.Lcd.setRotation(3);
     }
     else if(int(accY * 1000) > 500 && M5.Lcd.getRotation() != 1) {
       reset = 0;
       refresh = 0;
+      menuRefresh = 0;
       M5.Lcd.setRotation(1);
     }
   }
@@ -276,7 +278,7 @@ void whereis(void *pvParameters)
 void iss(void *pvParameters)
 {
   HTTPClient http;
-  unsigned int limit = 1 * 10 * 1000; // Retry 10 secondes
+  unsigned int limit = 1 * 30 * 1000; // Retry 30 secondes
     
   for (;;)
   {
@@ -290,13 +292,9 @@ void iss(void *pvParameters)
       if (httpCode == 200)                            // Check for the returning code
       {
         issData = http.getString(); // Get data
-        http.end(); // Free the resources
-        vTaskDelay(pdMS_TO_TICKS(limit));
       }
-      else {
-        http.end(); // Free the resources
-        vTaskDelay(pdMS_TO_TICKS(limit));
-      }
+      http.end(); // Free the resources
+      vTaskDelay(pdMS_TO_TICKS(limit));
     }
   }
 }
