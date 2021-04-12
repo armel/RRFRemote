@@ -144,16 +144,14 @@ void setup()
       NULL,         // Task handle
       1);           // Core where the task should run
 
-  /*
   xTaskCreatePinnedToCore(
       iss,          // Function to implement the task
       "iss",        // Name of the task
       8192,         // Stack size in words
       NULL,         // Task input parameter
-      2,            // Priority of the task
+      3,            // Priority of the task
       NULL,         // Task handle
       1);           // Core where the task should run
-  */
 
   // Accelelerometer
   M5.IMU.Init();
@@ -1304,23 +1302,6 @@ void loop()
     if(followCurrent == 1) {
       baselineString += " / FOLLOW ON";
     }
-
-    // Manage follow
-    /*
-    if(followCurrent == 1) {
-      for (uint8_t i = 0; i <= 5; i++) {
-        if (dtmf[i] == whereisCurrent) {
-          if (i != roomCurrent) {
-            roomCurrent = i;
-            preferences.putUInt("room", roomCurrent);
-            reset = 0;
-            refresh = 0;
-          }
-          break;
-        }
-      }
-    }
-    */
   }
 
   M5.Lcd.drawString(baselineString, 160, 36);
@@ -1332,7 +1313,7 @@ void loop()
     alternance++;
     if(alternance == 10) {
       refresh = 0;
-      type = (type++ < 4) ? type : 0;
+      type = (type++ < 5) ? type : 0;
       alternance = 0;
     }
   }
