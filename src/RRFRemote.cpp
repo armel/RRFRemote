@@ -144,6 +144,7 @@ void setup()
       NULL,         // Task handle
       1);           // Core where the task should run
 
+  /*
   xTaskCreatePinnedToCore(
       iss,          // Function to implement the task
       "iss",        // Name of the task
@@ -152,6 +153,7 @@ void setup()
       3,            // Priority of the task
       NULL,         // Task handle
       1);           // Core where the task should run
+  */
 
   // Accelelerometer
   M5.IMU.Init();
@@ -1313,7 +1315,7 @@ void loop()
     alternance++;
     if(alternance == 10) {
       refresh = 0;
-      type = (type++ < 5) ? type : 0;
+      type = (type++ < 4) ? type : 0;
       alternance = 0;
     }
   }
