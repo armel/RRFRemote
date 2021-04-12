@@ -1337,17 +1337,29 @@ void loop()
   
   // Manage screensaver
   scroll(10);
+
+  // Manage screensaver
   if (screensaverMode == 0 && millis() - screensaver > screensaverLimit)
   {
-    M5.Lcd.sleep();
+    for (uint8_t i = brightnessCurrent; i >= 1; i--)
+    {
+      M5.Lcd.setBrightness(i);
+      scroll(0);
+      delay(50);
+    }
     screensaverMode = 1;
-    M5.Lcd.setBrightness(0);
+    M5.Lcd.sleep();
   }
   else if (screensaverMode == 1 && millis() - screensaver < screensaverLimit)
   {
     M5.Lcd.wakeup();
     screensaverMode = 0;
-    M5.Lcd.setBrightness(brightnessCurrent);
+    for (uint8_t i = 1; i <= brightnessCurrent; i++)
+    {
+      M5.Lcd.setBrightness(i);
+      scroll(0);
+      delay(50);
+    }
   }
 
   // Manage action
