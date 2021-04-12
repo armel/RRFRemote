@@ -29,7 +29,7 @@
 #include "settings.h"
 
 // Version
-#define VERSION "2.2.5"
+#define VERSION "2.2.6"
 
 // Wifi
 WiFiClient clientRemote, clientTracker, clientHamSQL, clientWhereis;
@@ -156,13 +156,13 @@ String whereisString;
 
 bool reset = 0;
 bool refresh = 0;
-bool menuMode = 0;
 bool menuRefresh = 0;
 bool screensaverMode = 0;
 
 uint16_t qsy = 0;
 uint16_t issDistance = 0;
 
+int8_t menuMode = 0;
 int8_t menuSelected = -1;
 int8_t menuCurrent = 0;
 int8_t colorCurrent = 0;

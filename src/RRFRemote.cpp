@@ -314,6 +314,17 @@ void loop()
     tx[i] = tmp;
   }
 
+  /*
+  tot = 12;
+  if(foo % 2 == 0) {
+    lastDuree[0] = "00:57";
+  } else {
+    lastDuree[0] = "00:56";
+  }
+
+  foo += 1;
+  */
+
   // Prepare message
   if(tot == 0 || lastLatitude[0] == 0)
   {
@@ -1239,15 +1250,15 @@ void loop()
       }
       else if(optionString == "RAPTOR") 
       {
-        optionString = (raptorCurrent == 0) ? "RAPTOR ON" : "RAPTOR OFF";
+        optionString = (raptorCurrent == 0) ? "RAPTOR OFF" : "RAPTOR ON";
       }
       else if(optionString == "TOT") 
       {
-        optionString = (totCurrent == 0) ? "TOT ON" : "TOT OFF";
+        optionString = (totCurrent == 0) ? "TOT OFF" : "TOT ON";
       }
       else if(optionString == "FOLLOW") 
       {
-        optionString = (followCurrent == 0) ? "FOLLOW ON" : "FOLLOW OFF";
+        optionString = (followCurrent == 0) ? "FOLLOW OFF" : "FOLLOW ON";
       }
     }
 
@@ -1360,20 +1371,15 @@ void loop()
   scroll(10);
   reset = (reset == 0) ? 1 : 1;
 
-  if(action > 0)
+  switch(action) 
   {
-    if(action == 2) 
-    {
-      reset = 0;
-    }
-    refresh = 0;
-    action = 0;
-
-    if(menuMode)
-    {
-      menuRefresh = 0;
-    }
+    case 1: menuRefresh = 0; break;
+    case 2: reset = 0; refresh = 0; break;
+    case 3: reset = 0; refresh = 0; menuRefresh = 0; break;
+    case 4: reset = 0; refresh = 0; menuMode = 0; menuSelected = -1; break;
   }
+
+  action = 0;
 
   // Manage rotation
   scroll(10);
