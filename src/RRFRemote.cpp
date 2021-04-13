@@ -3,6 +3,7 @@
 
 #include "RRFRemote.h"
 #include "functions.h"
+#include "tasks.h"
 
 // Setup
 void setup()

@@ -29,7 +29,7 @@
 #include "settings.h"
 
 // Version
-#define VERSION "2.2.7"
+#define VERSION "2.2.8"
 
 // Wifi
 WiFiClient clientRemote, clientTracker, clientHamSQL, clientWhereis;
