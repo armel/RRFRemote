@@ -102,6 +102,8 @@ void setup()
     }
   }
 
+  clientISS.setInsecure(); // For ISS
+
   M5.Lcd.drawString(String(WiFi.localIP().toString().c_str()), 160, 70);
 
   // Create menu
@@ -127,8 +129,8 @@ void setup()
 
   // Multitasking task for retreive rrf, spotnik and propag data
   xTaskCreatePinnedToCore(
-      rrftracker,   // Function to implement the task
-      "rrftracker", // Name of the task
+      rrfdata,      // Function to implement the task
+      "rrfdata",    // Name of the task
       8192,         // Stack size in words
       NULL,         // Task input parameter
       1,            // Priority of the task
@@ -136,17 +138,8 @@ void setup()
       0);           // Core where the task should run
 
   xTaskCreatePinnedToCore(
-      whereis,      // Function to implement the task
-      "whereis",    // Name of the task
-      8192,         // Stack size in words
-      NULL,         // Task input parameter
-      2,            // Priority of the task
-      NULL,         // Task handle
-      0);           // Core where the task should run
-
-  xTaskCreatePinnedToCore(
-      hamqsl,       // Function to implement the task
-      "hamqsl",     // Name of the task
+      hamdata,      // Function to implement the task
+      "hamdata",    // Name of the task
       8192,         // Stack size in words
       NULL,         // Task input parameter
       1,            // Priority of the task
@@ -161,17 +154,6 @@ void setup()
       2,            // Priority of the task
       NULL,         // Task handle
       1);           // Core where the task should run
-
-  /*
-  xTaskCreatePinnedToCore(
-      iss,          // Function to implement the task
-      "iss",        // Name of the task
-      8192,         // Stack size in words
-      NULL,         // Task input parameter
-      3,            // Priority of the task
-      NULL,         // Task handle
-      1);           // Core where the task should run
-  */
 
   // Accelelerometer
   M5.IMU.Init();
@@ -212,7 +194,7 @@ void loop()
   uint16_t distance = 0;
 
   int8_t optimize = 0;
-  
+
   uint8_t i, j, k;
 
   static uint8_t lengthData = 0;
@@ -221,7 +203,8 @@ void loop()
   int16_t parenthesisBegin = 0;
   int16_t parenthesisLast = 0;
 
-  unsigned long timer = 0, wait = 0;
+  uint32_t wait = 0;
+  uint32_t timer = 0;
 
   // Let's go
   if (reset == 0)
@@ -495,7 +478,7 @@ void loop()
       type = 0;
     }
 
-    //type = 4;
+    //type = 1;
 
     if (type == 1)
     {
@@ -1304,30 +1287,13 @@ void loop()
     alternance++;
     if(alternance == 10) {
       refresh = 0;
-      type = (type++ < 4) ? type : 0;
+      type = (type++ < 5) ? type : 0;
       alternance = 0;
     }
   }
   
-  // Temporisation
-  scroll(10);
-  if(menuMode == 0) {
-    wait = millis() - timer;
-
-    if (wait < LIMIT)
-    {
-      uint8_t j = int((LIMIT - wait) / 10);
-      for (uint8_t i = 0; i <= j; i++)
-      {
-        scroll(10);
-      }
-    }
-  }
-  
   // Manage screensaver
   scroll(10);
-
-  // Manage screensaver
   if (screensaverMode == 0 && millis() - screensaver > screensaverLimit)
   {
     for (uint8_t i = brightnessCurrent; i >= 1; i--)
@@ -1381,6 +1347,21 @@ void loop()
           refresh = 0;
         }
         break;
+      }
+    }
+  }
+
+  // Manage temporisation
+  scroll(10);
+  if(menuMode == 0) {
+    wait = millis() - timer;
+
+    if (wait < LIMIT)
+    {
+      uint8_t j = int((LIMIT - wait) / 10);
+      for (uint8_t i = 0; i <= j; i++)
+      {
+        scroll(10);
       }
     }
   }

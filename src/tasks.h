@@ -1,25 +1,29 @@
 // Copyright (c) F4HWN Armel. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-// Get data from RRFTracker and manage QSY
-void rrftracker(void *pvParameters)
+// Get data from RRFTracker and manage RRFRemote client
+void rrfdata(void *pvParameters)
 {
   HTTPClient http;
-  unsigned long timer = 0, wait = 0, limit = 750; // Retry all 750ms
+  uint32_t timer = 0, wait = 0, limit = 750; // Retry all 750ms
+  uint8_t counter = 10;
+  uint16_t httpCode;
 
   for (;;)
   {
     timer = millis();
     if ((WiFi.status() == WL_CONNECTED)) // Check the current connection status
     {
-
+      // Manage QSY
       while (qsy > 0)
       {
+        //Serial.println("RRFRemote QSY");
         http.begin(clientRemote, config[(configCurrent * 6) + 5] + String("?cmd=") + String(qsy));  // Specify the URL
-        http.addHeader("Content-Type", "text/plain");                                     // Specify content-type header
-        http.setTimeout(500);                                                             // Set timeout
-        int httpCode = http.GET();                                                        // Make the request
-        if (httpCode == 200 || qsy == 2000 || qsy == 2001 || qsy == 2002 || qsy == 2003)  // Check for the returning code
+        http.addHeader("User-Agent","M5Stack");                                                     // Specify header
+        http.addHeader("Connection","keep-alive");                                                  // Specify header
+        http.setTimeout(500);                                                                       // Set timeout
+        httpCode = http.GET();                                                                      // Make the request
+        if (httpCode == 200 || qsy == 2000 || qsy == 2001 || qsy == 2002 || qsy == 2003)            // Check for the returning code
         {
           qsy = 0;
           refresh = 0;
@@ -27,20 +31,50 @@ void rrftracker(void *pvParameters)
           whereisCurrent = dtmf[roomCurrent];
           whereisString = String(room[roomCurrent]);
         }
-        http.end(); // Free the resources
       }
  
-      http.begin(clientTracker, endpointRRF[roomCurrent]);          // Specify the URL
-      http.addHeader("Content-Type", "text/plain");                 // Specify content-type header
-      http.setTimeout(750);                                         // Set Time Out
-      int httpCode = http.GET();                                    // Make the request
-      if (httpCode == 200)                                          // Check for the returning code
+      // RRFTracker GET
+      //Serial.println("RRFTracker GET");
+      http.begin(clientTracker, endpointRRF[roomCurrent]);  // Specify the URL
+      http.addHeader("User-Agent","M5Stack");               // Specify header
+      http.addHeader("Connection","keep-alive");            // Specify header
+      http.setTimeout(750);                                 // Set Time Out
+      httpCode = http.GET();                                // Make the request
+      if (httpCode == 200)                                  // Check for the returning code
       {
         jsonDataNew = http.getString(); // Get data
       } 
-      http.end(); // Free the resources
-    }
 
+      // RRFTracker GET
+      if(counter == 10)
+      {
+        //Serial.println("RRFRemote GET");
+        http.begin(clientWhereis, config[(configCurrent * 6) + 5] + String("?cmd=0"));  // Specify the URL
+        http.addHeader("User-Agent","M5Stack");                                         // Specify header
+        http.addHeader("Connection","keep-alive");                                      // Specify header
+        http.setTimeout(500);                                                           // Set Time Out
+        httpCode = http.GET();                                                          // Make the request
+        if (httpCode == 200)                                                            // Check for the returning code
+        {
+          whereisData = http.getString(); // Get data
+
+          whereisCurrent = whereisData.substring(0, whereisData.indexOf(", ")).toInt();
+
+          whereisData = whereisData.substring(whereisData.indexOf(", ") + 2);
+          whereisString = whereisData.substring(0, whereisData.indexOf(", "));
+          
+          whereisData = whereisData.substring(whereisData.indexOf(", ") + 2);
+
+          if(whereisData.substring(0, whereisData.indexOf(", ")) == "OFF") {
+            raptorCurrent = 0;
+          } else {
+            raptorCurrent = 1;
+          }
+        }
+      }
+      http.end(); // Free the resources
+      counter = (counter++ < 10) ? counter : 1;
+    }
     wait = millis() - timer;
     if (wait < limit)
     {
@@ -49,99 +83,54 @@ void rrftracker(void *pvParameters)
   }
 }
 
-// Get data from HamQSL
-void hamqsl(void *pvParameters)
+// Get data from ISS and HamSQL
+void hamdata(void *pvParameters)
 {
   HTTPClient http;
-  unsigned int limitShort = 1 * 60 * 1000; // Retry all minute
-  unsigned int limitLong = 60 * 60 * 1000; // Retry all hours
-
-  for (;;)
-  {
-    if ((WiFi.status() == WL_CONNECTED)) // Check the current connection status
-    {
-      http.begin(clientHamSQL, endpointHamQSL);     // Specify the URL
-      http.addHeader("Content-Type", "text/plain");   // Specify content-type header
-      http.setTimeout(500);                          // Set Time Out
-      int httpCode = http.GET();                      // Make the request
-      if (httpCode == 200)                            // Check for the returning code
-      {
-        xmlData = http.getString(); // Get data
-        http.end(); // Free the resources
-        vTaskDelay(pdMS_TO_TICKS(limitLong));
-      }
-      else {
-        http.end(); // Free the resources
-        vTaskDelay(pdMS_TO_TICKS(limitShort));
-      }
-    }
-  }
-}
-
-// Get data from Spotnik
-void whereis(void *pvParameters)
-{
-  HTTPClient http;
-  unsigned long timer = 0, wait = 0, limit = 1 * 10 * 1000; // Retry all 10 seconds
+  uint32_t timer = 0, wait = 0, limit = 1 * 10 * 1000; // Retry 10 secondes
+  uint16_t counter = 360;
+  uint16_t httpCode;
 
   for (;;)
   {
     timer = millis();
-    if ((WiFi.status() == WL_CONNECTED) && ((String)config[(configCurrent * 6) + 5] != "")) // Check the current connection status
+    if ((WiFi.status() == WL_CONNECTED)) // Check the current connection status
     {
-      http.begin(clientWhereis, config[(configCurrent * 6) + 5] + String("?cmd=0")); // Specify the URL
-      http.addHeader("Content-Type", "text/plain");                     // Specify content-type header
-      http.setTimeout(500);                                            // Set Time Out
-      int httpCode = http.GET();                                        // Make the request
-      if (httpCode == 200)                                              // Check for the returning code
+      // ISS Get
+      //Serial.println("ISS GET");
+      http.begin(clientISS, endpointISS);               // Specify the URL
+      http.addHeader("User-Agent","M5Stack");           // Specify header
+      http.addHeader("Connection","keep-alive");        // Specify header
+      http.setTimeout(1000);                            // Set Time Out
+      httpCode = http.GET();                            // Make the request
+      if (httpCode == 200)                              // Check for the returning code
       {
-        whereisData = http.getString(); // Get data
+        issData = http.getString(); // Get data
+      }
 
-        whereisCurrent = whereisData.substring(0, whereisData.indexOf(", ")).toInt();
-
-        whereisData = whereisData.substring(whereisData.indexOf(", ") + 2);
-        whereisString = whereisData.substring(0, whereisData.indexOf(", "));
-        
-        whereisData = whereisData.substring(whereisData.indexOf(", ") + 2);
-
-        if(whereisData.substring(0, whereisData.indexOf(", ")) == "OFF") {
-          raptorCurrent = 0;
-        } else {
-          raptorCurrent = 1;
+      // HamSQL GET (every hour)
+      if(counter == 360)
+      {
+        //Serial.println("HamSQL GET");
+        http.begin(clientHamSQL, endpointHamQSL);       // Specify the URL
+        http.addHeader("User-Agent","M5Stack");         // Specify header
+        http.addHeader("Connection","keep-alive");      // Specify header
+        http.setTimeout(1000);                          // Set Time Out
+        httpCode = http.GET();                          // Make the request
+        if (httpCode == 200)                            // Check for the returning code
+        {
+          xmlData = http.getString(); // Get data
         }
       }
+
       http.end(); // Free the resources
+      counter = (counter++ < 360) ? counter : 1;
     }
 
     wait = millis() - timer;
     if (wait < limit)
     {
       vTaskDelay(pdMS_TO_TICKS(limit - wait));
-    }
-  }
-}
-
-// Get data from ISS
-void iss(void *pvParameters)
-{
-  HTTPClient http;
-  unsigned int limit = 1 * 30 * 1000; // Retry 30 secondes
-
-  for (;;)
-  {
-    if ((WiFi.status() == WL_CONNECTED)) // Check the current connection status
-    {
-      clientISS.setInsecure();
-      http.begin(clientISS, endpointISS);     // Specify the URL
-      http.addHeader("Content-Type", "text/plain");   // Specify content-type header
-      http.setTimeout(500);                           // Set Time Out
-      int httpCode = http.GET();                      // Make the request
-      if (httpCode == 200)                            // Check for the returning code
-      {
-        issData = http.getString(); // Get data
-      }
-      http.end(); // Free the resources
-      vTaskDelay(pdMS_TO_TICKS(limit));
     }
   }
 }
@@ -186,6 +175,7 @@ void button(void *pvParameters)
       screensaver = millis(); // Screensaver update !!!
       if(screensaverMode == 1)
       {
+        //Serial.println("Wake up");
         btnA = 0;
         btnB = 0;
         btnC = 0;

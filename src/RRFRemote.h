@@ -29,7 +29,7 @@
 #include "settings.h"
 
 // Version
-#define VERSION "2.2.8"
+#define VERSION "2.2.9"
 
 // Wifi
 WiFiClient clientRemote, clientTracker, clientHamSQL, clientWhereis;
@@ -132,7 +132,6 @@ const char *menuSpotnikOn[]  = {"CONFIG", "QSY", "FOLLOW", "RAPTOR", "PERROQUET"
 const char *menuSpotnikOff[] = {"CONFIG", "TOT", "COULEUR", "LUMINOSITE", "QUITTER"};
 const char *sysop[] = {"REBOOT", "IP", "ACTION C", "ACTION D"};
 char **menu;
-int8_t menuSize;
 
 String tmpString;
 
@@ -162,6 +161,7 @@ bool screensaverMode = 0;
 uint16_t qsy = 0;
 uint16_t issDistance = 0;
 
+int8_t menuSize;
 int8_t menuMode = 0;
 int8_t menuSelected = -1;
 int8_t menuCurrent = 0;
@@ -185,5 +185,5 @@ uint8_t followCurrent = 0;
 uint8_t batteryChargeCurrent = 0;
 uint8_t batteryLevelCurrent = 0;
 
-unsigned long screensaver;
-int screensaverLimit = 5 * 60 * 1000;  // 5 minutes
+uint32_t screensaver;
+uint32_t screensaverLimit = 5 * 60 * 1000;  // 5 minutes

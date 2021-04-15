@@ -59,8 +59,8 @@ Voici la liste des fonctionnalités actuelles :
 	- du nombre de links actifs,
 	- du nombre de passages en émission depuis le début de la journée,
 	- du temps d'émission cumulé depuis le début de la journée,
-	- de l'heure.
-	- 	
+	- de l'heure,
+	- de la distance avec l'ISS,
 - affichage des links entrants et sortants, via scrolling horizontal,
 - affichage du département, du locator et de la distance du link en cours d'émission, via scrolling horizontal,
 - affichage alterné complémentaire :
@@ -69,6 +69,7 @@ Voici la liste des fonctionnalités actuelles :
 	- des blocages RRFSentinel en cours,
 	- des données techniques de l'ESP32,
 	- des données techniques de l'activité du Soleil (propagation, SFI, SN, A Index, K Index, etc.),
+	- des données techniques du positionnement de l'ISS (altitude, longitude, latitude, visibilité, etc.),
 - ventilation par nombre de TX dans la journée, sous forme d'histogramme,
 - scanner permanent de suivi d'activité sur les autres salons,
 - mise en veille automatique de l'écran, en cas d'absence d'activité pendant un temps donné.
