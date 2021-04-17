@@ -130,7 +130,7 @@ const char *room[] = {"RRF", "TECHNIQUE", "BAVARDAGE", "LOCAL", "INTERNATIONAL",
 const uint8_t dtmf[] = {96, 98, 100, 101, 99, 97};
 const char *menuSpotnikOn[]  = {"CONFIG", "QSY", "FOLLOW", "RAPTOR", "PERROQUET", "SYSOP", "TOT", "COULEUR", "LUMINOSITE", "QUITTER"};
 const char *menuSpotnikOff[] = {"CONFIG", "TOT", "COULEUR", "LUMINOSITE", "QUITTER"};
-const char *sysop[] = {"REBOOT", "IP", "ACTION C", "ACTION D"};
+const char *sysop[] = {"REBOOT", "IP", "SCAN RAPIDE", "LIBRE"};
 char **menu;
 
 String tmpString;

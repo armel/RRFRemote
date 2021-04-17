@@ -45,7 +45,7 @@ const requestHandler = (request, response) => {
       }
     });
   } else if (cmd == 2002) {
-    exec('true', (error, stdout, stderr) => {
+    exec('echo "201#" > /tmp/dtmf_uhf', (error, stdout, stderr) => {
       if (error || stderr) {
         //console.log(`error: ${error.message}`);
         //console.log(`stderr: ${stderr}`);

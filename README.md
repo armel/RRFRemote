@@ -84,7 +84,7 @@ Voici la liste des fonctionnalités actuelles :
 - appel de fonctions spéciales _librement paramétrables_ par le Sysop
 	- reboot du Spotnik,
 	- adresse IP du Spotnik,
-	- libre,
+	- scan rapide du Raptor,
 	- libre.
 
 > __Remarque 1__
@@ -93,7 +93,7 @@ Voici la liste des fonctionnalités actuelles :
 
 > __Remarque 2__
 > 
-> Concernant l'appel de fonctions spéciales paramétrables par le Sysop, elles sont au nombre de 4. C'est plutôt une fonctionnalité pour les _power user_ ayant un minimum de compétence en scripting. Par défaut, et à titre d'exemple, 2 fonctions sont déjà définies : reboot et adresse IP du Spotnik. Libre à vous de les modifier ou de définir les 2 autres qui restent libres. Il vous suffit :
+> Concernant l'appel de fonctions spéciales paramétrables par le Sysop, elles sont au nombre de 4. C'est plutôt une fonctionnalité pour les _power user_ ayant un minimum de compétence en scripting. Par défaut, et à titre d'exemple, 3 fonctions sont déjà définies : reboot et adresse IP du Spotnik ainsi que le scan rapide du Raptor. Libre à vous de les modifier ou de définir celle qui reste libre. Il vous suffit :
 > 
 > - d'adapter le code du script `RRFRemote.js`. Ces appels de fonctions correspondent aux traitements des appels des commandes `cmd` 2000, 2001, 2002 et 2003 du script `RRFRemote.js`.
 > - de renommer ces fonctions dans le fichier `RRFRemote.h` (voir la définition du tableau de pointeurs `const char *sysop[]`).
