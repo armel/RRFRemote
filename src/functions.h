@@ -25,14 +25,14 @@ String getValue(String data, char separator, uint8_t index)
 void resetColor()
 {
   switch(colorCurrent) {
-    case 0: TFT_FRONT = TFT_FRONT_ROUGE; TFT_HEADER = TFT_HEADER_ROUGE; break;
-    case 1: TFT_FRONT = TFT_FRONT_ORANGE; TFT_HEADER = TFT_HEADER_ORANGE; break;
-    case 2: TFT_FRONT = TFT_FRONT_VERT; TFT_HEADER = TFT_HEADER_VERT; break;
-    case 3: TFT_FRONT = TFT_FRONT_TURQUOISE; TFT_HEADER = TFT_HEADER_TURQUOISE; break;
-    case 4: TFT_FRONT = TFT_FRONT_BLEU; TFT_HEADER = TFT_HEADER_BLEU; break;
-    case 5: TFT_FRONT = TFT_FRONT_ROSE; TFT_HEADER = TFT_HEADER_ROSE; break;
-    case 6: TFT_FRONT = TFT_FRONT_VIOLET; TFT_HEADER = TFT_HEADER_VIOLET; break;
-    case 7: TFT_FRONT = TFT_FRONT_GRIS; TFT_HEADER = TFT_HEADER_GRIS; break;
+    case 0: TFT_FRONT = TFT_FRONT_ROUGE; TFT_HEADER = TFT_HEADER_ROUGE; TFT_BACK = TFT_BACK_ROUGE; break;
+    case 1: TFT_FRONT = TFT_FRONT_ORANGE; TFT_HEADER = TFT_HEADER_ORANGE; TFT_BACK = TFT_BACK_ORANGE; break;
+    case 2: TFT_FRONT = TFT_FRONT_VERT; TFT_HEADER = TFT_HEADER_VERT; TFT_BACK = TFT_BACK_VERT; break;
+    case 3: TFT_FRONT = TFT_FRONT_TURQUOISE; TFT_HEADER = TFT_HEADER_TURQUOISE; TFT_BACK = TFT_BACK_TURQUOISE; break;
+    case 4: TFT_FRONT = TFT_FRONT_BLEU; TFT_HEADER = TFT_HEADER_BLEU; TFT_BACK = TFT_BACK_BLEU; break;
+    case 5: TFT_FRONT = TFT_FRONT_ROSE; TFT_HEADER = TFT_HEADER_ROSE; TFT_BACK = TFT_BACK_ROSE; break;
+    case 6: TFT_FRONT = TFT_FRONT_VIOLET; TFT_HEADER = TFT_HEADER_VIOLET; TFT_BACK = TFT_BACK_VIOLET; break;
+    case 7: TFT_FRONT = TFT_FRONT_GRIS; TFT_HEADER = TFT_HEADER_GRIS; TFT_BACK = TFT_BACK_GRIS; break;
   }
 }
 
@@ -73,257 +73,6 @@ void clear()
   M5.Lcd.fillRoundRect(160, 117, 160, 122, 4, TFT_WHITE);
 }
 
-// Manage buttons
-void button()
-{
-  uint8_t right;
-  uint8_t left;
-
-  if (M5.Lcd.getRotation() == 1) {
-    right = 1;
-    left = -1;
-  } else {
-    right = -1;
-    left = 1;
-  }
-
-  // Manage screensaver
-  if (screensaverMode == 1)
-  {
-    if (btnA || btnB || btnC)
-    {
-      screensaver = millis(); // Screensaver update !!!
-    }
-  }
-  else
-  { // Mode menu inactive
-    if (menuMode == 0)
-    {
-      if(followCurrent == 0) {
-        if (btnA && followCurrent == 0)
-        {
-          screensaver = millis(); // Screensaver update !!!
-          roomCurrent += left;
-          refresh = 0;
-          reset = 0;
-
-          roomCurrent = (roomCurrent < 0) ? 5 : roomCurrent;
-          roomCurrent = (roomCurrent > 5) ? 0 : roomCurrent;
-          preferences.putUInt("room", roomCurrent);
-        }
-        else if (btnC && followCurrent == 0)
-        {
-          screensaver = millis(); // Screensaver update !!!
-          roomCurrent += right;
-          refresh = 0;
-          reset = 0;
-
-          roomCurrent = (roomCurrent < 0) ? 5 : roomCurrent;
-          roomCurrent = (roomCurrent > 5) ? 0 : roomCurrent;
-          preferences.putUInt("room", roomCurrent);
-        }
-        delay(100); // Special pause
-      }
-      if (btnB)
-      {
-        screensaver = millis(); // Screensaver update !!!
-        menuMode = 1;
-        menuRefresh = 0;
-      }
-    }
-    else
-    { // Mode menu active, no selection
-      if (menuSelected == -1)
-      {
-        if (btnA)
-        {
-          menuCurrent += left;
-        }
-        else if (btnC)
-        {
-          menuCurrent += right;
-        }
-        else if (btnB)
-        {
-          menuSelected = menuCurrent;
-          menuRefresh = 0;
-        }
-
-        menuCurrent = (menuCurrent < 0) ? 9 : menuCurrent;
-        menuCurrent = (menuCurrent > 9) ? 0 : menuCurrent;
-        preferences.putUInt("menu", menuCurrent);
-
-        delay(100); // Special pause
-      }
-      else
-      {
-        String option = String(menu[menuCurrent]);
-
-        // Mode menu active, QSY
-        if (option == "QSY")
-        {
-          qsy = dtmf[roomCurrent];
-         
-          menuMode = 0;
-          reset = 0;
-          refresh = 0;        
-        }
-        // Mode menu active, Raptor
-        else if (option == "RAPTOR")
-        {
-          qsy = 200;
-          raptorCurrent = (raptorCurrent == 0) ? 1 : 0;
-          
-          menuMode = 0;
-          reset = 0;
-          refresh = 0;
-        }
-        // Mode menu active, Parrot
-        else if (option == "PERROQUET")
-        {
-          qsy = 95;
-
-          menuMode = 0;
-          reset = 0;
-          refresh = 0;
-        }
-      // Mode menu active, Reboot
-        else if (option == "REBOOT")
-        {
-          qsy = 1000;
-
-          menuMode = 0;
-          reset = 0;
-          refresh = 0;
-        }
-        // Mode menu active, Follow
-        else if (option == "FOLLOW")
-        {
-          followCurrent = (followCurrent == 0) ? 1 : 0;
-
-          menuMode = 0;
-          reset = 0;
-          refresh = 0;
-
-          preferences.putUInt("follow", followCurrent);
-        }
-        // Mode menu active, TOT
-        else if (option == "TOT")
-        {
-          totCurrent = (totCurrent == 0) ? 1 : 0;
-
-          menuMode = 0;
-          reset = 0;
-          refresh = 0;
-
-          preferences.putUInt("tot", totCurrent);
-        }
-        // Mode menu active, Color
-        else if (option == "COULEUR")
-        {
-          int change = 0;
-          if (btnA)
-          {
-            colorCurrent += left;
-            change = 1;
-          }
-          else if (btnC)
-          {
-            colorCurrent += right;
-            change = 1;
-          }
-          else if (btnB)
-          {
-            menuMode = 0;
-            reset = 0;
-            refresh = 0;
-          }
-
-          colorCurrent = (colorCurrent < 0) ? 7 : colorCurrent;
-          colorCurrent = (colorCurrent > 7) ? 0 : colorCurrent;
-
-          if(change == 1) {
-            clear();
-            menuRefresh = 0;
-            refresh = 0;
-            change = 0;
-          }
-
-          preferences.putUInt("color", colorCurrent);
-        }
-        // Mode menu active, Brightness
-        else if (option == "LUMINOSITE")
-        {
-          if (btnA)
-          {
-            brightnessCurrent += left;
-          }
-          else if (btnC)
-          {
-            brightnessCurrent += right;
-          }
-          else if (btnB)
-          {
-            menuMode = 0;
-            reset = 0;
-            refresh = 0;
-          }
-
-          brightnessCurrent = (brightnessCurrent < 10) ? 10 : brightnessCurrent;
-          brightnessCurrent = (brightnessCurrent > 128) ? 128 : brightnessCurrent;
-          preferences.putUInt("brightness", brightnessCurrent);
-          M5.Lcd.setBrightness(brightnessCurrent);
-        }
-        // Mode menu active, Config
-        else if (option == "CONFIG")
-        {
-          if (btnA)
-          {
-            configCurrent += left;
-          }
-          else if (btnC)
-          {
-            configCurrent += right;
-          }
-          else if (btnB)
-          {
-            menuMode = 0;
-            reset = 0;
-            refresh = 0;
-          }
-
-          size_t n = sizeof(config) / sizeof(config[0]);
-          n = (n / 6) - 1;
-
-          configCurrent = (configCurrent < 0) ? n : configCurrent;
-          configCurrent = (configCurrent > n) ? 0 : configCurrent;
-          preferences.putUInt("config", configCurrent);
-
-          if(btnB) {
-            WiFi.begin(config[(configCurrent * 6)], config[(configCurrent * 6) + 1]);
-            while (WiFi.status() != WL_CONNECTED)
-            {
-              delay(500);
-            }
-          }
-        }        
-        // Mode menu active, Escape
-        else if (option == "QUITTER")
-        {
-          menuMode = 0;
-          reset = 0;
-          refresh = 0;
-        }
-      }
-    }
-  }
-
-  // Clean current value
-  btnA = 0;
-  btnB = 0;
-  btnC = 0;
-}
-
 // Build scroll
 void buildScroll()
 {
@@ -353,10 +102,6 @@ void buildScroll()
 // Scroll
 void scroll(uint8_t pause)
 {
-  if(btnA == 0 && btnB == 0 && btnC == 0) {
-    getButton();
-  }
-
   // Sprite for scroll
   buildScroll();
   img.pushSprite(0, 78);
@@ -383,11 +128,13 @@ void getAcceleration()
     if(int(accY * 1000) < -500 && M5.Lcd.getRotation() != 3) {
       reset = 0;
       refresh = 0;
+      menuRefresh = 0;
       M5.Lcd.setRotation(3);
     }
     else if(int(accY * 1000) > 500 && M5.Lcd.getRotation() != 1) {
       reset = 0;
       refresh = 0;
+      menuRefresh = 0;
       M5.Lcd.setRotation(1);
     }
   }
@@ -405,153 +152,4 @@ int computeDistance(float latitudeLink, float longitudeLink) {
   r = round(12742 * asin(sqrt(a)));
   
   return r;
-}
-
-// Get data from RRFTracker and manage QSY
-void rrftracker(void *pvParameters)
-{
-  HTTPClient http;
-  unsigned long timer = 0, wait = 0, limit = 750; // Retry all 750ms
-
-  for (;;)
-  {
-    timer = millis();
-    if ((WiFi.status() == WL_CONNECTED)) // Check the current connection status
-    {
-
-      while (qsy > 0)
-      {
-        http.begin(clientRemote, config[(configCurrent * 6) + 5] + String("?dtmf=") + String(qsy));  // Specify the URL
-        http.addHeader("Content-Type", "text/plain");                                     // Specify content-type header
-        http.setTimeout(500);                                                             // Set timeout
-        int httpCode = http.GET();                                                        // Make the request
-        if (httpCode == 200 || qsy == 1000) // Check for the returning code
-        {
-          qsy = 0;
-          refresh = 0;
-          menuMode = 0;
-          whereisCurrent = dtmf[roomCurrent];
-          whereisString = String(room[roomCurrent]);
-        }
-        http.end(); // Free the resources
-      }
- 
-      http.begin(clientTracker, endpointRRF[roomCurrent]);          // Specify the URL
-      http.addHeader("Content-Type", "text/plain");                 // Specify content-type header
-      http.setTimeout(750);                                         // Set Time Out
-      int httpCode = http.GET();                                    // Make the request
-      if (httpCode == 200)                                          // Check for the returning code
-      {
-        jsonDataNew = http.getString(); // Get data
-      } 
-      http.end(); // Free the resources
-    }
-
-    wait = millis() - timer;
-    if (wait < limit)
-    {
-      vTaskDelay(pdMS_TO_TICKS(limit - wait));
-    }
-  }
-}
-
-// Get data from HamQSL
-void hamqsl(void *pvParameters)
-{
-  HTTPClient http;
-  unsigned int limitShort = 1 * 60 * 1000; // Retry all minute
-  unsigned int limitLong = 60 * 60 * 1000; // Retry all hours
-
-  for (;;)
-  {
-    if ((WiFi.status() == WL_CONNECTED)) // Check the current connection status
-    {
-      http.begin(clientHamSQL, endpointHamQSL);     // Specify the URL
-      http.addHeader("Content-Type", "text/plain");   // Specify content-type header
-      http.setTimeout(1000);                          // Set Time Out
-      int httpCode = http.GET();                      // Make the request
-      if (httpCode == 200)                            // Check for the returning code
-      {
-        xmlData = http.getString(); // Get data
-        http.end(); // Free the resources
-        vTaskDelay(pdMS_TO_TICKS(limitLong));
-      }
-      else {
-        http.end(); // Free the resources
-        vTaskDelay(pdMS_TO_TICKS(limitShort));
-      }
-    }
-  }
-}
-
-// Get data from Spotnik
-void whereis(void *pvParameters)
-{
-  HTTPClient http;
-  unsigned long timer = 0, wait = 0, limit = 1 * 10 * 1000; // Retry all 10 seconds
-
-  for (;;)
-  {
-    timer = millis();
-    if ((WiFi.status() == WL_CONNECTED)) // Check the current connection status
-    {
-      http.begin(clientWhereis, config[(configCurrent * 6) + 5] + String("?dtmf=0")); // Specify the URL
-      http.addHeader("Content-Type", "text/plain");                     // Specify content-type header
-      http.setTimeout(1000);                                            // Set Time Out
-      int httpCode = http.GET();                                        // Make the request
-      if (httpCode == 200)                                              // Check for the returning code
-      {
-        whereisData = http.getString(); // Get data
-
-        whereisCurrent = whereisData.substring(0, whereisData.indexOf(", ")).toInt();
-
-        whereisData = whereisData.substring(whereisData.indexOf(", ") + 2);
-        whereisString = whereisData.substring(0, whereisData.indexOf(", "));
-        
-        whereisData = whereisData.substring(whereisData.indexOf(", ") + 2);
-
-        if(whereisData.substring(0, whereisData.indexOf(", ")) == "OFF") {
-          raptorCurrent = 0;
-        } else {
-          raptorCurrent = 1;
-        }
-      }
-      http.end(); // Free the resources
-    }
-
-    wait = millis() - timer;
-    if (wait < limit)
-    {
-      vTaskDelay(pdMS_TO_TICKS(limit - wait));
-    }
-  }
-}
-
-// Get data from ISS
-void iss(void *pvParameters)
-{
-  HTTPClient http;
-  unsigned int limit = 1 * 10 * 1000; // Retry 10 secondes
-    
-  for (;;)
-  {
-    if ((WiFi.status() == WL_CONNECTED)) // Check the current connection status
-    {
-      clientISS.setInsecure();
-      http.begin(clientISS, endpointISS);     // Specify the URL
-      http.addHeader("Content-Type", "text/plain");   // Specify content-type header
-      http.setTimeout(1000);                          // Set Time Out
-      int httpCode = http.GET();                      // Make the request
-      if (httpCode == 200)                            // Check for the returning code
-      {
-        issData = http.getString(); // Get data        
-        http.end(); // Free the resources
-        vTaskDelay(pdMS_TO_TICKS(limit));
-      }
-      else {
-        http.end(); // Free the resources
-        vTaskDelay(pdMS_TO_TICKS(limit));
-      }
-    }
-  }
 }

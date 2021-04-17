@@ -60,8 +60,7 @@ Voici la liste des fonctionnalités actuelles :
 	- du nombre de passages en émission depuis le début de la journée,
 	- du temps d'émission cumulé depuis le début de la journée,
 	- de l'heure,
-	- de la distance avec l'ISS.
-	
+	- de la distance avec l'ISS,
 - affichage des links entrants et sortants, via scrolling horizontal,
 - affichage du département, du locator et de la distance du link en cours d'émission, via scrolling horizontal,
 - affichage alterné complémentaire :
@@ -79,12 +78,25 @@ Voici la liste des fonctionnalités actuelles :
 Voici la liste des fonctionnalités actuelles :
 
 - QSY vers un salon,
-- Activation et désactivation du RRFRaptor,
-- Bascule en mode _Perroquet_,
-- Bascule en mode _Follow_,
-- Reboot du Spotnik.
+- activation et désactivation du RRFRaptor,
+- bascule en mode _Perroquet_,
+- bascule en mode _Follow_,
+- appel de fonctions spéciales _librement paramétrables_ par le Sysop
+	- reboot du Spotnik,
+	- adresse IP du Spotnik,
+	- scan rapide du Raptor,
+	- libre.
 
+> __Remarque 1__
+> 
 > Si le mode _Follow_ est activé, le RRFRemote affichera les informations du salon sur lequel se trouve votre link et il le suivra au grès de ses QSY. Il ne sera pas possible de consulter les informations d'un autre salon, à l'aide des boutons gauche et droit, à moins évidement de désactiver le mode _Follow_.
+
+> __Remarque 2__
+> 
+> Concernant l'appel de fonctions spéciales paramétrables par le Sysop, elles sont au nombre de 4. C'est plutôt une fonctionnalité pour les _power user_ ayant un minimum de compétence en scripting. Par défaut, et à titre d'exemple, 3 fonctions sont déjà définies : reboot et adresse IP du Spotnik ainsi que le scan rapide du Raptor. Libre à vous de les modifier ou de définir celle qui reste libre. Il vous suffit :
+> 
+> - d'adapter le code du script `RRFRemote.js`. Ces appels de fonctions correspondent aux traitements des appels des commandes `cmd` 2000, 2001, 2002 et 2003 du script `RRFRemote.js`.
+> - de renommer ces fonctions dans le fichier `RRFRemote.h` (voir la définition du tableau de pointeurs `const char *sysop[]`).
 
 ## En complément 
 Il est possible de :
@@ -137,6 +149,19 @@ Editer le fichier `src/settings.h` afin de renseigner vos paramétrages, à savo
 * votre indicatif,
 * et pour finir, l'url d'accès au script de contrôle que vous avez installé précédement (par défaut, c'est `http://adresse_ip_de_votre_spotnik:3000/`).
 
+> __Remarque 1__
+> 
+> Si vous n'avez pas de Spotnik, vous pouvez tout de même utiliser le RRFRemote. Il suffit juste de ne pas indiquer d'url. Une telle configuration pourrait ressembler à ceci :
+
+```
+const char *config[] = {
+  "Livebox", "mdp_Livebox", "48.8482855", "2.2708201", "F4HWN H", "",
+};
+```
+
+
+> __Remarque 2__
+> 
 > À noter que, depuis la version 2.0.0, il est possible de gérer autant de configurations que vous le souhaitez ! Cela vous permet, par exemple, de préconfigurer vos paramétrages pour une utilisation locale sur le Wifi de votre QRA et une configuration mobile sur le Wifi de votre Smartphone. Une telle configuration pourrait ressembler à ceci :
 > 
 

@@ -29,19 +29,20 @@
 #include "settings.h"
 
 // Version
-#define VERSION "2.2.2"
+#define VERSION "2.3.0"
 
 // Wifi
 WiFiClient clientRemote, clientTracker, clientHamSQL, clientWhereis;
 WiFiClientSecure clientISS;
 
 // Temporisation
-#define LIMIT 750
+#define LIMIT 500
 
 // Preferences
 Preferences preferences;
 
 // Color (https://www.rapidtables.com/web/color/RGB_Color.html)
+// Color (https://color.adobe.com/fr/create/color-wheel)
 typedef struct __attribute__((__packed__))
 {
   uint8_t r;
@@ -49,7 +50,8 @@ typedef struct __attribute__((__packed__))
   uint8_t b;
 } colorType;
 
-colorType TFT_BACK = {48, 48, 48};
+//colorType TFT_BACK = {48, 48, 48};
+colorType TFT_BACK = {117, 0, 76};
 colorType TFT_GRAY = {128, 128, 128};
 colorType TFT_FRONT = {51, 153, 255};
 colorType TFT_HEADER = {0, 76, 153};
@@ -58,27 +60,36 @@ const char *color[] = {"ROUGE", "ORANGE", "VERT", "TURQUOISE", "BLEU", "ROSE", "
 
 const colorType TFT_FRONT_ROUGE = {255, 102, 102};
 const colorType TFT_HEADER_ROUGE = {153, 0, 0};
+const colorType TFT_BACK_ROUGE = {117, 0, 31};
 
-const colorType TFT_FRONT_ORANGE = {255, 178, 102};
-const colorType TFT_HEADER_ORANGE = {255, 128, 0};
+const colorType TFT_FRONT_ORANGE = {255, 157, 77};
+const colorType TFT_HEADER_ORANGE = {255, 116, 0};
+const colorType TFT_BACK_ORANGE = {217, 65, 0};
 
 const colorType TFT_FRONT_VERT = {51, 204, 102};
 const colorType TFT_HEADER_VERT = {0, 102, 51};
+const colorType TFT_BACK_VERT = {0, 64, 32};
 
 const colorType TFT_FRONT_TURQUOISE = {51, 204, 204};
 const colorType TFT_HEADER_TURQUOISE = {0, 102, 102};
+const colorType TFT_BACK_TURQUOISE = {0, 64, 64};
 
-const colorType TFT_FRONT_BLEU = {51, 153, 255};
-const colorType TFT_HEADER_BLEU = {0, 76, 153};
+const colorType TFT_FRONT_BLEU = {51, 110, 170};
+const colorType TFT_HEADER_BLEU = {0, 57, 115};
+const colorType TFT_BACK_BLEU = {0, 51, 102};
 
 const colorType TFT_FRONT_ROSE = {255, 102, 178};
 const colorType TFT_HEADER_ROSE = {204, 0, 102};
+const colorType TFT_BACK_ROSE = {117, 0, 76};
 
 const colorType TFT_FRONT_VIOLET = {165, 105, 189};
 const colorType TFT_HEADER_VIOLET = {91, 44, 111};
+const colorType TFT_BACK_VIOLET = {61, 30, 74};
 
-const colorType TFT_FRONT_GRIS = {192, 192, 192};
+const colorType TFT_FRONT_GRIS = {160, 160, 160};
 const colorType TFT_HEADER_GRIS = {96, 96, 96};
+const colorType TFT_BACK_GRIS = {64, 64, 64};
+
 
 // Icon
 #define ICON_FONT &icon_works_webfont14pt7b
@@ -117,7 +128,10 @@ int16_t pos;
 // Misceleanous
 const char *room[] = {"RRF", "TECHNIQUE", "BAVARDAGE", "LOCAL", "INTERNATIONAL", "FON"};
 const uint8_t dtmf[] = {96, 98, 100, 101, 99, 97};
-const char *menu[] = {"CONFIG", "QSY", "FOLLOW", "RAPTOR", "PERROQUET", "REBOOT", "TOT", "COULEUR", "LUMINOSITE", "QUITTER"};
+const char *menuSpotnikOn[]  = {"CONFIG", "QSY", "FOLLOW", "RAPTOR", "PERROQUET", "SYSOP", "TOT", "COULEUR", "LUMINOSITE", "QUITTER"};
+const char *menuSpotnikOff[] = {"CONFIG", "TOT", "COULEUR", "LUMINOSITE", "QUITTER"};
+const char *sysop[] = {"REBOOT", "IP", "SCAN RAPIDE", "LIBRE"};
+char **menu;
 
 String tmpString;
 
@@ -141,22 +155,25 @@ String whereisString;
 
 bool reset = 0;
 bool refresh = 0;
-bool menuMode = 0;
 bool menuRefresh = 0;
 bool screensaverMode = 0;
 
 uint16_t qsy = 0;
 uint16_t issDistance = 0;
 
+int8_t menuSize;
+int8_t menuMode = 0;
 int8_t menuSelected = -1;
 int8_t menuCurrent = 0;
 int8_t colorCurrent = 0;
 int8_t configCurrent = 0;
+int8_t sysopCurrent = 0;
 int8_t roomCurrent = 0;
 
 uint8_t screenMode = 0;
 uint8_t alternance = 0;
 uint8_t type = 0;
+uint8_t action = 0; 
 
 uint8_t transmitOn = 0;
 uint8_t transmitOff = 0;
@@ -168,5 +185,5 @@ uint8_t followCurrent = 0;
 uint8_t batteryChargeCurrent = 0;
 uint8_t batteryLevelCurrent = 0;
 
-unsigned long screensaver;
-int screensaverLimit = 5 * 60 * 1000;  // 5 minutes
+uint32_t screensaver;
+uint32_t screensaverLimit = 5 * 60 * 1000;  // 5 minutes

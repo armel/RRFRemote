@@ -5,7 +5,7 @@ const requestHandler = (request, response) => {
   console.log(request.url);
   const { exec } = require('child_process');
   const input = new URL('https://localhost/' + request.url);
-  const dtmf = parseInt(input.searchParams.get('dtmf'));
+  const cmd = parseInt(input.searchParams.get('cmd'));
 
   var room = {"rrf":      "96, RRF", 
               "fon":      "97, FON", 
@@ -18,7 +18,7 @@ const requestHandler = (request, response) => {
               "default":  "95, PERROQUET"
             };
 
-  if (dtmf == 1000) {
+  if (cmd == 2000) {
     exec('reboot', (error, stdout, stderr) => {
       if (error || stderr) {
         //console.log(`error: ${error.message}`);
@@ -28,11 +28,50 @@ const requestHandler = (request, response) => {
       else {
         //console.log(`stdout: ${stdout}`);
         response.writeHead(200);
-        response.end('Reboot done');
+        response.end('Action A done');
       }
     });
-  } else if (dtmf > 0) {
-      exec('echo "' + dtmf + '#" > /tmp/dtmf_uhf', (error, stdout, stderr) => {
+  } else if (cmd == 2001) {
+    exec('echo "93#" > /tmp/dtmf_uhf', (error, stdout, stderr) => {
+      if (error || stderr) {
+        //console.log(`error: ${error.message}`);
+        //console.log(`stderr: ${stderr}`);
+        response.writeHead(500);
+      }
+      else {
+        //console.log(`stdout: ${stdout}`);
+        response.writeHead(200);
+        response.end('Action B done');
+      }
+    });
+  } else if (cmd == 2002) {
+    exec('echo "201#" > /tmp/dtmf_uhf', (error, stdout, stderr) => {
+      if (error || stderr) {
+        //console.log(`error: ${error.message}`);
+        //console.log(`stderr: ${stderr}`);
+        response.writeHead(500);
+      }
+      else {
+        //console.log(`stdout: ${stdout}`);
+        response.writeHead(200);
+        response.end('Action C done');
+      }
+    });
+  } else if (cmd == 2003) {
+    exec('true', (error, stdout, stderr) => {
+      if (error || stderr) {
+        //console.log(`error: ${error.message}`);
+        //console.log(`stderr: ${stderr}`);
+        response.writeHead(500);
+      }
+      else {
+        //console.log(`stdout: ${stdout}`);
+        response.writeHead(200);
+        response.end('Action D done');
+      }
+    });
+  } else if (cmd > 0 && cmd < 1000) {
+      exec('echo "' + cmd + '#" > /tmp/dtmf_uhf', (error, stdout, stderr) => {
       if (error || stderr) {
         //console.log(`error: ${error.message}`);
         //console.log(`stderr: ${stderr}`);

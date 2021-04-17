@@ -3,6 +3,7 @@
 
 #include "RRFRemote.h"
 #include "functions.h"
+#include "tasks.h"
 
 // Setup
 void setup()
@@ -29,18 +30,23 @@ void setup()
   //preferences.putUInt("config", 0);
 
   configCurrent = preferences.getUInt("config", 0);
-
-  if(configCurrent > n) {
+  if(configCurrent < 0 || configCurrent > n) {
     configCurrent = 0;
     preferences.putUInt("config", configCurrent);
   }
 
   roomCurrent = preferences.getUInt("room", 0);
+  if(roomCurrent < 0 || roomCurrent > 5) {
+    roomCurrent = 0;
+    preferences.putUInt("config", roomCurrent);
+  }
+
   colorCurrent = preferences.getUInt("color", 0);
   menuCurrent = preferences.getUInt("menu", 0);
   brightnessCurrent = preferences.getUInt("brightness", 128);
   followCurrent = preferences.getUInt("follow", 0);
   totCurrent = preferences.getUInt("tot", 0);
+  sysopCurrent = preferences.getUInt("sysop", 0);
 
   // LCD
   resetColor();
@@ -96,7 +102,26 @@ void setup()
     }
   }
 
+  clientISS.setInsecure(); // For ISS
+
   M5.Lcd.drawString(String(WiFi.localIP().toString().c_str()), 160, 70);
+
+  // Create menu
+  if ((String)config[(configCurrent * 6) + 5] != "")
+  {
+    menuSize = sizeof(menuSpotnikOn);
+    menu = (char **)malloc(menuSize);
+    memcpy(menu, menuSpotnikOn, menuSize);
+  }
+  else
+  {
+    menuSize = sizeof(menuSpotnikOff);
+    menu = (char **)malloc(menuSize);
+    memcpy(menu, menuSpotnikOff, menuSize);
+    
+    followCurrent = (followCurrent == 1) ? 0 : 0;
+    preferences.putUInt("follow", followCurrent);
+  } 
 
   // Scroll
   pos = M5.Lcd.width();
@@ -104,40 +129,31 @@ void setup()
 
   // Multitasking task for retreive rrf, spotnik and propag data
   xTaskCreatePinnedToCore(
-      rrftracker,   /* Function to implement the task */
-      "rrftracker", /* Name of the task */
-      8192,         /* Stack size in words */
-      NULL,         /* Task input parameter */
-      1,            /* Priority of the task */
-      NULL,         /* Task handle. */
-      0);           /* Core where the task should run */
+      rrfdata,      // Function to implement the task
+      "rrfdata",    // Name of the task
+      8192,         // Stack size in words
+      NULL,         // Task input parameter
+      1,            // Priority of the task
+      NULL,         // Task handle
+      0);           // Core where the task should run
 
   xTaskCreatePinnedToCore(
-      whereis,      /* Function to implement the task */
-      "whereis",    /* Name of the task */
-      8192,         /* Stack size in words */
-      NULL,         /* Task input parameter */
-      2,            /* Priority of the task */
-      NULL,         /* Task handle. */
-      0);           /* Core where the task should run */
+      hamdata,      // Function to implement the task
+      "hamdata",    // Name of the task
+      8192,         // Stack size in words
+      NULL,         // Task input parameter
+      1,            // Priority of the task
+      NULL,         // Task handle
+      1);           // Core where the task should run
 
   xTaskCreatePinnedToCore(
-      hamqsl,       /* Function to implement the task */
-      "hamqsl",     /* Name of the task */
-      8192,         /* Stack size in words */
-      NULL,         /* Task input parameter */
-      1,            /* Priority of the task */
-      NULL,         /* Task handle. */
-      1);           /* Core where the task should run */
-
-  xTaskCreatePinnedToCore(
-      iss,          /* Function to implement the task */
-      "iss",        /* Name of the task */
-      8192,         /* Stack size in words */
-      NULL,         /* Task input parameter */
-      2,            /* Priority of the task */
-      NULL,         /* Task handle. */
-      1);           /* Core where the task should run */
+      button,       // Function to implement the task
+      "button",     // Name of the task
+      8192,         // Stack size in words
+      NULL,         // Task input parameter
+      2,            // Priority of the task
+      NULL,         // Task handle
+      1);           // Core where the task should run
 
   // Accelelerometer
   M5.IMU.Init();
@@ -178,7 +194,7 @@ void loop()
   uint16_t distance = 0;
 
   int8_t optimize = 0;
-  
+
   uint8_t i, j, k;
 
   static uint8_t lengthData = 0;
@@ -187,9 +203,15 @@ void loop()
   int16_t parenthesisBegin = 0;
   int16_t parenthesisLast = 0;
 
-  unsigned long timer = 0, wait = 0;
+  uint32_t wait = 0;
+  uint32_t timer = 0;
 
   // Let's go
+  if (reset == 0)
+  {
+    clear();
+  }
+
   M5.Lcd.setTextPadding(0);
   timer = millis();
 
@@ -214,19 +236,17 @@ void loop()
 
   salon = doc["abstract"][0]["Salon"];
 
-  while (strcmp(room[roomCurrent], salon) != 0)
+  if(strcmp(room[roomCurrent], salon) != 0)
   {
-    jsonData = jsonDataNew;
-    DeserializationError error = deserializeJson(doc, jsonData);
-    if (!error)
+    while (strcmp(room[roomCurrent], salon) != 0)
     {
-      salon = doc["abstract"][0]["Salon"];
+      jsonData = jsonDataNew;
+      DeserializationError error = deserializeJson(doc, jsonData);
+      if (!error)
+      {
+        salon = doc["abstract"][0]["Salon"];
+      }
     }
-  }
-
-  if (reset == 0)
-  {
-    clear();
   }
 
   emission = doc["abstract"][0]["Emission cumulée"];
@@ -458,7 +478,7 @@ void loop()
       type = 0;
     }
 
-    //type = 5;
+    //type = 1;
 
     if (type == 1)
     {
@@ -829,7 +849,6 @@ void loop()
   }
   
   // Transmit or no transmit
-
   scroll(10);
 
   if (menuMode == 0)
@@ -1107,7 +1126,7 @@ void loop()
     {
       scroll(10);
 
-      reset = (reset == 0) ? 1 : 1;
+      //reset = (reset == 0) ? 1 : 1;
       batteryLevelCurrent = getBatteryLevel(0);
       batteryChargeCurrent = isCharging();
 
@@ -1168,8 +1187,6 @@ void loop()
 
       menuRefresh = 1;
     }
-
-    reset = (reset == 0) ? 1 : 1;
     
     M5.Lcd.setFreeFont(&dot15pt7b);
     M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
@@ -1187,7 +1204,11 @@ void loop()
     {
       titleString = String(menu[menuSelected]);
 
-      if(optionString == "COULEUR") 
+      if(optionString == "SYSOP") 
+      {
+        optionString = String(sysop[sysopCurrent]);
+      }
+      else if(optionString == "COULEUR") 
       {
         optionString = String(color[colorCurrent]);
       }
@@ -1199,13 +1220,17 @@ void loop()
       {
         optionString = String(config[(configCurrent * 6) + 4]);   
       }
+      else if(optionString == "RAPTOR") 
+      {
+        optionString = (raptorCurrent == 0) ? "RAPTOR OFF" : "RAPTOR ON";
+      }
       else if(optionString == "TOT") 
       {
-        optionString = (totCurrent == 0) ? "TOT ON" : "TOT OFF";
+        optionString = (totCurrent == 0) ? "TOT OFF" : "TOT ON";
       }
       else if(optionString == "FOLLOW") 
       {
-        optionString = (followCurrent == 0) ? "FOLLOW ON" : "FOLLOW OFF";
+        optionString = (followCurrent == 0) ? "FOLLOW OFF" : "FOLLOW ON";
       }
     }
 
@@ -1237,23 +1262,81 @@ void loop()
 
   baselineString = config[(configCurrent * 6) + 4];
 
-  if (dtmf[roomCurrent] != whereisCurrent && followCurrent == 0)
+  if ((String)config[(configCurrent * 6) + 5] != "")
   {
-    baselineString += " / " + whereisString;
-  }
+    if (dtmf[roomCurrent] != whereisCurrent && followCurrent == 0)
+    {
+      baselineString += " / " + whereisString;
+    }
 
-  if(raptorCurrent == 1) {
-    baselineString += " / RAPTOR ON" ;
-  }
+    if(raptorCurrent == 1) {
+      baselineString += " / RAPTOR ON" ;
+    }
 
-  if(followCurrent == 1) {
-    baselineString += " / FOLLOW ON";
+    if(followCurrent == 1) {
+      baselineString += " / FOLLOW ON";
+    }
   }
 
   M5.Lcd.drawString(baselineString, 160, 36);
   M5.Lcd.drawFastHLine(0, 0, 320, TFT_WHITE);
 
+  // Alternance and type
+  scroll(10);
+  if(menuMode == 0) {
+    alternance++;
+    if(alternance == 10) {
+      refresh = 0;
+      type = (type++ < 5) ? type : 0;
+      alternance = 0;
+    }
+  }
+  
+  // Manage screensaver
+  scroll(10);
+  if (screensaverMode == 0 && millis() - screensaver > screensaverLimit)
+  {
+    for (uint8_t i = brightnessCurrent; i >= 1; i--)
+    {
+      M5.Lcd.setBrightness(i);
+      scroll(0);
+      delay(50);
+    }
+    screensaverMode = 1;
+    M5.Lcd.sleep();
+  }
+  else if (screensaverMode == 1 && millis() - screensaver < screensaverLimit)
+  {
+    M5.Lcd.wakeup();
+    screensaverMode = 0;
+    for (uint8_t i = 1; i <= brightnessCurrent; i++)
+    {
+      M5.Lcd.setBrightness(i);
+      scroll(0);
+      delay(50);
+    }
+  }
+
+  // Manage action
+  scroll(10);
+  reset = (reset == 0) ? 1 : 1;
+
+  switch(action) 
+  {
+    case 1: menuRefresh = 0; break;
+    case 2: reset = 0; refresh = 0; break;
+    case 3: reset = 0; refresh = 0; menuRefresh = 0; break;
+    case 4: reset = 0; refresh = 0; menuMode = 0; menuSelected = -1; break;
+  }
+
+  action = 0;
+
+  // Manage rotation
+  scroll(10);
+  getAcceleration();
+
   // Manage follow
+  scroll(10);
   if(followCurrent == 1) {
     for (uint8_t i = 0; i <= 5; i++) {
       if (dtmf[i] == whereisCurrent) {
@@ -1268,53 +1351,18 @@ void loop()
     }
   }
 
-  // Alternance and type
+  // Manage temporisation
   scroll(10);
-
-  alternance++;
-  if(alternance == 10) {
-    refresh = 0;
-    type = (type++ < 5) ? type : 0;
-    alternance = 0;
-  }
-  
-  // Temporisation
-  if(btnA || btnB || btnC)
-  {
-    wait = LIMIT - 10;
-  }
-  else {
+  if(menuMode == 0) {
     wait = millis() - timer;
-  }
 
-  if (wait < LIMIT)
-  {
-    uint8_t j = int((LIMIT - wait) / 10);
-    for (uint8_t i = 0; i <= j; i++)
+    if (wait < LIMIT)
     {
-      scroll(10);
+      uint8_t j = int((LIMIT - wait) / 10);
+      for (uint8_t i = 0; i <= j; i++)
+      {
+        scroll(10);
+      }
     }
   }
-
-  // Manage button
-  button();
-
-  // Manage screensaver
-  scroll(10);
-
-  if (screensaverMode == 0 && millis() - screensaver > screensaverLimit)
-  {
-    M5.Lcd.sleep();
-    screensaverMode = 1;
-    M5.Lcd.setBrightness(0);
-  }
-  else if (screensaverMode == 1 && millis() - screensaver < screensaverLimit)
-  {
-    M5.Lcd.wakeup();
-    screensaverMode = 0;
-    M5.Lcd.setBrightness(brightnessCurrent);
-  }
-
-  // Manage rotation
-  getAcceleration();
 }
