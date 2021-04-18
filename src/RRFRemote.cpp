@@ -161,7 +161,7 @@ void setup()
   // Let's go after temporisation
   delay(1000);
 
-  for (uint8_t i = 0; i < 120; i++)
+  for (uint8_t i = 0; i <= 120; i++)
   {
     M5.Lcd.drawFastHLine(0, i, 320, TFT_BLACK);
     M5.Lcd.drawFastHLine(0, 240 - i, 320, TFT_BLACK);

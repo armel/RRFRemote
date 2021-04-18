@@ -113,11 +113,11 @@ void speaker()
 // Manage Tone
 void totTone()
 {
-    // Core2 is not ready
+    M5.Axp.SetLed(1);
 }
 
 // Manage Mute
 void totMute()
 {
-    // Core2 is not ready
+    M5.Axp.SetLed(0);
 }
