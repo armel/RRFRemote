@@ -348,7 +348,7 @@ void button(void *pvParameters)
         change = (change < 10) ? 10 : change;
         change = (change > 128) ? 128 : change;
 
-        if(change != colorCurrent) 
+        if(change != brightnessCurrent) 
         {
           brightnessCurrent = change;
           preferences.putUInt("brightness", brightnessCurrent);

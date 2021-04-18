@@ -103,7 +103,7 @@ Il est possible de :
 
 - changer les couleurs du thème,
 - régler la luminosité de l'écran,
-- activer une alerte sonore TOT,
+- activer une alerte sonore TOT (_alerte visuelle via la LED sur le CORE2_),
 - passer d'une configuration à une autre.
 
 # Installation
@@ -140,6 +140,30 @@ nohup node /root/RRFRemote.js &
 
 Ouvrez le projet RRFRemote avec PlateformIO for VSCode.
 
+### Fichier `src/RRFRemote.h`
+
+Ligne 5, vérifier que la constante `BOARD` correspond bien à votre type de M5Stack (par défaut, la constante est initialisée à `GREY`). Donc, indiquer : 
+
+- `GREY` si vous avez un M5Stack GREY
+
+```
+#define BOARD GREY
+```
+
+- `BASIC` si vous avez un M5Stack BASIC
+
+```
+#define BOARD BASIC
+```
+
+- `CORE2` si vous avez un M5Stack CORE2
+
+```
+#define BOARD CORE2
+```
+
+### Fichier `src/settings.h`
+
 Editer le fichier `src/settings.h` afin de renseigner vos paramétrages, à savoir :
 
 * votre SSID Wifi,
@@ -158,7 +182,6 @@ const char *config[] = {
   "Livebox", "mdp_Livebox", "48.8482855", "2.2708201", "F4HWN H", "",
 };
 ```
-
 
 > __Remarque 2__
 > 
@@ -196,13 +219,7 @@ default_envs = m5stack-core-esp32
 
 Cela revient à changer la plate-forme cible, le point-virgule étant un commentaire.
 
-En complément, éditer le fichier `src/RRFRemote.h` et modifier la ligne,
-
-```
-#define BOARD BASIC
-```
-
-Par,
+En complément, comme déjà évoqué, vérifier que vous avez bien modifié la constante `BOARD` dans le fichier `src/RRFRemote.h` en indiquant :
 
 ```
 #define BOARD CORE2
