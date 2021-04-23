@@ -123,7 +123,7 @@ Le plus simple est d'installer [PlateformIO for VSCode](https://platformio.org/i
 > 
 > Afin de contourner ce problème, rechercher les __Alias d'exécution de l'appli__ et décocher les occurences __Installeur d'applications python.exe et python3.exe__. 
 > 
-> ![](https://github.com/armel/RRFRemote/blob/main/img/Windows.jpeg)
+> ![Windows](https://github.com/armel/RRFRemote/blob/main/img/Windows.jpeg)
 >
 > Fermer et relancer VSCode.
 > 
