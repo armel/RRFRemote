@@ -92,11 +92,8 @@ void buildScroll()
   img.setTextWrap(false);      // Turn of wrap so we can print past end of sprite
 
   // Need to print twice so text appears to wrap around at left and right edges
-  img.setCursor(pos, 2); // Print text at pos
-  img.print(message);
-
-  img.setCursor(pos - w, 2); // Print text at pos - sprite width
-  img.print(message);
+  img.drawString(message, pos, 2);
+  img.drawString(message, pos - w, 2);
 }
 
 // Scroll
