@@ -435,6 +435,7 @@ void button(void *pvParameters)
 
         if(change != configCurrent) 
         {
+          whereisString = "-";
           configCurrent = change;
           preferences.putUInt("config", configCurrent);
         }
