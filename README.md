@@ -121,13 +121,12 @@ Le plus simple est d'installer [PlateformIO for VSCode](https://platformio.org/i
 > Terminal will be reused by tasks, presse any key to close it.
 > ```
 > 
-> Afin de contourner ce problème, rechercher les __Alias d'exécution de l'appli__ et décocher les occurences __Installeur d'applications python.exe et python3.exe__. 
+> Afin de contourner ce problème, rechercher les __Alias d'exécution de l'appli__ et décocher les occurences __Installeur d'applications python.exe__ et __python3.exe__. Puis fermer et relancer VSCode.
 > 
 > ![Windows](https://github.com/armel/RRFRemote/blob/main/img/Windows.jpeg)
 >
-> Fermer et relancer VSCode.
 > 
-> (merci à F5LGW Stéphane pour l'information et VA2NRJ Robin pour la capture d'écran).
+> Un grand merci à F5LGW Stéphane pour l'information et VA2NRJ Robin pour la capture d'écran.
 
 
 Ensuite, toujours sur votre PC ou Mac, cloner le projet RRFRemote via la commande `git` :
