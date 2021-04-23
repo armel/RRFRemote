@@ -91,6 +91,9 @@ void setup()
     }
     if(WiFi.status() != WL_CONNECTED)
     {
+      menuCurrent = 0;
+      preferences.putUInt("menu", menuCurrent);
+      
       configCurrent += 1;
       if(configCurrent > n) {
         configCurrent = 0;
@@ -98,8 +101,6 @@ void setup()
       }
     }
     else {
-      menuCurrent = 0;
-      preferences.putUInt("menu", menuCurrent);
       preferences.putUInt("config", configCurrent);
       break;    
     }
