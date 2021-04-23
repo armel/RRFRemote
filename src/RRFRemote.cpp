@@ -98,6 +98,9 @@ void setup()
       }
     }
     else {
+      menuCurrent = 0;
+      preferences.putUInt("menu", menuCurrent);
+      preferences.putUInt("config", configCurrent);
       break;    
     }
   }
