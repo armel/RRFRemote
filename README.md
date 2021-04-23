@@ -114,7 +114,21 @@ Il est possible de :
 
 Le plus simple est d'installer [PlateformIO for VSCode](https://platformio.org/install/ide?install=vscode) sur votre PC (Linux ou Windows) ou sur votre Mac (Intel ou M1). C'est un environnement de développement multiplateforme et multilangage performant, en plus d'être agréable à utiliser.
 
-> Quelques OMs ont eu des difficultés à installer PlateformIO sous Windows. Dans la majorité des cas, une réinstallation de Python règle le problème. 
+> Quelques OMs ont eu des difficultés à installer PlateformIO sous Windows. Le message d'erreur le plus courant est:
+> 
+> ```
+> The terminal process failed to launch: Path to shell executable "c:\Users\armel\RRFRemote\platformio.exe" does not exist.
+> Terminal will be reused by tasks, presse any key to close it.
+> ```
+> 
+> Afin de contourner ce problème, rechercher les __Alias d'exécution de l'appli__ et décocher les occurences __Installeur d'applications python.exe et python3.exe__. 
+> 
+> ![Windows](https://github.com/armel/RRFRemote/blob/main/img/Windows.jpeg)
+>
+> Fermer et relancer VSCode.
+> 
+> (merci à F5LGW Stéphane pour l'information et VA2NRJ Robin pour la capture d'écran).
+
 
 Ensuite, toujours sur votre PC ou Mac, cloner le projet RRFRemote via la commande `git` :
 
