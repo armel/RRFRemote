@@ -77,17 +77,22 @@ void clear()
 void buildScroll()
 {
   int16_t h = 20;
-  int16_t w = M5.Lcd.width();
+  int16_t w;
+  int16_t limit =  M5.Lcd.width();
 
+
+  img.setTextSize(1);          // Font size scaling is x1
+  img.setTextFont(2);          // Font 2 selected
+  w = img.textWidth(message) + 40;
+  if (w < limit)
+  {
+    w = limit;
+  }
   // We could just use fillSprite(color) but lets be a bit more creative...
   while (h--)
     img.drawFastHLine(0, h, w, TFT_BLACK);
 
-  // Now print text on top of the graphics
-  img.setTextSize(1);          // Font size scaling is x1
-  img.setTextFont(2);          // Font 2 selected
-  //img.setFreeFont(&tahoma6pt7b);
-  
+  // Now print text on top of the graphics  
   img.setTextColor(TFT_WHITE); // White text, no background colour
   img.setTextWrap(false);      // Turn of wrap so we can print past end of sprite
 
@@ -99,6 +104,8 @@ void buildScroll()
 // Scroll
 void scroll(uint8_t pause)
 {
+  int16_t limit =  M5.Lcd.width();
+
   // Sprite for scroll
   buildScroll();
   img.pushSprite(0, 78);
@@ -106,7 +113,13 @@ void scroll(uint8_t pause)
   pos -= 1;
   if (pos == 0)
   {
-    pos = M5.Lcd.width();
+    img.setTextSize(1);          // Font size scaling is x1
+    img.setTextFont(2);          // Font 2 selected
+    pos = img.textWidth(message) + 40;
+    if (pos < limit)
+    {
+      pos = limit;
+    }
   }
 
   delay(pause);

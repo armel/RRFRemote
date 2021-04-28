@@ -307,11 +307,11 @@ void loop()
     tmpString = String(entrant);
     if (tmpString.length() > 0)
     {
-      message = "+ " + tmpString.substring(0, tmpString.indexOf(","));
+      message = "+ " + tmpString;
       tmpString = String(sortant);
       if (tmpString.length() > 0)
       {
-        message += " - " + tmpString.substring(0, tmpString.indexOf(","));
+        message += " - " + tmpString;
       }
     }
     else
@@ -319,7 +319,7 @@ void loop()
       tmpString = String(sortant);
       if (tmpString.length() > 0)
       {
-        message = "- " + tmpString.substring(0, tmpString.indexOf(","));
+        message = "- " + tmpString;
       }
     }
   }
