@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 // Board
-#define BOARD GREY
+#define BOARD BASIC
 
 #define BASIC 1
 #define GREY  2
@@ -29,7 +29,7 @@
 #include "settings.h"
 
 // Version
-#define VERSION "2.3.4"
+#define VERSION "2.3.5"
 
 // Wifi
 WiFiClient clientRemote, clientTracker, clientHamSQL, clientWhereis;

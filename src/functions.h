@@ -73,13 +73,15 @@ void clear()
   M5.Lcd.fillRoundRect(160, 117, 160, 122, 4, TFT_WHITE);
 }
 
-// Build scroll
-void buildScroll()
+// Scroll
+void scroll(uint8_t pause)
 {
   int16_t h = 20;
   int16_t w;
   int16_t limit =  M5.Lcd.width();
 
+  //delay(pause);
+  vTaskDelay(pdMS_TO_TICKS(pause));
 
   img.setTextSize(1);          // Font size scaling is x1
   img.setTextFont(2);          // Font 2 selected
@@ -99,30 +101,14 @@ void buildScroll()
   // Need to print twice so text appears to wrap around at left and right edges
   img.drawString(message, pos, 2);
   img.drawString(message, pos - w, 2);
-}
 
-// Scroll
-void scroll(uint8_t pause)
-{
-  int16_t limit =  M5.Lcd.width();
-
-  // Sprite for scroll
-  buildScroll();
   img.pushSprite(0, 78);
 
   pos -= 1;
   if (pos == 0)
   {
-    img.setTextSize(1);          // Font size scaling is x1
-    img.setTextFont(2);          // Font 2 selected
-    pos = img.textWidth(message) + 40;
-    if (pos < limit)
-    {
-      pos = limit;
-    }
+    pos = w;
   }
-
-  delay(pause);
 }
 
 // Detect rotation
