@@ -1340,4 +1340,10 @@ void loop()
       }
     }
   }
+  else {
+    for (uint8_t i = 0; i <= 4; i++)
+    {
+      scroll(15);
+    }
+  }
 }
