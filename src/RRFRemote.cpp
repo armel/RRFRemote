@@ -230,6 +230,10 @@ void loop()
       doc = docNew;
       jsonData = jsonDataNew;
     }
+    for (uint8_t i = 0; i <= 4; i++)
+    {
+      scroll(10);
+    }
   }
 
   salon = doc["abstract"][0]["Salon"];
@@ -1333,17 +1337,17 @@ void loop()
 
     if (wait < LIMIT)
     {
-      uint8_t j = int((LIMIT - wait) / 15);
+      uint8_t j = int((LIMIT - wait) / 10);
       for (uint8_t i = 0; i <= j; i++)
       {
-        scroll(15);
+        scroll(10);
       }
     }
   }
   else {
     for (uint8_t i = 0; i <= 4; i++)
     {
-      scroll(15);
+      scroll(10);
     }
   }
 }

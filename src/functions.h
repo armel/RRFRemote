@@ -76,7 +76,7 @@ void clear()
 // Scroll
 void scroll(uint8_t pause)
 {
-  int16_t h = 20;
+  int16_t h = 18;
   int16_t w;
   int16_t limit =  M5.Lcd.width();
 
@@ -85,6 +85,7 @@ void scroll(uint8_t pause)
 
   img.setTextSize(1);          // Font size scaling is x1
   img.setTextFont(2);          // Font 2 selected
+
   w = img.textWidth(message) + 40;
   if (w < limit)
   {
