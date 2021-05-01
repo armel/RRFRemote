@@ -232,7 +232,7 @@ void loop()
     }
     for (uint8_t i = 0; i <= 4; i++)
     {
-      scroll(10);
+      scroll(12);
     }
   }
 
@@ -1337,17 +1337,17 @@ void loop()
 
     if (wait < LIMIT)
     {
-      uint8_t j = int((LIMIT - wait) / 10);
+      uint8_t j = int((LIMIT - wait) / 12);
       for (uint8_t i = 0; i <= j; i++)
       {
-        scroll(10);
+        scroll(12);
       }
     }
   }
   else {
     for (uint8_t i = 0; i <= 4; i++)
     {
-      scroll(10);
+      scroll(12);
     }
   }
 }
