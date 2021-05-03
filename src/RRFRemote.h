@@ -29,7 +29,7 @@
 #include "settings.h"
 
 // Version
-#define VERSION "2.3.7"
+#define VERSION "2.3.8"
 
 // Wifi
 WiFiClient clientRemote, clientTracker, clientHamSQL, clientWhereis;
@@ -128,8 +128,8 @@ int16_t pos;
 // Misceleanous
 const char *room[] = {"RRF", "TECHNIQUE", "BAVARDAGE", "LOCAL", "INTERNATIONAL", "FON"};
 const uint8_t dtmf[] = {96, 98, 100, 101, 99, 97};
-const char *menuSpotnikOn[]  = {"CONFIG", "QSY", "FOLLOW", "RAPTOR", "PERROQUET", "SYSOP", "TOT", "COULEUR", "LUMINOSITE", "QUITTER"};
-const char *menuSpotnikOff[] = {"CONFIG", "TOT", "COULEUR", "LUMINOSITE", "QUITTER"};
+const char *menuSpotnikOn[]  = {"CONFIG", "QSY", "FOLLOW", "RAPTOR", "PERROQUET", "SYSOP", "TOT", "ISS", "COULEUR", "LUMINOSITE", "QUITTER"};
+const char *menuSpotnikOff[] = {"CONFIG", "TOT", "ISS", "COULEUR", "LUMINOSITE", "QUITTER"};
 const char *sysop[] = {"REBOOT", "IP", "SCAN RAPIDE", "LIBRE"};
 char **menu;
 
@@ -170,7 +170,6 @@ int8_t configCurrent = 0;
 int8_t sysopCurrent = 0;
 int8_t roomCurrent = 0;
 
-uint8_t screenMode = 0;
 uint8_t alternance = 0;
 uint8_t type = 0;
 uint8_t action = 0; 
@@ -180,6 +179,7 @@ uint8_t transmitOff = 0;
 uint8_t whereisCurrent = 0;
 uint8_t brightnessCurrent = 32;
 uint8_t totCurrent = 0;
+uint8_t issCurrent = 0;
 uint8_t raptorCurrent = 0;
 uint8_t followCurrent = 0;
 uint8_t batteryChargeCurrent = 0;

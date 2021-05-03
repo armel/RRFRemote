@@ -94,7 +94,7 @@ void hamdata(void *pvParameters)
   for (;;)
   {
     timer = millis();
-    if ((WiFi.status() == WL_CONNECTED)) // Check the current connection status
+    if ((WiFi.status() == WL_CONNECTED) && issCurrent == 1) // Check the current connection status
     {
       // ISS Get
       //Serial.println("ISS GET");
@@ -284,6 +284,16 @@ void button(void *pvParameters)
         change = (change == 0) ? 1 : 0;
         followCurrent = change;
         preferences.putUInt("follow", followCurrent);
+        vTaskDelay(pdMS_TO_TICKS(1000));
+        menuMode = 2;
+      }
+      // Mode menu active, ISS
+      else if (option == "ISS")
+      {
+        change = issCurrent;
+        change = (change == 0) ? 1 : 0;
+        issCurrent = change;
+        preferences.putUInt("iss", issCurrent);
         vTaskDelay(pdMS_TO_TICKS(1000));
         menuMode = 2;
       }
