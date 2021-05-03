@@ -73,43 +73,43 @@ void clear()
   M5.Lcd.fillRoundRect(160, 117, 160, 122, 4, TFT_WHITE);
 }
 
-// Build scroll
-void buildScroll()
+// Scroll
+void scroll(uint8_t pause)
 {
-  int16_t h = 20;
-  int16_t w = M5.Lcd.width();
+  int16_t h = 18;
+  int16_t w;
+  int16_t limit =  M5.Lcd.width();
 
+  //delay(pause);
+  vTaskDelay(pdMS_TO_TICKS(pause));
+
+  img.setTextSize(1);          // Font size scaling is x1
+  img.setTextFont(2);          // Font 2 selected
+
+  w = img.textWidth(message) + 40;
+  if (w < limit)
+  {
+    w = limit;
+  }
   // We could just use fillSprite(color) but lets be a bit more creative...
   while (h--)
     img.drawFastHLine(0, h, w, TFT_BLACK);
 
-  // Now print text on top of the graphics
-  img.setTextSize(1);          // Font size scaling is x1
-  img.setTextFont(2);          // Font 2 selected
-  //img.setFreeFont(&tahoma6pt7b);
-  
+  // Now print text on top of the graphics  
   img.setTextColor(TFT_WHITE); // White text, no background colour
   img.setTextWrap(false);      // Turn of wrap so we can print past end of sprite
 
   // Need to print twice so text appears to wrap around at left and right edges
   img.drawString(message, pos, 2);
   img.drawString(message, pos - w, 2);
-}
 
-// Scroll
-void scroll(uint8_t pause)
-{
-  // Sprite for scroll
-  buildScroll();
   img.pushSprite(0, 78);
 
   pos -= 1;
   if (pos == 0)
   {
-    pos = M5.Lcd.width();
+    pos = w;
   }
-
-  delay(pause);
 }
 
 // Detect rotation

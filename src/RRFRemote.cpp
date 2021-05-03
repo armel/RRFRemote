@@ -178,8 +178,9 @@ void setup()
 // Main loop
 void loop()
 {
-  DynamicJsonDocument doc(8192);
-  DynamicJsonDocument docISS(2048);
+  static DynamicJsonDocument doc(8192);
+  DynamicJsonDocument docNew(8192);
+  StaticJsonDocument<512> docISS;
 
   char swap[32];
 
@@ -221,21 +222,18 @@ void loop()
 
   // Continue
   optimize = jsonDataNew.compareTo(jsonData);
-
-  if (optimize != 0) // If change
+  if(optimize != 0) // If change
   {
-    DeserializationError error = deserializeJson(doc, jsonDataNew); // Deserialize the JSON document
-
-    if (!error) // And no error
+    DeserializationError error = deserializeJson(docNew, jsonDataNew);
+    if (!error) // JSON is valid
     {
+      doc = docNew;
       jsonData = jsonDataNew;
     }
-    else {
-      deserializeJson(doc, jsonData); // Read last valid jsonData
+    for (uint8_t i = 0; i <= 4; i++)
+    {
+      scroll(12);
     }
-  }
-  else {
-    deserializeJson(doc, jsonData);   // Read last valid jsonData
   }
 
   salon = doc["abstract"][0]["Salon"];
@@ -307,11 +305,11 @@ void loop()
     tmpString = String(entrant);
     if (tmpString.length() > 0)
     {
-      message = "+ " + tmpString.substring(0, tmpString.indexOf(","));
+      message = "+ " + tmpString;
       tmpString = String(sortant);
       if (tmpString.length() > 0)
       {
-        message += " - " + tmpString.substring(0, tmpString.indexOf(","));
+        message += " - " + tmpString;
       }
     }
     else
@@ -319,7 +317,7 @@ void loop()
       tmpString = String(sortant);
       if (tmpString.length() > 0)
       {
-        message = "- " + tmpString.substring(0, tmpString.indexOf(","));
+        message = "- " + tmpString;
       }
     }
   }
@@ -344,8 +342,6 @@ void loop()
   if (screenMode == 0) {
 
     // Histogram
-    scroll(10);
-
     j = 6;
     k = 0;
 
@@ -366,11 +362,7 @@ void loop()
       k += 2;
     }
 
-    scroll(10);
-
     M5.Lcd.setFreeFont(0);
-    //M5.Lcd.setFreeFont(&tahoma6pt7b);
-
     M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
     M5.Lcd.setTextDatum(CL_DATUM);
 
@@ -380,8 +372,6 @@ void loop()
     }
 
     // Elsewhere
-    scroll(10);
-
     JsonObject obj = doc.as<JsonObject>();
     elsewhereString = obj["elsewhere"].as<String>();
 
@@ -459,8 +449,6 @@ void loop()
     }
 
     // Log
-    scroll(10);
-
     M5.Lcd.setFreeFont(&tahoma6pt7b);
     //M5.Lcd.setFreeFont(&arial6pt7b);
     //M5.Lcd.setFreeFont(&Ubuntu_Medium6pt7b);
@@ -853,8 +841,6 @@ void loop()
   }
   
   // Transmit or no transmit
-  scroll(10);
-
   if (menuMode == 0)
   {
     menuSelected = -1;
@@ -929,9 +915,9 @@ void loop()
         if((String(salon) == "RRF" && tot > 135) || (tot > 285))
         {
           totTone();
-          scroll(10);
+          delay(10);
           totTone();
-          scroll(10);
+          delay(10);
           totMute();
         }
       }
@@ -1128,9 +1114,6 @@ void loop()
 
     if(reset == 0 || batteryLevelCurrent != getBatteryLevel(0) || batteryChargeCurrent != isCharging())
     {
-      scroll(10);
-
-      //reset = (reset == 0) ? 1 : 1;
       batteryLevelCurrent = getBatteryLevel(0);
       batteryChargeCurrent = isCharging();
 
@@ -1256,8 +1239,6 @@ void loop()
   }
 
   // Status line
-  scroll(10);
-
   M5.Lcd.setFreeFont(0);
 
   M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
@@ -1286,7 +1267,6 @@ void loop()
   M5.Lcd.drawFastHLine(0, 0, 320, TFT_WHITE);
 
   // Alternance and type
-  scroll(10);
   if(menuMode == 0) {
     alternance++;
     if(alternance == 10) {
@@ -1297,7 +1277,6 @@ void loop()
   }
   
   // Manage screensaver
-  scroll(10);
   if (screensaverMode == 0 && millis() - screensaver > screensaverLimit)
   {
     for (uint8_t i = brightnessCurrent; i >= 1; i--)
@@ -1322,7 +1301,6 @@ void loop()
   }
 
   // Manage action
-  scroll(10);
   reset = (reset == 0) ? 1 : 1;
 
   switch(action) 
@@ -1336,11 +1314,9 @@ void loop()
   action = 0;
 
   // Manage rotation
-  scroll(10);
   getAcceleration();
 
   // Manage follow
-  scroll(10);
   if(followCurrent == 1) {
     for (uint8_t i = 0; i <= 5; i++) {
       if (dtmf[i] == whereisCurrent) {
@@ -1356,17 +1332,22 @@ void loop()
   }
 
   // Manage temporisation
-  scroll(10);
   if(menuMode == 0) {
     wait = millis() - timer;
 
     if (wait < LIMIT)
     {
-      uint8_t j = int((LIMIT - wait) / 10);
+      uint8_t j = int((LIMIT - wait) / 12);
       for (uint8_t i = 0; i <= j; i++)
       {
-        scroll(10);
+        scroll(12);
       }
+    }
+  }
+  else {
+    for (uint8_t i = 0; i <= 4; i++)
+    {
+      scroll(12);
     }
   }
 }
