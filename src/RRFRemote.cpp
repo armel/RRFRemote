@@ -134,7 +134,7 @@ void setup()
 
   // Init and get time
   configTime(utc * 3600, daylight * 3600, ntpServer);
-  printLocalTime();
+  updateLocalTime();
 
   // Multitasking task for retreive rrf, spotnik and propag data
   xTaskCreatePinnedToCore(
@@ -1004,7 +1004,7 @@ void loop()
       if (type == 0)
       {
         //dateString = getValue(date, ' ', 4);
-        printLocalTime();
+        updateLocalTime();
 
         if (dateStringOld != dateString)
         {

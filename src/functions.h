@@ -152,7 +152,7 @@ int computeDistance(float latitudeLink, float longitudeLink) {
 }
 
 // Get local time
-void printLocalTime()
+void updateLocalTime()
 {
   char timeStringBuff[10]; //10 chars should be enough
 
