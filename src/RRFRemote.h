@@ -30,7 +30,7 @@
 #include "settings.h"
 
 // Version
-#define VERSION "2.3.9"
+#define VERSION "2.3.10"
 
 // Wifi
 WiFiClient clientRemote, clientTracker, clientHamSQL, clientWhereis;
@@ -40,6 +40,7 @@ WiFiClientSecure clientISS;
 const char* ntpServer = "pool.ntp.org";
 const int8_t utc = 1;       // UTC + 1 for France
 const int8_t daylight = 1;  // If your country observes Daylight saving time set it to 1. Otherwise, set it to 0.
+int8_t shift = 0;
 
 // Temporisation
 #define LIMIT 500

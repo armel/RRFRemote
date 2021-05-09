@@ -372,7 +372,27 @@ void loop()
 
   for (uint8_t i = 0; i < 5; i++)
   {
-    M5.Lcd.drawString(String(legende[i]), 4 + (i * 34), 162);
+    int8_t delta = String(legende[i]).toInt();
+
+    delta += shift;
+
+    if(delta < 0)
+    {
+      delta = 24 + delta;
+    }
+    else if(delta > 23) 
+    {
+      delta = delta - 24;
+    }
+
+    if(delta < 10)
+    {
+      M5.Lcd.drawString("0" + String(delta), 4 + (i * 34), 162);
+    }
+    else
+    {
+      M5.Lcd.drawString(String(delta), 4 + (i * 34), 162);
+    }
   }
 
   // Elsewhere
@@ -819,6 +839,28 @@ void loop()
 
       tmpString = String(lastHeure[i]);
       tmpString = tmpString.substring(0, 5);
+
+      int8_t delta = tmpString.substring(0, 2).toInt();
+      
+      delta += shift;
+
+      if(delta < 0)
+      {
+        delta = 24 + delta;
+      }
+      else if(delta > 23) 
+      {
+        delta = delta - 24;
+      }
+
+      if(delta < 10)
+      {
+        tmpString = "0" + String(delta) + tmpString.substring(2, 5);
+      }
+      else
+      {
+        tmpString = String(delta) + tmpString.substring(2, 5);
+      }
 
       M5.Lcd.drawString(tmpString, 163, k + j);
 
