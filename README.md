@@ -155,6 +155,8 @@ Ouvrez le projet RRFRemote avec PlateformIO for VSCode.
 
 ### Fichier `src/RRFRemote.h`
 
+#### Type de carte
+
 Ligne 5, vérifier que la constante `BOARD` correspond bien à votre type de M5Stack (par défaut, la constante est initialisée à `GREY`). Donc, indiquer : 
 
 - `GREY` si vous avez un M5Stack GREY
@@ -174,6 +176,11 @@ Ligne 5, vérifier que la constante `BOARD` correspond bien à votre type de M5S
 ```
 #define BOARD CORE2
 ```
+
+#### Timezone
+
+Si vous êtes hors de France, il est désormais possible de configurer votre _timezone_ afin qu'elle soit prise en compte lors de l'affichage de l'heure. Ligne 41, variable `utc`, indiquez l'UTC de votre région (par défaut, 1 pour la France). Et ligne 42, variable `daylight`, indiquez si votre région observe l'heure d'été (par défaut, 1 pour la France). Dans le cas contraire, indiquez 0.
+
 
 ### Fichier `src/settings.h`
 

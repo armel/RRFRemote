@@ -25,15 +25,21 @@
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
 #include <Preferences.h>
+#include "time.h"
 #include "font.h"
 #include "settings.h"
 
 // Version
-#define VERSION "2.3.8"
+#define VERSION "2.3.9"
 
 // Wifi
 WiFiClient clientRemote, clientTracker, clientHamSQL, clientWhereis;
 WiFiClientSecure clientISS;
+
+// Timezone
+const char* ntpServer = "pool.ntp.org";
+const int8_t utc = 1;       // UTC + 1 for France
+const int8_t daylight = 1;  // If your country observes Daylight saving time set it to 1. Otherwise, set it to 0.
 
 // Temporisation
 #define LIMIT 500
@@ -89,7 +95,6 @@ const colorType TFT_BACK_VIOLET = {61, 30, 74};
 const colorType TFT_FRONT_GRIS = {160, 160, 160};
 const colorType TFT_HEADER_GRIS = {96, 96, 96};
 const colorType TFT_BACK_GRIS = {64, 64, 64};
-
 
 // Icon
 #define ICON_FONT &icon_works_webfont14pt7b
