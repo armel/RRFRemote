@@ -132,6 +132,10 @@ void setup()
   pos = M5.Lcd.width();
   img.createSprite(M5.Lcd.width(), 20);
 
+  // Init and get time
+  configTime(utc * 3600, daylight * 3600, ntpServer);
+  printLocalTime();
+
   // Multitasking task for retreive rrf, spotnik and propag data
   xTaskCreatePinnedToCore(
       rrfdata,      // Function to implement the task
@@ -185,7 +189,7 @@ void loop()
 
   char swap[32];
 
-  const char *emission = "", *date = "", *salon = "", *elsewhere = "", *entrant = "", *sortant = "";
+  const char *emission = "", *salon = "", *elsewhere = "", *entrant = "", *sortant = "";
   const char *lastIndicatif[10], *lastDuree[10], *lastHeure[10], *lastLocator[10], *lastRegion[10];
   const char *allIndicatif[10], *allDuree[10];
   const char *iptableIndicatif[10], *iptableType[10];
@@ -253,7 +257,6 @@ void loop()
   }
 
   emission = doc["abstract"][0]["Emission cumulée"];
-  date = doc["abstract"][0]["Date"];
   linkTotal = doc["abstract"][0]["Links connectés"];
   linkActif = doc["abstract"][0]["Links actifs"];
   txTotal = doc["abstract"][0]["TX total"];
@@ -472,7 +475,7 @@ void loop()
     type = 0;
   }
 
-  //type = 1;
+  //type = 0;
 
   scroll(10);
   if (type == 1)
@@ -958,7 +961,8 @@ void loop()
 
       if (type == 0)
       {
-        dateString = getValue(date, ' ', 4);
+        //dateString = getValue(date, ' ', 4);
+        printLocalTime();
 
         if (dateStringOld != dateString)
         {
