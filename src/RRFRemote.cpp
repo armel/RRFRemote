@@ -375,16 +375,9 @@ void loop()
   {
     int8_t delta = String(legende[i]).toInt();
 
-    delta += shift - (1 + dst);
-
-    if(delta < 0)
-    {
-      delta = 24 + delta;
-    }
-    else if(delta > 23) 
-    {
-      delta = delta - 24;
-    }
+    delta += utc + daylight - (1 + dst);
+    delta = (delta < 00) ? 24 + delta : delta;
+    delta = (delta > 23) ? delta - 24 : delta;
 
     if(delta < 10)
     {
@@ -843,16 +836,9 @@ void loop()
 
       int8_t delta = tmpString.substring(0, 2).toInt();
       
-      delta += shift - (1 + dst);
-
-      if(delta < 0)
-      {
-        delta = 24 + delta;
-      }
-      else if(delta > 23) 
-      {
-        delta = delta - 24;
-      }
+      delta += utc + daylight - (1 + dst);
+      delta = (delta < 00) ? 24 + delta : delta;
+      delta = (delta > 23) ? delta - 24 : delta;
 
       if(delta < 10)
       {

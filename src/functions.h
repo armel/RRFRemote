@@ -162,12 +162,9 @@ void updateLocalTime()
     Serial.println("Failed to obtain time");
     return;
   }
-
-  shift = utc + daylight;
   
   strftime(timeStringBuff, sizeof(timeStringBuff), "%H:%M:%S", &timeinfo);
   //Serial.println(timeStringBuff);
-  //Serial.println(shift);
 
   dateString = String(timeStringBuff);
 }
