@@ -163,15 +163,8 @@ void updateLocalTime()
     return;
   }
 
-  if(timeinfo.tm_isdst == 1)
-  {
-    shift = utc + 1;
-    shift = shift - 2;
-  }
-  else{
-    shift = utc - 2;
-  }
-
+  shift = utc + daylight;
+  
   strftime(timeStringBuff, sizeof(timeStringBuff), "%H:%M:%S", &timeinfo);
   //Serial.println(timeStringBuff);
   //Serial.println(shift);
