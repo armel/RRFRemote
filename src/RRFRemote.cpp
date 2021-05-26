@@ -134,7 +134,7 @@ void setup()
 
   // Init and get time
   configTime(utc * 3600, daylight * 3600, ntpServer);
-  printLocalTime();
+  updateLocalTime();
 
   // Multitasking task for retreive rrf, spotnik and propag data
   xTaskCreatePinnedToCore(
@@ -205,7 +205,7 @@ void loop()
 
   int8_t optimize = 0;
 
-  uint8_t i, j, k;
+  uint8_t i, j, k, dst;
 
   static uint8_t lengthData = 0;
   static uint8_t centerData = 0;
@@ -262,6 +262,7 @@ void loop()
   txTotal = doc["abstract"][0]["TX total"];
   entrant = doc["abstract"][0]["Links entrants"];
   sortant = doc["abstract"][0]["Links sortants"];
+  dst = doc["abstract"][0]["DST"];
   tot = doc["transmit"][0]["TOT"];
 
   for (uint8_t i = 0; i < doc["last"].size(); i++)
@@ -372,7 +373,20 @@ void loop()
 
   for (uint8_t i = 0; i < 5; i++)
   {
-    M5.Lcd.drawString(String(legende[i]), 4 + (i * 34), 162);
+    int8_t delta = String(legende[i]).toInt();
+
+    delta += utc + daylight - (1 + dst);
+    delta = (delta < 00) ? 24 + delta : delta;
+    delta = (delta > 23) ? delta - 24 : delta;
+
+    if(delta < 10)
+    {
+      M5.Lcd.drawString("0" + String(delta), 4 + (i * 34), 162);
+    }
+    else
+    {
+      M5.Lcd.drawString(String(delta), 4 + (i * 34), 162);
+    }
   }
 
   // Elsewhere
@@ -820,6 +834,21 @@ void loop()
       tmpString = String(lastHeure[i]);
       tmpString = tmpString.substring(0, 5);
 
+      int8_t delta = tmpString.substring(0, 2).toInt();
+      
+      delta += utc + daylight - (1 + dst);
+      delta = (delta < 00) ? 24 + delta : delta;
+      delta = (delta > 23) ? delta - 24 : delta;
+
+      if(delta < 10)
+      {
+        tmpString = "0" + String(delta) + tmpString.substring(2, 5);
+      }
+      else
+      {
+        tmpString = String(delta) + tmpString.substring(2, 5);
+      }
+
       M5.Lcd.drawString(tmpString, 163, k + j);
 
       M5.Lcd.setTextColor(TFT_BLACK, TFT_WHITE);
@@ -962,7 +991,7 @@ void loop()
       if (type == 0)
       {
         //dateString = getValue(date, ' ', 4);
-        printLocalTime();
+        updateLocalTime();
 
         if (dateStringOld != dateString)
         {

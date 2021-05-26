@@ -152,17 +152,19 @@ int computeDistance(float latitudeLink, float longitudeLink) {
 }
 
 // Get local time
-void printLocalTime()
+void updateLocalTime()
 {
   char timeStringBuff[10]; //10 chars should be enough
 
   struct tm timeinfo;
+
   if(!getLocalTime(&timeinfo)){
     Serial.println("Failed to obtain time");
     return;
   }
+  
   strftime(timeStringBuff, sizeof(timeStringBuff), "%H:%M:%S", &timeinfo);
-  Serial.println(timeStringBuff);
+  //Serial.println(timeStringBuff);
 
   dateString = String(timeStringBuff);
 }
