@@ -94,20 +94,22 @@ void hamdata(void *pvParameters)
   for (;;)
   {
     timer = millis();
-    if ((WiFi.status() == WL_CONNECTED) && issCurrent == 1) // Check the current connection status
+    if (WiFi.status() == WL_CONNECTED) // Check the current connection status
     {
       // ISS Get
-      //Serial.println("ISS GET");
-      http.begin(clientISS, endpointISS);               // Specify the URL
-      http.addHeader("User-Agent","M5Stack");           // Specify header
-      http.addHeader("Connection","keep-alive");        // Specify header
-      http.setTimeout(1000);                            // Set Time Out
-      httpCode = http.GET();                            // Make the request
-      if (httpCode == 200)                              // Check for the returning code
-      {
-        issData = http.getString(); // Get data
+      if(issCurrent == 1) {
+        //Serial.println("ISS GET");
+        http.begin(clientISS, endpointISS);               // Specify the URL
+        http.addHeader("User-Agent","M5Stack");           // Specify header
+        http.addHeader("Connection","keep-alive");        // Specify header
+        http.setTimeout(1000);                            // Set Time Out
+        httpCode = http.GET();                            // Make the request
+        if (httpCode == 200)                              // Check for the returning code
+        {
+          issData = http.getString(); // Get data
+        }
       }
-
+      
       // HamSQL GET (every hour)
       if(counter == 360)
       {

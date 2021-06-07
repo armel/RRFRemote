@@ -30,7 +30,7 @@
 #include "settings.h"
 
 // Version
-#define VERSION "2.3.10"
+#define VERSION "2.3.11"
 
 // Wifi
 WiFiClient clientRemote, clientTracker, clientHamSQL, clientWhereis;
