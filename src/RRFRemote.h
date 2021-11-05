@@ -38,8 +38,15 @@ WiFiClientSecure clientISS;
 
 // Timezone
 const char* ntpServer = "pool.ntp.org";
-const int8_t utc = 1;       // UTC + 1 for France
-const int8_t daylight = 0;  // If your country observes Daylight saving time set it to 1. Otherwise, set it to 0.
+const char* ntpTimeZone = "CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00"; // For Europe/Paris
+//const char* ntpTimeZone = "CET-1CEST,M3.5.0,M10.5.0/3"; // For Europe/Brussels
+//const char* ntpTimeZone = "EET-2EEST,M3.5.0/3,M10.5.0/4"; // For Europe/Sofia 
+//const char* ntpTimeZone = "EST5EDT,M3.2.0,M11.1.0"; // For America/Montreal
+//const char* ntpTimeZone = "AST4"; // For America/Martinique
+//const char* ntpTimeZone = "AST4"; // For America/Guadeloupe
+//const char* ntpTimeZone = "NCT-11"; // For Pacific/Noumea
+
+int utc = 1;
 
 // Temporisation
 #define LIMIT 500

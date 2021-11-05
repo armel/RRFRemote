@@ -133,7 +133,7 @@ void setup()
   img.createSprite(M5.Lcd.width(), 20);
 
   // Init and get time
-  configTime(utc * 3600, daylight * 3600, ntpServer);
+  configTzTime(ntpTimeZone, ntpServer);
   updateLocalTime();
 
   // Multitasking task for retreive rrf, spotnik and propag data
@@ -205,7 +205,7 @@ void loop()
 
   int8_t optimize = 0;
 
-  uint8_t i, j, k, dst;
+  uint8_t i, j, k;
 
   static uint8_t lengthData = 0;
   static uint8_t centerData = 0;
@@ -262,7 +262,6 @@ void loop()
   txTotal = doc["abstract"][0]["TX total"];
   entrant = doc["abstract"][0]["Links entrants"];
   sortant = doc["abstract"][0]["Links sortants"];
-  dst = doc["abstract"][0]["DST"];
   tot = doc["transmit"][0]["TOT"];
 
   for (uint8_t i = 0; i < doc["last"].size(); i++)
@@ -375,7 +374,7 @@ void loop()
   {
     int8_t delta = String(legende[i]).toInt();
 
-    delta += utc + daylight - (1 + dst);
+    delta += utc - 1;
     delta = (delta < 00) ? 24 + delta : delta;
     delta = (delta > 23) ? delta - 24 : delta;
 
@@ -836,7 +835,7 @@ void loop()
 
       int8_t delta = tmpString.substring(0, 2).toInt();
       
-      delta += utc + daylight - (1 + dst);
+      delta += utc - 1;
       delta = (delta < 00) ? 24 + delta : delta;
       delta = (delta > 23) ? delta - 24 : delta;
 

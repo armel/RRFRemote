@@ -154,7 +154,8 @@ int computeDistance(float latitudeLink, float longitudeLink) {
 // Get local time
 void updateLocalTime()
 {
-  char timeStringBuff[10]; //10 chars should be enough
+  char timeStringBuff[10];  //10 chars should be enough
+  char utcStringBuff[10];   //10 chars should be enough
 
   struct tm timeinfo;
 
@@ -164,7 +165,12 @@ void updateLocalTime()
   }
   
   strftime(timeStringBuff, sizeof(timeStringBuff), "%H:%M:%S", &timeinfo);
-  //Serial.println(timeStringBuff);
+  strftime(utcStringBuff, sizeof(utcStringBuff), "%z", &timeinfo);
+
+  sscanf(utcStringBuff, "%d", &utc);
+  utc = utc / 100;
+
+  //Serial.println(utc);
 
   dateString = String(timeStringBuff);
 }

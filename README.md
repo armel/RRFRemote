@@ -179,7 +179,7 @@ Ligne 5, vérifier que la constante `BOARD` correspond bien à votre type de M5S
 
 #### Timezone
 
-Si vous êtes hors de France, il est désormais possible de configurer votre _timezone_ afin qu'elle soit prise en compte lors de l'affichage de l'heure. Ligne 41, variable `utc`, indiquez l'UTC de votre région (par défaut, 1 pour la France). Et ligne 42, variable `daylight`, indiquez si votre région observe l'heure d'été (par défaut, 1 pour la France). Dans le cas contraire, indiquez 0.
+Si vous êtes hors de France, il est désormais possible de configurer votre _timezone_ afin qu'elle soit prise en compte lors de l'affichage de l'heure. Ligne 41, la variable `ntpTimeZone` est configurée, par défaut, pour la France. J'ai indiqué d'autres configurations possibles pour d'autres régions du monde, actives sur le RRF. Si nécessaire, consultez cette [liste](https://github.com/blindsidenetworks/bigbluebutton-1/blob/master/bbb-voice-conference/config/freeswitch/conf/autoload_configs/timezones.conf.xml) plus détaillée ou me contacter si besoin d'aide.
 
 
 ### Fichier `src/settings.h`
