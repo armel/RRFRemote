@@ -205,7 +205,7 @@ void loop()
 
   int8_t optimize = 0;
 
-  uint8_t i, j, k;
+  uint8_t i, j, k, dst;
 
   static uint8_t lengthData = 0;
   static uint8_t centerData = 0;
@@ -262,6 +262,7 @@ void loop()
   txTotal = doc["abstract"][0]["TX total"];
   entrant = doc["abstract"][0]["Links entrants"];
   sortant = doc["abstract"][0]["Links sortants"];
+  dst = doc["abstract"][0]["DST"];
   tot = doc["transmit"][0]["TOT"];
 
   for (uint8_t i = 0; i < doc["last"].size(); i++)
@@ -374,7 +375,7 @@ void loop()
   {
     int8_t delta = String(legende[i]).toInt();
 
-    delta += utc - 1;
+    delta += utc - 1 - dst;
     delta = (delta < 00) ? 24 + delta : delta;
     delta = (delta > 23) ? delta - 24 : delta;
 
@@ -835,7 +836,7 @@ void loop()
 
       int8_t delta = tmpString.substring(0, 2).toInt();
       
-      delta += utc - 1;
+      delta += utc - 1 - dst;
       delta = (delta < 00) ? 24 + delta : delta;
       delta = (delta > 23) ? delta - 24 : delta;
 
