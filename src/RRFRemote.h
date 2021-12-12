@@ -39,14 +39,10 @@ WiFiServer server(80);
 
 // Web site Screen Capture stuff
 #include "WebIndex.h"
-#include "WebButton.h"
-#include "WebM5.h"
 
 #define GET_unknown 0
 #define GET_index_page  1
-#define GET_m5_img  2
-#define GET_button_img  3
-#define GET_screenshot  4
+#define GET_screenshot  2
 
 // Flags for button presses via Web site Screen Capture
 bool buttonLeftPressed = false;

@@ -292,20 +292,6 @@ void getScreenshot()
                   M5Screen2bmp(client);
                   break;
                 }
-                case GET_m5_img: {              
-                  client.println("HTTP/1.1 200 OK");
-                  client.println("Content-type:image/png");
-                  client.println();
-                  client.write_P(m5_img, sizeof(m5_img));
-                  break;
-                }
-                case GET_button_img: {              
-                  client.println("HTTP/1.1 200 OK");
-                  client.println("Content-type:image/png");
-                  client.println();
-                  client.write_P(button_img, sizeof(button_img));
-                  break;
-                }
                 default:
                   client.println("HTTP/1.1 404 Not Found");
                   client.println("Content-type:text/html");
@@ -329,14 +315,6 @@ void getScreenshot()
                 // If the screenshot image is requested
                 if(currentLine.startsWith("GET /screenshot.bmp")){
                   htmlGetRequest = GET_screenshot;
-                }
-                // If the m5 image is requested
-                if(currentLine.startsWith("GET /m5.png")){
-                  htmlGetRequest = GET_m5_img;
-                }
-                // If the button image is requested
-                if(currentLine.startsWith("GET /button.png")){
-                  htmlGetRequest = GET_button_img;
                 }
                 // If the button left was pressed on the HTML page
                 if(currentLine.startsWith("GET /buttonLeft")){
