@@ -37,25 +37,21 @@ WiFiClient clientRemote, clientTracker, clientHamSQL, clientWhereis;
 WiFiClientSecure clientISS;
 WiFiServer server(80);
 
-// For screenshot feature
+// Web site Screen Capture stuff
+#include "WebIndex.h"
+#include "WebButton.h"
+#include "WebM5.h"
+
 #define GET_unknown 0
 #define GET_index_page  1
-#define GET_favicon  2
-#define GET_logo  3
-#define GET_refresh_img  4
-#define GET_button_img  5
-#define GET_screenshot  6
-int html_get_request;
+#define GET_m5_img  2
+#define GET_button_img  3
+#define GET_screenshot  4
 
-// Website stuff
-#include "index.h"
-#include "button.h"
-#include "refresh.h"
-
-// Flags for button presses via Web interface
-bool Control_A_pressed = false;
-bool Control_B_pressed = false;
-bool Control_C_pressed = false;
+// Flags for button presses via Web site Screen Capture
+bool buttonLeftPressed = false;
+bool buttonCenterPressed = false;
+bool buttonRightPressed = false;
 
 // Timezone
 const char* ntpServer = "pool.ntp.org";
@@ -203,6 +199,7 @@ int8_t configCurrent = 0;
 int8_t sysopCurrent = 0;
 int8_t roomCurrent = 0;
 
+uint8_t htmlGetRequest;
 uint8_t alternance = 0;
 uint8_t type = 0;
 uint8_t action = 0; 
