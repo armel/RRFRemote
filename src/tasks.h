@@ -148,6 +148,19 @@ void button(void *pvParameters)
   {
     getButton();
 
+    if(Control_A_pressed) {
+      btnA = true;
+      Control_A_pressed = false;
+    }
+    if(Control_B_pressed) {
+      btnB = true;
+      Control_B_pressed = false;
+    }
+    if(Control_C_pressed) {
+      btnC = true;
+      Control_C_pressed = false;
+    }
+
     /*
     if (btnA || btnB || btnC)
     {
