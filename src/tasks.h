@@ -75,6 +75,7 @@ void rrfdata(void *pvParameters)
       http.end(); // Free the resources
       counter = (counter++ < 10) ? counter : 1;
     }
+
     wait = millis() - timer;
     if (wait < limit)
     {
@@ -147,6 +148,19 @@ void button(void *pvParameters)
   for (;;)
   {
     getButton();
+
+    if(buttonLeftPressed) {
+      btnA = true;
+      buttonLeftPressed = false;
+    }
+    if(buttonCenterPressed) {
+      btnB = true;
+      buttonCenterPressed = false;
+    }
+    if(buttonRightPressed) {
+      btnC = true;
+      buttonRightPressed = false;
+    }
 
     /*
     if (btnA || btnB || btnC)

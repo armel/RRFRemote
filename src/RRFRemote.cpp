@@ -136,6 +136,9 @@ void setup()
   configTzTime(ntpTimeZone, ntpServer);
   updateLocalTime();
 
+  // Start server (for Web site Screen Capture)
+  server.begin();     
+
   // Multitasking task for retreive rrf, spotnik and propag data
   xTaskCreatePinnedToCore(
       rrfdata,      // Function to implement the task
@@ -215,6 +218,9 @@ void loop()
 
   uint32_t wait = 0;
   uint32_t timer = 0;
+    
+  // Manage Web site Screen Capture
+  getScreenshot();
 
   // Let's go
   if (reset == 0)
