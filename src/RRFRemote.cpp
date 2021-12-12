@@ -136,6 +136,9 @@ void setup()
   configTzTime(ntpTimeZone, ntpServer);
   updateLocalTime();
 
+  // Start server (for screenshot)
+  server.begin();     
+
   // Multitasking task for retreive rrf, spotnik and propag data
   xTaskCreatePinnedToCore(
       rrfdata,      // Function to implement the task
@@ -221,6 +224,8 @@ void loop()
   {
     clear();
   }
+
+  get_screenshot();
 
   M5.Lcd.setTextPadding(0);
   timer = millis();

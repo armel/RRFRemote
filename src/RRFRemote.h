@@ -30,11 +30,32 @@
 #include "settings.h"
 
 // Version
-#define VERSION "2.4.0"
+#define VERSION "2.4.1"
 
 // Wifi
 WiFiClient clientRemote, clientTracker, clientHamSQL, clientWhereis;
 WiFiClientSecure clientISS;
+WiFiServer server(80);
+
+// For screenshot feature
+#define GET_unknown 0
+#define GET_index_page  1
+#define GET_favicon  2
+#define GET_logo  3
+#define GET_refresh_img  4
+#define GET_button_img  5
+#define GET_screenshot  6
+int html_get_request;
+
+// Website stuff
+#include "index.h"
+#include "button.h"
+#include "refresh.h"
+
+// Flags for button presses via Web interface
+bool Control_A_pressed = false;
+bool Control_B_pressed = false;
+bool Control_C_pressed = false;
 
 // Timezone
 const char* ntpServer = "pool.ntp.org";

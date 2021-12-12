@@ -174,3 +174,203 @@ void updateLocalTime()
 
   dateString = String(timeStringBuff);
 }
+
+// M5Screen2bmp (Dump the screen to a WiFi client)
+
+bool M5Screen2bmp(WiFiClient &client)
+{
+  int image_height = M5.Lcd.height();
+  int image_width = M5.Lcd.width();
+  const uint pad=(4-(3*image_width)%4)%4;
+  uint filesize=54+(3*image_width+pad)*image_height; 
+  unsigned char header[54] = { 
+    'B','M',  // BMP signature (Windows 3.1x, 95, NT, …)
+    0,0,0,0,  // image file size in bytes
+    0,0,0,0,  // reserved
+    54,0,0,0, // start of pixel array
+    40,0,0,0, // info header size
+    0,0,0,0,  // image width
+    0,0,0,0,  // image height
+    1,0,      // number of color planes
+    24,0,     // bits per pixel
+    0,0,0,0,  // compression
+    0,0,0,0,  // image size (can be 0 for uncompressed images)
+    0,0,0,0,  // horizontal resolution (dpm)
+    0,0,0,0,  // vertical resolution (dpm)
+    0,0,0,0,  // colors in color table (0 = none)
+    0,0,0,0 };// important color count (0 = all colors are important)
+  // fill filesize, width and heigth in the header array
+  for(uint i=0; i<4; i++) {
+      header[ 2+i] = (char)((filesize>>(8*i))&255);
+      header[18+i] = (char)((image_width   >>(8*i))&255);
+      header[22+i] = (char)((image_height  >>(8*i))&255);
+  }
+  // write the header to the file
+  client.write(header, 54);
+  
+  // To keep the required memory low, the image is captured line by line
+  unsigned char line_data[image_width*3+pad];
+  // initialize padded pixel with 0 
+  for(int i=(image_width-1)*3; i<(image_width*3+pad); i++){
+    line_data[i]=0;
+  }
+  // The coordinate origin of a BMP image is at the bottom left.
+  // Therefore, the image must be read from bottom to top.
+  for(int y=image_height; y>0; y--){
+    // get one line of the screen content
+    M5.Lcd.readRectRGB(0, y-1, image_width, 1, line_data);
+    // BMP color order is: Blue, Green, Red
+    // return values from readRectRGB is: Red, Green, Blue
+    // therefore: R und B need to be swapped
+    for(int x=0; x<image_width; x++){
+      unsigned char r_buff = line_data[x*3];
+      line_data[x*3] = line_data[x*3+2];
+      line_data[x*3+2] = r_buff;
+    }
+    // write the line to the file
+    client.write(line_data, (image_width*3)+pad);
+  }
+  return true;
+}
+
+// Get screenshot
+
+void get_screenshot()
+{
+  // check if WIFI is still connected
+  // if the WIFI is not connected (anymore)
+  // a reconnect is triggert
+  wl_status_t wifi_Status = WiFi.status();
+  // check if WIFI is connected
+  // needed because of the above mentioned reconnection attempt
+  wifi_Status = WiFi.status();
+  if(wifi_Status == WL_CONNECTED){
+    // check for incoming clients
+    WiFiClient client = server.available(); 
+    if (client) {  
+      // force a disconnect after 2 seconds
+      unsigned long timeout_millis = millis()+2000;
+      Serial.println("New Client.");  
+      // a String to hold incoming data from the client line by line        
+      String currentLine = "";                
+      // loop while the client's connected
+      while (client.connected()) { 
+        // if the client is still connected after 2 seconds,
+        // something is wrong. So kill the connection
+        if(millis() > timeout_millis){
+          Serial.println("Force Client stop!");  
+          client.stop();
+        } 
+        // if there's bytes to read from the client,
+        if (client.available()) {             
+          char c = client.read();            
+          Serial.write(c);    
+          // if the byte is a newline character             
+          if (c == '\n') {    
+            // two newline characters in a row (empty line) are indicating
+            // the end of the client HTTP request, so send a response:
+            if (currentLine.length() == 0) {
+              // HTTP headers always start with a response code (e.g. HTTP/1.1 200 OK)
+              // and a content-type so the client knows what's coming, then a blank line,
+              // followed by the content:
+              switch (html_get_request)
+              {
+                case GET_index_page: {
+                  client.println("HTTP/1.1 200 OK");
+                  client.println("Content-type:text/html");
+                  client.println();
+                  client.write_P(index_html, sizeof(index_html));
+                  break;
+                }
+                case GET_screenshot: {              
+                  client.println("HTTP/1.1 200 OK");
+                  client.println("Content-type:image/bmp");
+                  client.println();
+                  M5Screen2bmp(client);
+                  break;
+                }
+                case GET_refresh_img: {              
+                  client.println("HTTP/1.1 200 OK");
+                  client.println("Content-type:image/png");
+                  client.println();
+                  client.write_P(refresh_img, sizeof(refresh_img));
+                  break;
+                }
+                case GET_button_img: {              
+                  client.println("HTTP/1.1 200 OK");
+                  client.println("Content-type:image/png");
+                  client.println();
+                  client.write_P(control_button_img, sizeof(control_button_img));
+                  break;
+                }
+                default:
+                  client.println("HTTP/1.1 404 Not Found");
+                  client.println("Content-type:text/html");
+                  client.println();
+                  client.print("404 Page not found.<br>");
+                  break;
+              }
+              // The HTTP response ends with another blank line:
+              client.println();
+              // break out of the while loop:
+              break;
+            } else {    // if a newline is found
+              // Analyze the currentLine:
+              // detect the specific GET requests:
+              if(currentLine.startsWith("GET /")){
+                html_get_request = GET_unknown;
+                // if no specific target is requested
+                if(currentLine.startsWith("GET / ")){
+                  html_get_request = GET_index_page;
+                }
+                // if the logo image is requested
+                if(currentLine.startsWith("GET /electric-idea_100x100.jpg")){
+                  html_get_request = GET_logo;
+                }
+                // if the favicon icon is requested
+                if(currentLine.startsWith("GET /favicon.ico")){
+                  html_get_request = GET_favicon;
+                }
+                // if the screenshot image is requested
+                if(currentLine.startsWith("GET /screenshot.bmp")){
+                  html_get_request = GET_screenshot;
+                }
+                // if the refresh image is requested
+                if(currentLine.startsWith("GET /refresh-40x30.png")){
+                  html_get_request = GET_refresh_img;
+                }
+                // if the control-button image is requested
+                if(currentLine.startsWith("GET /button.png")){
+                  html_get_request = GET_button_img;
+                }
+                // if the control-button A was pressed on the HTML page
+                if(currentLine.startsWith("GET /button-A")){
+                  Control_A_pressed = true;
+                  html_get_request = GET_index_page;
+                }
+                // if the control-button B was pressed on the HTML page
+                if(currentLine.startsWith("GET /button-B")){
+                  Control_B_pressed = true;
+                  html_get_request = GET_index_page;
+                }
+                // if the control-button C was pressed on the HTML page
+                if(currentLine.startsWith("GET /button-C")){
+                  Control_C_pressed = true;
+                  html_get_request = GET_index_page;
+                }
+              }
+              currentLine = "";
+            }
+          } else if (c != '\r') {  
+            // add anything else than a carriage return
+            // character to the currentLine 
+            currentLine += c;      
+          }
+        }
+      }
+      // close the connection:
+      client.stop();
+      Serial.println("Client Disconnected.");
+    }
+  }
+}
