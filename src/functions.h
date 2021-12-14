@@ -181,10 +181,10 @@ bool M5Screen2bmp(WiFiClient &client)
 {
   int image_height = M5.Lcd.height();
   int image_width = M5.Lcd.width();
-  const uint pad = (4-(3*image_width)%4)%4;
+  const uint pad = (4 - (3 * image_width) % 4) % 4;
   int start = (image_width-1) * 3;
   int stop = (image_width * 3 + pad);
-  uint filesize = 54+(3*image_width+pad)*image_height; 
+  uint filesize = 54 + (stop) * image_height; 
   unsigned char header[54] = { 
     'B','M',  // BMP signature (Windows 3.1x, 95, NT, …)
     0,0,0,0,  // image file size in bytes
@@ -202,17 +202,19 @@ bool M5Screen2bmp(WiFiClient &client)
     0,0,0,0,  // colors in color table (0 = none)
     0,0,0,0 };// important color count (0 = all colors are important)
 
+  client.setNoDelay(1);
+
   // Fill filesize, width and heigth in the header array
   for(uint i = 0; i < 4; i++) {
       header[ 2+i] = (char)((filesize>>(8*i))&255);
-      header[18+i] = (char)((image_width   >>(8*i))&255);
-      header[22+i] = (char)((image_height  >>(8*i))&255);
+      header[18+i] = (char)((image_width  >>(8*i))&255);
+      header[22+i] = (char)((image_height >>(8*i))&255);
   }
   // Write the header to the file
   client.write(header, 54);
   
   // To keep the required memory low, the image is captured line by line
-  unsigned char line_data[image_width*3+pad];
+  unsigned char line_data[stop];
   // Initialize padded pixel with 0 
   for(int i = start; i < stop; i++){
     line_data[i]=0;
@@ -276,6 +278,9 @@ void getScreenshot()
               // HTTP headers always start with a response code (e.g. HTTP/1.1 200 OK)
               // and a content-type so the client knows what's coming, then a blank line,
               // followed by the content:
+
+              screensaver = millis(); // Screensaver update !!!
+
               switch (htmlGetRequest)
               {
                 case GET_index_page: {
