@@ -30,12 +30,13 @@
 #include "settings.h"
 
 // Version
-#define VERSION "2.5.1"
+#define VERSION "2.5.2"
 
 // Wifi
-WiFiClient clientRemote, clientTracker, clientHamSQL, clientWhereis;
 WiFiClientSecure clientISS;
-WiFiServer server(80);
+WiFiClient clientRemote, clientTracker, clientHamSQL, clientWhereis;
+WiFiClient httpClient;
+WiFiServer httpServer(80);
 
 // Web site Screen Capture stuff
 #include "WebIndex.h"

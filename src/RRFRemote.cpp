@@ -137,7 +137,7 @@ void setup()
   updateLocalTime();
 
   // Start server (for Web site Screen Capture)
-  server.begin();     
+  httpServer.begin();     
 
   // Multitasking task for retreive rrf, spotnik and propag data
   xTaskCreatePinnedToCore(
@@ -218,7 +218,7 @@ void loop()
 
   uint32_t wait = 0;
   uint32_t timer = 0;
-    
+
   // Manage Web site Screen Capture
   getScreenshot();
 
