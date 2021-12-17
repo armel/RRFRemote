@@ -304,7 +304,7 @@ bool M5Screen2bmp(){
 
 void getScreenshot()
 {
-  unsigned long timeout_millis = millis() + 10000;
+  unsigned long timeout_millis = millis() + 2000;
   String currentLine = "";                
 
   httpClient = httpServer.available(); 
