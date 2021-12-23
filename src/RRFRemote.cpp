@@ -1368,6 +1368,12 @@ void loop()
   // Manage rotation
   getAcceleration();
 
+  // Check Wifi
+  if (screensaverMode == 1) {
+    //Serial.print("Check Wifi... ");
+    checkWifi();
+  }
+
   // Manage follow
   if(followCurrent == 1) {
     for (uint8_t i = 0; i <= 5; i++) {

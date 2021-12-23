@@ -408,3 +408,19 @@ void getScreenshot()
     }
   }
 }
+
+// Check Wifi and try to reconnect
+
+boolean checkWifi() {
+  if(WiFi.status() == WL_CONNECTED) {
+    //Serial.println("Wifi Ok");
+    return true;
+  }
+  else {
+    //Serial.println("Wifi Ko");
+    WiFi.disconnect();
+    WiFi.reconnect();
+    delay(30 * 1000);
+    return true;
+  }
+}
