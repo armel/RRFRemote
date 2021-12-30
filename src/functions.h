@@ -424,3 +424,48 @@ boolean checkWifi() {
     return true;
   }
 }
+
+// Check black and white list
+
+void ledAlert(bool type) {
+  boolean qrzDetected = false;
+  uint8_t i, j;
+
+  if(type) {
+    for(i = 0; i < sizeof(qrz) / sizeof(qrz[0]); i += 2)
+    {
+      if(strstr(indicatifString.c_str(), qrz[i]) != NULL) {
+        Serial.println(qrz[i]);
+        Serial.println(i);
+    
+        qrzDetected = true;
+        break;
+      }
+    }
+
+    if(qrzDetected) {
+      for(j = 0; j <= 4 ; j++){
+        leds[j] = (int)strtol(qrz[i + 1], NULL, 0);
+        leds[9 - j] = (int)strtol(qrz[i + 1], NULL, 0);
+      }
+      FastLED.setBrightness(16);
+      FastLED.show();
+    }
+    else {
+      for(j = 0; j <= 4 ; j++){
+        leds[j] = CRGB::Black;
+        leds[9 - j] = CRGB::Black;
+      }
+      FastLED.setBrightness(16);
+      FastLED.show();
+    }
+  }
+  else {
+    for(j = 0; j <= 4 ; j++){
+      leds[j] = CRGB::Black;
+      leds[9 - j] = CRGB::Black;
+    }
+    FastLED.setBrightness(16);
+    FastLED.show();
+  }
+}

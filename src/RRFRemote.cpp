@@ -16,6 +16,7 @@ void setup()
 
   // Init M5
   M5.begin(true, false, false, false);
+  FastLED.addLeds<NEOPIXEL, LED_PIN>(leds, NUM_LEDS);  // GRB ordering is assumed
   power();
 
   // Init Speaker
@@ -920,6 +921,8 @@ void loop()
         tmpString = String(lastIndicatif[0]);
         indicatifString = tmpString;
 
+        ledAlert(true);
+
         if(tmpString.substring(0, 3) == "GW-") {
           tmpString = "GW";
         }
@@ -967,6 +970,8 @@ void loop()
     { // If no transmit
       if (transmitOff == 1 || reset == 0)
       {
+        ledAlert(false);
+
         if (!isCharging() && screensaverMode == 0)
         {
           M5.Lcd.setBrightness(brightnessCurrent);
