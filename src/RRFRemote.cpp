@@ -16,6 +16,7 @@ void setup()
 
   // Init M5
   M5.begin(true, false, false, false);
+  FastLED.addLeds<NEOPIXEL, LED_PIN>(leds, NUM_LEDS);  // GRB ordering is assumed
   power();
 
   // Init Speaker
@@ -137,7 +138,7 @@ void setup()
   updateLocalTime();
 
   // Start server (for Web site Screen Capture)
-  server.begin();     
+  httpServer.begin();     
 
   // Multitasking task for retreive rrf, spotnik and propag data
   xTaskCreatePinnedToCore(
@@ -218,7 +219,7 @@ void loop()
 
   uint32_t wait = 0;
   uint32_t timer = 0;
-    
+
   // Manage Web site Screen Capture
   getScreenshot();
 
@@ -920,6 +921,8 @@ void loop()
         tmpString = String(lastIndicatif[0]);
         indicatifString = tmpString;
 
+        ledAlert(true);
+
         if(tmpString.substring(0, 3) == "GW-") {
           tmpString = "GW";
         }
@@ -967,6 +970,8 @@ void loop()
     { // If no transmit
       if (transmitOff == 1 || reset == 0)
       {
+        ledAlert(false);
+
         if (!isCharging() && screensaverMode == 0)
         {
           M5.Lcd.setBrightness(brightnessCurrent);
@@ -1367,6 +1372,12 @@ void loop()
 
   // Manage rotation
   getAcceleration();
+
+  // Check Wifi
+  if (screensaverMode == 1) {
+    //Serial.print("Check Wifi... ");
+    checkWifi();
+  }
 
   // Manage follow
   if(followCurrent == 1) {

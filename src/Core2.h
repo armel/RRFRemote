@@ -3,34 +3,43 @@
 
 uint8_t btnA, btnB, btnC, btnD, btnE = 0;
 
+/*
 TouchZone left(0, 0, 160, 240);
 TouchZone right(160, 0, 160, 240);
 TouchZone top(0, 0, 320, 120);
 TouchZone bottom(0, 120, 320, 240);
+*/
 
+Gesture swipeLeft("swipe left", 160, DIR_LEFT, 30, true);
+Gesture swipeRight("swipe right", 160, DIR_RIGHT, 30, true);
+Gesture swipeDown("swipe down", 120, DIR_DOWN, 30, true);
+Gesture swipeUp("swipe up", 120, DIR_UP, 30, true);
+
+/*
 Gesture swipeLeft(right, left, "Swipe left");
 Gesture swipeRight(left, right, "Swipe right");
 Gesture swipeBottom(top, bottom, "Swipe down");
 Gesture swipeTop(bottom, top, "Swipe top");
+*/
 
 // Swipe left manage
-void detectSwipeLeft(TouchEvent& e) {
-    btnD = -10;
+void detectSwipeLeft(Event& e) {
+    btnD = 1;
 }
 
 // Swipe right manage
-void detectSwipeRight(TouchEvent& e) {
-    btnD = 10;
+void detectSwipeRight(Event& e) {
+    btnD = 2;
 }
 
 // Swipe bottom manage
-void detectSwipeBottom(TouchEvent& e) {
-    btnE = -10;
+void detectSwipeDown(Event& e) {
+    btnE = 1;
 }
 
 // Swipe top manage
-void detectSwipeTop(TouchEvent& e) {
-    btnE = 10;
+void detectSwipeUp(Event& e) {
+    btnE = 2;
 }
 
 // Power init
@@ -40,8 +49,8 @@ void power()
     M5.Axp.SetLed(0);
     swipeLeft.addHandler(detectSwipeLeft);
     swipeRight.addHandler(detectSwipeRight);
-    swipeBottom.addHandler(detectSwipeBottom);
-    swipeTop.addHandler(detectSwipeTop);
+    swipeDown.addHandler(detectSwipeDown);
+    swipeUp.addHandler(detectSwipeUp);
 }
 
 // Get Battery level
@@ -89,16 +98,16 @@ void getButton()
     btnB = M5.BtnB.isPressed();
     btnC = M5.BtnC.isPressed();
 
-    if(btnD < 0) {
+    if(btnD == 1) {
         btnA = 1;
         btnD = 0;
     }
-    else if(btnD > 0) {
+    else if(btnD == 2) {
         btnC = 1;
         btnD = 0;
     }
 
-    if(btnE < 0 || btnE > 0) {
+    if(btnE == 1 || btnE == 2) {
         btnB = 1;
         btnE = 0;
     }

@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 // Board
-#define BOARD GREY
+#define BOARD BASIC
 
 #define BASIC 1
 #define GREY  2
@@ -10,13 +10,16 @@
 
 #if BOARD == BASIC
   #define M5STACK_MPU6886
+  #define LED_PIN 15
   #include <M5Stack.h>
   #include "BasicAndGrey.h"
 #elif BOARD == GREY
   #define M5STACK_MPU6886
+  #define LED_PIN 15
   #include <M5Stack.h>
   #include "BasicAndGrey.h"
 #elif BOARD == CORE2
+  #define LED_PIN 25
   #include <M5Core2.h>
   #include "Core2.h"
 #endif
@@ -25,17 +28,19 @@
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
 #include <Preferences.h>
+#include <FastLED.h>
 #include "time.h"
 #include "font.h"
 #include "settings.h"
 
 // Version
-#define VERSION "2.5.1"
+#define VERSION "2.5.4"
 
 // Wifi
-WiFiClient clientRemote, clientTracker, clientHamSQL, clientWhereis;
 WiFiClientSecure clientISS;
-WiFiServer server(80);
+WiFiClient clientRemote, clientTracker, clientHamSQL, clientWhereis;
+WiFiClient httpClient;
+WiFiServer httpServer(80);
 
 // Web site Screen Capture stuff
 #include "WebIndex.h"
@@ -48,6 +53,10 @@ WiFiServer server(80);
 bool buttonLeftPressed = false;
 bool buttonCenterPressed = false;
 bool buttonRightPressed = false;
+
+// LED
+#define NUM_LEDS 10
+CRGB leds[NUM_LEDS];
 
 // Timezone
 const char* ntpServer = "pool.ntp.org";

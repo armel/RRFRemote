@@ -198,7 +198,7 @@ Je hais la gestion des décalages horaires, des alternances hiver/été, etc. N�
 
 ### Fichier `src/settings.h`
 
-Editer le fichier `src/settings.h` afin de renseigner vos paramétrages, à savoir :
+Editer le fichier `src/settings.h` afin de renseigner vos paramétrages via le tableau `config`, à savoir :
 
 * votre SSID Wifi,
 * votre mot de passe Wifi,
@@ -230,6 +230,8 @@ const char *config[] = {
 ```
 
 > Notez au passage l'utilisation d'une adresse IP publique pour la configuration mobile sur le Wifi du Smartphone...
+
+Toujours dans le fichier `src/settings.h`, si vous disposez d'un module aditionnel M5GO (GREY ou BASIC) ou M5GO2 (CORE2), vous pouvez ajouter des indicatifs à surveiller via le tableau `qrz`. Ce tableau est constitué d'une liste d'indicatifs et d'une couleur associée au format RGB. Si l'un de ces indicatifs passe en émission, les barres de leds présentent sur les modules M5GO et M5GO2 s'allumeront (avec la couleur associée). Cela permet d'avoir des alertes luminueuses.
 
 ### Modèle M5Stack Basic et M5Stack Grey
 
