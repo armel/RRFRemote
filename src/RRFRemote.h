@@ -152,6 +152,7 @@ String endpointRRF[] = {
     "http://rrf.f5nlg.ovh:8080/RRFTracker/BAVARDAGE-today/rrf_tiny.json",
     "http://rrf.f5nlg.ovh:8080/RRFTracker/LOCAL-today/rrf_tiny.json",
     "http://rrf.f5nlg.ovh:8080/RRFTracker/INTERNATIONAL-today/rrf_tiny.json",
+    "http://rrf.f5nlg.ovh:8080/RRFTracker/EXPERIMENTAL-today/rrf_tiny.json",
     "http://rrf.f5nlg.ovh:8080/RRFTracker/FON-today/rrf_tiny.json"};
 
 // Scroll
@@ -160,8 +161,8 @@ String message = "";
 int16_t pos;
 
 // Misceleanous
-const char *room[] = {"RRF", "TECHNIQUE", "BAVARDAGE", "LOCAL", "INTERNATIONAL", "FON"};
-const uint8_t dtmf[] = {96, 98, 100, 101, 99, 97};
+const char *room[] = {"RRF", "TECHNIQUE", "BAVARDAGE", "LOCAL", "INTERNATIONAL", "EXPERIMENTAL", "FON"};
+const uint8_t dtmf[] = {96, 98, 100, 101, 99, 102, 97};
 const char *menuSpotnikOn[]  = {"CONFIG", "QSY", "FOLLOW", "RAPTOR", "PERROQUET", "SYSOP", "TOT", "ISS", "COULEUR", "LUMINOSITE", "QUITTER"};
 const char *menuSpotnikOff[] = {"CONFIG", "TOT", "ISS", "COULEUR", "LUMINOSITE", "QUITTER"};
 const char *sysop[] = {"REBOOT", "IP", "SCAN RAPIDE", "LIBRE"};

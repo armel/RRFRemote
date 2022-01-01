@@ -361,15 +361,15 @@ void loop()
   {
     if (tx[i] != 0)
     {
-      uint8_t tmp = map(tx[i], 0, maxLevel, 0, 48);
-      M5.Lcd.fillRect(j, 153 - tmp, 5, tmp, M5.Lcd.color565(TFT_FRONT.r - k, TFT_FRONT.g - k, TFT_FRONT.b - k));
-      M5.Lcd.fillRect(j, 153 - 48, 5, 48 - tmp, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
+      uint8_t tmp = map(tx[i], 0, maxLevel, 0, 34);
+      M5.Lcd.fillRect(j, 139 - tmp, 5, tmp, M5.Lcd.color565(TFT_FRONT.r - k, TFT_FRONT.g - k, TFT_FRONT.b - k));
+      M5.Lcd.fillRect(j, 139 - 34, 5, 34 - tmp, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
     }
     else
     {
-      M5.Lcd.fillRect(j, 153 - 48, 5, 48, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
+      M5.Lcd.fillRect(j, 139 - 34, 5, 34, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
     }
-    M5.Lcd.fillRect(j, 154, 5, 1, TFT_LIGHTGREY);
+    M5.Lcd.fillRect(j, 140, 5, 1, TFT_LIGHTGREY);
     j += 6;
     k += 2;
   }
@@ -388,11 +388,11 @@ void loop()
 
     if(delta < 10)
     {
-      M5.Lcd.drawString("0" + String(delta), 4 + (i * 34), 162);
+      M5.Lcd.drawString("0" + String(delta), 4 + (i * 34), 148);
     }
     else
     {
-      M5.Lcd.drawString(String(delta), 4 + (i * 34), 162);
+      M5.Lcd.drawString(String(delta), 4 + (i * 34), 148);
     }
   }
 
@@ -411,13 +411,13 @@ void loop()
       j = 6;
       k = 0;
 
-      while (k <= 4)
+      while (k <= 5)
       {
         if (strcmp(room[i], salon) != 0)
         {
           M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
           M5.Lcd.setTextDatum(CC_DATUM);
-          M5.Lcd.drawString(String(room[i]).substring(0, 3), 14, 168 + j);
+          M5.Lcd.drawString(String(room[i]).substring(0, 3), 14, 154 + j);
 
           M5.Lcd.setTextDatum(CC_DATUM);
           M5.Lcd.setTextColor(TFT_BLACK, TFT_WHITE);
@@ -440,12 +440,12 @@ void loop()
               tmpString = (tmpString == "") ? "RTFM" : getValue(elsewhere, ' ', 1) + ' ' + getValue(elsewhere, ' ', 2);
             }
 
-            M5.Lcd.fillRect(28, 169 + (14 * k), 72, 13, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
+            M5.Lcd.fillRect(28, 155 + (14 * k), 72, 13, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
             M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
           }
           else
           {
-            M5.Lcd.fillRect(28, 169 + (14 * k), 72, 13, TFT_WHITE);
+            M5.Lcd.fillRect(28, 155 + (14 * k), 72, 13, TFT_WHITE);
             M5.Lcd.setTextPadding(70);
             linkTotalElsewhere = doc["elsewhere"][5][room[i]];
             sprintf(swap, "%d", linkTotalElsewhere);
@@ -456,13 +456,13 @@ void loop()
               tmpString += "S";
             }
           }
-          M5.Lcd.drawString(tmpString, 64, 168 + j);
+          M5.Lcd.drawString(tmpString, 64, 154 + j);
 
           M5.Lcd.setTextColor(TFT_BLACK, TFT_WHITE);
           M5.Lcd.setTextDatum(CC_DATUM);
           M5.Lcd.setTextPadding(52);
           elsewhere = doc["elsewhere"][3][room[i]];
-          M5.Lcd.drawString(String(elsewhere), 128, 168 + j);
+          M5.Lcd.drawString(String(elsewhere), 128, 154 + j);
 
           M5.Lcd.setTextPadding(0);
 
