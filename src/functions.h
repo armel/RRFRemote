@@ -53,25 +53,44 @@ void clear()
   M5.Lcd.drawFastHLine(  0, 100, 320, TFT_WHITE);
   M5.Lcd.fillRect(0, 101, 320, 239, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
 
-  // Elsewhere
-  M5.Lcd.fillRoundRect(0, 154, 155, 85, 4, TFT_WHITE);
-  M5.Lcd.fillRoundRect(1, 155, 26, 83, 4, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
+  if(modeCurrent == 0) {
+    // Elsewhere
+    M5.Lcd.fillRoundRect(0, 154, 155, 85, 4, TFT_WHITE);
+    M5.Lcd.fillRoundRect(1, 155, 26, 83, 4, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
 
-  M5.Lcd.drawFastVLine(24, 155, 83, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
-  M5.Lcd.drawFastVLine(25, 155, 83, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
-  M5.Lcd.drawFastVLine(26, 155, 83, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
+    M5.Lcd.drawFastVLine(24, 155, 83, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
+    M5.Lcd.drawFastVLine(25, 155, 83, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
+    M5.Lcd.drawFastVLine(26, 155, 83, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
 
-  M5.Lcd.drawFastVLine(27, 155, 83, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
-  M5.Lcd.drawFastVLine(100, 155, 83, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
+    M5.Lcd.drawFastVLine(27, 155, 83, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
+    M5.Lcd.drawFastVLine(100, 155, 83, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
 
-  M5.Lcd.drawFastHLine(2, 168, 152, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
-  M5.Lcd.drawFastHLine(2, 182, 152, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
-  M5.Lcd.drawFastHLine(2, 196, 152, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
-  M5.Lcd.drawFastHLine(2, 210, 152, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
-  M5.Lcd.drawFastHLine(2, 224, 152, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
+    M5.Lcd.drawFastHLine(2, 168, 152, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
+    M5.Lcd.drawFastHLine(2, 182, 152, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
+    M5.Lcd.drawFastHLine(2, 196, 152, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
+    M5.Lcd.drawFastHLine(2, 210, 152, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
+    M5.Lcd.drawFastHLine(2, 224, 152, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
 
-  // Log
-  M5.Lcd.fillRoundRect(160, 117, 160, 122, 4, TFT_WHITE);
+    // Log
+    M5.Lcd.fillRoundRect(160, 117, 160, 122, 4, TFT_WHITE);
+  }
+  else {
+    for (uint8_t i = 0; i <= 1; i++) {
+      M5.Lcd.fillRoundRect(0 + (170 * i), 125, 150, 115, 4, TFT_WHITE);
+      M5.Lcd.fillRoundRect(1 + (170 * i), 126, 148, 113, 4, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
+      M5.Lcd.fillRect(51 + (170 * i), 126, 98, 113, TFT_WHITE);
+      M5.Lcd.drawFastVLine(50 + (170 * i), 126, 113, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
+
+      for(uint8_t k = 1; k <= 5; k++) {
+        M5.Lcd.drawFastHLine(1 + (170 * i), 125 + (k * 18) + k, 148, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
+      }
+    }
+    M5.Lcd.setFreeFont(&tahoma8pt7b);
+    M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
+    M5.Lcd.setTextPadding(0);
+    M5.Lcd.drawString("SCANNER", 75, 112);
+    M5.Lcd.drawString("TRAFIC RECENT", 245, 112);
+  }
 }
 
 // Scroll
@@ -84,27 +103,24 @@ void scroll(uint8_t pause)
   //delay(pause);
   vTaskDelay(pdMS_TO_TICKS(pause));
 
-  img.setTextSize(1);          // Font size scaling is x1
-  img.setTextFont(2);          // Font 2 selected
-
-  w = img.textWidth(message) + 40;
+  w = Sprite.textWidth(message) + 40;
   if (w < limit)
   {
     w = limit;
   }
   // We could just use fillSprite(color) but lets be a bit more creative...
   while (h--)
-    img.drawFastHLine(0, h, w, TFT_BLACK);
+    Sprite.drawFastHLine(0, h, w, TFT_BLACK);
 
   // Now print text on top of the graphics  
-  img.setTextColor(TFT_WHITE); // White text, no background colour
-  img.setTextWrap(false);      // Turn of wrap so we can print past end of sprite
+  Sprite.setTextColor(TFT_WHITE); // White text, no background colour
+  Sprite.setTextWrap(false);      // Turn of wrap so we can print past end of sprite
 
   // Need to print twice so text appears to wrap around at left and right edges
-  img.drawString(message, pos, 2);
-  img.drawString(message, pos - w, 2);
+  Sprite.drawString(message, pos, 2);
+  Sprite.drawString(message, pos - w, 2);
 
-  img.pushSprite(0, 78);
+  Sprite.pushSprite(0, 78);
 
   pos -= 1;
   if (pos == 0)
@@ -114,7 +130,7 @@ void scroll(uint8_t pause)
 }
 
 // Detect rotation
-void getAcceleration()
+void checkAcceleration()
 {
   float accX = 0.0F;
   float accY = 0.0F;
@@ -410,23 +426,19 @@ void getScreenshot()
   }
 }
 
-// Check Wifi and try to reconnect
+// Manage Wifi and try to reconnect
 
-boolean checkWifi() {
-  if(WiFi.status() == WL_CONNECTED) {
-    //Serial.println("Wifi Ok");
-    return true;
-  }
-  else {
-    //Serial.println("Wifi Ko");
-    WiFi.disconnect();
-    WiFi.reconnect();
-    delay(30 * 1000);
-    return true;
+void checkWifi() {
+  if (screensaverMode == 1) {
+    if(WiFi.status() != WL_CONNECTED) {
+      WiFi.disconnect();
+      WiFi.reconnect();
+      delay(30 * 1000);
+    }
   }
 }
 
-// Check black and white list
+// Manage black and white list
 
 void ledAlert(bool type) {
   boolean qrzDetected = false;

@@ -34,7 +34,7 @@
 #include "settings.h"
 
 // Version
-#define VERSION "2.5.4"
+#define VERSION "2.6.0"
 
 // Wifi
 WiFiClientSecure clientISS;
@@ -156,23 +156,25 @@ String endpointRRF[] = {
     "http://rrf.f5nlg.ovh:8080/RRFTracker/FON-today/rrf_tiny.json"};
 
 // Scroll
-TFT_eSprite img = TFT_eSprite(&M5.Lcd); // Create Sprite object "img" with pointer to "tft" object
-String message = "";
-int16_t pos;
+TFT_eSprite Sprite = TFT_eSprite(&M5.Lcd); // Create Sprite object "img" with pointer to "tft" object
+String message;
+int16_t pos = 0;
 
 // Misceleanous
 const char *room[] = {"RRF", "TECHNIQUE", "BAVARDAGE", "LOCAL", "INTERNATIONAL", "EXPERIMENTAL", "FON"};
 const uint8_t dtmf[] = {96, 98, 100, 101, 99, 102, 97};
-const char *menuSpotnikOn[]  = {"CONFIG", "QSY", "FOLLOW", "RAPTOR", "PERROQUET", "SYSOP", "TOT", "ISS", "COULEUR", "LUMINOSITE", "QUITTER"};
+const char *menuSpotnikOn[]  = {"CONFIG", "QSY", "FOLLOW", "RAPTOR", "PERROQUET", "SYSOP", "TOT", "ISS", "COULEUR", "LUMINOSITE", "MODE", "QUITTER"};
 const char *menuSpotnikOff[] = {"CONFIG", "TOT", "ISS", "COULEUR", "LUMINOSITE", "QUITTER"};
 const char *sysop[] = {"REBOOT", "IP", "SCAN RAPIDE", "LIBRE"};
 char **menu;
+char swap[32];
 
 String tmpString;
 
 String jsonData = "", issData = "", xmlData = "", whereisData = "";
 String jsonDataNew = "", issDataNew = "";
 
+String lastString;
 String dateString, dateStringOld;
 String dureeString, dureeStringOld;
 String emissionString, emissionStringOld;
@@ -204,11 +206,13 @@ int8_t colorCurrent = 0;
 int8_t configCurrent = 0;
 int8_t sysopCurrent = 0;
 int8_t roomCurrent = 0;
+int8_t modeCurrent = 1;
 
 uint8_t htmlGetRequest;
 uint8_t alternance = 0;
 uint8_t type = 0;
 uint8_t action = 0; 
+uint8_t dst;
 
 uint8_t transmitOn = 0;
 uint8_t transmitOff = 0;
