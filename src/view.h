@@ -218,7 +218,7 @@ void viewPropagation() {
   if (refresh == 0)
   {
     M5.Lcd.setTextPadding(160);
-    M5.Lcd.drawString("PROPAGATION", 240, 108);
+    M5.Lcd.drawString("Propagation", 240, 108);
 
     i = 161;
     j = 70;
@@ -278,13 +278,13 @@ void viewPropagation() {
 }
 
 // View Top Links
-void viewTopLinks(uint8_t stop, uint16_t allTx[10], const char *allIndicatif[10], const char *allDuree[10]) {
+void viewTopLinks(uint8_t stop, uint16_t allTx[10], const char *allIndicatif[10], const char *allDuree[10], const char *salon) {
   uint8_t i, j, k;
 
   if (refresh == 0)
   {
     M5.Lcd.setTextPadding(160);
-    M5.Lcd.drawString("TOP LINKS", 240, 108);
+    M5.Lcd.drawString("Top Links sur " + String(salon).substring(0, 3), 240, 108);
 
     i = 161;
     j = 38;
@@ -341,7 +341,7 @@ void viewTopLinks(uint8_t stop, uint16_t allTx[10], const char *allIndicatif[10]
 
 // View blocages
 
-void viewBlocage(uint8_t stop, const char *iptableIndicatif[10], const char *iptableType[10]) {
+void viewBlocage(uint8_t stop, const char *iptableIndicatif[10], const char *iptableType[10], const char *salon) {
   uint8_t i, j, k;
   int16_t parenthesisBegin = 0;
   int16_t parenthesisLast = 0;
@@ -349,7 +349,7 @@ void viewBlocage(uint8_t stop, const char *iptableIndicatif[10], const char *ipt
   if (refresh == 0)
   {
     M5.Lcd.setTextPadding(160);
-    M5.Lcd.drawString("BLOCAGES", 240, 108);
+    M5.Lcd.drawString("Blocages sur " + String(salon).substring(0, 3), 240, 108);
 
     i = 161;
     j = 50;
@@ -483,13 +483,13 @@ void viewISS(StaticJsonDocument<512> docISS) {
 }
 
 // View last links
-void viewLastLinks(uint8_t stop, const char *lastHeure[10], const char *lastIndicatif[10], const char *lastDuree[10]) {
+void viewLastLinks(uint8_t stop, const char *lastHeure[10], const char *lastIndicatif[10], const char *lastDuree[10], const char *salon) {
   uint8_t i, j, k;
 
   if (refresh == 0)
   {
     M5.Lcd.setTextPadding(160);
-    M5.Lcd.drawString("DERNIERS LINKS", 240, 108);
+    M5.Lcd.drawString("Derniers TX sur " + String(salon).substring(0, 3), 240, 108);
 
     i = 161;
     j = 38;
@@ -764,6 +764,10 @@ void viewElsewhereBig(DynamicJsonDocument doc, const char *salon) {
   M5.Lcd.setFreeFont(&tahoma8pt7b);
 
   if(reset == 0) {
+    M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
+    M5.Lcd.setTextPadding(0);
+    M5.Lcd.drawString("Trafic en cours", 75, 112);
+
     for(i = 0; i < 10; i++) {
       memory[i] = "";
     }
@@ -849,7 +853,7 @@ void viewElsewhereBig(DynamicJsonDocument doc, const char *salon) {
 }
 
 // View last links Big
-void viewLastLinksBig(uint8_t stop, const char *lastHeure[10], const char *lastIndicatif[10], const char *lastDuree[10]) {
+void viewLastLinksBig(uint8_t stop, const char *lastHeure[10], const char *lastIndicatif[10], const char *lastDuree[10], const char *salon) {
   uint8_t i, j, k;
   static String memory[10];
 
@@ -861,6 +865,10 @@ void viewLastLinksBig(uint8_t stop, const char *lastHeure[10], const char *lastI
   M5.Lcd.setFreeFont(&tahoma8pt7b);
 
   if(reset == 0) {
+    M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
+    M5.Lcd.setTextPadding(0);
+    M5.Lcd.drawString("Derniers TX sur " + String(salon).substring(0, 3), 245, 112);
+
     for(i = 0; i < 10; i++) {
       memory[i] = "";
     }

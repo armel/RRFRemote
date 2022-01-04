@@ -85,11 +85,6 @@ void clear()
         M5.Lcd.drawFastHLine(1 + (170 * i), 125 + (k * 18) + k, 148, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
       }
     }
-    M5.Lcd.setFreeFont(&tahoma8pt7b);
-    M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
-    M5.Lcd.setTextPadding(0);
-    M5.Lcd.drawString("SCANNER", 75, 112);
-    M5.Lcd.drawString("TRAFIC RECENT", 245, 112);
   }
 }
 

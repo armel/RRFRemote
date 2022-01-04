@@ -368,19 +368,19 @@ void loop()
       
       case 2:
         if(doc["last"].size() != 0) {
-          viewLastLinks(doc["last"].size(), lastHeure, lastIndicatif, lastDuree);
+          viewLastLinks(doc["last"].size(), lastHeure, lastIndicatif, lastDuree, salon);
         }
         break;
 
       case 3:
         if(doc["all"].size() != 0) {
-          viewTopLinks(doc["all"].size(), allTx, allIndicatif, allDuree);
+          viewTopLinks(doc["all"].size(), allTx, allIndicatif, allDuree, salon);
         }
         break;
 
       case 4:
         if (doc["iptable"].size() != 0) {
-          viewBlocage(doc["iptable"].size(), iptableIndicatif, iptableType);
+          viewBlocage(doc["iptable"].size(), iptableIndicatif, iptableType, salon);
         }
         break;
 
@@ -395,7 +395,7 @@ void loop()
   else {
     viewElsewhereBig(doc, salon);
     if(doc["last"].size() != 0) {
-      viewLastLinksBig(doc["last"].size(), lastHeure, lastIndicatif, lastDuree);
+      viewLastLinksBig(doc["last"].size(), lastHeure, lastIndicatif, lastDuree, salon);
     }
   }
 
