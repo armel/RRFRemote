@@ -162,6 +162,10 @@ void button(void *pvParameters)
       buttonRightPressed = false;
     }
 
+    if(htmlGetRefresh == 1) {
+      htmlGetRefresh = 2;
+    }
+
     /*
     if (btnA || btnB || btnC)
     {
@@ -321,6 +325,15 @@ void button(void *pvParameters)
         totCurrent = change;
         preferences.putUInt("tot", totCurrent);
         vTaskDelay(pdMS_TO_TICKS(1000));
+        menuMode = 2;
+      }
+      else if (option == "MODE")
+      {
+        change = modeCurrent;
+        change = (change == 0) ? 1 : 0;
+        modeCurrent = change;
+        preferences.putUInt("mode", modeCurrent);
+        //vTaskDelay(pdMS_TO_TICKS(1000));
         menuMode = 2;
       }
       // Mode menu active, Color

@@ -34,7 +34,7 @@
 #include "settings.h"
 
 // Version
-#define VERSION "2.5.4"
+#define VERSION "2.6.1"
 
 // Wifi
 WiFiClientSecure clientISS;
@@ -152,26 +152,29 @@ String endpointRRF[] = {
     "http://rrf.f5nlg.ovh:8080/RRFTracker/BAVARDAGE-today/rrf_tiny.json",
     "http://rrf.f5nlg.ovh:8080/RRFTracker/LOCAL-today/rrf_tiny.json",
     "http://rrf.f5nlg.ovh:8080/RRFTracker/INTERNATIONAL-today/rrf_tiny.json",
+    "http://rrf.f5nlg.ovh:8080/RRFTracker/EXPERIMENTAL-today/rrf_tiny.json",
     "http://rrf.f5nlg.ovh:8080/RRFTracker/FON-today/rrf_tiny.json"};
 
 // Scroll
-TFT_eSprite img = TFT_eSprite(&M5.Lcd); // Create Sprite object "img" with pointer to "tft" object
-String message = "";
-int16_t pos;
+TFT_eSprite Sprite = TFT_eSprite(&M5.Lcd); // Create Sprite object "img" with pointer to "tft" object
+String message;
+int16_t pos = 0;
 
 // Misceleanous
-const char *room[] = {"RRF", "TECHNIQUE", "BAVARDAGE", "LOCAL", "INTERNATIONAL", "FON"};
-const uint8_t dtmf[] = {96, 98, 100, 101, 99, 97};
-const char *menuSpotnikOn[]  = {"CONFIG", "QSY", "FOLLOW", "RAPTOR", "PERROQUET", "SYSOP", "TOT", "ISS", "COULEUR", "LUMINOSITE", "QUITTER"};
+const char *room[] = {"RRF", "TECHNIQUE", "BAVARDAGE", "LOCAL", "INTERNATIONAL", "EXPERIMENTAL", "FON"};
+const uint8_t dtmf[] = {96, 98, 100, 101, 99, 102, 97};
+const char *menuSpotnikOn[]  = {"CONFIG", "QSY", "FOLLOW", "RAPTOR", "PERROQUET", "SYSOP", "TOT", "ISS", "COULEUR", "LUMINOSITE", "MODE", "QUITTER"};
 const char *menuSpotnikOff[] = {"CONFIG", "TOT", "ISS", "COULEUR", "LUMINOSITE", "QUITTER"};
 const char *sysop[] = {"REBOOT", "IP", "SCAN RAPIDE", "LIBRE"};
 char **menu;
+char swap[32];
 
 String tmpString;
 
 String jsonData = "", issData = "", xmlData = "", whereisData = "";
 String jsonDataNew = "", issDataNew = "";
 
+String lastString;
 String dateString, dateStringOld;
 String dureeString, dureeStringOld;
 String emissionString, emissionStringOld;
@@ -192,9 +195,6 @@ bool refresh = 0;
 bool menuRefresh = 0;
 bool screensaverMode = 0;
 
-uint16_t qsy = 0;
-uint16_t issDistance = 0;
-
 int8_t menuSize;
 int8_t menuMode = 0;
 int8_t menuSelected = -1;
@@ -203,11 +203,14 @@ int8_t colorCurrent = 0;
 int8_t configCurrent = 0;
 int8_t sysopCurrent = 0;
 int8_t roomCurrent = 0;
+int8_t modeCurrent = 1;
 
 uint8_t htmlGetRequest;
+uint8_t htmlGetRefresh = 3;
 uint8_t alternance = 0;
 uint8_t type = 0;
 uint8_t action = 0; 
+uint8_t dst;
 
 uint8_t transmitOn = 0;
 uint8_t transmitOff = 0;
@@ -220,5 +223,11 @@ uint8_t followCurrent = 0;
 uint8_t batteryChargeCurrent = 0;
 uint8_t batteryLevelCurrent = 0;
 
+uint16_t qsy = 0;
+uint16_t issDistance = 0;
+
 uint32_t screensaver;
 uint32_t screensaverLimit = 5 * 60 * 1000;  // 5 minutes
+
+#undef SPI_READ_FREQUENCY
+#define SPI_READ_FREQUENCY 40000000
