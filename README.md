@@ -109,7 +109,8 @@ Mais pourquoi avoir développé une telle fonctionnalité ? Pour 2 raisons :
 - premièrement, c'était amusant à développer,
 - deuxièmement, ca permet de prendre de belle capture d'écran du RRFRemote, la preuve ;)
 
-![Capture](https://github.com/armel/RRFRemote/blob/main/img/screenshot.png)
+![Capture](https://github.com/armel/RRFRemote/blob/main/img/expert.png)
+![Capture](https://github.com/armel/RRFRemote/blob/main/img/basic.png)
 
 
 ## En complément 
