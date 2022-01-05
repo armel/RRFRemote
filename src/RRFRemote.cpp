@@ -145,22 +145,22 @@ void setup()
 
   // Multitasking task for retreive rrf, spotnik and propag data
   xTaskCreatePinnedToCore(
-      rrfdata,      // Function to implement the task
-      "rrfdata",    // Name of the task
-      8192,         // Stack size in words
-      NULL,         // Task input parameter
-      1,            // Priority of the task
-      NULL,         // Task handle
-      0);           // Core where the task should run
+      rrfdata,        // Function to implement the task
+      "rrfdata",      // Name of the task
+      8192,           // Stack size in words
+      NULL,           // Task input parameter
+      1,              // Priority of the task
+      NULL,           // Task handle
+      0);             // Core where the task should run
 
   xTaskCreatePinnedToCore(
-      hamdata,      // Function to implement the task
-      "hamdata",    // Name of the task
-      8192,         // Stack size in words
-      NULL,         // Task input parameter
-      1,            // Priority of the task
-      NULL,         // Task handle
-      1);           // Core where the task should run
+      hamdata,        // Function to implement the task
+      "hamdata",      // Name of the task
+      8192,           // Stack size in words
+      NULL,           // Task input parameter
+      1,              // Priority of the task
+      NULL,           // Task handle
+      1);             // Core where the task should run
 
   xTaskCreatePinnedToCore(
       button,       // Function to implement the task

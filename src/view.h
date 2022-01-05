@@ -559,7 +559,7 @@ String viewData(uint8_t icon, String data, String dataOld) {
   if (dataOld != data)
   {
     M5.Lcd.fillRect(4, 2, 36, 42, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
-    Serial.println(data);
+    //Serial.println(data);
 
     sprintf(swap, "%c", icon);
     tmpString = swap;

@@ -228,3 +228,6 @@ uint16_t issDistance = 0;
 
 uint32_t screensaver;
 uint32_t screensaverLimit = 5 * 60 * 1000;  // 5 minutes
+
+#undef SPI_READ_FREQUENCY
+#define SPI_READ_FREQUENCY 40000000
