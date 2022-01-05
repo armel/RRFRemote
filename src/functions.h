@@ -336,11 +336,11 @@ void getScreenshot()
         } 
         // If there's bytes to read from the client,
         if (httpClient.available()) {             
-          char c = httpClient.read();            
-          Serial.write(c);    
+          char c = httpClient.read();
+          Serial.write(c);
           // If the byte is a newline character             
           if (c == '\n') {    
-            // Uwo newline characters in a row (empty line) are indicating
+            // Two newline characters in a row (empty line) are indicating
             // The end of the client HTTP request, so send a response:
             if (currentLine.length() == 0) {
               // HTTP headers always start with a response code (e.g. HTTP/1.1 200 OK)
@@ -358,7 +358,7 @@ void getScreenshot()
                   httpClient.write_P(index_html, sizeof(index_html));
                   break;
                 }
-                case GET_screenshot: {              
+                case GET_screenshot: {
                   httpClient.println("HTTP/1.1 200 OK");
                   httpClient.println("Content-type:image/bmp");
                   httpClient.println();
@@ -383,25 +383,30 @@ void getScreenshot()
                 htmlGetRequest = GET_unknown;
                 // If no specific target is requested
                 if(currentLine.startsWith("GET / ")){
+                  htmlGetRefresh = 3;
                   htmlGetRequest = GET_index_page;
                 }
                 // If the screenshot image is requested
                 if(currentLine.startsWith("GET /screenshot.bmp")){
+                  htmlGetRefresh = 3;
                   htmlGetRequest = GET_screenshot;
                 }
                 // If the button left was pressed on the HTML page
                 if(currentLine.startsWith("GET /buttonLeft")){
                   buttonLeftPressed = true;
+                  htmlGetRefresh = 1;
                   htmlGetRequest = GET_index_page;
                 }
                 // If the button center was pressed on the HTML page
                 if(currentLine.startsWith("GET /buttonCenter")){
                   buttonCenterPressed = true;
+                  htmlGetRefresh = 1;
                   htmlGetRequest = GET_index_page;
                 }
                 // If the button right was pressed on the HTML page
                 if(currentLine.startsWith("GET /buttonRight")){
                   buttonRightPressed = true;
+                  htmlGetRefresh = 1;
                   htmlGetRequest = GET_index_page;
                 }
               }

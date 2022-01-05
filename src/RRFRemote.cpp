@@ -212,9 +212,6 @@ void loop()
 
   uint32_t timer = 0;
 
-  // Manage Web site Screen Capture
-  getScreenshot();
-
   // Let's go
   if (reset == 0)
   {
@@ -651,7 +648,7 @@ void loop()
   //Serial.print(millis() - timer);
   //Serial.print(" - ");
 
-  if(menuMode == 0) {
+  if(menuMode == 0 && htmlGetRefresh != 2) {
     while(millis() - timer < LIMIT)
     {
       scroll(10);
@@ -659,4 +656,13 @@ void loop()
   }
 
   //Serial.println(millis() - timer);
+
+  // Manage Web site Screen Capture
+
+  if(htmlGetRefresh == 2) {
+    htmlGetRefresh = 3;
+  }
+  else if(htmlGetRefresh == 3) {
+    getScreenshot();
+  }
 }

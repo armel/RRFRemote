@@ -162,6 +162,10 @@ void button(void *pvParameters)
       buttonRightPressed = false;
     }
 
+    if(htmlGetRefresh == 1) {
+      htmlGetRefresh = 2;
+    }
+
     /*
     if (btnA || btnB || btnC)
     {

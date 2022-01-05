@@ -34,7 +34,7 @@
 #include "settings.h"
 
 // Version
-#define VERSION "2.6.0"
+#define VERSION "2.6.1"
 
 // Wifi
 WiFiClientSecure clientISS;
@@ -195,9 +195,6 @@ bool refresh = 0;
 bool menuRefresh = 0;
 bool screensaverMode = 0;
 
-uint16_t qsy = 0;
-uint16_t issDistance = 0;
-
 int8_t menuSize;
 int8_t menuMode = 0;
 int8_t menuSelected = -1;
@@ -209,6 +206,7 @@ int8_t roomCurrent = 0;
 int8_t modeCurrent = 1;
 
 uint8_t htmlGetRequest;
+uint8_t htmlGetRefresh = 3;
 uint8_t alternance = 0;
 uint8_t type = 0;
 uint8_t action = 0; 
@@ -224,6 +222,9 @@ uint8_t raptorCurrent = 0;
 uint8_t followCurrent = 0;
 uint8_t batteryChargeCurrent = 0;
 uint8_t batteryLevelCurrent = 0;
+
+uint16_t qsy = 0;
+uint16_t issDistance = 0;
 
 uint32_t screensaver;
 uint32_t screensaverLimit = 5 * 60 * 1000;  // 5 minutes
