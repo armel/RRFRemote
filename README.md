@@ -115,6 +115,7 @@ Mais pourquoi avoir développé une telle fonctionnalité ? Pour 2 raisons :
 ## En complément 
 Il est possible de :
 
+- changer le mode d'affichage : EXPERT ou BASIC (pour un affichage avec une taille de police plus importante),
 - changer les couleurs du thème,
 - régler la luminosité de l'écran,
 - activer une alerte sonore TOT (_alerte visuelle via la LED sur le CORE2_),
