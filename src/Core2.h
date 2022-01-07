@@ -85,7 +85,6 @@ bool isCharging()
 void getButton()
 {
   M5.update();
-
   btnA = M5.BtnA.read();
   btnB = M5.BtnB.read();
   btnC = M5.BtnC.read();
