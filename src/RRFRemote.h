@@ -13,15 +13,18 @@
   #define LED_PIN 15
   #include <M5Stack.h>
   #include "BasicAndGrey.h"
+  #include "WebIndexBasicAndGrey.h"
 #elif BOARD == GREY
   #define M5STACK_MPU6886
   #define LED_PIN 15
   #include <M5Stack.h>
   #include "BasicAndGrey.h"
+  #include "WebIndexBasicAndGrey.h"
 #elif BOARD == CORE2
   #define LED_PIN 25
   #include <M5Core2.h>
   #include "Core2.h"
+  #include "WebIndexCore2.h"
 #endif
 
 #include <WiFiClientSecure.h>
@@ -34,7 +37,7 @@
 #include "settings.h"
 
 // Version
-#define VERSION "2.6.1"
+#define VERSION "2.6.2"
 
 // Wifi
 WiFiClientSecure clientISS;
@@ -43,8 +46,6 @@ WiFiClient httpClient;
 WiFiServer httpServer(80);
 
 // Web site Screen Capture stuff
-#include "WebIndex.h"
-
 #define GET_unknown 0
 #define GET_index_page  1
 #define GET_screenshot  2

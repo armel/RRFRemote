@@ -651,7 +651,7 @@ void loop()
   if(menuMode == 0 && htmlGetRefresh != 2) {
     while(millis() - timer < LIMIT)
     {
-      scroll(10);
+      scroll(15);
     }
   }
 
