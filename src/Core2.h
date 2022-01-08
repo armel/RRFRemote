@@ -1,35 +1,41 @@
 // Copyright (c) F4HWN Armel. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-uint8_t btnA, btnB, btnC, btnD, btnE = 0;
+uint8_t btnA, btnB, btnC, btnD, btnE, btnF = 0;
 
 Gesture swipeLeft("swipe left", 160, DIR_LEFT, 30, true);
 Gesture swipeRight("swipe right", 160, DIR_RIGHT, 30, true);
 Gesture swipeDown("swipe down", 120, DIR_DOWN, 30, true);
 Gesture swipeUp("swipe up", 120, DIR_UP, 30, true);
 
+// Expand virtual fucking button
+Button myBtnA(0, 200, 80, 80);
+Button myBtnB(120, 200, 80, 80);
+Button myBtnC(240, 200, 80, 80);
+//Button myBtnD(0, 0, 320, 80);
+
 // Swipe left manage
 void detectSwipeLeft(Event &e)
 {
-  btnD = 1;
+  btnE = 1;
 }
 
 // Swipe right manage
 void detectSwipeRight(Event &e)
 {
-  btnD = 2;
+  btnE = 2;
 }
 
 // Swipe bottom manage
 void detectSwipeDown(Event &e)
 {
-  btnE = 1;
+  btnF = 1;
 }
 
 // Swipe top manage
 void detectSwipeUp(Event &e)
 {
-  btnE = 2;
+  btnF = 2;
 }
 
 // Power init
@@ -85,25 +91,32 @@ bool isCharging()
 void getButton()
 {
   M5.update();
-  btnA = M5.BtnA.read();
-  btnB = M5.BtnB.read();
-  btnC = M5.BtnC.read();
+  btnA = myBtnA.read();
+  btnB = myBtnB.read();
+  btnC = myBtnC.read();
+  //btnD = myBtnD.read();
 
-  if (btnD == 1)
+  //Serial.println(btnA);
+  //Serial.println(btnB);
+  //Serial.println(btnC);
+  //Serial.println(btnD);
+  //Serial.println("----------");
+
+  if (btnE == 1)
   {
     btnA = 1;
-    btnD = 0;
+    btnE = 0;
   }
-  else if (btnD == 2)
+  else if (btnE == 2)
   {
     btnC = 1;
-    btnD = 0;
+    btnE = 0;
   }
 
-  if (btnE == 1 || btnE == 2)
+  if (btnF == 1 || btnF == 2)
   {
     btnB = 1;
-    btnE = 0;
+    btnF = 0;
   }
 }
 
