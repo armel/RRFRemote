@@ -485,7 +485,7 @@ void loop()
       }
 
       if(totCurrent) {
-        if((String(salon) == "RRF" && tot > 135) || (tot > 285))
+        if((String(salon) == "RRF" && tot > 145) || (tot > 290))
         {
           totTone();
           delay(10);
