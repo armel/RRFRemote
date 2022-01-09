@@ -923,3 +923,31 @@ void viewLastLinksBig(uint8_t stop, const char *lastHeure[10], const char *lastI
     j += 19;
   }
 }
+
+// View DTMF
+void viewDTMF() {
+  uint8_t i, j, k;
+
+  M5.Lcd.setFreeFont(&tahoma8pt7b);
+  M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
+  M5.Lcd.setTextDatum(CC_DATUM);
+  M5.Lcd.setTextPadding(45);
+
+  j = 0;
+  k = 0;
+
+  for (i = 0; i < 7; i++) {
+    tmpString = String(room[i]);
+    tmpString = tmpString.substring(0, 3);
+    M5.Lcd.drawString(tmpString, (50 + j), (123 + k));
+    j += 110;
+    if (i == 2 || i == 5) {
+      j = 0;
+      k += 48;
+    }
+  }
+
+  M5.Lcd.drawString("PERROQUET", (50 + j), (123 + k));
+  j += 110;
+  M5.Lcd.drawString("RAPTOR", (50 + j), (123 + k));
+}

@@ -1,19 +1,50 @@
 // Copyright (c) F4HWN Armel. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-uint8_t btnA, btnB, btnC, btnD, btnE, btnF = 0;
+CORE2SPK _Core2SPK;
 
-Gesture swipeLeft("swipe left", 160, DIR_LEFT, 30, true);
-Gesture swipeRight("swipe right", 160, DIR_RIGHT, 30, true);
-Gesture swipeDown("swipe down", 120, DIR_DOWN, 30, true);
-Gesture swipeUp("swipe up", 120, DIR_UP, 30, true);
+uint8_t btnA, btnB, btnC, btnD = 0;
+uint8_t btnDTMF1, btnDTMF2, btnDTMF3 = 0;
+uint8_t btnDTMF4, btnDTMF5, btnDTMF6 = 0;
+uint8_t btnDTMF7, btnDTMF8, btnDTMF9 = 0;
+
+/*
+Gesture swipeLeft(  "swipe left",   160, DIR_LEFT,  30, true);
+Gesture swipeRight( "swipe right",  160, DIR_RIGHT, 30, true);
+Gesture swipeDown(  "swipe down",   120, DIR_DOWN,  30, true);
+Gesture swipeUp(    "swipe up",     120, DIR_UP,    30, true);
+*/
 
 // Expand virtual fucking button
-Button myBtnA(0, 200, 80, 80);
-Button myBtnB(120, 200, 80, 80);
-Button myBtnC(240, 200, 80, 80);
-//Button myBtnD(0, 0, 320, 80);
+Button myBtnA(  0, 200, 100,  80);
+Button myBtnB(110, 200, 100,  80);
+Button myBtnC(220, 200, 100,  80);
+Button myBtnD(  0,   0, 320,  80);
 
+// Special DTMF button
+/*
+Button myBtnDTMF1(10 + (110 * 0), 109 + (48 * 0), 80, 30, false, "", {BLACK, WHITE, WHITE});
+Button myBtnDTMF2(10 + (110 * 1), 109 + (48 * 0), 80, 30, false, "", {BLACK, WHITE, WHITE});
+Button myBtnDTMF3(10 + (110 * 2), 109 + (48 * 0), 80, 30, false, "", {BLACK, WHITE, WHITE});
+Button myBtnDTMF4(10 + (110 * 0), 109 + (48 * 1), 80, 30, false, "", {BLACK, WHITE, WHITE});
+Button myBtnDTMF5(10 + (110 * 1), 109 + (48 * 1), 80, 30, false, "", {BLACK, WHITE, WHITE});
+Button myBtnDTMF6(10 + (110 * 2), 109 + (48 * 1), 80, 30, false, "", {BLACK, WHITE, WHITE});
+Button myBtnDTMF7(10 + (110 * 0), 109 + (48 * 2), 80, 30, false, "", {BLACK, WHITE, WHITE});
+Button myBtnDTMF8(10 + (110 * 1), 109 + (48 * 2), 80, 30, false, "", {BLACK, WHITE, WHITE});
+Button myBtnDTMF9(10 + (110 * 2), 109 + (48 * 2), 80, 30, false, "", {BLACK, WHITE, WHITE});
+*/
+
+Button myBtnDTMF1(10 + (110 * 0), 109 + (48 * 0), 80, 30);
+Button myBtnDTMF2(10 + (110 * 1), 109 + (48 * 0), 80, 30);
+Button myBtnDTMF3(10 + (110 * 2), 109 + (48 * 0), 80, 30);
+Button myBtnDTMF4(10 + (110 * 0), 109 + (48 * 1), 80, 30);
+Button myBtnDTMF5(10 + (110 * 1), 109 + (48 * 1), 80, 30);
+Button myBtnDTMF6(10 + (110 * 2), 109 + (48 * 1), 80, 30);
+Button myBtnDTMF7(10 + (110 * 0), 109 + (48 * 2), 80, 30);
+Button myBtnDTMF8(10 + (110 * 1), 109 + (48 * 2), 80, 30);
+Button myBtnDTMF9(10 + (110 * 2), 109 + (48 * 2), 80, 30);
+
+/*
 // Swipe left manage
 void detectSwipeLeft(Event &e)
 {
@@ -37,16 +68,19 @@ void detectSwipeUp(Event &e)
 {
   btnF = 2;
 }
+*/
 
 // Power init
 void power()
 {
   // By default, M5.begin() will initialize AXP192 chip on Core2
   M5.Axp.SetLed(0);
+  /*
   swipeLeft.addHandler(detectSwipeLeft);
   swipeRight.addHandler(detectSwipeRight);
   swipeDown.addHandler(detectSwipeDown);
   swipeUp.addHandler(detectSwipeUp);
+  */
 }
 
 // Get Battery level
@@ -88,19 +122,101 @@ bool isCharging()
 }
 
 // Get button
-void getButton()
+void getButton(uint8_t modeCurrent)
 {
+  static uint8_t modeChange = 10;
+
+  if(modeChange != modeCurrent) {
+    modeChange = modeCurrent;
+
+    if(modeChange != 2) {
+      myBtnDTMF1.hide();
+      myBtnDTMF2.hide();
+      myBtnDTMF3.hide();
+      myBtnDTMF4.hide();
+      myBtnDTMF5.hide();
+      myBtnDTMF6.hide();
+      myBtnDTMF7.hide();
+      myBtnDTMF8.hide();
+      myBtnDTMF9.hide();
+
+      myBtnA.draw();
+      myBtnB.draw();
+      myBtnC.draw();
+      //myBtnD.draw();
+
+      Serial.println("DTMF OFF");
+    }
+    else {
+      myBtnDTMF1.draw();
+      myBtnDTMF2.draw();
+      myBtnDTMF3.draw();
+      myBtnDTMF4.draw();
+      myBtnDTMF5.draw();
+      myBtnDTMF6.draw();
+      myBtnDTMF7.draw();
+      myBtnDTMF8.draw();
+      myBtnDTMF9.draw();
+
+      myBtnA.hide();
+      myBtnB.hide();
+      myBtnC.hide();
+      //myBtnD.hide();
+
+      Serial.println("DTMF ON");
+    }
+  }
+
   M5.update();
+
   btnA = myBtnA.read();
   btnB = myBtnB.read();
   btnC = myBtnC.read();
-  //btnD = myBtnD.read();
+  btnD = myBtnD.isPressed();
 
-  //Serial.println(btnA);
-  //Serial.println(btnB);
-  //Serial.println(btnC);
-  //Serial.println(btnD);
-  //Serial.println("----------");
+  btnDTMF1 = myBtnDTMF1.read();
+  btnDTMF2 = myBtnDTMF2.read();
+  btnDTMF3 = myBtnDTMF3.read();
+  btnDTMF4 = myBtnDTMF4.read();
+  btnDTMF5 = myBtnDTMF5.read();
+  btnDTMF6 = myBtnDTMF6.read();
+  btnDTMF7 = myBtnDTMF7.read();
+  btnDTMF8 = myBtnDTMF8.read();
+  btnDTMF9 = myBtnDTMF9.read();
+
+  if(
+      btnA || btnB || btnC || btnD || 
+      btnDTMF1 || btnDTMF2 || btnDTMF3 ||
+      btnDTMF4 || btnDTMF5 || btnDTMF6 ||
+      btnDTMF7 || btnDTMF8 || btnDTMF9   
+    ) 
+  {
+    _Core2SPK.playBeep(5000, 100, 2000, false);
+    Serial.print(btnDTMF1);
+    Serial.print(" ");
+    Serial.print(btnDTMF2);
+    Serial.print(" ");
+    Serial.print(btnDTMF3);
+    Serial.print(" ");
+    Serial.print(btnDTMF4);
+    Serial.print(" ");
+    Serial.print(btnDTMF5);
+    Serial.print(" ");
+    Serial.print(btnDTMF6);
+    Serial.print(" ");
+    Serial.print(btnDTMF7);
+    Serial.print(" ");
+    Serial.print(btnDTMF8);
+    Serial.print(" ");
+    Serial.println(btnDTMF9);
+  }
+
+  /*
+  Serial.print(btnA);
+  Serial.print(" - ");
+  Serial.print(btnB);
+  Serial.print(" - ");
+  Serial.println(btnC);
 
   if (btnE == 1)
   {
@@ -118,17 +234,21 @@ void getButton()
     btnB = 1;
     btnF = 0;
   }
+  */
 }
 
 // Speaker
 void speaker()
 {
-  // Core2 is not ready
+  M5.Axp.SetSpkEnable(true);
+  _Core2SPK.begin();
+  _Core2SPK.playBeep(5000, 100, 2000, false);
 }
 
 // Manage Tone
 void totTone()
 {
+  _Core2SPK.playBeep(5000, 100, 2000, false);
   M5.Axp.SetLed(1);
 }
 
