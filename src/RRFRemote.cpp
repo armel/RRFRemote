@@ -373,27 +373,41 @@ void loop()
         if(doc["all"].size() != 0) {
           viewTopLinks(doc["all"].size(), allTx, allIndicatif, allDuree, salon);
         }
+        else {
+          viewLastLinks(doc["last"].size(), lastHeure, lastIndicatif, lastDuree, salon);
+        }
         break;
 
       case 4:
         if (doc["iptable"].size() != 0) {
           viewBlocage(doc["iptable"].size(), iptableIndicatif, iptableType, salon);
         }
+        else {
+          viewLastLinks(doc["last"].size(), lastHeure, lastIndicatif, lastDuree, salon);
+        }
         break;
 
       case 5:
-        viewISS(docISS);
+        if(issCurrent == 1) {
+          viewISS(docISS);
+        }
+        else {
+          viewLastLinks(doc["last"].size(), lastHeure, lastIndicatif, lastDuree, salon);
+        }
         break;
 
       default:
         viewPropagation();
     }
   }
-  else {
+  else if(modeCurrent == 1) {
     viewElsewhereBig(doc, salon);
     if(doc["last"].size() != 0) {
       viewLastLinksBig(doc["last"].size(), lastHeure, lastIndicatif, lastDuree, salon);
     }
+  }
+  else {
+    viewDTMF();
   }
 
   // Transmit or no transmit
@@ -549,9 +563,16 @@ void loop()
           break;
 
         case 5:
-          tmpString = String(issDistance);
-          issString =  "ISS " + tmpString + " Km";
-          issStringOld = viewData(ICON_ISS, issString, issStringOld);
+          if(issCurrent == 1) {
+            tmpString = String(issDistance);
+            issString =  "ISS " + tmpString + " Km";
+            issStringOld = viewData(ICON_ISS, issString, issStringOld);
+          }
+          else {
+            tmpString = String(emission);
+            emissionString = (strlen(emission) == 5) ? "BF 00:" + tmpString : "BF " + tmpString;
+            emissionStringOld = viewData(ICON_CLOCK, emissionString, emissionStringOld);
+          }
           break;
       }
     }
@@ -618,6 +639,7 @@ void loop()
     case 2: reset = 0; refresh = 0; break;
     case 3: reset = 0; refresh = 0; menuRefresh = 0; break;
     case 4: reset = 0; refresh = 0; menuMode = 0; menuSelected = -1; break;
+    case 5: reset = 0; refresh = 0; modeCurrent = modeNew; break;
   }
 
   action = 0;

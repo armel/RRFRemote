@@ -74,7 +74,7 @@ void clear()
     // Log
     M5.Lcd.fillRoundRect(160, 117, 160, 122, 4, TFT_WHITE);
   }
-  else {
+  else if(modeCurrent == 1) {
     for (uint8_t i = 0; i <= 1; i++) {
       M5.Lcd.fillRoundRect(0 + (170 * i), 125, 150, 115, 4, TFT_WHITE);
       M5.Lcd.fillRoundRect(1 + (170 * i), 126, 148, 113, 4, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
@@ -83,6 +83,14 @@ void clear()
 
       for(uint8_t k = 1; k <= 5; k++) {
         M5.Lcd.drawFastHLine(1 + (170 * i), 125 + (k * 18) + k, 148, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
+      }
+    }
+  }
+  else {
+    for (uint8_t i = 0; i <= 2; i++) {
+      for (uint8_t j = 0; j <= 2; j++) {
+        M5.Lcd.fillRoundRect(0 + (110 * j), 104 + (48 * i), 100, 40, 4, TFT_WHITE);
+        M5.Lcd.fillRoundRect(1 + (110 * j), 105 + (48 * i), 98, 38, 4, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
       }
     }
   }

@@ -23,6 +23,7 @@
 #elif BOARD == CORE2
   #define LED_PIN 25
   #include <M5Core2.h>
+  #include "Core2SPK.h"
   #include "Core2.h"
   #include "WebIndexCore2.h"
 #endif
@@ -37,7 +38,7 @@
 #include "settings.h"
 
 // Version
-#define VERSION "2.6.2"
+#define VERSION "2.7.0"
 
 // Wifi
 WiFiClientSecure clientISS;
@@ -205,6 +206,8 @@ int8_t configCurrent = 0;
 int8_t sysopCurrent = 0;
 int8_t roomCurrent = 0;
 int8_t modeCurrent = 1;
+int8_t modeOld = 1;
+int8_t modeNew = 1;
 
 uint8_t htmlGetRequest;
 uint8_t htmlGetRefresh = 3;

@@ -147,7 +147,7 @@ void button(void *pvParameters)
 
   for (;;)
   {
-    getButton();
+    getButton(modeCurrent);
 
     if(buttonLeftPressed) {
       btnA = true;
@@ -190,6 +190,77 @@ void button(void *pvParameters)
       left = 1;
     }
 
+    if(btnD == 1) {
+      if(modeCurrent == 2) {
+        modeNew = modeOld;
+        btnA = btnB = btnC = 0;
+        action = 5;
+      }
+      else {
+        modeOld = modeCurrent;
+        modeNew = 2;
+        btnA = btnB = btnC = 0;
+        action = 5;
+      }
+    }
+
+    // Manage DTMF on CORE2
+
+    if (btnDTMF1 == 1) {
+      Serial.println("QSY RRF");
+      qsy = dtmf[0];
+      modeNew = modeOld;
+      action = 5;
+    }
+    else if (btnDTMF2 == 1) {
+      Serial.println("QSY TEC");
+      qsy = dtmf[1];
+      modeNew = modeOld;
+      action = 5;
+    }
+    else if (btnDTMF3 == 1) {
+      Serial.println("QSY BAV");
+      qsy = dtmf[2];
+      modeNew = modeOld;
+      action = 5;
+    }
+    else if (btnDTMF4 == 1) {
+      Serial.println("QSY LOC");
+      qsy = dtmf[3];
+      modeNew = modeOld;
+      action = 5;
+    }
+    else if (btnDTMF5 == 1) {
+      Serial.println("QSY INT");
+      qsy = dtmf[4];
+      modeNew = modeOld;
+      action = 5;
+    }
+    else if (btnDTMF6 == 1) {
+      Serial.println("QSY EXP");
+      qsy = dtmf[5];
+      modeNew = modeOld;
+      action = 5;
+    }
+    else if (btnDTMF7 == 1) {
+      Serial.println("QSY FON");
+      qsy = dtmf[6];
+      modeNew = modeOld;
+      action = 5;
+    }
+    else if (btnDTMF8 == 1) {
+      Serial.println("PERROQUET");
+      qsy = 95;
+      modeNew = modeOld;
+      action = 5;
+    }
+    else if (btnDTMF9 == 1) {
+      Serial.println("RAPTOR");
+      qsy = 200;
+      modeNew = modeOld;
+      action = 5;
+    }
+
     if ((btnA || btnB || btnC))
     {
       screensaver = millis(); // Screensaver update !!!
@@ -208,12 +279,15 @@ void button(void *pvParameters)
         {
           change = roomCurrent;
 
+          int n = sizeof(room) / sizeof(room[0]);
+          n -= 1;
+
           if (btnA)
           {
             change += left;
 
-            change = (change < 0) ? 5 : change;
-            change = (change > 5) ? 0 : change;
+            change = (change < 0) ? n : change;
+            change = (change > n) ? 0 : change;
             roomCurrent = change;
             preferences.putUInt("room", roomCurrent);
           }
@@ -221,8 +295,8 @@ void button(void *pvParameters)
           {
             change += right;
         
-            change = (change < 0) ? 5 : change;
-            change = (change > 5) ? 0 : change;
+            change = (change < 0) ? n : change;
+            change = (change > n) ? 0 : change;
             roomCurrent = change;
             preferences.putUInt("room", roomCurrent);
           }
