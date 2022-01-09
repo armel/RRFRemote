@@ -364,9 +364,7 @@ void loop()
         break;
       
       case 2:
-        if(doc["last"].size() != 0) {
-          viewLastLinks(doc["last"].size(), lastHeure, lastIndicatif, lastDuree, salon);
-        }
+        viewPropagation();
         break;
 
       case 3:
@@ -397,7 +395,9 @@ void loop()
         break;
 
       default:
-        viewPropagation();
+        if(doc["last"].size() != 0) {
+          viewLastLinks(doc["last"].size(), lastHeure, lastIndicatif, lastDuree, salon);
+        }
     }
   }
   else if(modeCurrent == 1) {
