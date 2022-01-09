@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 // Board
-#define BOARD BASIC
+#define BOARD CORE2
 
 #define BASIC 1
 #define GREY  2
@@ -23,7 +23,6 @@
 #elif BOARD == CORE2
   #define LED_PIN 25
   #include <M5Core2.h>
-  #include <driver/i2s.h>
   #include "Core2SPK.h"
   #include "Core2.h"
   #include "WebIndexCore2.h"

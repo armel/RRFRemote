@@ -1,3 +1,6 @@
+#include <M5Core2.h>
+#include <driver/i2s.h>
+
 #define CONFIG_I2S_BCK_PIN 12
 #define CONFIG_I2S_LRCK_PIN 0
 #define CONFIG_I2S_DATA_PIN 2
