@@ -279,12 +279,15 @@ void button(void *pvParameters)
         {
           change = roomCurrent;
 
+          int n = sizeof(room) / sizeof(room[0]);
+          n -= 1;
+
           if (btnA)
           {
             change += left;
 
-            change = (change < 0) ? 5 : change;
-            change = (change > 5) ? 0 : change;
+            change = (change < 0) ? n : change;
+            change = (change > n) ? 0 : change;
             roomCurrent = change;
             preferences.putUInt("room", roomCurrent);
           }
@@ -292,8 +295,8 @@ void button(void *pvParameters)
           {
             change += right;
         
-            change = (change < 0) ? 5 : change;
-            change = (change > 5) ? 0 : change;
+            change = (change < 0) ? n : change;
+            change = (change > n) ? 0 : change;
             roomCurrent = change;
             preferences.putUInt("room", roomCurrent);
           }
