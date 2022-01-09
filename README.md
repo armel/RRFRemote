@@ -89,9 +89,13 @@ Voici la liste des fonctionnalités actuelles :
 
 > __Remarque 1__
 > 
-> Si le mode _Follow_ est activé, le RRFRemote affichera les informations du salon sur lequel se trouve votre link et il le suivra au grès de ses QSY. Il ne sera pas possible de consulter les informations d'un autre salon, à l'aide des boutons gauche et droit, à moins évidement de désactiver le mode _Follow_.
+> Concernant le modèle Core2, tactile, il est désormais possible d'afficher une télécommande DTMF 100% tactile. Il suffit de cliquer sur le haut de l'écran pour l'afficher.
 
 > __Remarque 2__
+> 
+> Si le mode _Follow_ est activé, le RRFRemote affichera les informations du salon sur lequel se trouve votre link et il le suivra au grès de ses QSY. Il ne sera pas possible de consulter les informations d'un autre salon, à l'aide des boutons gauche et droit, à moins évidement de désactiver le mode _Follow_.
+
+> __Remarque 3__
 > 
 > Concernant l'appel de fonctions spéciales paramétrables par le Sysop, elles sont au nombre de 4. C'est plutôt une fonctionnalité pour les _power user_ ayant un minimum de compétence en scripting. Par défaut, et à titre d'exemple, 3 fonctions sont déjà définies : reboot et adresse IP du Spotnik ainsi que le scan rapide du Raptor. Libre à vous de les modifier ou de définir celle qui reste libre. Il vous suffit :
 > 
