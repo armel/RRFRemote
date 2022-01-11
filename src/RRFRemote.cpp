@@ -149,7 +149,7 @@ void setup()
       "rrfdata",      // Name of the task
       8192,           // Stack size in words
       NULL,           // Task input parameter
-      1,              // Priority of the task
+      3,              // Priority of the task
       NULL,           // Task handle
       0);             // Core where the task should run
 

@@ -228,8 +228,8 @@ bool M5Screen4bmp(){
     252, 252, 252, 255,
     192, 192, 192, 255,
     TFT_HEADER.b, TFT_HEADER.g, TFT_HEADER.r, 255,
-    TFT_FRONT.b, TFT_FRONT.g, TFT_FRONT.r, 255,
-    TFT_BACK.b, TFT_BACK.g, TFT_BACK.r, 255
+    TFT_BACK.b, TFT_BACK.g, TFT_BACK.r, 255,
+    TFT_FRONT.b, TFT_FRONT.g, TFT_FRONT.r, 255
   };
 
   // Fill filesize, width and heigth in the header array
@@ -289,9 +289,9 @@ bool M5Screen4bmp(){
           l = 0b0011;
         }
         else if(
-          abs(line_data_raw[x * 3] - TFT_FRONT.r) < 16 && 
-          abs(line_data_raw[x * 3 + 1] - TFT_FRONT.g) < 16 && 
-          abs(line_data_raw[x * 3 + 2] - TFT_FRONT.b) < 16
+          abs(line_data_raw[x * 3] - TFT_BACK.r) < 16 && 
+          abs(line_data_raw[x * 3 + 1] - TFT_BACK.g) < 16 && 
+          abs(line_data_raw[x * 3 + 2] - TFT_BACK.b) < 16
         ) {
           l = 0b0100;
         }
@@ -329,9 +329,9 @@ bool M5Screen4bmp(){
           r = 0b0011;
         }
         else if(
-          abs(line_data_raw[(x + 1) * 3] - TFT_FRONT.r) < 16 &&
-          abs(line_data_raw[(x + 1) * 3 + 1] - TFT_FRONT.g) < 16 &&
-          abs(line_data_raw[(x + 1) * 3 + 2] - TFT_FRONT.b) < 16
+          abs(line_data_raw[(x + 1) * 3] - TFT_BACK.r) < 16 &&
+          abs(line_data_raw[(x + 1) * 3 + 1] - TFT_BACK.g) < 16 &&
+          abs(line_data_raw[(x + 1) * 3 + 2] - TFT_BACK.b) < 16
         ) {
           r = 0b0100;
         }
@@ -380,8 +380,8 @@ bool M5Screen8bmp(){
     252, 252, 252, 255,
     192, 192, 192, 255,
     TFT_HEADER.b, TFT_HEADER.g, TFT_HEADER.r, 255,
-    TFT_FRONT.b, TFT_FRONT.g, TFT_FRONT.r, 255,
-    TFT_BACK.b, TFT_BACK.g, TFT_BACK.r, 255
+    TFT_BACK.b, TFT_BACK.g, TFT_BACK.r, 255,
+    TFT_FRONT.b, TFT_FRONT.g, TFT_FRONT.r, 255
   };
 
   // Fill filesize, width and heigth in the header array
@@ -438,9 +438,9 @@ bool M5Screen8bmp(){
         line_data_bmp[x] = 3;
       }
       else if(
-        abs(line_data_raw[x * 3] - TFT_FRONT.r) < 16 &&
-        abs(line_data_raw[x * 3 + 1] - TFT_FRONT.g) < 16 &&
-        abs(line_data_raw[x * 3 + 2] - TFT_FRONT.b) < 16
+        abs(line_data_raw[x * 3] - TFT_BACK.r) < 16 &&
+        abs(line_data_raw[x * 3 + 1] - TFT_BACK.g) < 16 &&
+        abs(line_data_raw[x * 3 + 2] - TFT_BACK.b) < 16
       ) {
         line_data_bmp[x] = 4;
       }
