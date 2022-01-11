@@ -195,105 +195,297 @@ void updateLocalTime()
   dateString = String(timeStringBuff);
 }
 
-// M5Screen2bmp (dump the screen to a file)
-
-bool M5Screen2bmp(fs::FS &fs, const char * path){
+//M5Screen4bmp() (dump 4 bits screen to a WiFi client)
+bool M5Screen4bmp(){
   uint16_t image_height = M5.Lcd.height();
   uint16_t image_width = M5.Lcd.width();
-  const uint16_t pad = (4 - (3 * image_width) % 4) % 4;
-  uint16_t filesize = 54 + (3 * image_width + pad) * image_height; 
-  unsigned char swap;
-  unsigned char line_data[image_width * 3 + pad];
+  uint32_t filesize = 54 + 24 + ((image_width * image_height) / 2); 
+  uint8_t l = 0;
+  uint8_t r = 0;
+
+  unsigned char line_data_raw[image_width * 3];
+  unsigned char line_data_bmp[(image_width / 2) * 10];
+
   unsigned char header[54] = { 
-    'B','M',  // BMP signature (Windows 3.1x, 95, NT, …)
-    0,0,0,0,  // image file size in bytes
-    0,0,0,0,  // reserved
-    54,0,0,0, // start of pixel array
-    40,0,0,0, // info header size
-    0,0,0,0,  // image width
-    0,0,0,0,  // image height
-    1,0,      // number of color planes
-    24,0,     // bits per pixel
-    0,0,0,0,  // compression
-    0,0,0,0,  // image size (can be 0 for uncompressed images)
-    0,0,0,0,  // horizontal resolution (dpm)
-    0,0,0,0,  // vertical resolution (dpm)
-    0,0,0,0,  // colors in color table (0 = none)
-    0,0,0,0 };// important color count (0 = all colors are important)
-    
-  // Open file for writing
-  // The existing image file will be replaced
-  File file = fs.open(path, FILE_WRITE);
+    'B', 'M',         // BMP signature (Windows 3.1x, 95, NT, …)
+    0, 0, 0, 0,       // Image file size in bytes
+    0, 0, 0, 0,       // Reserved
+    54 + 24, 0, 0, 0, // Start of pixel array
+    40, 0, 0, 0,      // Info header size
+    0, 0, 0, 0,       // Image width
+    0, 0, 0, 0,       // Image height
+    1 ,0,             // Number of color planes
+    4, 0,             // Bits per pixel
+    0, 0, 0, 0,       // Compression
+    0, 0, 0, 0,       // Image size (can be 0 for uncompressed images)
+    0, 0, 0, 0,       // Horizontal resolution (dpm)
+    0, 0, 0, 0,       // Vertical resolution (dpm)
+    6, 0, 0, 0,       // Colors in color table (0 = none)
+    0, 0, 0, 0 };     // Important color count (0 = all colors are important)
 
-  if(file){
-    // fill filesize, width and heigth in the header array
-    for(uint8_t i = 0; i < 4; i++) {
-        header[ 2 + i] = (char)((filesize>>(8 * i)) & 255);
-        header[18 + i] = (char)((image_width  >>(8 * i)) & 255);
-        header[22 + i] = (char)((image_height >>(8 * i)) & 255);
-    }
-    // write the header to the file
-    file.write(header, 54);
-    
-    // initialize padded pixel with 0 
-    for(uint16_t i = (image_width - 1) * 3; i < (image_width * 3 + pad); i++){
-      line_data[i]=0;
-    }
-    // The coordinate origin of a BMP image is at the bottom left.
-    // Therefore, the image must be read from bottom to top.
-    for(uint16_t y = image_height; y > 0; y--){
-      // get one line of the screen content
-      M5.Lcd.readRectRGB(0, y - 1, image_width, 1, line_data);
-      // BMP color order is: Blue, Green, Red
-      // return values from readRectRGB is: Red, Green, Blue
-      // therefore: R und B need to be swapped
-      for(uint16_t x = 0; x < image_width; x++){
-        swap = line_data[x * 3];
-        line_data[x * 3] = line_data[x * 3 + 2];
-        line_data[x * 3 + 2] = swap;
-      }
-      // write the line to the file
-      file.write(line_data, (image_width * 3) + pad);
-    }
-    file.close();
-    return true;
-  }
-  return false;
-}
+  unsigned char palette[24] = {
+    0, 0, 0, 255,
+    252, 252, 252, 255,
+    192, 192, 192, 255,
+    TFT_HEADER.b, TFT_HEADER.g, TFT_HEADER.r, 255,
+    TFT_FRONT.b, TFT_FRONT.g, TFT_FRONT.r, 255,
+    TFT_BACK.b, TFT_BACK.g, TFT_BACK.r, 255
+  };
 
-// M5Screen2bmp (dump the screen to a WiFi client)
-
-bool M5Screen2bmp(){
-  uint16_t image_height = M5.Lcd.height();
-  uint16_t image_width = M5.Lcd.width();
-  const uint16_t pad = (4 - (3 * image_width) % 4) % 4;
-  uint16_t filesize = 54 + (3 * image_width + pad) * image_height; 
-  unsigned char swap;
-  unsigned char line_data[image_width * 3 + pad];
-  unsigned char header[54] = { 
-    'B','M',  // BMP signature (Windows 3.1x, 95, NT, …)
-    0,0,0,0,  // image file size in bytes
-    0,0,0,0,  // reserved
-    54,0,0,0, // start of pixel array
-    40,0,0,0, // info header size
-    0,0,0,0,  // image width
-    0,0,0,0,  // image height
-    1,0,      // number of color planes
-    24,0,     // bits per pixel
-    0,0,0,0,  // compression
-    0,0,0,0,  // image size (can be 0 for uncompressed images)
-    0,0,0,0,  // horizontal resolution (dpm)
-    0,0,0,0,  // vertical resolution (dpm)
-    0,0,0,0,  // colors in color table (0 = none)
-    0,0,0,0 };// important color count (0 = all colors are important)
-
-  // fill filesize, width and heigth in the header array
+  // Fill filesize, width and heigth in the header array
   for(uint8_t i = 0; i < 4; i++) {
       header[ 2 + i] = (char)((filesize>>(8 * i)) & 255);
       header[18 + i] = (char)((image_width  >> (8 * i)) & 255);
       header[22 + i] = (char)((image_height >> (8 * i)) & 255);
   }
-  // write the header to the file
+  // Write header
+  httpClient.write(header, 54);
+
+  // Write palette
+  httpClient.write(palette, 24);
+
+  // The coordinate origin of a BMP image is at the bottom left.
+  // Therefore, the image must be read from bottom to top.
+  for(uint16_t y = image_height; y > 0; y-= 10){
+    uint16_t k = 0;
+
+    for(uint8_t z = 0; z < 10; z++) {
+      // Get one line of the screen content
+      M5.Lcd.readRectRGB(0, y - 1 - z, image_width, 1, line_data_raw);
+      // BMP color order is: Blue, Green, Red
+      // Return values from readRectRGB is: Red, Green, Blue
+      // Therefore: R und B need to be swapped
+      //
+      // Note the strange euristic algo with abs substract to match palette color
+      // Because, for example, TFT_WHITE is #FCFCFC and not #FFFFFF, when you read screen
+      for(uint16_t x = 0; x < image_width; x += 2) {
+        // Left
+        if( 
+          line_data_raw[x * 3] == 0 && 
+          line_data_raw[x * 3 + 1] == 0 && 
+          line_data_raw[x * 3 + 2] == 0
+        ) {
+          l = 0b0000;
+        }
+        else if(
+          abs(line_data_raw[x * 3] - 255) < 16 && 
+          abs(line_data_raw[x * 3 + 1] - 255) < 16 && 
+          abs(line_data_raw[x * 3 + 2] - 255) < 16
+        ) {
+          l = 0b0001;
+        }
+        else if(
+          abs(line_data_raw[x * 3] - 192) < 16 && 
+          abs(line_data_raw[x * 3 + 1] - 192) < 16 && 
+          abs(line_data_raw[x * 3 + 2] - 192) < 16
+        ) {
+          l = 0b0010;
+        }
+        else if(
+          abs(line_data_raw[x * 3] - TFT_HEADER.r) < 16 && 
+          abs(line_data_raw[x * 3 + 1] - TFT_HEADER.g) < 16 && 
+          abs(line_data_raw[x * 3 + 2] - TFT_HEADER.b) < 16
+        ) {
+          l = 0b0011;
+        }
+        else if(
+          abs(line_data_raw[x * 3] - TFT_FRONT.r) < 16 && 
+          abs(line_data_raw[x * 3 + 1] - TFT_FRONT.g) < 16 && 
+          abs(line_data_raw[x * 3 + 2] - TFT_FRONT.b) < 16
+        ) {
+          l = 0b0100;
+        }
+        else {
+          l = 0b0101;
+        }
+
+        // Right
+        if(
+          line_data_raw[(x + 1) * 3] == 0 && 
+          line_data_raw[(x + 1) * 3 + 1] == 0 && 
+          line_data_raw[(x + 1) * 3 + 2] == 0
+        ) {
+          r = 0b0000;
+        }
+        else if(
+          abs(line_data_raw[(x + 1) * 3] - 255) < 16 && 
+          abs(line_data_raw[(x + 1) * 3 + 1] - 255) < 16 && 
+          abs(line_data_raw[(x + 1) * 3 + 2] - 255) < 16
+        ) {
+          r = 0b0001;
+        }
+        else if(
+          abs(line_data_raw[(x + 1) * 3] - 192) < 16 && 
+          abs(line_data_raw[(x + 1) * 3 + 1] - 192) < 16 && 
+          abs(line_data_raw[(x + 1) * 3 + 2] - 192) < 16
+        ) {
+          r = 0b0010;
+        }
+        else if(
+          abs(line_data_raw[(x + 1) * 3] - TFT_HEADER.r) < 16 && 
+          abs(line_data_raw[(x + 1) * 3 + 1] - TFT_HEADER.g) < 16 && 
+          abs(line_data_raw[(x + 1) * 3 + 2] - TFT_HEADER.b) < 16
+        ) {
+          r = 0b0011;
+        }
+        else if(
+          abs(line_data_raw[(x + 1) * 3] - TFT_FRONT.r) < 16 &&
+          abs(line_data_raw[(x + 1) * 3 + 1] - TFT_FRONT.g) < 16 &&
+          abs(line_data_raw[(x + 1) * 3 + 2] - TFT_FRONT.b) < 16
+        ) {
+          r = 0b0100;
+        }
+        else {
+          r = 0b0101;
+        }
+
+        line_data_bmp[k] = (l<<4) | r;
+        k++;
+      }
+    }
+    // Write the line to the file
+    httpClient.write(line_data_bmp, ((image_width) / 2) * 10);
+  }
+  return true;
+}
+
+//M5Screen8bmp() (dump 8 bits screen to a WiFi client)
+bool M5Screen8bmp(){
+  uint16_t image_height = M5.Lcd.height();
+  uint16_t image_width = M5.Lcd.width();
+  uint32_t filesize = 54 + 24 + (image_width * image_height); 
+
+  unsigned char line_data_raw[image_width * 3];
+  unsigned char line_data_bmp[image_width];
+
+  unsigned char header[54] = { 
+    'B', 'M',         // BMP signature (Windows 3.1x, 95, NT, …)
+    0, 0, 0, 0,       // Image file size in bytes
+    0, 0, 0, 0,       // Reserved
+    54 + 24, 0, 0, 0, // Start of pixel array
+    40, 0, 0, 0,      // Info header size
+    0, 0, 0, 0,       // Image width
+    0, 0, 0, 0,       // Image height
+    1 ,0,             // Number of color planes
+    8, 0,             // Bits per pixel
+    0, 0, 0, 0,       // Compression
+    0, 0, 0, 0,       // Image size (can be 0 for uncompressed images)
+    0, 0, 0, 0,       // Horizontal resolution (dpm)
+    0, 0, 0, 0,       // Vertical resolution (dpm)
+    6, 0, 0, 0,       // Colors in color table (0 = none)
+    0, 0, 0, 0 };     // Important color count (0 = all colors are important)
+
+  unsigned char palette[24] = {
+    0, 0, 0, 255,
+    252, 252, 252, 255,
+    192, 192, 192, 255,
+    TFT_HEADER.b, TFT_HEADER.g, TFT_HEADER.r, 255,
+    TFT_FRONT.b, TFT_FRONT.g, TFT_FRONT.r, 255,
+    TFT_BACK.b, TFT_BACK.g, TFT_BACK.r, 255
+  };
+
+  // Fill filesize, width and heigth in the header array
+  for(uint8_t i = 0; i < 4; i++) {
+      header[ 2 + i] = (char)((filesize>>(8 * i)) & 255);
+      header[18 + i] = (char)((image_width  >> (8 * i)) & 255);
+      header[22 + i] = (char)((image_height >> (8 * i)) & 255);
+  }
+  // Write header
+  httpClient.write(header, 54);
+
+  // Write palette
+  httpClient.write(palette, 24);
+
+  // The coordinate origin of a BMP image is at the bottom left.
+  // Therefore, the image must be read from bottom to top.
+  for(uint16_t y = image_height; y > 0; y--){
+    // Get one line of the screen content
+    M5.Lcd.readRectRGB(0, y - 1, image_width, 1, line_data_raw);
+    // BMP color order is: Blue, Green, Red
+    // Return values from readRectRGB is: Red, Green, Blue
+    // Therefore: R und B need to be swapped
+    //
+    // Note the strange euristic algo with abs substract to match palette color
+    // Because, for example, TFT_WHITE is #FCFCFC and not #FFFFFF, when you read screen
+
+    for(uint16_t x = 0; x < image_width; x++) {
+      if(
+        line_data_raw[x * 3] == 0 && 
+        line_data_raw[x * 3 + 1] == 0 && 
+        line_data_raw[x * 3 + 2] == 0
+      ) {
+        line_data_bmp[x] = 0;
+      }
+      else if(
+        abs(line_data_raw[x * 3] - 255) < 16 &&
+        abs(line_data_raw[x * 3 + 1] - 255) < 16 &&
+        abs(line_data_raw[x * 3 + 2] - 255) < 16
+      ) {
+        line_data_bmp[x] = 1;
+      }
+      else if(
+        abs(line_data_raw[x * 3] - 192) < 16 &&
+        abs(line_data_raw[x * 3 + 1] - 192) < 16 &&
+        abs(line_data_raw[x * 3 + 2] - 192) < 16
+      ) {
+        line_data_bmp[x] = 2;
+      }
+      else if(
+        abs(line_data_raw[x * 3] - TFT_HEADER.r) < 16 &&
+        abs(line_data_raw[x * 3 + 1] - TFT_HEADER.g) < 16 &&
+        abs(line_data_raw[x * 3 + 2] - TFT_HEADER.b) < 16
+      ) {
+        line_data_bmp[x] = 3;
+      }
+      else if(
+        abs(line_data_raw[x * 3] - TFT_FRONT.r) < 16 &&
+        abs(line_data_raw[x * 3 + 1] - TFT_FRONT.g) < 16 &&
+        abs(line_data_raw[x * 3 + 2] - TFT_FRONT.b) < 16
+      ) {
+        line_data_bmp[x] = 4;
+      }
+      else {
+        line_data_bmp[x] = 5;
+      }
+    }
+    // Write the line to the file
+    httpClient.write(line_data_bmp, (image_width));
+  }
+  return true;
+}
+
+// M5Screen24bmp (dump 24 bits screen to a WiFi client)
+bool M5Screen24bmp(){
+  uint16_t image_height = M5.Lcd.height();
+  uint16_t image_width = M5.Lcd.width();
+  const uint16_t pad = (4 - (3 * image_width) % 4) % 4;
+  uint32_t filesize = 54 + (3 * image_width + pad) * image_height; 
+  unsigned char swap;
+  unsigned char line_data[image_width * 3 + pad];
+  unsigned char header[54] = { 
+    'B','M',  // BMP signature (Windows 3.1x, 95, NT, …)
+    0,0,0,0,  // Image file size in bytes
+    0,0,0,0,  // Reserved
+    54,0,0,0, // Start of pixel array
+    40,0,0,0, // Info header size
+    0,0,0,0,  // Image width
+    0,0,0,0,  // Image height
+    1,0,      // Number of color planes
+    24,0,     // Bits per pixel
+    0,0,0,0,  // Compression
+    0,0,0,0,  // Image size (can be 0 for uncompressed images)
+    0,0,0,0,  // Horizontal resolution (dpm)
+    0,0,0,0,  // Vertical resolution (dpm)
+    0,0,0,0,  // Colors in color table (0 = none)
+    0,0,0,0 };// Important color count (0 = all colors are important)
+
+  // Fill filesize, width and heigth in the header array
+  for(uint8_t i = 0; i < 4; i++) {
+      header[ 2 + i] = (char)((filesize>>(8 * i)) & 255);
+      header[18 + i] = (char)((image_width  >> (8 * i)) & 255);
+      header[22 + i] = (char)((image_height >> (8 * i)) & 255);
+  }
+  // Write the header to the file
   httpClient.write(header, 54);
   
   // To keep the required memory low, the image is captured line by line
@@ -304,24 +496,23 @@ bool M5Screen2bmp(){
   // The coordinate origin of a BMP image is at the bottom left.
   // Therefore, the image must be read from bottom to top.
   for(uint16_t y = image_height; y > 0; y--){
-    // get one line of the screen content
+    // Get one line of the screen content
     M5.Lcd.readRectRGB(0, y - 1, image_width, 1, line_data);
     // BMP color order is: Blue, Green, Red
-    // return values from readRectRGB is: Red, Green, Blue
-    // therefore: R und B need to be swapped
+    // Return values from readRectRGB is: Red, Green, Blue
+    // Therefore: R und B need to be swapped
     for(uint16_t x = 0; x < image_width; x++){
       swap = line_data[x * 3];
       line_data[x * 3] = line_data[x * 3 + 2];
       line_data[x * 3 + 2] = swap;
     }
-    // write the line to the file
+    // Write the line to the file
     httpClient.write(line_data, (image_width * 3) + pad);
   }
   return true;
 }
 
 // Get screenshot
-
 void getScreenshot()
 {
   unsigned long timeout_millis = millis() + 3000;
@@ -370,7 +561,7 @@ void getScreenshot()
                   httpClient.println("HTTP/1.1 200 OK");
                   httpClient.println("Content-type:image/bmp");
                   httpClient.println();
-                  M5Screen2bmp();
+                  M5Screen4bmp();
                   break;
                 }
                 default:
