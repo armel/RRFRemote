@@ -192,23 +192,6 @@ void getButton(uint8_t modeCurrent)
     ) 
   {
     _Core2SPK.playBeep(5000, 100, 2000, false);
-    Serial.print(btnDTMF1);
-    Serial.print(" ");
-    Serial.print(btnDTMF2);
-    Serial.print(" ");
-    Serial.print(btnDTMF3);
-    Serial.print(" ");
-    Serial.print(btnDTMF4);
-    Serial.print(" ");
-    Serial.print(btnDTMF5);
-    Serial.print(" ");
-    Serial.print(btnDTMF6);
-    Serial.print(" ");
-    Serial.print(btnDTMF7);
-    Serial.print(" ");
-    Serial.print(btnDTMF8);
-    Serial.print(" ");
-    Serial.println(btnDTMF9);
   }
 
   /*
