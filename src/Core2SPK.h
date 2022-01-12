@@ -146,7 +146,7 @@ void speakerPlayTask(void *arg)
                 if (rawLength != 0)
                 {
                     i2s_write(SPAKER_I2S_NUMBER, raw, ( rawLength ) * 2 , &bytes_written, portMAX_DELAY);
-                    Serial.printf("I2S Write\r\n");
+                    //Serial.printf("I2S Write\r\n");
                 }
                 delete pam;
                 delete raw;
