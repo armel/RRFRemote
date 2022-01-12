@@ -572,7 +572,7 @@ void getScreenshot()
                   break;
               }
               // The HTTP response ends with another blank line:
-              httpClient.println();
+              // httpClient.println();
               // Break out of the while loop:
               break;
             } else {    // if a newline is found

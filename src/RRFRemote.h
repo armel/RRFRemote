@@ -162,6 +162,10 @@ TFT_eSprite Sprite = TFT_eSprite(&M5.Lcd); // Create Sprite object "img" with po
 String message;
 int16_t pos = 0;
 
+// Task Handle
+TaskHandle_t rrfdataHandle;
+TaskHandle_t buttonHandle;
+
 // Misceleanous
 const char *room[] = {"RRF", "TECHNIQUE", "BAVARDAGE", "LOCAL", "INTERNATIONAL", "EXPERIMENTAL", "FON"};
 const uint8_t dtmf[] = {96, 98, 100, 101, 99, 102, 97};
