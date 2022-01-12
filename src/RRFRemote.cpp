@@ -149,9 +149,18 @@ void setup()
       "rrfdata",      // Name of the task
       8192,           // Stack size in words
       NULL,           // Task input parameter
-      3,              // Priority of the task
+      4,              // Priority of the task
       NULL,           // Task handle
-      0);             // Core where the task should run
+      1);             // Core where the task should run
+
+ xTaskCreatePinnedToCore(
+      button,       // Function to implement the task
+      "button",     // Name of the task
+      8192,         // Stack size in words
+      NULL,         // Task input parameter
+      2,            // Priority of the task
+      NULL,         // Task handle
+      1);           // Core where the task should run
 
   xTaskCreatePinnedToCore(
       hamdata,        // Function to implement the task
@@ -161,15 +170,6 @@ void setup()
       1,              // Priority of the task
       NULL,           // Task handle
       1);             // Core where the task should run
-
-  xTaskCreatePinnedToCore(
-      button,       // Function to implement the task
-      "button",     // Name of the task
-      8192,         // Stack size in words
-      NULL,         // Task input parameter
-      2,            // Priority of the task
-      NULL,         // Task handle
-      1);           // Core where the task should run
 
   // Accelelerometer
   M5.IMU.Init();
