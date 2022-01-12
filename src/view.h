@@ -33,7 +33,7 @@ void viewHistogram(uint16_t maxLevel, uint16_t tx[]) {
 
   for (i = 0; i < 5; i++)
   {
-    scroll(10);
+    scroll(20);
 
     delta = String(legende[i]).toInt();
 
@@ -62,7 +62,7 @@ void viewElsewhere(DynamicJsonDocument doc, const char *salon) {
   JsonObject obj = doc.as<JsonObject>();
   elsewhereString = obj["elsewhere"].as<String>();
 
-  scroll(10);
+  scroll(20);
 
   M5.Lcd.setFreeFont(&tahoma6pt7b);
 
@@ -83,7 +83,7 @@ void viewElsewhere(DynamicJsonDocument doc, const char *salon) {
 
       while (k <= 5)
       {
-        scroll(10);
+        scroll(20);
         if (strcmp(room[i], salon) != 0)
         {
           M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
@@ -912,7 +912,7 @@ void viewElsewhereBig(DynamicJsonDocument doc, const char *salon) {
   JsonObject obj = doc.as<JsonObject>();
   elsewhereString = obj["elsewhere"].as<String>();
 
-  scroll(10);
+  scroll(20);
 
   M5.Lcd.setFreeFont(&tahoma8pt7b);
 
@@ -937,7 +937,7 @@ void viewElsewhereBig(DynamicJsonDocument doc, const char *salon) {
 
       while (k <= 5)
       {
-        scroll(10);
+        scroll(20);
         if (strcmp(room[i], salon) != 0)
         {
           M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
@@ -1013,7 +1013,7 @@ void viewLastLinksBig(uint8_t stop, const char *lastHeure[10], const char *lastI
   j = 0;
   k = 134; // 110
 
-  scroll(10);
+  scroll(20);
 
   M5.Lcd.setFreeFont(&tahoma8pt7b);
 

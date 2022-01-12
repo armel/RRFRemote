@@ -149,7 +149,7 @@ void setup()
       "rrfdata",        // Name of the task
       8192,             // Stack size in words
       NULL,             // Task input parameter
-      19,               // Priority of the task
+      18,               // Priority of the task
       &rrfdataHandle,   // Task handle
       1);               // Core where the task should run
 
@@ -158,7 +158,7 @@ void setup()
       "button",         // Name of the task
       8192,             // Stack size in words
       NULL,             // Task input parameter
-      2,                // Priority of the task
+      4,                // Priority of the task
       &buttonHandle,    // Task handle
       1);               // Core where the task should run
 
@@ -357,7 +357,7 @@ void loop()
       type = 0;
     }
 
-    scroll(10);
+    scroll(20);
     switch(type) {
       case 1:
         viewSettings();
@@ -411,7 +411,7 @@ void loop()
   }
 
   // Transmit or no transmit
-  scroll(10);
+  scroll(20);
   if (menuMode == 0)
   {
     menuSelected = -1;
@@ -586,7 +586,7 @@ void loop()
   }
 
   // View Baseline
-  scroll(10);
+  scroll(20);
   viewBaseline();
 
   // Manage alternance and type
@@ -673,7 +673,7 @@ void loop()
   if(menuMode == 0 && htmlGetRefresh != 2) {
     while(millis() - timer < LIMIT)
     {
-      scroll(15);
+      scroll(20);
     }
   }
 

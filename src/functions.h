@@ -99,12 +99,12 @@ void clear()
 // Scroll
 void scroll(uint8_t pause)
 {
-  int16_t h = 18;
-  int16_t w;
-  int16_t limit =  M5.Lcd.width();
-
-  //delay(pause);
-  vTaskDelay(pdMS_TO_TICKS(pause));
+  uint16_t h = 18;
+  uint16_t w;
+  uint16_t limit =  M5.Lcd.width();
+  static uint32_t timer = 0, wait = 0; 
+  
+  timer = millis();
 
   w = Sprite.textWidth(message) + 40;
   if (w < limit)
@@ -129,6 +129,13 @@ void scroll(uint8_t pause)
   if (pos == 0)
   {
     pos = w;
+  }
+
+  wait = millis() - timer;
+  if (wait < pause)
+  {
+    vTaskDelay(pdMS_TO_TICKS(pause - wait));
+    //Serial.println(pause - wait);
   }
 }
 
