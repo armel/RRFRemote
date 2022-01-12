@@ -38,7 +38,7 @@
 #include "settings.h"
 
 // Version
-#define VERSION "2.7.3"
+#define VERSION "2.7.4"
 
 // Wifi
 WiFiClientSecure clientISS;
@@ -161,6 +161,10 @@ String endpointRRF[] = {
 TFT_eSprite Sprite = TFT_eSprite(&M5.Lcd); // Create Sprite object "img" with pointer to "tft" object
 String message;
 int16_t pos = 0;
+
+// Task Handle
+TaskHandle_t rrfdataHandle;
+TaskHandle_t buttonHandle;
 
 // Misceleanous
 const char *room[] = {"RRF", "TECHNIQUE", "BAVARDAGE", "LOCAL", "INTERNATIONAL", "EXPERIMENTAL", "FON"};

@@ -5,12 +5,13 @@
 void rrfdata(void *pvParameters)
 {
   HTTPClient http;
-  uint32_t timer = 0, wait = 0, limit = 750; // Retry all 750ms
+  uint32_t timer = 0, wait = 0, limit = 500; // Retry all 500ms
   uint8_t counter = 10;
   uint16_t httpCode;
 
   for (;;)
   {
+    //Serial.println("rrfdata");
     timer = millis();
     if ((WiFi.status() == WL_CONNECTED)) // Check the current connection status
     {
@@ -94,6 +95,7 @@ void hamdata(void *pvParameters)
 
   for (;;)
   {
+    //Serial.println("hamdata");
     timer = millis();
     if (WiFi.status() == WL_CONNECTED) // Check the current connection status
     {
@@ -147,6 +149,7 @@ void button(void *pvParameters)
 
   for (;;)
   {
+    //Serial.println("button");
     getButton(modeCurrent);
 
     if(buttonLeftPressed) {
@@ -207,55 +210,55 @@ void button(void *pvParameters)
     // Manage DTMF on CORE2
 
     if (btnDTMF1 == 1) {
-      Serial.println("QSY RRF");
+      //Serial.println("QSY RRF");
       qsy = dtmf[0];
       modeNew = modeOld;
       action = 5;
     }
     else if (btnDTMF2 == 1) {
-      Serial.println("QSY TEC");
+      //Serial.println("QSY TEC");
       qsy = dtmf[1];
       modeNew = modeOld;
       action = 5;
     }
     else if (btnDTMF3 == 1) {
-      Serial.println("QSY BAV");
+      //Serial.println("QSY BAV");
       qsy = dtmf[2];
       modeNew = modeOld;
       action = 5;
     }
     else if (btnDTMF4 == 1) {
-      Serial.println("QSY LOC");
+      //Serial.println("QSY LOC");
       qsy = dtmf[3];
       modeNew = modeOld;
       action = 5;
     }
     else if (btnDTMF5 == 1) {
-      Serial.println("QSY INT");
+      //Serial.println("QSY INT");
       qsy = dtmf[4];
       modeNew = modeOld;
       action = 5;
     }
     else if (btnDTMF6 == 1) {
-      Serial.println("QSY EXP");
+      //Serial.println("QSY EXP");
       qsy = dtmf[5];
       modeNew = modeOld;
       action = 5;
     }
     else if (btnDTMF7 == 1) {
-      Serial.println("QSY FON");
+      //Serial.println("QSY FON");
       qsy = dtmf[6];
       modeNew = modeOld;
       action = 5;
     }
     else if (btnDTMF8 == 1) {
-      Serial.println("PERROQUET");
+      //Serial.println("PERROQUET");
       qsy = 95;
       modeNew = modeOld;
       action = 5;
     }
     else if (btnDTMF9 == 1) {
-      Serial.println("RAPTOR");
+      //Serial.println("RAPTOR");
       qsy = 200;
       modeNew = modeOld;
       action = 5;

@@ -145,7 +145,7 @@ void getButton(uint8_t modeCurrent)
       myBtnC.draw();
       //myBtnD.draw();
 
-      Serial.println("DTMF OFF");
+      //Serial.println("DTMF OFF");
     }
     else {
       myBtnDTMF1.draw();
@@ -163,7 +163,7 @@ void getButton(uint8_t modeCurrent)
       myBtnC.hide();
       //myBtnD.hide();
 
-      Serial.println("DTMF ON");
+      //Serial.println("DTMF ON");
     }
   }
 
