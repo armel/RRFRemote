@@ -28,6 +28,8 @@
   #include "WebIndexCore2.h"
 #endif
 
+#define FASTLED_INTERNAL // To disable pragma messages on compile
+
 #include <WiFiClientSecure.h>
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
@@ -38,7 +40,7 @@
 #include "settings.h"
 
 // Version
-#define VERSION "2.7.4"
+#define VERSION "2.7.5"
 
 // Wifi
 WiFiClientSecure clientISS;

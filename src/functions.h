@@ -99,12 +99,12 @@ void clear()
 // Scroll
 void scroll(uint8_t pause)
 {
-  int16_t h = 18;
-  int16_t w;
-  int16_t limit =  M5.Lcd.width();
-
-  //delay(pause);
-  vTaskDelay(pdMS_TO_TICKS(pause));
+  uint16_t h = 18;
+  uint16_t w;
+  uint16_t limit =  M5.Lcd.width();
+  static uint32_t timer = 0, wait = 0; 
+  
+  timer = millis();
 
   w = Sprite.textWidth(message) + 40;
   if (w < limit)
@@ -129,6 +129,13 @@ void scroll(uint8_t pause)
   if (pos == 0)
   {
     pos = w;
+  }
+
+  wait = millis() - timer;
+  if (wait < pause)
+  {
+    vTaskDelay(pdMS_TO_TICKS(pause - wait));
+    //Serial.println(pause - wait);
   }
 }
 
@@ -521,13 +528,13 @@ void getScreenshot()
   httpClient = httpServer.available(); 
 
   if(WiFi.status() == WL_CONNECTED){
-    //client.setNoDelay(1);
+    //httpClient.setNoDelay(1);
     if (httpClient) {  
-      // Force a disconnect after 2 seconds
+      // Force a disconnect after 3 seconds
       Serial.println("New Client.");  
       // Loop while the client's connected
       while (httpClient.connected()) { 
-        // If the client is still connected after 2 seconds,
+        // If the client is still connected after 3 seconds,
         // Something is wrong. So kill the connection
         if(millis() > timeout_millis){
           Serial.println("Force Client stop!");  
@@ -545,9 +552,6 @@ void getScreenshot()
               // HTTP headers always start with a response code (e.g. HTTP/1.1 200 OK)
               // and a content-type so the client knows what's coming, then a blank line,
               // followed by the content:
-
-              screensaver = millis(); // Screensaver update !!!
-
               switch (htmlGetRequest)
               {
                 case GET_index_page: {
@@ -562,6 +566,7 @@ void getScreenshot()
                   httpClient.println("Content-type:image/bmp");
                   httpClient.println();
                   M5Screen4bmp();
+                  screensaver = millis(); // Screensaver update !!!
                   break;
                 }
                 default:

@@ -39,7 +39,7 @@ void rrfdata(void *pvParameters)
       http.begin(clientTracker, endpointRRF[roomCurrent]);  // Specify the URL
       http.addHeader("User-Agent","M5Stack");               // Specify header
       http.addHeader("Connection","keep-alive");            // Specify header
-      http.setTimeout(750);                                 // Set Time Out
+      http.setTimeout(500);                                 // Set Time Out
       httpCode = http.GET();                                // Make the request
       if (httpCode == 200)                                  // Check for the returning code
       {
@@ -82,6 +82,9 @@ void rrfdata(void *pvParameters)
     {
       vTaskDelay(pdMS_TO_TICKS(limit - wait));
     }
+
+    //Serial.print("rrfdata ");
+    //Serial.println(millis() - timer);
   }
 }
 
