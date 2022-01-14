@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 // Board
-#define BOARD CORE2
+#define BOARD BASIC
 
 #define BASIC 1
 #define GREY  2
@@ -28,6 +28,8 @@
   #include "WebIndexCore2.h"
 #endif
 
+#define FASTLED_INTERNAL // To disable pragma messages on compile
+
 #include <WiFiClientSecure.h>
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
@@ -38,7 +40,7 @@
 #include "settings.h"
 
 // Version
-#define VERSION "2.7.4"
+#define VERSION "2.7.5"
 
 // Wifi
 WiFiClientSecure clientISS;
