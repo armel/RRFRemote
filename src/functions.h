@@ -565,6 +565,9 @@ void getScreenshot()
                   httpClient.println("HTTP/1.1 200 OK");
                   httpClient.println("Content-type:image/bmp");
                   httpClient.println();
+                  if(screensaverMode == 1) {
+                    M5.Lcd.wakeup();
+                  }
                   M5Screen4bmp();
                   screensaver = millis(); // Screensaver update !!!
                   break;
