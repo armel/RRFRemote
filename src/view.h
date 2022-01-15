@@ -790,6 +790,10 @@ void viewMenu() {
     {
       optionString = String(color[colorCurrent]);
     }
+    else if(optionString == "QSY") 
+    {
+      optionString = String(room[roomSelected]);
+    }
     else if(optionString == "LUMINOSITE") 
     {
       optionString = "LEVEL " + String(brightnessCurrent);      
