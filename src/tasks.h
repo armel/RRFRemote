@@ -358,8 +358,33 @@ void button(void *pvParameters)
       // Mode menu active, QSY
       if (option == "QSY")
       {
-        qsy = dtmf[roomCurrent];
-        menuMode = 2;
+        change = roomSelected;
+
+        if (btnA)
+        {
+          change += left;
+        }
+        else if (btnC)
+        {
+          change += right;
+        }
+        else if (btnB)
+        {
+          qsy = dtmf[roomSelected];
+          preferences.putUInt("room", roomSelected);
+          menuMode = 2;
+        }
+
+        size_t n = sizeof(room) / sizeof(room[0]);
+        n -= 1;
+
+        change = (change < 0) ? n : change;
+        change = (change > n) ? 0 : change;
+
+        if(change != roomSelected) 
+        {
+          roomSelected = change;
+        }
       }
       // Mode menu active, Raptor
       else if (option == "RAPTOR")

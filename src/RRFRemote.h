@@ -211,6 +211,7 @@ int8_t colorCurrent = 0;
 int8_t configCurrent = 0;
 int8_t sysopCurrent = 0;
 int8_t roomCurrent = 0;
+int8_t roomSelected = 0;
 int8_t modeCurrent = 1;
 int8_t modeOld = 1;
 int8_t modeNew = 1;

@@ -38,9 +38,9 @@ void setup()
   }
 
   roomCurrent = preferences.getUInt("room", 0);
-  if(roomCurrent < 0 || roomCurrent > 5) {
+  if(roomCurrent < 0 || roomCurrent > 6) {
     roomCurrent = 0;
-    preferences.putUInt("config", roomCurrent);
+    preferences.putUInt("room", roomCurrent);
   }
 
   colorCurrent = preferences.getUInt("color", 0);
@@ -656,6 +656,7 @@ void loop()
       if (dtmf[i] == whereisCurrent) {
         if (i != roomCurrent) {
           roomCurrent = i;
+          roomSelected = i;
           preferences.putUInt("room", roomCurrent);
           reset = 0;
           refresh = 0;
