@@ -40,7 +40,7 @@
 #include "settings.h"
 
 // Version
-#define VERSION "2.7.6"
+#define VERSION "2.7.7"
 
 // Wifi
 WiFiClientSecure clientISS;

@@ -149,11 +149,21 @@ void button(void *pvParameters)
   int8_t right;
   int8_t left;
   int16_t change;
+  uint16_t limit = 1 * 5 * 1000; // Retry 5 secondes
+  static uint32_t timer = 0; 
 
   for (;;)
   {
     //Serial.println("button");
     getButton(modeCurrent);
+
+    // Escape submenu from CONFIG, SYSOP, QSY, COULEUR and LUMINOSTE
+    if (menuMode == 1 && menuSelected != -1) {
+      Serial.println(millis() - timer);
+      if((millis() - timer) > limit) {
+        menuSelected = -1;
+      }
+    }
 
     if(buttonLeftPressed) {
       btnA = true;
@@ -339,6 +349,7 @@ void button(void *pvParameters)
             vTaskDelay(pdMS_TO_TICKS(250));
             menuSelected = menuCurrent;
             btnB = 0;
+            timer = millis();
           }
 
           int n = menuSize/sizeof(char *);
@@ -363,10 +374,12 @@ void button(void *pvParameters)
         if (btnA)
         {
           change += left;
+          timer = millis();
         }
         else if (btnC)
         {
           change += right;
+          timer = millis();
         }
         else if (btnB)
         {
@@ -451,10 +464,12 @@ void button(void *pvParameters)
         if (btnA)
         {
           change += left;
+          timer = millis();
         }
         else if (btnC)
         {
           change += right;
+          timer = millis();
         }
         else if (btnB)
         {
@@ -481,10 +496,12 @@ void button(void *pvParameters)
         if (btnA)
         {
           change += left;
+          timer = millis();
         }
         else if (btnC)
         {
           change += right;
+          timer = millis();
         }
         else if (btnB)
         {
@@ -509,10 +526,12 @@ void button(void *pvParameters)
         if (btnA)
         {
           change += left;
+          timer = millis();
         }
         else if (btnC)
         {
           change += right;
+          timer = millis();
         }
         else if (btnB)
         {
@@ -541,10 +560,12 @@ void button(void *pvParameters)
         if (btnA)
         {
           change += left;
+          timer = millis();
         }
         else if (btnC)
         {
           change += right;
+          timer = millis();
         }
         else if (btnB)
         {
