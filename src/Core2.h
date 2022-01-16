@@ -220,12 +220,20 @@ void getButton(uint8_t modeCurrent)
   */
 }
 
+// Manage Vibrator
+void vibration(int t) {
+  M5.Axp.SetLDOEnable(3, true);
+  delay(t);
+  M5.Axp.SetLDOEnable(3, false);
+}
+
 // Speaker
 void speaker()
 {
   M5.Axp.SetSpkEnable(true);
   _Core2SPK.begin();
   _Core2SPK.playBeep(5000, 100, 2000, false);
+  vibration(200);
 }
 
 // Manage Tone
