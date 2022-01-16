@@ -148,7 +148,7 @@ void button(void *pvParameters)
 {
   int8_t right;
   int8_t left;
-  int8_t change;
+  int16_t change;
 
   for (;;)
   {
@@ -358,7 +358,7 @@ void button(void *pvParameters)
       // Mode menu active, QSY
       if (option == "QSY")
       {
-        change = roomSelected;
+        change = roomCurrent;
 
         if (btnA)
         {
@@ -370,8 +370,8 @@ void button(void *pvParameters)
         }
         else if (btnB)
         {
-          qsy = dtmf[roomSelected];
-          preferences.putUInt("room", roomSelected);
+          qsy = dtmf[roomCurrent];
+          preferences.putUInt("room", roomCurrent);
           menuMode = 2;
         }
 
@@ -381,9 +381,11 @@ void button(void *pvParameters)
         change = (change < 0) ? n : change;
         change = (change > n) ? 0 : change;
 
-        if(change != roomSelected) 
+        if(change != roomCurrent) 
         {
-          roomSelected = change;
+          type = 0; // View last TX
+          action = 2;
+          roomCurrent = change;
         }
       }
       // Mode menu active, Raptor
@@ -489,8 +491,8 @@ void button(void *pvParameters)
           menuMode = 2;
         }
 
-        change = (change < 10) ? 10 : change;
-        change = (change > 128) ? 128 : change;
+        change = (change < 10) ? 128 : change;
+        change = (change > 128) ? 10 : change;
 
         if(change != brightnessCurrent) 
         {

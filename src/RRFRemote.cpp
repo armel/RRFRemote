@@ -651,12 +651,11 @@ void loop()
   checkWifi();
 
   // Manage follow
-  if(followCurrent == 1) {
+  if(followCurrent == 1 && menuMode != 1) {
     for (uint8_t i = 0; i <= 5; i++) {
       if (dtmf[i] == whereisCurrent) {
         if (i != roomCurrent) {
           roomCurrent = i;
-          roomSelected = i;
           preferences.putUInt("room", roomCurrent);
           reset = 0;
           refresh = 0;

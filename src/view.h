@@ -88,6 +88,7 @@ void viewElsewhere(DynamicJsonDocument doc, const char *salon) {
         {
           M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
           M5.Lcd.setTextDatum(CC_DATUM);
+          M5.Lcd.setTextPadding(27);
           M5.Lcd.drawString(String(room[i]).substring(0, 3), 14, 154 + j);
 
           M5.Lcd.setTextDatum(CC_DATUM);
@@ -792,7 +793,7 @@ void viewMenu() {
     }
     else if(optionString == "QSY") 
     {
-      optionString = String(room[roomSelected]);
+      optionString = String(room[roomCurrent]);
     }
     else if(optionString == "LUMINOSITE") 
     {
@@ -888,7 +889,7 @@ void viewBattery()
       sprintf(swap, "%c", ICON_CHARGING);
       tmpString = swap;
       M5.Lcd.drawString(tmpString, 310, 18);
-      M5.Lcd.setBrightness(128);
+      //M5.Lcd.setBrightness(128);
     }
     else
     {
@@ -1023,7 +1024,8 @@ void viewLastLinksBig(uint8_t stop, const char *lastHeure[10], const char *lastI
 
   if(reset == 0) {
     M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
-    M5.Lcd.setTextPadding(0);
+    M5.Lcd.setTextDatum(CC_DATUM);
+    M5.Lcd.setTextPadding(150);
     M5.Lcd.drawString("Derniers TX sur " + String(salon).substring(0, 3), 245, 112);
 
     for(i = 0; i < 10; i++) {
