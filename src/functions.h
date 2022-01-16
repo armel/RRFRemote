@@ -39,15 +39,19 @@ void resetColor()
 // Clear screen
 void clear()
 {
+  String option = String(menu[menuCurrent]);
+
   // Reset
   message = "";
-  M5.lcd.clear();
+  //M5.lcd.clear();
   resetColor();
 
-  // Header
-  M5.Lcd.fillRect(0, 0, 320, 44, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
-  M5.Lcd.drawFastHLine(  0,   0, 320, TFT_WHITE);
-  M5.Lcd.drawFastHLine(  0,  44, 320, TFT_WHITE);
+  if(menuMode != 1 || (menuMode == 1 && option == "COULEUR")) {
+    // Header
+    M5.Lcd.fillRect(0, 0, 320, 44, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
+    M5.Lcd.drawFastHLine(  0,   0, 320, TFT_WHITE);
+    M5.Lcd.drawFastHLine(  0,  44, 320, TFT_WHITE);
+  }
 
   // Grey zone
   M5.Lcd.drawFastHLine(  0, 100, 320, TFT_WHITE);
@@ -58,18 +62,16 @@ void clear()
     M5.Lcd.fillRoundRect(0, 154, 155, 85, 4, TFT_WHITE);
     M5.Lcd.fillRoundRect(1, 155, 26, 83, 4, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
 
-    M5.Lcd.drawFastVLine(24, 155, 83, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
-    M5.Lcd.drawFastVLine(25, 155, 83, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
-    M5.Lcd.drawFastVLine(26, 155, 83, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
+    for (uint8_t i = 24; i < 27; i++) {
+      M5.Lcd.drawFastVLine(i, 155, 83, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
+    }
 
     M5.Lcd.drawFastVLine(27, 155, 83, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
     M5.Lcd.drawFastVLine(100, 155, 83, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
 
-    M5.Lcd.drawFastHLine(2, 168, 152, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
-    M5.Lcd.drawFastHLine(2, 182, 152, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
-    M5.Lcd.drawFastHLine(2, 196, 152, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
-    M5.Lcd.drawFastHLine(2, 210, 152, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
-    M5.Lcd.drawFastHLine(2, 224, 152, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
+    for (uint8_t i = 0; i < 5; i++) {
+      M5.Lcd.drawFastHLine(2, 168 + (i * 14), 152, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
+    }
 
     // Log
     M5.Lcd.fillRoundRect(160, 117, 160, 122, 4, TFT_WHITE);
