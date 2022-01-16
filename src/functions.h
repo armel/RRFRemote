@@ -152,12 +152,14 @@ void checkAcceleration()
     M5.IMU.getAccelData(&accX,&accY,&accZ);
 
     if(int(accY * 1000) < -500 && M5.Lcd.getRotation() != 3) {
+      M5.lcd.clear();
       reset = 0;
       refresh = 0;
       menuRefresh = 0;
       M5.Lcd.setRotation(3);
     }
     else if(int(accY * 1000) > 500 && M5.Lcd.getRotation() != 1) {
+      M5.lcd.clear();
       reset = 0;
       refresh = 0;
       menuRefresh = 0;
