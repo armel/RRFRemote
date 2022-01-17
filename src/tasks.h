@@ -207,6 +207,8 @@ void button(void *pvParameters)
     }
 
     if(btnD == 1) {
+      screensaver = millis(); // Screensaver update !!!
+
       if(modeCurrent == 2) {
         modeNew = modeOld;
         btnA = btnB = btnC = 0;

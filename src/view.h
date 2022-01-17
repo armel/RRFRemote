@@ -54,10 +54,16 @@ void viewHistogram(uint16_t maxLevel, uint16_t tx[]) {
 
 // View elsewhere
 void viewElsewhere(DynamicJsonDocument doc, const char *salon) {
-  static String memory[10];
   const char *elsewhere = "";
   uint16_t linkTotalElsewhere = 0;
-  uint8_t i, j, k, l;
+  uint8_t i, j;
+
+  String left[10];
+  String middle[10];
+  String right[10];
+  static String leftOld[10];
+  static String middleOld[10];
+  static String rightOld[10];
 
   JsonObject obj = doc.as<JsonObject>();
   elsewhereString = obj["elsewhere"].as<String>();
@@ -66,9 +72,40 @@ void viewElsewhere(DynamicJsonDocument doc, const char *salon) {
 
   M5.Lcd.setFreeFont(&tahoma6pt7b);
 
+  size_t stop = sizeof(room) / sizeof(room[0]);
+  stop -= 1;
+
   if(reset == 0) {
-    for(i = 0; i < 10; i++) {
-      memory[i] = "";
+    M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
+    M5.Lcd.setTextDatum(CC_DATUM);
+    M5.Lcd.setTextPadding(26);
+
+    for(i = 0; i < stop; i++) {
+      M5.Lcd.drawString(leftOld[i].substring(0, 3), 14, 160 + (14 * i));
+    }
+
+    M5.Lcd.setTextDatum(CC_DATUM);
+    M5.Lcd.setTextPadding(70);
+
+    for(i = 0; i < stop; i++) {
+      if(strstr(middleOld[i].c_str(), "LINK") != NULL) {
+        M5.Lcd.fillRect(28, 155 + (14 * i), 72, 13, TFT_WHITE);
+        M5.Lcd.setTextColor(TFT_BLACK, TFT_WHITE);
+      }
+      else {
+        M5.Lcd.fillRect(28, 155 + (14 * i), 72, 13, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
+        M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
+      }
+      Serial.println(middleOld[i]);
+      M5.Lcd.drawString(middleOld[i], 64, 160 + (14 * i));
+    }
+    
+    M5.Lcd.setTextColor(TFT_BLACK, TFT_WHITE);
+    M5.Lcd.setTextDatum(CC_DATUM);
+    M5.Lcd.setTextPadding(52);
+
+    for(i = 0; i < stop; i++) {
+      M5.Lcd.drawString(rightOld[i], 128, 160 + (14 * i));
     }
   }
 
@@ -77,23 +114,13 @@ void viewElsewhere(DynamicJsonDocument doc, const char *salon) {
     {
       elsewhereStringOld = elsewhereString;
 
-      i = 0;
-      j = 6;
-      k = 0;
-
-      while (k <= 5)
+      j = 0;
+      for(i = 0; i <= stop; i++)
       {
         scroll(20);
         if (strcmp(room[i], salon) != 0)
         {
-          M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
-          M5.Lcd.setTextDatum(CC_DATUM);
-          M5.Lcd.setTextPadding(27);
-          M5.Lcd.drawString(String(room[i]).substring(0, 3), 14, 154 + j);
-
-          M5.Lcd.setTextDatum(CC_DATUM);
-          M5.Lcd.setTextColor(TFT_BLACK, TFT_WHITE);
-
+          left[j] = String(room[i]).substring(0, 3);
           elsewhere = doc["elsewhere"][1][room[i]];
 
           //elsewhere = "GW-ALLSTAR-40020";
@@ -112,8 +139,6 @@ void viewElsewhere(DynamicJsonDocument doc, const char *salon) {
               tmpString = getValue(elsewhere, ' ', 1);
               tmpString = (tmpString == "") ? "RTFM" : getValue(elsewhere, ' ', 1) + ' ' + getValue(elsewhere, ' ', 2);
             }
-
-            l = 0;
           }
           else
           {
@@ -125,37 +150,53 @@ void viewElsewhere(DynamicJsonDocument doc, const char *salon) {
             {
               tmpString += "S";
             }
-
-            l = 1;
           }
 
-          if(tmpString != memory[i])
-          {
-            memory[i] = tmpString;
-
-            if(l == 0) {
-              M5.Lcd.fillRect(28, 155 + (14 * k), 72, 13, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
-              M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
-            }
-            else {
-              M5.Lcd.fillRect(28, 155 + (14 * k), 72, 13, TFT_WHITE);
-              M5.Lcd.setTextPadding(70);
-            }
-            M5.Lcd.drawString(tmpString, 64, 154 + j);
-          }
-
-          M5.Lcd.setTextColor(TFT_BLACK, TFT_WHITE);
-          M5.Lcd.setTextDatum(CC_DATUM);
-          M5.Lcd.setTextPadding(52);
+          middle[j] = tmpString;
           elsewhere = doc["elsewhere"][3][room[i]];
-          M5.Lcd.drawString(String(elsewhere), 128, 154 + j);
-
-          M5.Lcd.setTextPadding(0);
-
-          j += 14;
-          k += 1;
+          right[j] = String(elsewhere);
+          j += 1;
         }
-        i += 1;
+      }
+
+      M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
+      M5.Lcd.setTextDatum(CC_DATUM);
+      M5.Lcd.setTextPadding(26);
+
+      for(i = 0; i < stop; i++) {
+        if(left[i] != leftOld[i]) {
+          leftOld[i] = left[i];
+          M5.Lcd.drawString(left[i].substring(0, 3), 14, 160 + (14 * i));
+        }
+      }
+
+      M5.Lcd.setTextDatum(CC_DATUM);
+      M5.Lcd.setTextPadding(70);
+
+      for(i = 0; i < stop; i++) {
+        if(middle[i] != middleOld[i]) {
+          middleOld[i] = middle[i];
+          if(strstr(middle[i].c_str(), "LINK") != NULL) {
+            M5.Lcd.fillRect(28, 155 + (14 * i), 72, 13, TFT_WHITE);
+            M5.Lcd.setTextColor(TFT_BLACK, TFT_WHITE);
+          }
+          else {
+            M5.Lcd.fillRect(28, 155 + (14 * i), 72, 13, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
+            M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
+          }
+          M5.Lcd.drawString(middle[i], 64, 160 + (14 * i));
+        }
+      }
+
+      M5.Lcd.setTextColor(TFT_BLACK, TFT_WHITE);
+      M5.Lcd.setTextDatum(CC_DATUM);
+      M5.Lcd.setTextPadding(52);
+
+      for(i = 0; i < stop; i++) {
+        if(right[i] != rightOld[i]) {
+          rightOld[i] = right[i];
+          M5.Lcd.drawString(right[i], 128, 160 + (14 * i));
+        }
       }
     }
   }
