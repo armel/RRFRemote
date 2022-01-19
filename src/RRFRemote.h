@@ -112,7 +112,7 @@ uint16_t TFT_INFO = 0x0000;
 #define TFT_WHITE 0xEF7D  // 0xEEEEEE (238, 238, 238)
 */
 
-const char *color[] = {"ROUGE", "ROSE", "VIOLET", "BLEU", "TURQUOISE", "VERT", "ORANGE", "MARRON", "GRIS"};
+const char *color[] = {"ROUGE", "ROSE", "VIOLET", "BLEU", "TURQUOISE", "VERT", "ARDOISE", "MARRON", "GRIS"};
 
 const colorType TFT_HEADER_ROUGE = {152, 0, 0};
 const colorType TFT_INFO_ROUGE = {46, 48, 62};
@@ -144,10 +144,10 @@ const colorType TFT_INFO_VERT = {46, 48, 62};
 const colorType TFT_FRONT_VERT = {56, 176, 144};
 const colorType TFT_BACK_VERT = {0, 64, 32};
 
-const colorType TFT_HEADER_ORANGE = {84, 103, 143};
-const colorType TFT_INFO_ORANGE = {46, 48, 62};
-const colorType TFT_FRONT_ORANGE = {145, 153, 190};
-const colorType TFT_BACK_ORANGE = {108, 107, 116};
+const colorType TFT_HEADER_ARDOISE = {84, 103, 143};
+const colorType TFT_INFO_ARDOISE = {46, 48, 62};
+const colorType TFT_FRONT_ARDOISE = {145, 153, 190};
+const colorType TFT_BACK_ARDOISE = {108, 107, 116};
 
 const colorType TFT_HEADER_MARRON = {120, 80, 72};
 const colorType TFT_INFO_MARRON = {46, 48, 62};

@@ -441,11 +441,10 @@ void loop()
         tmpString = swap;
         M5.Lcd.drawString(tmpString, 10, 20);
 
-        //M5.Lcd.fillRect(0, 45, 320, 54, TFT_INFO);
-        //M5.Lcd.fillRect(0, 46, 320, 32, TFT_INFO);
+        M5.Lcd.fillRect(0, 46, 320, 32, TFT_INFO);
 
         M5.Lcd.setFreeFont(&rounded_led_board10pt7b);
-        M5.Lcd.setTextColor(TFT_WHITE, TFT_BLACK);
+        M5.Lcd.setTextColor(TFT_WHITE, TFT_INFO);
         M5.Lcd.setTextDatum(CL_DATUM);
 
         tmpString = String(lastIndicatif[0]);

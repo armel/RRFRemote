@@ -876,7 +876,7 @@ void viewMenu() {
   {
     optionStringOld = optionString;
     M5.Lcd.setFreeFont(&rounded_led_board10pt7b);
-    M5.Lcd.setTextColor(TFT_WHITE, TFT_BLACK);
+    M5.Lcd.setTextColor(TFT_WHITE, TFT_INFO);
     M5.Lcd.setTextDatum(CC_DATUM);
     M5.Lcd.setTextPadding(320);
     M5.Lcd.drawString(optionString, 160, 60);
