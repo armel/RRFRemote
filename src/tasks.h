@@ -161,7 +161,15 @@ void button(void *pvParameters)
     if (menuMode == 1 && menuSelected != -1) {
       Serial.println(millis() - timer);
       if((millis() - timer) > limit) {
+        String option = String(menu[menuCurrent]);
         menuSelected = -1;
+        if (option == "COULEUR") {
+          colorCurrent = preferences.getUInt("color", 0);
+        }
+        else if(option == "CONFIG") {
+          configCurrent = preferences.getUInt("config", 0);
+        }
+        action = 3;
       }
     }
 
@@ -476,6 +484,8 @@ void button(void *pvParameters)
         else if (btnB)
         {
           menuMode = 2;
+          colorCurrent = change;
+          preferences.putUInt("color", colorCurrent);
         }
 
         size_t n = sizeof(color) / sizeof(color[0]);
@@ -488,7 +498,6 @@ void button(void *pvParameters)
         {
           colorCurrent = change;
           action = 3;
-          preferences.putUInt("color", colorCurrent);
         }
       }
       // Mode menu active, Brightness
@@ -571,6 +580,8 @@ void button(void *pvParameters)
         }
         else if (btnB)
         {
+          configCurrent = change;
+          preferences.putUInt("config", configCurrent);
           WiFi.begin(config[(configCurrent * 6)], config[(configCurrent * 6) + 1]);
           while (WiFi.status() != WL_CONNECTED)
           {
@@ -606,7 +617,6 @@ void button(void *pvParameters)
         {
           whereisString = "-";
           configCurrent = change;
-          preferences.putUInt("config", configCurrent);
         }
       }        
       // Mode menu active, Escape

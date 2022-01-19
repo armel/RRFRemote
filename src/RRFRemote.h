@@ -40,7 +40,7 @@
 #include "settings.h"
 
 // Version
-#define VERSION "2.7.8"
+#define VERSION "2.8.0"
 
 // Wifi
 WiFiClientSecure clientISS;
@@ -90,44 +90,79 @@ typedef struct __attribute__((__packed__))
 } colorType;
 
 //colorType TFT_BACK = {48, 48, 48};
-colorType TFT_BACK = {117, 0, 76};
+/*
+colorType TFT_BACK = {120, 0, 72};
 colorType TFT_GRAY = {128, 128, 128};
-colorType TFT_FRONT = {51, 153, 255};
-colorType TFT_HEADER = {0, 76, 153};
+colorType TFT_FRONT = {56, 152, 255};
+colorType TFT_HEADER = {0, 72, 152};
+*/
 
-const char *color[] = {"ROUGE", "ORANGE", "VERT", "TURQUOISE", "BLEU", "ROSE", "VIOLET", "GRIS"};
+uint16_t TFT_BACK = 0x0000;
+uint16_t TFT_FRONT = 0x0000;
+uint16_t TFT_HEADER = 0x0000;
+uint16_t TFT_INFO = 0x0000;
 
-const colorType TFT_FRONT_ROUGE = {255, 102, 102};
-const colorType TFT_HEADER_ROUGE = {153, 0, 0};
-const colorType TFT_BACK_ROUGE = {117, 0, 31};
+//#undef TFT_BLACK 
+//#define TFT_BLACK 0x2987  // 0x282828 (40, 40, 40)
 
-const colorType TFT_FRONT_ORANGE = {255, 157, 77};
-const colorType TFT_HEADER_ORANGE = {255, 116, 0};
-const colorType TFT_BACK_ORANGE = {217, 65, 0};
+//#define TFT_BLACK M5.Lcd.color565(46, 48, 42)
 
-const colorType TFT_FRONT_VERT = {51, 204, 102};
-const colorType TFT_HEADER_VERT = {0, 102, 51};
-const colorType TFT_BACK_VERT = {0, 64, 32};
+/*
+#undef TFT_WHITE
+#define TFT_WHITE 0xEF7D  // 0xEEEEEE (238, 238, 238)
+*/
 
-const colorType TFT_FRONT_TURQUOISE = {51, 204, 204};
-const colorType TFT_HEADER_TURQUOISE = {0, 102, 102};
+const char *color[] = {"ROUGE", "ROSE", "VIOLET", "BLEU", "TURQUOISE", "VERT", "ORANGE", "MARRON", "GRIS"};
+
+const colorType TFT_HEADER_ROUGE = {152, 0, 0};
+const colorType TFT_INFO_ROUGE = {46, 48, 62};
+const colorType TFT_FRONT_ROUGE = {255, 104, 104};
+const colorType TFT_BACK_ROUGE = {114, 0, 32};
+
+const colorType TFT_HEADER_ROSE = {200, 0, 104};
+const colorType TFT_INFO_ROSE = {46, 48, 62};
+const colorType TFT_FRONT_ROSE = {255, 104, 176};
+const colorType TFT_BACK_ROSE = {120, 0, 72};
+
+const colorType TFT_HEADER_VIOLET = {96, 48, 112};
+const colorType TFT_INFO_VIOLET = {46, 48, 62};
+const colorType TFT_FRONT_VIOLET = {160, 104, 184};
+const colorType TFT_BACK_VIOLET = {64, 32, 72};
+
+const colorType TFT_HEADER_BLEU = {0, 56, 120};
+const colorType TFT_INFO_BLEU = {46, 48, 62};
+const colorType TFT_FRONT_BLEU = {56, 114, 168};
+const colorType TFT_BACK_BLEU = {0, 56, 104};
+
+const colorType TFT_HEADER_TURQUOISE = {0, 104, 104};
+const colorType TFT_INFO_TURQUOISE = {46, 48, 62};
+const colorType TFT_FRONT_TURQUOISE = {56, 184, 184};
 const colorType TFT_BACK_TURQUOISE = {0, 64, 64};
 
-const colorType TFT_FRONT_BLEU = {51, 110, 170};
-const colorType TFT_HEADER_BLEU = {0, 57, 115};
-const colorType TFT_BACK_BLEU = {0, 51, 102};
+const colorType TFT_HEADER_VERT = {0, 104, 56};
+const colorType TFT_INFO_VERT = {46, 48, 62};
+const colorType TFT_FRONT_VERT = {56, 176, 144};
+const colorType TFT_BACK_VERT = {0, 64, 32};
 
-const colorType TFT_FRONT_ROSE = {255, 102, 178};
-const colorType TFT_HEADER_ROSE = {204, 0, 102};
-const colorType TFT_BACK_ROSE = {117, 0, 76};
+const colorType TFT_HEADER_ORANGE = {84, 103, 143};
+const colorType TFT_INFO_ORANGE = {46, 48, 62};
+const colorType TFT_FRONT_ORANGE = {145, 153, 190};
+const colorType TFT_BACK_ORANGE = {108, 107, 116};
 
-const colorType TFT_FRONT_VIOLET = {165, 105, 189};
-const colorType TFT_HEADER_VIOLET = {91, 44, 111};
-const colorType TFT_BACK_VIOLET = {61, 30, 74};
+const colorType TFT_HEADER_MARRON = {120, 80, 72};
+const colorType TFT_INFO_MARRON = {46, 48, 62};
+const colorType TFT_FRONT_MARRON = {160, 136, 128};
+const colorType TFT_BACK_MARRON = {96, 64, 56};
 
-const colorType TFT_FRONT_GRIS = {160, 160, 160};
 const colorType TFT_HEADER_GRIS = {96, 96, 96};
+const colorType TFT_INFO_GRIS = {46, 48, 62};
+const colorType TFT_FRONT_GRIS = {160, 160, 160};
 const colorType TFT_BACK_GRIS = {64, 64, 64};
+
+colorType BMP_HEADER;
+colorType BMP_INFO;
+colorType BMP_FRONT;
+colorType BMP_BACK;
 
 // Icon
 #define ICON_FONT &icon_works_webfont14pt7b
