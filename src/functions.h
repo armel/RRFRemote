@@ -144,7 +144,7 @@ void clear()
   }
 
   // Info zone
-  M5.Lcd.fillRect(0, 45, 320, 54, TFT_INFO);
+  M5.Lcd.fillRect(0, 45, 320, 55, TFT_INFO);
 
   // Grey zone
   M5.Lcd.drawFastHLine(  0, 100, 320, TFT_WHITE);
@@ -303,7 +303,7 @@ void updateLocalTime()
 bool M5Screen4bmp(){
   uint16_t image_height = M5.Lcd.height();
   uint16_t image_width = M5.Lcd.width();
-  uint32_t filesize = 54 + 24 + ((image_width * image_height) / 2); 
+  uint32_t filesize = 54 + 28 + ((image_width * image_height) / 2); 
   uint8_t l = 0;
   uint8_t r = 0;
 
@@ -314,7 +314,7 @@ bool M5Screen4bmp(){
     'B', 'M',         // BMP signature (Windows 3.1x, 95, NT, …)
     0, 0, 0, 0,       // Image file size in bytes
     0, 0, 0, 0,       // Reserved
-    54 + 24, 0, 0, 0, // Start of pixel array
+    54 + 28, 0, 0, 0, // Start of pixel array
     40, 0, 0, 0,      // Info header size
     0, 0, 0, 0,       // Image width
     0, 0, 0, 0,       // Image height
@@ -324,16 +324,17 @@ bool M5Screen4bmp(){
     0, 0, 0, 0,       // Image size (can be 0 for uncompressed images)
     0, 0, 0, 0,       // Horizontal resolution (dpm)
     0, 0, 0, 0,       // Vertical resolution (dpm)
-    6, 0, 0, 0,       // Colors in color table (0 = none)
+    7, 0, 0, 0,       // Colors in color table (0 = none)
     0, 0, 0, 0 };     // Important color count (0 = all colors are important)
 
-  unsigned char palette[24] = {
+  unsigned char palette[28] = {
     0, 0, 0, 255,
     255, 255, 255, 255,
     192, 192, 192, 255,
     BMP_HEADER.b, BMP_HEADER.g, BMP_HEADER.r, 255,
-    BMP_BACK.b, BMP_BACK.g, BMP_BACK.r, 255,
-    BMP_FRONT.b, BMP_FRONT.g, BMP_FRONT.r, 255
+    BMP_INFO.b, BMP_INFO.g, BMP_INFO.r, 255,
+    BMP_FRONT.b, BMP_FRONT.g, BMP_FRONT.r, 255,
+    BMP_BACK.b, BMP_BACK.g, BMP_BACK.r, 255
   };
 
   // Fill filesize, width and heigth in the header array
@@ -346,7 +347,7 @@ bool M5Screen4bmp(){
   httpClient.write(header, 54);
 
   // Write palette
-  httpClient.write(palette, 24);
+  httpClient.write(palette, 28);
 
   // The coordinate origin of a BMP image is at the bottom left.
   // Therefore, the image must be read from bottom to top.
@@ -393,14 +394,21 @@ bool M5Screen4bmp(){
           l = 0b0011;
         }
         else if(
-          abs(line_data_raw[x * 3] - BMP_BACK.r) < 16 && 
-          abs(line_data_raw[x * 3 + 1] - BMP_BACK.g) < 16 && 
-          abs(line_data_raw[x * 3 + 2] - BMP_BACK.b) < 16
+          abs(line_data_raw[x * 3] - BMP_INFO.r) < 16 && 
+          abs(line_data_raw[x * 3 + 1] - BMP_INFO.g) < 16 && 
+          abs(line_data_raw[x * 3 + 2] - BMP_INFO.b) < 16
         ) {
           l = 0b0100;
         }
-        else {
+        else if(
+          abs(line_data_raw[x * 3] - BMP_FRONT.r) < 16 && 
+          abs(line_data_raw[x * 3 + 1] - BMP_FRONT.g) < 16 && 
+          abs(line_data_raw[x * 3 + 2] - BMP_FRONT.b) < 16
+        ) {
           l = 0b0101;
+        }
+        else {
+          l = 0b0110;
         }
 
         // Right
@@ -433,14 +441,21 @@ bool M5Screen4bmp(){
           r = 0b0011;
         }
         else if(
-          abs(line_data_raw[(x + 1) * 3] - BMP_BACK.r) < 16 &&
-          abs(line_data_raw[(x + 1) * 3 + 1] - BMP_BACK.g) < 16 &&
-          abs(line_data_raw[(x + 1) * 3 + 2] - BMP_BACK.b) < 16
+          abs(line_data_raw[(x + 1) * 3] - BMP_INFO.r) < 16 &&
+          abs(line_data_raw[(x + 1) * 3 + 1] - BMP_INFO.g) < 16 &&
+          abs(line_data_raw[(x + 1) * 3 + 2] - BMP_INFO.b) < 16
         ) {
           r = 0b0100;
         }
-        else {
+        else if(
+          abs(line_data_raw[(x + 1) * 3] - BMP_FRONT.r) < 16 &&
+          abs(line_data_raw[(x + 1) * 3 + 1] - BMP_FRONT.g) < 16 &&
+          abs(line_data_raw[(x + 1) * 3 + 2] - BMP_FRONT.b) < 16
+        ) {
           r = 0b0101;
+        }
+        else {
+          r = 0b0110;
         }
 
         line_data_bmp[k] = (l<<4) | r;
