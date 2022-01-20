@@ -475,7 +475,7 @@ void loop()
       }
 
       M5.Lcd.setFreeFont(&rounded_led_board10pt7b);
-      M5.Lcd.setTextColor(TFT_WHITE, TFT_BLACK);
+      M5.Lcd.setTextColor(TFT_WHITE, TFT_INFO);
       M5.Lcd.setTextDatum(CL_DATUM);
       dureeString = String(lastDuree[0]);
       if (dureeStringOld != dureeString) 

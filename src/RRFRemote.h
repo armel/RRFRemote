@@ -80,8 +80,10 @@ int utc = 1;
 // Preferences
 Preferences preferences;
 
-// Color (https://www.rapidtables.com/web/color/RGB_Color.html)
-// Color (https://color.adobe.com/fr/create/color-wheel)
+// Color https://www.rapidtables.com/web/color/RGB_Color.html
+// Color https://color.adobe.com/fr/create/color-wheel
+// Color https://visme.co/blog/fr/palette-de-couleur/
+
 typedef struct __attribute__((__packed__))
 {
   uint8_t r;
@@ -89,75 +91,82 @@ typedef struct __attribute__((__packed__))
   uint8_t b;
 } colorType;
 
-//colorType TFT_BACK = {48, 48, 48};
-/*
-colorType TFT_BACK = {120, 0, 72};
-colorType TFT_GRAY = {128, 128, 128};
-colorType TFT_FRONT = {56, 152, 255};
-colorType TFT_HEADER = {0, 72, 152};
-*/
-
-uint16_t TFT_BACK = 0x0000;
-uint16_t TFT_FRONT = 0x0000;
 uint16_t TFT_HEADER = 0x0000;
-uint16_t TFT_INFO = 0x0000;
+uint16_t TFT_INFO   = 0x0000;
+uint16_t TFT_FRONT  = 0x0000;
+uint16_t TFT_BACK   = 0x0000;
 
-//#undef TFT_BLACK 
-//#define TFT_BLACK 0x2987  // 0x282828 (40, 40, 40)
+// http://www.rinkydinkelectronics.com/calc_rgb565.php
+// #undef TFT_BLACK 
+// #define TFT_BLACK 0x2945
+// #define TFT_BLACK M5.Lcd.color565(40, 40, 40)
 
-//#define TFT_BLACK M5.Lcd.color565(46, 48, 42)
-
-/*
-#undef TFT_WHITE
-#define TFT_WHITE 0xEF7D  // 0xEEEEEE (238, 238, 238)
-*/
-
-const char *color[] = {"ROUGE", "ROSE", "VIOLET", "BLEU", "TURQUOISE", "VERT", "ARDOISE", "MARRON", "GRIS"};
+const char *color[] = {"ROUGE", "ROSE", "VIOLET", "BLEU", "TURQUOISE", "VERT", "ORANGE", "MARRON", "GRIS", "CREPUSCULE", "FORET", "ARDOISE", "FLORAL"};
 
 const colorType TFT_HEADER_ROUGE = {152, 0, 0};
-const colorType TFT_INFO_ROUGE = {46, 48, 62};
+const colorType TFT_INFO_ROUGE = {32, 32, 32};
 const colorType TFT_FRONT_ROUGE = {255, 104, 104};
 const colorType TFT_BACK_ROUGE = {114, 0, 32};
 
 const colorType TFT_HEADER_ROSE = {200, 0, 104};
-const colorType TFT_INFO_ROSE = {46, 48, 62};
+const colorType TFT_INFO_ROSE = {32, 32, 32};
 const colorType TFT_FRONT_ROSE = {255, 104, 176};
 const colorType TFT_BACK_ROSE = {120, 0, 72};
 
 const colorType TFT_HEADER_VIOLET = {96, 48, 112};
-const colorType TFT_INFO_VIOLET = {46, 48, 62};
+const colorType TFT_INFO_VIOLET = {32, 32, 32};
 const colorType TFT_FRONT_VIOLET = {160, 104, 184};
 const colorType TFT_BACK_VIOLET = {64, 32, 72};
 
 const colorType TFT_HEADER_BLEU = {0, 56, 120};
-const colorType TFT_INFO_BLEU = {46, 48, 62};
+const colorType TFT_INFO_BLEU = {32, 32, 32};
 const colorType TFT_FRONT_BLEU = {56, 114, 168};
 const colorType TFT_BACK_BLEU = {0, 56, 104};
 
 const colorType TFT_HEADER_TURQUOISE = {0, 104, 104};
-const colorType TFT_INFO_TURQUOISE = {46, 48, 62};
+const colorType TFT_INFO_TURQUOISE = {32, 32, 32};
 const colorType TFT_FRONT_TURQUOISE = {56, 184, 184};
 const colorType TFT_BACK_TURQUOISE = {0, 64, 64};
 
 const colorType TFT_HEADER_VERT = {0, 104, 56};
-const colorType TFT_INFO_VERT = {46, 48, 62};
+const colorType TFT_INFO_VERT = {32, 32, 32};
 const colorType TFT_FRONT_VERT = {56, 176, 144};
 const colorType TFT_BACK_VERT = {0, 64, 32};
 
-const colorType TFT_HEADER_ARDOISE = {84, 103, 143};
-const colorType TFT_INFO_ARDOISE = {46, 48, 62};
-const colorType TFT_FRONT_ARDOISE = {145, 153, 190};
-const colorType TFT_BACK_ARDOISE = {108, 107, 116};
+const colorType TFT_HEADER_ORANGE = {255, 64, 0};
+const colorType TFT_INFO_ORANGE = {32, 32, 32};
+const colorType TFT_FRONT_ORANGE = {255, 157, 77};
+const colorType TFT_BACK_ORANGE = {230, 108, 44};
 
 const colorType TFT_HEADER_MARRON = {120, 80, 72};
-const colorType TFT_INFO_MARRON = {46, 48, 62};
+const colorType TFT_INFO_MARRON = {32, 32, 32};
 const colorType TFT_FRONT_MARRON = {160, 136, 128};
 const colorType TFT_BACK_MARRON = {96, 64, 56};
 
 const colorType TFT_HEADER_GRIS = {96, 96, 96};
-const colorType TFT_INFO_GRIS = {46, 48, 62};
+const colorType TFT_INFO_GRIS = {32, 32, 32};
 const colorType TFT_FRONT_GRIS = {160, 160, 160};
 const colorType TFT_BACK_GRIS = {64, 64, 64};
+
+const colorType TFT_HEADER_CREPUSCULE = {92, 74, 114};
+const colorType TFT_INFO_CREPUSCULE = {163, 88, 109};
+const colorType TFT_FRONT_CREPUSCULE = {243, 176, 90};
+const colorType TFT_BACK_CREPUSCULE = {244, 135, 75};
+
+const colorType TFT_HEADER_FORET = {65, 89, 57};
+const colorType TFT_INFO_FORET = {63, 50, 50};
+const colorType TFT_FRONT_FORET = {181, 193, 180};
+const colorType TFT_BACK_FORET = {116, 89, 61};
+
+const colorType TFT_HEADER_ARDOISE = {84, 103, 143};
+const colorType TFT_INFO_ARDOISE = {64, 64, 64};
+const colorType TFT_FRONT_ARDOISE = {145, 153, 190};
+const colorType TFT_BACK_ARDOISE = {108, 107, 116};
+
+const colorType TFT_HEADER_FLORAL = {43, 25, 62};
+const colorType TFT_INFO_FLORAL = {79, 114, 142};
+const colorType TFT_FRONT_FLORAL = {238, 108, 129};
+const colorType TFT_BACK_FLORAL = {141, 45, 86};
 
 colorType BMP_HEADER;
 colorType BMP_INFO;
