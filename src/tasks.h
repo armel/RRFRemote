@@ -157,19 +157,27 @@ void button(void *pvParameters)
     //Serial.println("button");
     getButton(modeCurrent);
 
-    // Escape submenu from CONFIG, SYSOP, QSY, COULEUR and LUMINOSTE
-    if (menuMode == 1 && menuSelected != -1) {
-      Serial.println(millis() - timer);
-      if((millis() - timer) > limit) {
-        String option = String(menu[menuCurrent]);
-        menuSelected = -1;
-        if (option == "COULEUR") {
-          colorCurrent = preferences.getUInt("color", 0);
+    // Escape menu and submenus from CONFIG, SYSOP, QSY, COULEUR and LUMINOSTE
+    if (menuMode == 1) {
+      //Serial.println(millis() - timer);
+      if(menuSelected != -1) {
+        if((millis() - timer) > limit) {
+          String option = String(menu[menuCurrent]);
+          menuSelected = -1;
+          if (option == "COULEUR") {
+            colorCurrent = preferences.getUInt("color", 0);
+          }
+          else if(option == "CONFIG") {
+            configCurrent = preferences.getUInt("config", 0);
+          }
+          action = 3;
+          timer = millis();
         }
-        else if(option == "CONFIG") {
-          configCurrent = preferences.getUInt("config", 0);
+      }
+      else {
+        if((millis() - timer) > 2 * limit) {
+          menuMode = 2;
         }
-        action = 3;
       }
     }
 
@@ -331,6 +339,7 @@ void button(void *pvParameters)
         if (btnB)
         {
           //Serial.println("Click A");
+          timer = millis();
           vTaskDelay(pdMS_TO_TICKS(250));
           menuMode = 1;
           btnB = 0;
@@ -348,10 +357,12 @@ void button(void *pvParameters)
           if (btnA)
           {
             change += left;
+            timer = millis();
           }
           else if (btnC)
           {
             change += right;
+            timer = millis();
           }
           else if (btnB)
           {
