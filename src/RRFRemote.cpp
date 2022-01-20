@@ -55,11 +55,11 @@ void setup()
   // LCD
   resetColor();
   M5.Lcd.setBrightness(brightnessCurrent);
-  M5.Lcd.fillScreen(M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
+  M5.Lcd.fillScreen(TFT_HEADER);
 
   // Title
   M5.Lcd.setFreeFont(&rounded_led_board10pt7b);
-  M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
+  M5.Lcd.setTextColor(TFT_WHITE, TFT_HEADER);
   M5.Lcd.setTextDatum(CC_DATUM);
   M5.Lcd.drawString("RRFRemote", 160, 20);
   M5.Lcd.setFreeFont(0);
@@ -344,7 +344,7 @@ void loop()
 
     // View many datas
     M5.Lcd.setFreeFont(&tahoma6pt7b);
-    M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
+    M5.Lcd.setTextColor(TFT_WHITE,TFT_BACK);
     M5.Lcd.setTextDatum(CC_DATUM);
 
     if (tot > 0) 
@@ -356,7 +356,7 @@ void loop()
       alternance = 5;
       type = 0;
     }
-
+    
     scroll(20);
     switch(type) {
       case 1:
@@ -425,15 +425,15 @@ void loop()
           M5.Lcd.setBrightness(brightnessCurrent);
         }
 
-        M5.Lcd.fillRect(4, 2, 36, 42, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
+        M5.Lcd.fillRect(4, 2, 36, 42, TFT_HEADER);
 
-        M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
+        M5.Lcd.setTextColor(TFT_WHITE, TFT_HEADER);
         M5.Lcd.setFreeFont(&dot15pt7b);
         M5.Lcd.setTextDatum(CC_DATUM);
         M5.Lcd.setTextPadding(240);
         M5.Lcd.drawString(String(salon), 160, 16);
 
-        M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
+        M5.Lcd.setTextColor(TFT_WHITE, TFT_HEADER);
         M5.Lcd.setFreeFont(ICON_FONT);
         M5.Lcd.setTextDatum(CL_DATUM);
         M5.Lcd.setTextPadding(20);
@@ -441,10 +441,10 @@ void loop()
         tmpString = swap;
         M5.Lcd.drawString(tmpString, 10, 20);
 
-        M5.Lcd.fillRect(0, 46, 320, 32, TFT_BLACK);
+        M5.Lcd.fillRect(0, 46, 320, 32, TFT_INFO);
 
         M5.Lcd.setFreeFont(&rounded_led_board10pt7b);
-        M5.Lcd.setTextColor(TFT_WHITE, TFT_BLACK);
+        M5.Lcd.setTextColor(TFT_WHITE, TFT_INFO);
         M5.Lcd.setTextDatum(CL_DATUM);
 
         tmpString = String(lastIndicatif[0]);
@@ -475,7 +475,7 @@ void loop()
       }
 
       M5.Lcd.setFreeFont(&rounded_led_board10pt7b);
-      M5.Lcd.setTextColor(TFT_WHITE, TFT_BLACK);
+      M5.Lcd.setTextColor(TFT_WHITE, TFT_INFO);
       M5.Lcd.setTextDatum(CL_DATUM);
       dureeString = String(lastDuree[0]);
       if (dureeStringOld != dureeString) 
@@ -506,7 +506,7 @@ void loop()
           M5.Lcd.setBrightness(brightnessCurrent);
         }
 
-        M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
+        M5.Lcd.setTextColor(TFT_WHITE, TFT_HEADER);
         M5.Lcd.setFreeFont(&dot15pt7b);
         M5.Lcd.setTextDatum(CC_DATUM);
         M5.Lcd.setTextPadding(240);
@@ -524,7 +524,7 @@ void loop()
       }
 
       M5.Lcd.setFreeFont(ICON_FONT);
-      M5.Lcd.setTextColor(TFT_WHITE, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
+      M5.Lcd.setTextColor(TFT_WHITE, TFT_HEADER);
       M5.Lcd.setTextDatum(CL_DATUM);
       M5.Lcd.setTextPadding(0);
 
@@ -652,7 +652,11 @@ void loop()
 
   // Manage follow
   if(followCurrent == 1 && menuMode != 1) {
-    for (uint8_t i = 0; i <= 5; i++) {
+
+    size_t n = sizeof(room) / sizeof(room[0]);
+    n -= 1;
+
+    for (uint8_t i = 0; i <= n; i++) {
       if (dtmf[i] == whereisCurrent) {
         if (i != roomCurrent) {
           roomCurrent = i;

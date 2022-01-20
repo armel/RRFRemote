@@ -25,14 +25,148 @@ String getValue(String data, char separator, uint8_t index)
 void resetColor()
 {
   switch(colorCurrent) {
-    case 0: TFT_FRONT = TFT_FRONT_ROUGE; TFT_HEADER = TFT_HEADER_ROUGE; TFT_BACK = TFT_BACK_ROUGE; break;
-    case 1: TFT_FRONT = TFT_FRONT_ORANGE; TFT_HEADER = TFT_HEADER_ORANGE; TFT_BACK = TFT_BACK_ORANGE; break;
-    case 2: TFT_FRONT = TFT_FRONT_VERT; TFT_HEADER = TFT_HEADER_VERT; TFT_BACK = TFT_BACK_VERT; break;
-    case 3: TFT_FRONT = TFT_FRONT_TURQUOISE; TFT_HEADER = TFT_HEADER_TURQUOISE; TFT_BACK = TFT_BACK_TURQUOISE; break;
-    case 4: TFT_FRONT = TFT_FRONT_BLEU; TFT_HEADER = TFT_HEADER_BLEU; TFT_BACK = TFT_BACK_BLEU; break;
-    case 5: TFT_FRONT = TFT_FRONT_ROSE; TFT_HEADER = TFT_HEADER_ROSE; TFT_BACK = TFT_BACK_ROSE; break;
-    case 6: TFT_FRONT = TFT_FRONT_VIOLET; TFT_HEADER = TFT_HEADER_VIOLET; TFT_BACK = TFT_BACK_VIOLET; break;
-    case 7: TFT_FRONT = TFT_FRONT_GRIS; TFT_HEADER = TFT_HEADER_GRIS; TFT_BACK = TFT_BACK_GRIS; break;
+    case 0: 
+      TFT_HEADER = M5.Lcd.color565(TFT_HEADER_ROUGE.r, TFT_HEADER_ROUGE.g, TFT_HEADER_ROUGE.b); 
+      TFT_INFO = M5.Lcd.color565(TFT_INFO_ROUGE.r, TFT_INFO_ROUGE.g, TFT_INFO_ROUGE.b); 
+      TFT_FRONT = M5.Lcd.color565(TFT_FRONT_ROUGE.r, TFT_FRONT_ROUGE.g, TFT_FRONT_ROUGE.b); 
+      TFT_BACK = M5.Lcd.color565(TFT_BACK_ROUGE.r, TFT_BACK_ROUGE.g, TFT_BACK_ROUGE.b);
+      BMP_HEADER = TFT_HEADER_ROUGE;
+      BMP_INFO = TFT_INFO_ROUGE;
+      BMP_FRONT = TFT_FRONT_ROUGE;
+      BMP_BACK = TFT_BACK_ROUGE;
+      break;
+    
+    case 1:
+      TFT_HEADER = M5.Lcd.color565(TFT_HEADER_ROSE.r, TFT_HEADER_ROSE.g, TFT_HEADER_ROSE.b); 
+      TFT_INFO = M5.Lcd.color565(TFT_INFO_ROSE.r, TFT_INFO_ROSE.g, TFT_INFO_ROSE.b); 
+      TFT_FRONT = M5.Lcd.color565(TFT_FRONT_ROSE.r, TFT_FRONT_ROSE.g, TFT_FRONT_ROSE.b); 
+      TFT_BACK = M5.Lcd.color565(TFT_BACK_ROSE.r, TFT_BACK_ROSE.g, TFT_BACK_ROSE.b);
+      BMP_HEADER = TFT_HEADER_ROSE;
+      BMP_INFO = TFT_INFO_ROSE;
+      BMP_FRONT = TFT_FRONT_ROSE;
+      BMP_BACK = TFT_BACK_ROSE;
+      break;
+
+    case 2: 
+      TFT_HEADER = M5.Lcd.color565(TFT_HEADER_VIOLET.r, TFT_HEADER_VIOLET.g, TFT_HEADER_VIOLET.b); 
+      TFT_INFO = M5.Lcd.color565(TFT_INFO_VIOLET.r, TFT_INFO_VIOLET.g, TFT_INFO_VIOLET.b); 
+      TFT_FRONT = M5.Lcd.color565(TFT_FRONT_VIOLET.r, TFT_FRONT_VIOLET.g, TFT_FRONT_VIOLET.b); 
+      TFT_BACK = M5.Lcd.color565(TFT_BACK_VIOLET.r, TFT_BACK_VIOLET.g, TFT_BACK_VIOLET.b);
+      BMP_HEADER = TFT_HEADER_VIOLET;
+      BMP_INFO = TFT_INFO_VIOLET;
+      BMP_FRONT = TFT_FRONT_VIOLET;
+      BMP_BACK = TFT_BACK_VIOLET;
+      break;
+
+    case 3: 
+      TFT_HEADER = M5.Lcd.color565(TFT_HEADER_BLEU.r, TFT_HEADER_BLEU.g, TFT_HEADER_BLEU.b); 
+      TFT_INFO = M5.Lcd.color565(TFT_INFO_BLEU.r, TFT_INFO_BLEU.g, TFT_INFO_BLEU.b); 
+      TFT_FRONT = M5.Lcd.color565(TFT_FRONT_BLEU.r, TFT_FRONT_BLEU.g, TFT_FRONT_BLEU.b); 
+      TFT_BACK = M5.Lcd.color565(TFT_BACK_BLEU.r, TFT_BACK_BLEU.g, TFT_BACK_BLEU.b);
+      BMP_HEADER = TFT_HEADER_BLEU;
+      BMP_INFO = TFT_INFO_BLEU;
+      BMP_FRONT = TFT_FRONT_BLEU;
+      BMP_BACK = TFT_BACK_BLEU;
+      break;
+
+    case 4: 
+      TFT_HEADER = M5.Lcd.color565(TFT_HEADER_TURQUOISE.r, TFT_HEADER_TURQUOISE.g, TFT_HEADER_TURQUOISE.b); 
+      TFT_INFO = M5.Lcd.color565(TFT_INFO_TURQUOISE.r, TFT_INFO_TURQUOISE.g, TFT_INFO_TURQUOISE.b); 
+      TFT_FRONT = M5.Lcd.color565(TFT_FRONT_TURQUOISE.r, TFT_FRONT_TURQUOISE.g, TFT_FRONT_TURQUOISE.b); 
+      TFT_BACK = M5.Lcd.color565(TFT_BACK_TURQUOISE.r, TFT_BACK_TURQUOISE.g, TFT_BACK_TURQUOISE.b);
+      BMP_HEADER = TFT_HEADER_TURQUOISE;
+      BMP_INFO = TFT_INFO_TURQUOISE;
+      BMP_FRONT = TFT_FRONT_TURQUOISE;
+      BMP_BACK = TFT_BACK_TURQUOISE;    
+      break;
+
+    case 5:
+      TFT_HEADER = M5.Lcd.color565(TFT_HEADER_VERT.r, TFT_HEADER_VERT.g, TFT_HEADER_VERT.b); 
+      TFT_INFO = M5.Lcd.color565(TFT_INFO_VERT.r, TFT_INFO_VERT.g, TFT_INFO_VERT.b); 
+      TFT_FRONT = M5.Lcd.color565(TFT_FRONT_VERT.r, TFT_FRONT_VERT.g, TFT_FRONT_VERT.b); 
+      TFT_BACK = M5.Lcd.color565(TFT_BACK_VERT.r, TFT_BACK_VERT.g, TFT_BACK_VERT.b);
+      BMP_HEADER = TFT_HEADER_VERT;
+      BMP_INFO = TFT_INFO_VERT;
+      BMP_FRONT = TFT_FRONT_VERT;
+      BMP_BACK = TFT_BACK_VERT;
+      break;
+
+    case 6:
+      TFT_HEADER = M5.Lcd.color565(TFT_HEADER_ORANGE.r, TFT_HEADER_ORANGE.g, TFT_HEADER_ORANGE.b); 
+      TFT_INFO = M5.Lcd.color565(TFT_INFO_ORANGE.r, TFT_INFO_ORANGE.g, TFT_INFO_ORANGE.b); 
+      TFT_FRONT = M5.Lcd.color565(TFT_FRONT_ORANGE.r, TFT_FRONT_ORANGE.g, TFT_FRONT_ORANGE.b); 
+      TFT_BACK = M5.Lcd.color565(TFT_BACK_ORANGE.r, TFT_BACK_ORANGE.g, TFT_BACK_ORANGE.b);
+      BMP_HEADER = TFT_HEADER_ORANGE;
+      BMP_INFO = TFT_INFO_ORANGE;
+      BMP_FRONT = TFT_FRONT_ORANGE;
+      BMP_BACK = TFT_BACK_ORANGE;
+      break;
+
+    case 7:
+      TFT_HEADER = M5.Lcd.color565(TFT_HEADER_MARRON.r, TFT_HEADER_MARRON.g, TFT_HEADER_MARRON.b); 
+      TFT_INFO = M5.Lcd.color565(TFT_INFO_MARRON.r, TFT_INFO_MARRON.g, TFT_INFO_MARRON.b); 
+      TFT_FRONT = M5.Lcd.color565(TFT_FRONT_MARRON.r, TFT_FRONT_MARRON.g, TFT_FRONT_MARRON.b); 
+      TFT_BACK = M5.Lcd.color565(TFT_BACK_MARRON.r, TFT_BACK_MARRON.g, TFT_BACK_MARRON.b);
+      BMP_HEADER = TFT_HEADER_MARRON;
+      BMP_INFO = TFT_INFO_MARRON;
+      BMP_FRONT = TFT_FRONT_MARRON;
+      BMP_BACK = TFT_BACK_MARRON;
+      break;
+
+    case 8:
+      TFT_HEADER = M5.Lcd.color565(TFT_HEADER_GRIS.r, TFT_HEADER_GRIS.g, TFT_HEADER_GRIS.b); 
+      TFT_INFO = M5.Lcd.color565(TFT_INFO_GRIS.r, TFT_INFO_GRIS.g, TFT_INFO_GRIS.b); 
+      TFT_FRONT = M5.Lcd.color565(TFT_FRONT_GRIS.r, TFT_FRONT_GRIS.g, TFT_FRONT_GRIS.b); 
+      TFT_BACK = M5.Lcd.color565(TFT_BACK_GRIS.r, TFT_BACK_GRIS.g, TFT_BACK_GRIS.b);
+      BMP_HEADER = TFT_HEADER_GRIS;
+      BMP_INFO = TFT_INFO_GRIS;
+      BMP_FRONT = TFT_FRONT_GRIS;
+      BMP_BACK = TFT_BACK_GRIS;
+      break;
+
+    case 9:
+      TFT_HEADER = M5.Lcd.color565(TFT_HEADER_CREPUSCULE.r, TFT_HEADER_CREPUSCULE.g, TFT_HEADER_CREPUSCULE.b); 
+      TFT_INFO = M5.Lcd.color565(TFT_INFO_CREPUSCULE.r, TFT_INFO_CREPUSCULE.g, TFT_INFO_CREPUSCULE.b); 
+      TFT_FRONT = M5.Lcd.color565(TFT_FRONT_CREPUSCULE.r, TFT_FRONT_CREPUSCULE.g, TFT_FRONT_CREPUSCULE.b); 
+      TFT_BACK = M5.Lcd.color565(TFT_BACK_CREPUSCULE.r, TFT_BACK_CREPUSCULE.g, TFT_BACK_CREPUSCULE.b);
+      BMP_HEADER = TFT_HEADER_CREPUSCULE;
+      BMP_INFO = TFT_INFO_CREPUSCULE;
+      BMP_FRONT = TFT_FRONT_CREPUSCULE;
+      BMP_BACK = TFT_BACK_CREPUSCULE;
+      break;
+
+    case 10: 
+      TFT_HEADER = M5.Lcd.color565(TFT_HEADER_FORET.r, TFT_HEADER_FORET.g, TFT_HEADER_FORET.b); 
+      TFT_INFO = M5.Lcd.color565(TFT_INFO_FORET.r, TFT_INFO_FORET.g, TFT_INFO_FORET.b); 
+      TFT_FRONT = M5.Lcd.color565(TFT_FRONT_FORET.r, TFT_FRONT_FORET.g, TFT_FRONT_FORET.b); 
+      TFT_BACK = M5.Lcd.color565(TFT_BACK_FORET.r, TFT_BACK_FORET.g, TFT_BACK_FORET.b);
+      BMP_HEADER = TFT_HEADER_FORET;
+      BMP_INFO = TFT_INFO_FORET;
+      BMP_FRONT = TFT_FRONT_FORET;
+      BMP_BACK = TFT_BACK_FORET;
+      break;
+
+    case 11: 
+      TFT_HEADER = M5.Lcd.color565(TFT_HEADER_ARDOISE.r, TFT_HEADER_ARDOISE.g, TFT_HEADER_ARDOISE.b); 
+      TFT_INFO = M5.Lcd.color565(TFT_INFO_ARDOISE.r, TFT_INFO_ARDOISE.g, TFT_INFO_ARDOISE.b); 
+      TFT_FRONT = M5.Lcd.color565(TFT_FRONT_ARDOISE.r, TFT_FRONT_ARDOISE.g, TFT_FRONT_ARDOISE.b); 
+      TFT_BACK = M5.Lcd.color565(TFT_BACK_ARDOISE.r, TFT_BACK_ARDOISE.g, TFT_BACK_ARDOISE.b);
+      BMP_HEADER = TFT_HEADER_ARDOISE;
+      BMP_INFO = TFT_INFO_ARDOISE;
+      BMP_FRONT = TFT_FRONT_ARDOISE;
+      BMP_BACK = TFT_BACK_ARDOISE;
+      break;
+
+    case 12:
+      TFT_HEADER = M5.Lcd.color565(TFT_HEADER_FLORAL.r, TFT_HEADER_FLORAL.g, TFT_HEADER_FLORAL.b); 
+      TFT_INFO = M5.Lcd.color565(TFT_INFO_FLORAL.r, TFT_INFO_FLORAL.g, TFT_INFO_FLORAL.b); 
+      TFT_FRONT = M5.Lcd.color565(TFT_FRONT_FLORAL.r, TFT_FRONT_FLORAL.g, TFT_FRONT_FLORAL.b); 
+      TFT_BACK = M5.Lcd.color565(TFT_BACK_FLORAL.r, TFT_BACK_FLORAL.g, TFT_BACK_FLORAL.b);
+      BMP_HEADER = TFT_HEADER_FLORAL;
+      BMP_INFO = TFT_INFO_FLORAL;
+      BMP_FRONT = TFT_FRONT_FLORAL;
+      BMP_BACK = TFT_BACK_FLORAL;
+      break;
   }
 }
 
@@ -48,29 +182,33 @@ void clear()
 
   if(menuMode != 1 || (menuMode == 1 && option == "COULEUR")) {
     // Header
-    M5.Lcd.fillRect(0, 0, 320, 44, M5.Lcd.color565(TFT_HEADER.r, TFT_HEADER.g, TFT_HEADER.b));
+    M5.Lcd.fillRect(0, 0, 320, 44, TFT_HEADER);
+    M5.Lcd.fillRect(0, 45, 320, 55, TFT_INFO);
     M5.Lcd.drawFastHLine(  0,   0, 320, TFT_WHITE);
     M5.Lcd.drawFastHLine(  0,  44, 320, TFT_WHITE);
   }
 
+  // Info zone
+  M5.Lcd.fillRect(0, 98, 320, 2, TFT_INFO);
+
   // Grey zone
   M5.Lcd.drawFastHLine(  0, 100, 320, TFT_WHITE);
-  M5.Lcd.fillRect(0, 101, 320, 239, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
+  M5.Lcd.fillRect(0, 101, 320, 239, TFT_BACK);
 
   if(modeCurrent == 0) {
     // Elsewhere
     M5.Lcd.fillRoundRect(0, 154, 155, 85, 4, TFT_WHITE);
-    M5.Lcd.fillRoundRect(1, 155, 26, 83, 4, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
+    M5.Lcd.fillRoundRect(1, 155, 26, 83, 4, TFT_FRONT);
 
     for (uint8_t i = 24; i < 27; i++) {
-      M5.Lcd.drawFastVLine(i, 155, 83, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
+      M5.Lcd.drawFastVLine(i, 155, 83, TFT_FRONT);
     }
 
-    M5.Lcd.drawFastVLine(27, 155, 83, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
-    M5.Lcd.drawFastVLine(100, 155, 83, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
+    M5.Lcd.drawFastVLine(27, 155, 83, TFT_BACK);
+    M5.Lcd.drawFastVLine(100, 155, 83, TFT_BACK);
 
     for (uint8_t i = 0; i < 5; i++) {
-      M5.Lcd.drawFastHLine(2, 168 + (i * 14), 152, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
+      M5.Lcd.drawFastHLine(2, 168 + (i * 14), 152, TFT_BACK);
     }
 
     // Log
@@ -79,12 +217,12 @@ void clear()
   else if(modeCurrent == 1) {
     for (uint8_t i = 0; i <= 1; i++) {
       M5.Lcd.fillRoundRect(0 + (170 * i), 125, 150, 115, 4, TFT_WHITE);
-      M5.Lcd.fillRoundRect(1 + (170 * i), 126, 148, 113, 4, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
+      M5.Lcd.fillRoundRect(1 + (170 * i), 126, 148, 113, 4, TFT_FRONT);
       M5.Lcd.fillRect(51 + (170 * i), 126, 98, 113, TFT_WHITE);
-      M5.Lcd.drawFastVLine(50 + (170 * i), 126, 113, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
+      M5.Lcd.drawFastVLine(50 + (170 * i), 126, 113, TFT_BACK);
 
       for(uint8_t k = 1; k <= 5; k++) {
-        M5.Lcd.drawFastHLine(1 + (170 * i), 125 + (k * 18) + k, 148, M5.Lcd.color565(TFT_BACK.r, TFT_BACK.g, TFT_BACK.b));
+        M5.Lcd.drawFastHLine(1 + (170 * i), 125 + (k * 18) + k, 148, TFT_BACK);
       }
     }
   }
@@ -92,7 +230,7 @@ void clear()
     for (uint8_t i = 0; i <= 2; i++) {
       for (uint8_t j = 0; j <= 2; j++) {
         M5.Lcd.fillRoundRect(0 + (110 * j), 104 + (48 * i), 100, 40, 4, TFT_WHITE);
-        M5.Lcd.fillRoundRect(1 + (110 * j), 105 + (48 * i), 98, 38, 4, M5.Lcd.color565(TFT_FRONT.r, TFT_FRONT.g, TFT_FRONT.b));
+        M5.Lcd.fillRoundRect(1 + (110 * j), 105 + (48 * i), 98, 38, 4, TFT_FRONT);
       }
     }
   }
@@ -101,7 +239,7 @@ void clear()
 // Scroll
 void scroll(uint8_t pause)
 {
-  uint16_t h = 18;
+  uint16_t h = 21;
   uint16_t w;
   uint16_t limit =  M5.Lcd.width();
   static uint32_t timer = 0, wait = 0; 
@@ -115,7 +253,7 @@ void scroll(uint8_t pause)
   }
   // We could just use fillSprite(color) but lets be a bit more creative...
   while (h--)
-    Sprite.drawFastHLine(0, h, w, TFT_BLACK);
+    Sprite.drawFastHLine(0, h, w, TFT_INFO);
 
   // Now print text on top of the graphics  
   Sprite.setTextColor(TFT_WHITE); // White text, no background colour
@@ -210,7 +348,7 @@ void updateLocalTime()
 bool M5Screen4bmp(){
   uint16_t image_height = M5.Lcd.height();
   uint16_t image_width = M5.Lcd.width();
-  uint32_t filesize = 54 + 24 + ((image_width * image_height) / 2); 
+  uint32_t filesize = 54 + 28 + ((image_width * image_height) / 2); 
   uint8_t l = 0;
   uint8_t r = 0;
 
@@ -221,7 +359,7 @@ bool M5Screen4bmp(){
     'B', 'M',         // BMP signature (Windows 3.1x, 95, NT, …)
     0, 0, 0, 0,       // Image file size in bytes
     0, 0, 0, 0,       // Reserved
-    54 + 24, 0, 0, 0, // Start of pixel array
+    54 + 28, 0, 0, 0, // Start of pixel array
     40, 0, 0, 0,      // Info header size
     0, 0, 0, 0,       // Image width
     0, 0, 0, 0,       // Image height
@@ -231,16 +369,17 @@ bool M5Screen4bmp(){
     0, 0, 0, 0,       // Image size (can be 0 for uncompressed images)
     0, 0, 0, 0,       // Horizontal resolution (dpm)
     0, 0, 0, 0,       // Vertical resolution (dpm)
-    6, 0, 0, 0,       // Colors in color table (0 = none)
+    7, 0, 0, 0,       // Colors in color table (0 = none)
     0, 0, 0, 0 };     // Important color count (0 = all colors are important)
 
-  unsigned char palette[24] = {
+  unsigned char palette[28] = {
     0, 0, 0, 255,
-    252, 252, 252, 255,
+    255, 255, 255, 255,
     192, 192, 192, 255,
-    TFT_HEADER.b, TFT_HEADER.g, TFT_HEADER.r, 255,
-    TFT_BACK.b, TFT_BACK.g, TFT_BACK.r, 255,
-    TFT_FRONT.b, TFT_FRONT.g, TFT_FRONT.r, 255
+    BMP_HEADER.b, BMP_HEADER.g, BMP_HEADER.r, 255,
+    BMP_INFO.b, BMP_INFO.g, BMP_INFO.r, 255,
+    BMP_FRONT.b, BMP_FRONT.g, BMP_FRONT.r, 255,
+    BMP_BACK.b, BMP_BACK.g, BMP_BACK.r, 255
   };
 
   // Fill filesize, width and heigth in the header array
@@ -253,7 +392,7 @@ bool M5Screen4bmp(){
   httpClient.write(header, 54);
 
   // Write palette
-  httpClient.write(palette, 24);
+  httpClient.write(palette, 28);
 
   // The coordinate origin of a BMP image is at the bottom left.
   // Therefore, the image must be read from bottom to top.
@@ -293,21 +432,28 @@ bool M5Screen4bmp(){
           l = 0b0010;
         }
         else if(
-          abs(line_data_raw[x * 3] - TFT_HEADER.r) < 16 && 
-          abs(line_data_raw[x * 3 + 1] - TFT_HEADER.g) < 16 && 
-          abs(line_data_raw[x * 3 + 2] - TFT_HEADER.b) < 16
+          abs(line_data_raw[x * 3] - BMP_HEADER.r) < 16 && 
+          abs(line_data_raw[x * 3 + 1] - BMP_HEADER.g) < 16 && 
+          abs(line_data_raw[x * 3 + 2] - BMP_HEADER.b) < 16
         ) {
           l = 0b0011;
         }
         else if(
-          abs(line_data_raw[x * 3] - TFT_BACK.r) < 16 && 
-          abs(line_data_raw[x * 3 + 1] - TFT_BACK.g) < 16 && 
-          abs(line_data_raw[x * 3 + 2] - TFT_BACK.b) < 16
+          abs(line_data_raw[x * 3] - BMP_INFO.r) < 16 && 
+          abs(line_data_raw[x * 3 + 1] - BMP_INFO.g) < 16 && 
+          abs(line_data_raw[x * 3 + 2] - BMP_INFO.b) < 16
         ) {
           l = 0b0100;
         }
-        else {
+        else if(
+          abs(line_data_raw[x * 3] - BMP_FRONT.r) < 16 && 
+          abs(line_data_raw[x * 3 + 1] - BMP_FRONT.g) < 16 && 
+          abs(line_data_raw[x * 3 + 2] - BMP_FRONT.b) < 16
+        ) {
           l = 0b0101;
+        }
+        else {
+          l = 0b0110;
         }
 
         // Right
@@ -333,21 +479,28 @@ bool M5Screen4bmp(){
           r = 0b0010;
         }
         else if(
-          abs(line_data_raw[(x + 1) * 3] - TFT_HEADER.r) < 16 && 
-          abs(line_data_raw[(x + 1) * 3 + 1] - TFT_HEADER.g) < 16 && 
-          abs(line_data_raw[(x + 1) * 3 + 2] - TFT_HEADER.b) < 16
+          abs(line_data_raw[(x + 1) * 3] - BMP_HEADER.r) < 16 && 
+          abs(line_data_raw[(x + 1) * 3 + 1] - BMP_HEADER.g) < 16 && 
+          abs(line_data_raw[(x + 1) * 3 + 2] - BMP_HEADER.b) < 16
         ) {
           r = 0b0011;
         }
         else if(
-          abs(line_data_raw[(x + 1) * 3] - TFT_BACK.r) < 16 &&
-          abs(line_data_raw[(x + 1) * 3 + 1] - TFT_BACK.g) < 16 &&
-          abs(line_data_raw[(x + 1) * 3 + 2] - TFT_BACK.b) < 16
+          abs(line_data_raw[(x + 1) * 3] - BMP_INFO.r) < 16 &&
+          abs(line_data_raw[(x + 1) * 3 + 1] - BMP_INFO.g) < 16 &&
+          abs(line_data_raw[(x + 1) * 3 + 2] - BMP_INFO.b) < 16
         ) {
           r = 0b0100;
         }
-        else {
+        else if(
+          abs(line_data_raw[(x + 1) * 3] - BMP_FRONT.r) < 16 &&
+          abs(line_data_raw[(x + 1) * 3 + 1] - BMP_FRONT.g) < 16 &&
+          abs(line_data_raw[(x + 1) * 3 + 2] - BMP_FRONT.b) < 16
+        ) {
           r = 0b0101;
+        }
+        else {
+          r = 0b0110;
         }
 
         line_data_bmp[k] = (l<<4) | r;
@@ -360,6 +513,7 @@ bool M5Screen4bmp(){
   return true;
 }
 
+/*
 //M5Screen8bmp() (dump 8 bits screen to a WiFi client)
 bool M5Screen8bmp(){
   uint16_t image_height = M5.Lcd.height();
@@ -388,7 +542,7 @@ bool M5Screen8bmp(){
 
   unsigned char palette[24] = {
     0, 0, 0, 255,
-    252, 252, 252, 255,
+    255, 255, 255, 255,
     192, 192, 192, 255,
     TFT_HEADER.b, TFT_HEADER.g, TFT_HEADER.r, 255,
     TFT_BACK.b, TFT_BACK.g, TFT_BACK.r, 255,
@@ -522,6 +676,7 @@ bool M5Screen24bmp(){
   }
   return true;
 }
+*/
 
 // Get screenshot
 void getScreenshot()
