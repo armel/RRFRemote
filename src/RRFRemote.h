@@ -104,47 +104,47 @@ uint16_t TFT_BACK   = 0x0000;
 const char *color[] = {"ROUGE", "ROSE", "VIOLET", "BLEU", "TURQUOISE", "VERT", "ORANGE", "MARRON", "GRIS", "CREPUSCULE", "FORET", "ARDOISE", "FLORAL"};
 
 const colorType TFT_HEADER_ROUGE = {152, 0, 0};
-const colorType TFT_INFO_ROUGE = {32, 32, 32};
+const colorType TFT_INFO_ROUGE = {0, 0, 0};
 const colorType TFT_FRONT_ROUGE = {255, 104, 104};
 const colorType TFT_BACK_ROUGE = {114, 0, 32};
 
 const colorType TFT_HEADER_ROSE = {200, 0, 104};
-const colorType TFT_INFO_ROSE = {32, 32, 32};
+const colorType TFT_INFO_ROSE = {0, 0, 0};
 const colorType TFT_FRONT_ROSE = {255, 104, 176};
 const colorType TFT_BACK_ROSE = {120, 0, 72};
 
 const colorType TFT_HEADER_VIOLET = {96, 48, 112};
-const colorType TFT_INFO_VIOLET = {32, 32, 32};
+const colorType TFT_INFO_VIOLET = {0, 0, 0};
 const colorType TFT_FRONT_VIOLET = {160, 104, 184};
 const colorType TFT_BACK_VIOLET = {64, 32, 72};
 
 const colorType TFT_HEADER_BLEU = {0, 56, 120};
-const colorType TFT_INFO_BLEU = {32, 32, 32};
+const colorType TFT_INFO_BLEU = {0, 0, 0};
 const colorType TFT_FRONT_BLEU = {56, 114, 168};
 const colorType TFT_BACK_BLEU = {0, 56, 104};
 
 const colorType TFT_HEADER_TURQUOISE = {0, 104, 104};
-const colorType TFT_INFO_TURQUOISE = {32, 32, 32};
+const colorType TFT_INFO_TURQUOISE = {0, 0, 0};
 const colorType TFT_FRONT_TURQUOISE = {56, 184, 184};
 const colorType TFT_BACK_TURQUOISE = {0, 64, 64};
 
 const colorType TFT_HEADER_VERT = {0, 104, 56};
-const colorType TFT_INFO_VERT = {32, 32, 32};
+const colorType TFT_INFO_VERT = {0, 0, 0};
 const colorType TFT_FRONT_VERT = {56, 176, 144};
 const colorType TFT_BACK_VERT = {0, 64, 32};
 
 const colorType TFT_HEADER_ORANGE = {255, 64, 0};
-const colorType TFT_INFO_ORANGE = {32, 32, 32};
+const colorType TFT_INFO_ORANGE = {0, 0, 0};
 const colorType TFT_FRONT_ORANGE = {255, 157, 77};
 const colorType TFT_BACK_ORANGE = {230, 108, 44};
 
 const colorType TFT_HEADER_MARRON = {120, 80, 72};
-const colorType TFT_INFO_MARRON = {32, 32, 32};
+const colorType TFT_INFO_MARRON = {0, 0, 0};
 const colorType TFT_FRONT_MARRON = {160, 136, 128};
 const colorType TFT_BACK_MARRON = {96, 64, 56};
 
 const colorType TFT_HEADER_GRIS = {96, 96, 96};
-const colorType TFT_INFO_GRIS = {32, 32, 32};
+const colorType TFT_INFO_GRIS = {0, 0, 0};
 const colorType TFT_FRONT_GRIS = {160, 160, 160};
 const colorType TFT_BACK_GRIS = {64, 64, 64};
 
