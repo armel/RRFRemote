@@ -652,7 +652,11 @@ void loop()
 
   // Manage follow
   if(followCurrent == 1 && menuMode != 1) {
-    for (uint8_t i = 0; i <= 5; i++) {
+
+    size_t n = sizeof(room) / sizeof(room[0]);
+    n -= 1;
+
+    for (uint8_t i = 0; i <= n; i++) {
       if (dtmf[i] == whereisCurrent) {
         if (i != roomCurrent) {
           roomCurrent = i;
