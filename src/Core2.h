@@ -248,3 +248,10 @@ void totMute()
 {
   M5.Axp.SetLed(0);
 }
+
+// Manage brightness
+void setBrightness(uint8_t value)
+{
+    uint16_t tmp = map(value, 0, 128, 2500, 3300);
+    M5.Axp.SetLcdVoltage(tmp); // from 2500 to 3300
+}

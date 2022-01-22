@@ -149,7 +149,7 @@ void button(void *pvParameters)
   int8_t right;
   int8_t left;
   int16_t change;
-  uint16_t limit = 1 * 5 * 1000; // Retry 5 secondes
+  uint16_t limit = 1 * 10 * 1000; // Retry 10 secondes
   static uint32_t timer = 0; 
 
   for (;;)
@@ -175,7 +175,7 @@ void button(void *pvParameters)
         }
       }
       else {
-        if((millis() - timer) > 2 * limit) {
+        if((millis() - timer) > limit) {
           menuMode = 2;
         }
       }
@@ -537,7 +537,7 @@ void button(void *pvParameters)
         {
           brightnessCurrent = change;
           preferences.putUInt("brightness", brightnessCurrent);
-          M5.Lcd.setBrightness(brightnessCurrent);
+          setBrightness(brightnessCurrent);
         }
       }
       // Mode menu active, Special
