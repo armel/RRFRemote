@@ -485,13 +485,16 @@ void loop()
       }
 
       if(totCurrent) {
-        if((String(salon) == "RRF" && tot > 145) || (tot > 290))
+        if((String(salon) == "RRF" && tot > 140) || (tot > 285))
         {
+          M5.Lcd.setBrightness(10);
           totTone();
           delay(10);
           totTone();
           delay(10);
           totMute();
+          delay(80);
+          M5.Lcd.setBrightness(brightnessCurrent);
         }
       }
     }
