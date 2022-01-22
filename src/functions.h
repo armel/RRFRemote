@@ -814,8 +814,8 @@ void ledAlert(bool type) {
     for(i = 0; i < sizeof(qrz) / sizeof(qrz[0]); i += 2)
     {
       if(strstr(indicatifString.c_str(), qrz[i]) != NULL) {
-        Serial.println(qrz[i]);
-        Serial.println(i);
+        //Serial.println(qrz[i]);
+        //Serial.println(i);
     
         qrzDetected = true;
         break;

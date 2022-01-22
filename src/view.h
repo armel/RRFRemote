@@ -96,7 +96,7 @@ void viewElsewhere(DynamicJsonDocument doc, const char *salon) {
         M5.Lcd.fillRect(28, 155 + (14 * i), 72, 13, TFT_FRONT);
         M5.Lcd.setTextColor(TFT_WHITE, TFT_FRONT);
       }
-      Serial.println(middleOld[i]);
+      //Serial.println(middleOld[i]);
       M5.Lcd.drawString(middleOld[i], 64, 160 + (14 * i));
     }
     
@@ -782,7 +782,7 @@ String viewData(uint8_t icon, String data, String dataOld) {
 void viewMenu() {
   if (menuRefresh == 0)
   {
-    M5.Lcd.setBrightness(brightnessCurrent);
+    setBrightness(brightnessCurrent);
 
     M5.Lcd.fillRect(4, 4, 316, 40, TFT_HEADER);
 

@@ -537,7 +537,7 @@ void button(void *pvParameters)
         {
           brightnessCurrent = change;
           preferences.putUInt("brightness", brightnessCurrent);
-          M5.Lcd.setBrightness(brightnessCurrent);
+          setBrightness(brightnessCurrent);
         }
       }
       // Mode menu active, Special

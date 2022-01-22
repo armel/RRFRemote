@@ -51,3 +51,9 @@ void totMute()
 {
     M5.Speaker.mute();
 }
+
+// Manage brightness
+void setBrightness(uint8_t value)
+{
+    M5.Lcd.setBrightness(value);
+}

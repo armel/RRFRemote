@@ -54,7 +54,7 @@ void setup()
 
   // LCD
   resetColor();
-  M5.Lcd.setBrightness(brightnessCurrent);
+  setBrightness(brightnessCurrent);
   M5.Lcd.fillScreen(TFT_HEADER);
 
   // Title
@@ -422,7 +422,7 @@ void loop()
       {
         if (!isCharging() && screensaverMode == 0)
         {
-          M5.Lcd.setBrightness(brightnessCurrent);
+          setBrightness(brightnessCurrent);
         }
 
         M5.Lcd.fillRect(4, 2, 36, 42, TFT_HEADER);
@@ -487,14 +487,14 @@ void loop()
       if(totCurrent) {
         if((String(salon) == "RRF" && tot > 140) || (tot > 285))
         {
-          M5.Lcd.setBrightness(10);
+          setBrightness(0);
           totTone();
           delay(10);
           totTone();
           delay(10);
           totMute();
           delay(80);
-          M5.Lcd.setBrightness(brightnessCurrent);
+          setBrightness(brightnessCurrent);
         }
       }
     }
@@ -506,7 +506,7 @@ void loop()
 
         if (!isCharging() && screensaverMode == 0)
         {
-          M5.Lcd.setBrightness(brightnessCurrent);
+          setBrightness(brightnessCurrent);
         }
 
         M5.Lcd.setTextColor(TFT_WHITE, TFT_HEADER);
@@ -614,7 +614,7 @@ void loop()
   {
     for (uint8_t i = brightnessCurrent; i >= 1; i--)
     {
-      M5.Lcd.setBrightness(i);
+      setBrightness(i);
       scroll(0);
       delay(50);
     }
@@ -627,7 +627,7 @@ void loop()
     screensaverMode = 0;
     for (uint8_t i = 1; i <= brightnessCurrent; i++)
     {
-      M5.Lcd.setBrightness(i);
+      setBrightness(i);
       scroll(0);
       delay(50);
     }
