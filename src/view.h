@@ -1045,34 +1045,34 @@ void viewElsewhereBig(DynamicJsonDocument doc, const char *salon) {
         }
       }
     }
-  }
 
-  M5.Lcd.setTextColor(TFT_WHITE, TFT_FRONT);
-  M5.Lcd.setTextDatum(CC_DATUM);
-  M5.Lcd.setTextPadding(45);
+    M5.Lcd.setTextColor(TFT_WHITE, TFT_FRONT);
+    M5.Lcd.setTextDatum(CC_DATUM);
+    M5.Lcd.setTextPadding(45);
 
-  for(i = 0; i < stop; i++) {
-    if(left[i] != leftOld[i]) {
-      leftOld[i] = left[i];
-      M5.Lcd.drawString(left[i].substring(0, 3), 25, 134 + (19 * i));
+    for(i = 0; i < stop; i++) {
+      if(left[i] != leftOld[i]) {
+        leftOld[i] = left[i];
+        M5.Lcd.drawString(left[i].substring(0, 3), 25, 134 + (19 * i));
+      }
     }
-  }
 
-  M5.Lcd.setTextDatum(CC_DATUM);
-  M5.Lcd.setTextPadding(96);
+    M5.Lcd.setTextDatum(CC_DATUM);
+    M5.Lcd.setTextPadding(96);
 
-  for(i = 0; i < stop; i++) {
-    if(right[i] != rightOld[i]) {
-      rightOld[i] = right[i];
-      if(strstr(right[i].c_str(), "LINK") != NULL) {
-        M5.Lcd.fillRect(51, 126 + (18 * i) + i, 98, 18, TFT_WHITE);
-        M5.Lcd.setTextColor(TFT_BLACK, TFT_WHITE);
+    for(i = 0; i < stop; i++) {
+      if(right[i] != rightOld[i]) {
+        rightOld[i] = right[i];
+        if(strstr(right[i].c_str(), "LINK") != NULL) {
+          M5.Lcd.fillRect(51, 126 + (18 * i) + i, 98, 18, TFT_WHITE);
+          M5.Lcd.setTextColor(TFT_BLACK, TFT_WHITE);
+        }
+        else {
+          M5.Lcd.fillRect(51, 126 + (18 * i) + i, 98, 18, TFT_FRONT);
+          M5.Lcd.setTextColor(TFT_WHITE, TFT_FRONT);
+        }
+        M5.Lcd.drawString(right[i], 100, 134 + (19 * i));
       }
-      else {
-        M5.Lcd.fillRect(51, 126 + (18 * i) + i, 98, 18, TFT_FRONT);
-        M5.Lcd.setTextColor(TFT_WHITE, TFT_FRONT);
-      }
-       M5.Lcd.drawString(right[i], 100, 134 + (19 * i));
     }
   }
 }
