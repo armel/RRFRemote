@@ -240,13 +240,13 @@ void speaker()
 void totTone()
 {
   _Core2SPK.playBeep(5000, 100, 2000, false);
-  M5.Axp.SetLed(1);
+  //M5.Axp.SetLed(1);
 }
 
 // Manage Mute
 void totMute()
 {
-  M5.Axp.SetLed(0);
+  //M5.Axp.SetLed(0);
 }
 
 // Manage brightness
