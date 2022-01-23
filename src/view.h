@@ -888,7 +888,7 @@ void viewBaseline() {
   M5.Lcd.setFreeFont(0);
   M5.Lcd.setTextColor(TFT_WHITE, TFT_HEADER);
   M5.Lcd.setTextDatum(CC_DATUM);
-  M5.Lcd.setTextPadding(220);
+  M5.Lcd.setTextPadding(240);
 
   baselineString = config[(configCurrent * 6) + 4];
 
@@ -896,15 +896,19 @@ void viewBaseline() {
   {
     if (dtmf[roomCurrent] != whereisCurrent && followCurrent == 0)
     {
-      baselineString += " / " + whereisString;
+      baselineString += " - " + whereisString;
     }
 
     if(raptorCurrent == 1) {
-      baselineString += " / RAPTOR ON" ;
+      baselineString += " - RAPTOR" ;
     }
 
     if(followCurrent == 1) {
-      baselineString += " / FOLLOW ON";
+      baselineString += " - FOLLOW";
+    }
+
+    if(totCurrent == 1) {
+      baselineString += " - TOT";
     }
   }
 
