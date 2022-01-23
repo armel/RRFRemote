@@ -690,13 +690,13 @@ void getScreenshot()
     //httpClient.setNoDelay(1);
     if (httpClient) {  
       // Force a disconnect after 3 seconds
-      Serial.println("New Client.");  
+      //Serial.println("New Client.");  
       // Loop while the client's connected
       while (httpClient.connected()) { 
         // If the client is still connected after 3 seconds,
         // Something is wrong. So kill the connection
         if(millis() > timeout_millis){
-          Serial.println("Force Client stop!");  
+          //Serial.println("Force Client stop!");  
           httpClient.stop();
         } 
         // If there's bytes to read from the client,
@@ -787,7 +787,7 @@ void getScreenshot()
       }
       // Close the connection
       httpClient.stop();
-      Serial.println("Client Disconnected.");
+      //Serial.println("Client Disconnected.");
     }
   }
 }
