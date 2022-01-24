@@ -199,7 +199,7 @@ Ligne 5, vérifier que la constante `BOARD` correspond bien à votre type de M5S
 
 #### Timezone
 
-Je hais la gestion des décalages horaires, des alternances hiver/été, etc. Néanmoins, si vous êtes hors de France, il est désormais possible de configurer votre _timezone_ afin qu'elle soit prise en compte lors de l'affichage de l'heure. Ligne 67, la variable `ntpTimeZone` est configurée, par défaut, pour la France. Mais j'ai indiqué d'autres configurations possibles pour d'autres régions du monde, régulièrement actives sur le RRF. Il vous suffit de décommenter uniquement la _timezone_ qui correspond à votre région. Si elle n'est pas présente, consultez cette [liste](https://github.com/blindsidenetworks/bigbluebutton-1/blob/master/bbb-voice-conference/config/freeswitch/conf/autoload_configs/timezones.conf.xml) plus détaillée. En dernier recours, me contacter si besoin d'aide ou si vous habitez dans une région exotique...
+Je hais la gestion des décalages horaires, des alternances hiver/été, etc. Néanmoins, si vous êtes hors de France, il est désormais possible de configurer votre _timezone_ afin qu'elle soit prise en compte lors de l'affichage de l'heure. Ligne 75, la variable `ntpTimeZone` est configurée, par défaut, pour la France. Mais j'ai indiqué d'autres configurations possibles pour d'autres régions du monde, régulièrement actives sur le RRF. Il vous suffit de décommenter uniquement la _timezone_ qui correspond à votre région. Si elle n'est pas présente, consultez cette [liste](https://github.com/blindsidenetworks/bigbluebutton-1/blob/master/bbb-voice-conference/config/freeswitch/conf/autoload_configs/timezones.conf.xml) plus détaillée. En dernier recours, me contacter si besoin d'aide ou si vous habitez dans une région exotique...
 
 
 ### Fichier `src/settings.h`
@@ -248,15 +248,15 @@ Compiler et uploader le projet sur votre M5Stack. C'est terminé.
 Si et seulement si __vous utilisez le M5Stack Core2__, éditer le fichier `plateformio.io` et modifier les lignes,
 
 ```
-default_envs = m5stack-grey
-;default_envs = m5stack-core-esp32
+default_envs = m5stack-basic-grey
+;default_envs = m5stack-core2
 ```
 
 Par,
 
 ```
-;default_envs = m5stack-grey
-default_envs = m5stack-core-esp32
+;default_envs = m5stack-basic-grey
+default_envs = m5stack-core2
 ```
 
 Cela revient à changer la plate-forme cible, le point-virgule étant un commentaire.

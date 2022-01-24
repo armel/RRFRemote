@@ -17,7 +17,21 @@ void setup()
 
   // Init M5
   M5.begin(true, false, false, false);
+
+  // SD Loader
+  while(millis() - screensaver < 2 * 1000) {
+    M5.update();
+
+    if(M5.BtnB.read()) {
+      updateFromFS(SPIFFS, "/dxtracker.bin");
+      ESP.restart();
+    }
+  }
+
+  // Init Led
   FastLED.addLeds<NEOPIXEL, LED_PIN>(leds, NUM_LEDS);  // GRB ordering is assumed
+
+  // Init Power
   power();
 
   // Init Speaker
@@ -485,7 +499,7 @@ void loop()
       }
 
       if(totCurrent) {
-        if((String(salon) == "RRF" && tot > 140) || (tot > 285))
+        if((String(salon) == "RRF" && tot > TIMEOUT_TOT_RRF) || (tot > TIMEOUT_TOT_ELSEWHERE))
         {
           setBrightness(0);
           totTone();
@@ -610,7 +624,7 @@ void loop()
   }
   
   // Manage screensaver
-  if (screensaverMode == 0 && millis() - screensaver > screensaverLimit)
+  if (screensaverMode == 0 && millis() - screensaver > TIMEOUT_SCREENSAVER)
   {
     for (uint8_t i = brightnessCurrent; i >= 1; i--)
     {
@@ -621,7 +635,7 @@ void loop()
     screensaverMode = 1;
     M5.Lcd.sleep();
   }
-  else if (screensaverMode == 1 && millis() - screensaver < screensaverLimit)
+  else if (screensaverMode == 1 && millis() - screensaver < TIMEOUT_SCREENSAVER)
   {
     M5.Lcd.wakeup();
     screensaverMode = 0;
@@ -678,7 +692,7 @@ void loop()
   //Serial.print(" - ");
 
   if(menuMode == 0 && htmlGetRefresh != 2) {
-    while(millis() - timer < LIMIT)
+    while(millis() - timer < REFRESH)
     {
       scroll(20);
     }
