@@ -18,15 +18,8 @@ void setup()
   // Init M5
   M5.begin(true, false, false, false);
 
-  // SD Loader
-  while(millis() - screensaver < 2 * 1000) {
-    M5.update();
-
-    if(M5.BtnB.read()) {
-      updateFromFS(SPIFFS, "/dxtracker.bin");
-      ESP.restart();
-    }
-  }
+  // Bin Loader
+  binLoader();
 
   // Init Led
   FastLED.addLeds<NEOPIXEL, LED_PIN>(leds, NUM_LEDS);  // GRB ordering is assumed
@@ -662,7 +655,9 @@ void loop()
   action = 0;
 
   // Manage rotation
-  checkAcceleration();
+  if(menuMode != 1) {
+    checkAcceleration();
+  }
 
   // Manage Wifi
   checkWifi();

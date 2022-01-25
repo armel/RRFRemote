@@ -216,6 +216,11 @@ TFT_eSprite Sprite = TFT_eSprite(&M5.Lcd); // Create Sprite object "img" with po
 String message;
 int16_t pos = 0;
 
+// Bin loader
+File root;
+String binFilename[8];
+uint8_t binIndex = 0;
+
 // Task Handle
 TaskHandle_t rrfdataHandle;
 TaskHandle_t buttonHandle;
