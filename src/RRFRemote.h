@@ -8,6 +8,7 @@
 #define GREY  2
 #define CORE2 3
 
+#define TIMEOUT_BIN_LOADER 3                // 3 sec
 #define TIMEOUT_SCREENSAVER 5 * 60 * 1000   // 5 min
 #define TIMEOUT_MENU 10 * 1000              // 10 sec
 #define TIMEOUT_TOT_RRF 140 * 1000          // 140 sec, 2min 20sec
@@ -48,7 +49,7 @@
 #include <M5StackUpdater.h>
 
 // Version
-#define VERSION "2.9.0"
+#define VERSION "2.9.1"
 
 // Wifi
 WiFiClientSecure clientISS;
