@@ -285,7 +285,7 @@ git pull
 ```
 Evidement, vous devrez recompiler et uploader le projet sur votre M5Stack.
 
-## Utilisation du Bin Loader
+## Utilisation du Bin Loader (_power user only..._)
 
 Evolution récente de mes développements, il est désormais possible de stocker plusieurs applications dans la mémoire Flash de votre M5Stack. Au démarrage, une procédure est prévue pour charger une application en particulier.
 
@@ -329,27 +329,29 @@ Passons à l'étape probablement la plus compliquée. Ouvrez le projet RRFRemote
 
 ![Capture](https://github.com/armel/RRFRemote/blob/main/img/flash.png)
 
-Cliquer sur l'icône Platformio (l'icone avec une tête de fourmi...). Déroulez la section :
+Cliquez sur l'icône Platformio (l'icone avec une tête de fourmi...). Déroulez la section :
 
 - `m5stack-basic-grey`, si vous avez compilé pour un M5Stack GREY ou BASIC
 - `m5stack-core2`, si vous avez compilé pour un M5Stack CORE2 ou AWS
 
-Allez dans la sous section Platform. Et cliquez sur Upload Filesystem Image.
+Allez dans la sous section `Platform`. Et cliquez sur `Upload Filesystem Image`.
 
 Patientez. Le contenu du répertoire `data` va être écrit dans la mémoire Flash de votre M5Stack. Ca y est ? Vous y êtes !!!!
 
 ### Utilisation
 
-Démarrez votre M5Stack. Vous devriez voir un écran noir, suivi de l'affichage de 1, 2, 3, 4 puis 5 petits points, en haut de l'écran. C'est le fameux Bin Loader. 
+Démarrez votre M5Stack. Vous devriez voir un écran noir, suivi de l'affichage de 1, 2, 3, 4 puis 5 petits points, en haut de l'écran. C'est le fameux Bin Loader ;)
 
 Dès l'affichage du premier petit point, vous pouvez :
 
 - soit appuyez sur le bouton gauche ou droite, pour lancer l'application par défaut.
-- soit appuyer sur le bouton central. Dans ce cas, le menu du Bin Loader s'affiche et vous propose la liste des binaires disponnibles en mémoire Flash. 
+- soit appuyez sur le bouton central. Dans ce cas, le menu du Bin Loader s'affiche et vous propose la liste des binaires disponnibles en mémoire Flash. 
 
-Les boutons gauche et droite, permettent de passer d'un binaire à un autre. Et le bouton central permet de valider la selection. Dans ce cas, l'application selectionnée sera chargée ;)
+Si vous avez parfaitement suivi la procédure, vous devriez avoir le choix entre `RRFRemote.bin` et `DXTracker.bin`.
 
-> Le chargement prend environ 20 secondes.
+Les boutons gauche et droite, permettent de passer d'un binaire à un autre. Et le bouton central permet de valider le binaire en cours de sélection. Dans ce cas, l'application selectionnée sera chargée ;)
+
+> Le chargement prend environ 20 secondes. C'est supportable.
 
 ### Limitation
 
