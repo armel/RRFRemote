@@ -149,7 +149,6 @@ void button(void *pvParameters)
   int8_t right;
   int8_t left;
   int16_t change;
-  uint16_t limit = 1 * 10 * 1000; // Retry 10 secondes
   static uint32_t timer = 0; 
 
   for (;;)
@@ -161,7 +160,7 @@ void button(void *pvParameters)
     if (menuMode == 1) {
       //Serial.println(millis() - timer);
       if(menuSelected != -1) {
-        if((millis() - timer) > limit) {
+        if((millis() - timer) > TIMEOUT_MENU) {
           String option = String(menu[menuCurrent]);
           menuSelected = -1;
           if (option == "COULEUR") {
@@ -175,7 +174,7 @@ void button(void *pvParameters)
         }
       }
       else {
-        if((millis() - timer) > limit) {
+        if((millis() - timer) > TIMEOUT_MENU) {
           menuMode = 2;
         }
       }

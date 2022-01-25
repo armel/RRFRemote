@@ -8,6 +8,11 @@
 #define GREY  2
 #define CORE2 3
 
+#define TIMEOUT_SCREENSAVER 5 * 60 * 1000   // 5 min
+#define TIMEOUT_MENU 10 * 1000              // 10 sec
+#define TIMEOUT_TOT_RRF 140 * 1000          // 140 sec, 2min 20sec
+#define TIMEOUT_TOT_ELSEWHERE 285 * 1000    // 285 sec, 4min 45sec
+
 #if BOARD == BASIC
   #define M5STACK_MPU6886
   #define LED_PIN 15
@@ -38,9 +43,12 @@
 #include "time.h"
 #include "font.h"
 #include "settings.h"
+#include "FS.h"
+#include "SPIFFS.h"
+#include <M5StackUpdater.h>
 
 // Version
-#define VERSION "2.8.2"
+#define VERSION "2.9.0"
 
 // Wifi
 WiFiClientSecure clientISS;
@@ -74,8 +82,8 @@ const char* ntpTimeZone = "CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00"; // For
 
 int utc = 1;
 
-// Temporisation
-#define LIMIT 500
+// Refresh temporisation
+#define REFRESH 500
 
 // Preferences
 Preferences preferences;
@@ -208,6 +216,11 @@ TFT_eSprite Sprite = TFT_eSprite(&M5.Lcd); // Create Sprite object "img" with po
 String message;
 int16_t pos = 0;
 
+// Bin loader
+File root;
+String binFilename[8];
+uint8_t binIndex = 0;
+
 // Task Handle
 TaskHandle_t rrfdataHandle;
 TaskHandle_t buttonHandle;
@@ -281,7 +294,6 @@ uint16_t qsy = 0;
 uint16_t issDistance = 0;
 
 uint32_t screensaver;
-uint32_t screensaverLimit = 5 * 60 * 1000;  // 5 minutes
 
 #undef SPI_READ_FREQUENCY
 #define SPI_READ_FREQUENCY 40000000

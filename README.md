@@ -199,7 +199,7 @@ Ligne 5, vérifier que la constante `BOARD` correspond bien à votre type de M5S
 
 #### Timezone
 
-Je hais la gestion des décalages horaires, des alternances hiver/été, etc. Néanmoins, si vous êtes hors de France, il est désormais possible de configurer votre _timezone_ afin qu'elle soit prise en compte lors de l'affichage de l'heure. Ligne 67, la variable `ntpTimeZone` est configurée, par défaut, pour la France. Mais j'ai indiqué d'autres configurations possibles pour d'autres régions du monde, régulièrement actives sur le RRF. Il vous suffit de décommenter uniquement la _timezone_ qui correspond à votre région. Si elle n'est pas présente, consultez cette [liste](https://github.com/blindsidenetworks/bigbluebutton-1/blob/master/bbb-voice-conference/config/freeswitch/conf/autoload_configs/timezones.conf.xml) plus détaillée. En dernier recours, me contacter si besoin d'aide ou si vous habitez dans une région exotique...
+Je hais la gestion des décalages horaires, des alternances hiver/été, etc. Néanmoins, si vous êtes hors de France, il est désormais possible de configurer votre _timezone_ afin qu'elle soit prise en compte lors de l'affichage de l'heure. Ligne 75, la variable `ntpTimeZone` est configurée, par défaut, pour la France. Mais j'ai indiqué d'autres configurations possibles pour d'autres régions du monde, régulièrement actives sur le RRF. Il vous suffit de décommenter uniquement la _timezone_ qui correspond à votre région. Si elle n'est pas présente, consultez cette [liste](https://github.com/blindsidenetworks/bigbluebutton-1/blob/master/bbb-voice-conference/config/freeswitch/conf/autoload_configs/timezones.conf.xml) plus détaillée. En dernier recours, me contacter si besoin d'aide ou si vous habitez dans une région exotique...
 
 
 ### Fichier `src/settings.h`
@@ -248,15 +248,15 @@ Compiler et uploader le projet sur votre M5Stack. C'est terminé.
 Si et seulement si __vous utilisez le M5Stack Core2__, éditer le fichier `plateformio.io` et modifier les lignes,
 
 ```
-default_envs = m5stack-grey
-;default_envs = m5stack-core-esp32
+default_envs = m5stack-basic-grey
+;default_envs = m5stack-core2
 ```
 
 Par,
 
 ```
-;default_envs = m5stack-grey
-default_envs = m5stack-core-esp32
+;default_envs = m5stack-basic-grey
+default_envs = m5stack-core2
 ```
 
 Cela revient à changer la plate-forme cible, le point-virgule étant un commentaire.
@@ -285,6 +285,77 @@ git pull
 ```
 Evidement, vous devrez recompiler et uploader le projet sur votre M5Stack.
 
+## Utilisation du Bin Loader (_power user only..._)
+
+Evolution récente de mes développements, il est désormais possible de stocker plusieurs applications dans la mémoire Flash de votre M5Stack. Au démarrage, une procédure est prévue pour charger une application en particulier.
+
+### Préparation
+
+Je vais détailler ici la procédure pour déployer l'application RRFRemote et DXTRacker sur un même M5Stack.
+
+#### Etape 1 - Compilation
+
+Commencez par compiler vos applications, comme vous aviez l'habitude de le faire. Rien ne change ici. Par exemple, commencez par compiler l'application RRFRemote. Puis faites de même avec l'application DXTracker. 
+
+> À noter que l'application 705SMeter dispose aussi du Bin Loader. Mais elle n'a d'intérêt que si vous disposez d'un IC 705.
+
+#### Etape 2 - Collecte des fichiers binaires
+
+Ca y est, vous avez compiler l'application RRFRemote et DXTracker ? C'est parfait.
+
+Chaque compilation a produit un binaire. C'est ce binaire qui est envoyé / flashé sur votre M5Stack, via la connexion USB.
+
+Placez vous à la racine du dossier RRFRemote, qui contient l'ensemble du projet. Et allez dans le répertoire :
+
+- `.pio/build/m5stack-basic-grey`, si vous avez compilé pour un M5Stack GREY ou BASIC
+- `.pio/build/m5stack-core2`, si vous avez compilé pour un M5Stack CORE2 ou AWS
+
+Vous y trouverez un fichier `firmware.bin`. Copier le dans le répertoire `data` qui se trouve à la racine du dossier RRFRemote. Et profitez en pour le renommer en l'appelant, par exemple, `RRFRemote.bin`.
+
+Faites de même avec l'application DXTracker. Placez vous à la racine du dossier DXTracker, qui contient l'ensemble du projet. Et allez dans le répertoire :
+
+- `.pio/build/m5stack-basic-grey`, si vous avez compilé pour un M5Stack GREY ou BASIC
+- `.pio/build/m5stack-core2`, si vous avez compilé pour un M5Stack CORE2 ou AWS
+
+Vous y trouverez également un fichier `firmware.bin`. Copier le, lui aussi, dans le répertoire `data` qui se trouve à la racine du dossier RRFRemote. Et profitez en pour le renommer en l'appelant, par exemple, `DXTracker.bin`.
+
+> Hyper important, l'idée est bien de copier ces 2 binaires dans le même répertoire `data` (à la racine du dossier RRFRemote).
+
+A ce stade, vous devez donc avoir 2 fichiers binaires clairement identifiés : `RRFRemote.bin` et `DXTracker.bin` dans le répertoire `data` qui se trouve à la racine du dossier RRFRemote.
+
+#### Etape 3 - Copie dans la mémoire Flash du M5Stack
+
+Passons à l'étape probablement la plus compliquée. Ouvrez le projet RRFRemote depuis Visual Studio Code, comme vous le feriez pour le compiler. 
+
+![Capture](https://github.com/armel/RRFRemote/blob/main/img/flash.png)
+
+Cliquez sur l'icône Platformio (l'icone avec une tête de fourmi...). Déroulez la section :
+
+- `m5stack-basic-grey`, si vous avez compilé pour un M5Stack GREY ou BASIC
+- `m5stack-core2`, si vous avez compilé pour un M5Stack CORE2 ou AWS
+
+Allez dans la sous section `Platform`. Et cliquez sur `Upload Filesystem Image`.
+
+Patientez. Le contenu du répertoire `data` va être écrit dans la mémoire Flash de votre M5Stack. Ca y est ? Vous y êtes !!!!
+
+### Utilisation
+
+Démarrez votre M5Stack. Vous devriez voir un écran noir, suivi de l'affichage de 1, 2, 3, 4 puis 5 petits points, en haut de l'écran. C'est le fameux Bin Loader ;)
+
+Dès l'affichage du premier petit point, vous pouvez :
+
+- soit appuyez sur le bouton gauche ou droite, pour lancer l'application par défaut.
+- soit appuyez sur le bouton central. Dans ce cas, le menu du Bin Loader s'affiche et vous propose la liste des binaires disponnibles en mémoire Flash. 
+
+Si vous avez parfaitement suivi la procédure, vous devriez avoir le choix entre `RRFRemote.bin` et `DXTracker.bin`.
+
+Les boutons gauche et droite, permettent de passer d'un binaire à un autre. Et le bouton central permet de valider le binaire en cours de sélection. Dans ce cas, l'application selectionnée sera chargée ;)
+
+> Le chargement prend environ 20 secondes. C'est supportable.
+
+### Limitation
+
+Je pense qu'il est possible de faire cohabiter 5 ou 6 applications, dans la mémoire Flash de votre M5Stack. En l'état, ca me semble suffisant. Si besoin, j'adapterais le code pour les binaires sur la carte SD. 
 
 # Remerciements
 
