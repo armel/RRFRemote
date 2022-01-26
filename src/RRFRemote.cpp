@@ -18,9 +18,6 @@ void setup()
   // Init M5
   M5.begin(true, false, false, false);
 
-  // Bin Loader
-  binLoader();
-
   // Init Led
   FastLED.addLeds<NEOPIXEL, LED_PIN>(leds, NUM_LEDS);  // GRB ordering is assumed
 
@@ -29,6 +26,9 @@ void setup()
 
   // Init Speaker
   speaker();
+
+  // Bin Loader
+  binLoader();
 
   // Preferences
   preferences.begin("RRFRemote");
