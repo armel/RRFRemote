@@ -27,6 +27,7 @@
   #include "BasicAndGrey.h"
   #include "WebIndexBasicAndGrey.h"
 #elif BOARD == CORE2
+  #define M5STACK_MPU6886
   #define LED_PIN 25
   #include <M5Core2.h>
   #include "Core2SPK.h"
@@ -49,7 +50,7 @@
 #include <M5StackUpdater.h>
 
 // Version
-#define VERSION "2.9.1"
+#define VERSION "2.9.2"
 
 // Wifi
 WiFiClientSecure clientISS;

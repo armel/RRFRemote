@@ -25,7 +25,7 @@ bool isCharging()
 }
 
 // Get button
-void getButton(uint8_t modeCurrent)
+void getButton(uint8_t modeCurrent = 1)
 {
     M5.update();
     btnA = M5.BtnA.read();

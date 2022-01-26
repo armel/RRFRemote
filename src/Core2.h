@@ -87,7 +87,11 @@ void power()
 uint8_t getBatteryLevel(bool type)
 {
   float baterryVoltage = M5.Axp.GetBatVoltage();
-  uint8_t batteryPercentage = (baterryVoltage < 3.2) ? 0 : (baterryVoltage - 3.2) * 100;
+  uint16_t batteryPercentage = (baterryVoltage < 3.2) ? 0 : (baterryVoltage - 3.2) * 100;
+
+  if(batteryPercentage > 100) {
+    batteryPercentage = 100;
+  }
 
   if (type == 0)
   {
@@ -122,7 +126,7 @@ bool isCharging()
 }
 
 // Get button
-void getButton(uint8_t modeCurrent)
+void getButton(uint8_t modeCurrent = 1)
 {
   static uint8_t modeChange = 10;
 
@@ -240,6 +244,7 @@ void speaker()
 void totTone()
 {
   _Core2SPK.playBeep(5000, 100, 2000, false);
+  vTaskDelay(pdMS_TO_TICKS(100));
   //M5.Axp.SetLed(1);
 }
 
