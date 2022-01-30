@@ -245,7 +245,7 @@ Compiler et uploader le projet sur votre M5Stack. C'est terminé.
 
 ### Modèle M5Core2
 
-Si et seulement si __vous utilisez le M5Stack Core2__, éditer le fichier `plateformio.io` et modifier les lignes,
+Si et seulement si __vous utilisez le M5Stack Core2__, éditer le fichier `platformio.ini` et modifier les lignes,
 
 ```
 default_envs = m5stack-basic-grey
