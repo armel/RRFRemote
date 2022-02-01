@@ -50,7 +50,7 @@
 #include <M5StackUpdater.h>
 
 // Version
-#define VERSION "2.9.2"
+#define VERSION "2.9.3"
 
 // Wifi
 WiFiClientSecure clientISS;
@@ -230,8 +230,8 @@ TaskHandle_t buttonHandle;
 // Misceleanous
 const char *room[] = {"RRF", "TECHNIQUE", "BAVARDAGE", "LOCAL", "INTERNATIONAL", "EXPERIMENTAL", "FON"};
 const uint8_t dtmf[] = {96, 98, 100, 101, 99, 102, 97};
-const char *menuSpotnikOn[]  = {"CONFIG", "QSY", "FOLLOW", "RAPTOR", "PERROQUET", "SYSOP", "TOT", "ISS", "COULEUR", "LUMINOSITE", "MODE", "QUITTER"};
-const char *menuSpotnikOff[] = {"CONFIG", "TOT", "ISS", "COULEUR", "LUMINOSITE", "MODE", "QUITTER"};
+const char *menuSpotnikOn[]  = {"CONFIG", "QSY", "FOLLOW", "RAPTOR", "PERROQUET", "SYSOP", "TOT", "ISS", "COULEUR", "LUMINOSITE", "MODE", "ETEINDRE"};
+const char *menuSpotnikOff[] = {"CONFIG", "TOT", "ISS", "COULEUR", "LUMINOSITE", "MODE", "ETEINDRE"};
 const char *sysop[] = {"REBOOT", "IP", "SCAN RAPIDE", "LIBRE"};
 char **menu;
 char swap[32];
