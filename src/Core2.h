@@ -83,6 +83,12 @@ void power()
   */
 }
 
+// Shutdown
+void shutdown()
+{
+  M5.Axp.PowerOff();
+}
+
 // Get Battery level
 uint8_t getBatteryLevel(bool type)
 {

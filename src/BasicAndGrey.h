@@ -9,51 +9,57 @@ uint8_t btnDTMF7, btnDTMF8, btnDTMF9 = 0;
 // Power init
 void power()
 {
-    M5.Power.begin();
+  M5.Power.begin();
+}
+
+// Shutdown
+void shutdown()
+{
+  M5.Power.powerOFF();
 }
 
 // Get Battery level
 uint8_t getBatteryLevel(bool type)
 {
-    return M5.Power.getBatteryLevel();
+  return M5.Power.getBatteryLevel();
 }
 
 // Control if charging
 bool isCharging()
 {
-    return M5.Power.isCharging();
+  return M5.Power.isCharging();
 }
 
 // Get button
 void getButton(uint8_t modeCurrent = 1)
 {
-    M5.update();
-    btnA = M5.BtnA.read();
-    btnB = M5.BtnB.read();
-    btnC = M5.BtnC.read();
+  M5.update();
+  btnA = M5.BtnA.read();
+  btnB = M5.BtnB.read();
+  btnC = M5.BtnC.read();
 }
 
 // Speaker
 void speaker()
 {
-    M5.Speaker.setVolume(1);
-    M5.Speaker.update();
+  M5.Speaker.setVolume(1);
+  M5.Speaker.update();
 }
 
 // Manage Tone
 void totTone()
 {
-    M5.Speaker.tone(2000);
+  M5.Speaker.tone(2000);
 }
 
 // Manage Mute
 void totMute()
 {
-    M5.Speaker.mute();
+  M5.Speaker.mute();
 }
 
 // Manage brightness
 void setBrightness(uint8_t value)
 {
-    M5.Lcd.setBrightness(value);
+  M5.Lcd.setBrightness(value);
 }

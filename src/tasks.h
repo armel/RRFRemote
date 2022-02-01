@@ -11,20 +11,20 @@ void rrfdata(void *pvParameters)
 
   for (;;)
   {
-    //Serial.println("rrfdata");
+    // Serial.println("rrfdata");
     timer = millis();
     if ((WiFi.status() == WL_CONNECTED)) // Check the current connection status
     {
       // Manage QSY
       while (qsy > 0)
       {
-        //Serial.println("RRFRemote QSY");
-        http.begin(clientRemote, config[(configCurrent * 6) + 5] + String("?cmd=") + String(qsy));  // Specify the URL
-        http.addHeader("User-Agent","M5Stack");                                                     // Specify header
-        http.addHeader("Connection","keep-alive");                                                  // Specify header
-        http.setTimeout(500);                                                                       // Set timeout
-        httpCode = http.GET();                                                                      // Make the request
-        if (httpCode == 200 || qsy == 2000 || qsy == 2001 || qsy == 2002 || qsy == 2003)            // Check for the returning code
+        // Serial.println("RRFRemote QSY");
+        http.begin(clientRemote, config[(configCurrent * 6) + 5] + String("?cmd=") + String(qsy)); // Specify the URL
+        http.addHeader("User-Agent", "M5Stack");                                                   // Specify header
+        http.addHeader("Connection", "keep-alive");                                                // Specify header
+        http.setTimeout(500);                                                                      // Set timeout
+        httpCode = http.GET();                                                                     // Make the request
+        if (httpCode == 200 || qsy == 2000 || qsy == 2001 || qsy == 2002 || qsy == 2003)           // Check for the returning code
         {
           qsy = 0;
           refresh = 0;
@@ -33,29 +33,29 @@ void rrfdata(void *pvParameters)
           whereisString = String(room[roomCurrent]);
         }
       }
- 
-      // RRFTracker GET
-      //Serial.println("RRFTracker GET");
-      http.begin(clientTracker, endpointRRF[roomCurrent]);  // Specify the URL
-      http.addHeader("User-Agent","M5Stack");               // Specify header
-      http.addHeader("Connection","keep-alive");            // Specify header
-      http.setTimeout(500);                                 // Set Time Out
-      httpCode = http.GET();                                // Make the request
-      if (httpCode == 200)                                  // Check for the returning code
-      {
-        jsonDataNew = http.getString(); // Get data
-      } 
 
       // RRFTracker GET
-      if(counter == 10)
+      // Serial.println("RRFTracker GET");
+      http.begin(clientTracker, endpointRRF[roomCurrent]); // Specify the URL
+      http.addHeader("User-Agent", "M5Stack");             // Specify header
+      http.addHeader("Connection", "keep-alive");          // Specify header
+      http.setTimeout(500);                                // Set Time Out
+      httpCode = http.GET();                               // Make the request
+      if (httpCode == 200)                                 // Check for the returning code
       {
-        //Serial.println("RRFRemote GET");
-        http.begin(clientWhereis, config[(configCurrent * 6) + 5] + String("?cmd=0"));  // Specify the URL
-        http.addHeader("User-Agent","M5Stack");                                         // Specify header
-        http.addHeader("Connection","keep-alive");                                      // Specify header
-        http.setTimeout(500);                                                           // Set Time Out
-        httpCode = http.GET();                                                          // Make the request
-        if (httpCode == 200)                                                            // Check for the returning code
+        jsonDataNew = http.getString(); // Get data
+      }
+
+      // RRFTracker GET
+      if (counter == 10)
+      {
+        // Serial.println("RRFRemote GET");
+        http.begin(clientWhereis, config[(configCurrent * 6) + 5] + String("?cmd=0")); // Specify the URL
+        http.addHeader("User-Agent", "M5Stack");                                       // Specify header
+        http.addHeader("Connection", "keep-alive");                                    // Specify header
+        http.setTimeout(500);                                                          // Set Time Out
+        httpCode = http.GET();                                                         // Make the request
+        if (httpCode == 200)                                                           // Check for the returning code
         {
           whereisData = http.getString(); // Get data
 
@@ -63,12 +63,15 @@ void rrfdata(void *pvParameters)
 
           whereisData = whereisData.substring(whereisData.indexOf(", ") + 2);
           whereisString = whereisData.substring(0, whereisData.indexOf(", "));
-          
+
           whereisData = whereisData.substring(whereisData.indexOf(", ") + 2);
 
-          if(whereisData.substring(0, whereisData.indexOf(", ")) == "OFF") {
+          if (whereisData.substring(0, whereisData.indexOf(", ")) == "OFF")
+          {
             raptorCurrent = 0;
-          } else {
+          }
+          else
+          {
             raptorCurrent = 1;
           }
         }
@@ -83,8 +86,8 @@ void rrfdata(void *pvParameters)
       vTaskDelay(pdMS_TO_TICKS(limit - wait));
     }
 
-    //Serial.print("rrfdata ");
-    //Serial.println(millis() - timer);
+    // Serial.print("rrfdata ");
+    // Serial.println(millis() - timer);
   }
 }
 
@@ -98,34 +101,35 @@ void hamdata(void *pvParameters)
 
   for (;;)
   {
-    //Serial.println("hamdata");
+    // Serial.println("hamdata");
     timer = millis();
     if (WiFi.status() == WL_CONNECTED) // Check the current connection status
     {
       // ISS Get
-      if(issCurrent == 1) {
-        //Serial.println("ISS GET");
-        http.begin(clientISS, endpointISS);               // Specify the URL
-        http.addHeader("User-Agent","M5Stack");           // Specify header
-        http.addHeader("Connection","keep-alive");        // Specify header
-        http.setTimeout(1000);                            // Set Time Out
-        httpCode = http.GET();                            // Make the request
-        if (httpCode == 200)                              // Check for the returning code
+      if (issCurrent == 1)
+      {
+        // Serial.println("ISS GET");
+        http.begin(clientISS, endpointISS);         // Specify the URL
+        http.addHeader("User-Agent", "M5Stack");    // Specify header
+        http.addHeader("Connection", "keep-alive"); // Specify header
+        http.setTimeout(1000);                      // Set Time Out
+        httpCode = http.GET();                      // Make the request
+        if (httpCode == 200)                        // Check for the returning code
         {
           issData = http.getString(); // Get data
         }
       }
-      
+
       // HamSQL GET (every hour)
-      if(counter == 360)
+      if (counter == 360)
       {
-        //Serial.println("HamSQL GET");
-        http.begin(clientHamSQL, endpointHamQSL);       // Specify the URL
-        http.addHeader("User-Agent","M5Stack");         // Specify header
-        http.addHeader("Connection","keep-alive");      // Specify header
-        http.setTimeout(1000);                          // Set Time Out
-        httpCode = http.GET();                          // Make the request
-        if (httpCode == 200)                            // Check for the returning code
+        // Serial.println("HamSQL GET");
+        http.begin(clientHamSQL, endpointHamQSL);   // Specify the URL
+        http.addHeader("User-Agent", "M5Stack");    // Specify header
+        http.addHeader("Connection", "keep-alive"); // Specify header
+        http.setTimeout(1000);                      // Set Time Out
+        httpCode = http.GET();                      // Make the request
+        if (httpCode == 200)                        // Check for the returning code
         {
           xmlData = http.getString(); // Get data
         }
@@ -149,51 +153,62 @@ void button(void *pvParameters)
   int8_t right;
   int8_t left;
   int16_t change;
-  static uint32_t timer = 0; 
+  static uint32_t timer = 0;
 
   for (;;)
   {
-    //Serial.println("button");
+    // Serial.println("button");
     getButton(modeCurrent);
 
     // Escape menu and submenus from CONFIG, SYSOP, QSY, COULEUR and LUMINOSTE
-    if (menuMode == 1) {
-      //Serial.println(millis() - timer);
-      if(menuSelected != -1) {
-        if((millis() - timer) > TIMEOUT_MENU) {
+    if (menuMode == 1)
+    {
+      // Serial.println(millis() - timer);
+      if (menuSelected != -1)
+      {
+        if ((millis() - timer) > TIMEOUT_MENU)
+        {
           String option = String(menu[menuCurrent]);
           menuSelected = -1;
-          if (option == "COULEUR") {
+          if (option == "COULEUR")
+          {
             colorCurrent = preferences.getUInt("color", 0);
           }
-          else if(option == "CONFIG") {
+          else if (option == "CONFIG")
+          {
             configCurrent = preferences.getUInt("config", 0);
           }
           action = 3;
           timer = millis();
         }
       }
-      else {
-        if((millis() - timer) > TIMEOUT_MENU) {
+      else
+      {
+        if ((millis() - timer) > TIMEOUT_MENU)
+        {
           menuMode = 2;
         }
       }
     }
 
-    if(buttonLeftPressed) {
+    if (buttonLeftPressed)
+    {
       btnA = true;
       buttonLeftPressed = false;
     }
-    if(buttonCenterPressed) {
+    if (buttonCenterPressed)
+    {
       btnB = true;
       buttonCenterPressed = false;
     }
-    if(buttonRightPressed) {
+    if (buttonRightPressed)
+    {
       btnC = true;
       buttonRightPressed = false;
     }
 
-    if(htmlGetRefresh == 1) {
+    if (htmlGetRefresh == 1)
+    {
       htmlGetRefresh = 2;
     }
 
@@ -213,23 +228,29 @@ void button(void *pvParameters)
     }
     */
 
-    if (M5.Lcd.getRotation() == 1) {
+    if (M5.Lcd.getRotation() == 1)
+    {
       right = 1;
       left = -1;
-    } else {
+    }
+    else
+    {
       right = -1;
       left = 1;
     }
 
-    if(btnD == 1) {
+    if (btnD == 1)
+    {
       screensaver = millis(); // Screensaver update !!!
 
-      if(modeCurrent == 2) {
+      if (modeCurrent == 2)
+      {
         modeNew = modeOld;
         btnA = btnB = btnC = 0;
         action = 5;
       }
-      else {
+      else
+      {
         modeOld = modeCurrent;
         modeNew = 2;
         btnA = btnB = btnC = 0;
@@ -239,56 +260,65 @@ void button(void *pvParameters)
 
     // Manage DTMF on CORE2
 
-    if (btnDTMF1 == 1) {
-      //Serial.println("QSY RRF");
+    if (btnDTMF1 == 1)
+    {
+      // Serial.println("QSY RRF");
       qsy = dtmf[0];
       modeNew = modeOld;
       action = 5;
     }
-    else if (btnDTMF2 == 1) {
-      //Serial.println("QSY TEC");
+    else if (btnDTMF2 == 1)
+    {
+      // Serial.println("QSY TEC");
       qsy = dtmf[1];
       modeNew = modeOld;
       action = 5;
     }
-    else if (btnDTMF3 == 1) {
-      //Serial.println("QSY BAV");
+    else if (btnDTMF3 == 1)
+    {
+      // Serial.println("QSY BAV");
       qsy = dtmf[2];
       modeNew = modeOld;
       action = 5;
     }
-    else if (btnDTMF4 == 1) {
-      //Serial.println("QSY LOC");
+    else if (btnDTMF4 == 1)
+    {
+      // Serial.println("QSY LOC");
       qsy = dtmf[3];
       modeNew = modeOld;
       action = 5;
     }
-    else if (btnDTMF5 == 1) {
-      //Serial.println("QSY INT");
+    else if (btnDTMF5 == 1)
+    {
+      // Serial.println("QSY INT");
       qsy = dtmf[4];
       modeNew = modeOld;
       action = 5;
     }
-    else if (btnDTMF6 == 1) {
-      //Serial.println("QSY EXP");
+    else if (btnDTMF6 == 1)
+    {
+      // Serial.println("QSY EXP");
       qsy = dtmf[5];
       modeNew = modeOld;
       action = 5;
     }
-    else if (btnDTMF7 == 1) {
-      //Serial.println("QSY FON");
+    else if (btnDTMF7 == 1)
+    {
+      // Serial.println("QSY FON");
       qsy = dtmf[6];
       modeNew = modeOld;
       action = 5;
     }
-    else if (btnDTMF8 == 1) {
-      //Serial.println("PERROQUET");
+    else if (btnDTMF8 == 1)
+    {
+      // Serial.println("PERROQUET");
       qsy = 95;
       modeNew = modeOld;
       action = 5;
     }
-    else if (btnDTMF9 == 1) {
-      //Serial.println("RAPTOR");
+    else if (btnDTMF9 == 1)
+    {
+      // Serial.println("RAPTOR");
       qsy = 200;
       modeNew = modeOld;
       action = 5;
@@ -297,9 +327,9 @@ void button(void *pvParameters)
     if ((btnA || btnB || btnC))
     {
       screensaver = millis(); // Screensaver update !!!
-      if(screensaverMode == 1)
+      if (screensaverMode == 1)
       {
-        //Serial.println("Wake up");
+        // Serial.println("Wake up");
         btnA = 0;
         btnB = 0;
         btnC = 0;
@@ -308,7 +338,7 @@ void button(void *pvParameters)
       // Mode menu inactive
       if (menuMode == 0)
       {
-        if(followCurrent == 0)
+        if (followCurrent == 0)
         {
           change = roomCurrent;
 
@@ -327,7 +357,7 @@ void button(void *pvParameters)
           else if (btnC)
           {
             change += right;
-        
+
             change = (change < 0) ? n : change;
             change = (change > n) ? 0 : change;
             roomCurrent = change;
@@ -337,7 +367,7 @@ void button(void *pvParameters)
         }
         if (btnB)
         {
-          //Serial.println("Click A");
+          // Serial.println("Click A");
           timer = millis();
           vTaskDelay(pdMS_TO_TICKS(250));
           menuMode = 1;
@@ -365,14 +395,14 @@ void button(void *pvParameters)
           }
           else if (btnB)
           {
-            //Serial.println("Click B");
+            // Serial.println("Click B");
             vTaskDelay(pdMS_TO_TICKS(250));
             menuSelected = menuCurrent;
             btnB = 0;
             timer = millis();
           }
 
-          int n = menuSize/sizeof(char *);
+          int n = menuSize / sizeof(char *);
           n -= 1;
 
           change = (change < 0) ? n : change;
@@ -414,7 +444,7 @@ void button(void *pvParameters)
         change = (change < 0) ? n : change;
         change = (change > n) ? 0 : change;
 
-        if(change != roomCurrent) 
+        if (change != roomCurrent)
         {
           type = 0; // View last TX
           action = 2;
@@ -473,7 +503,7 @@ void button(void *pvParameters)
         change = (change == 0) ? 1 : 0;
         modeCurrent = change;
         preferences.putUInt("mode", modeCurrent);
-        //vTaskDelay(pdMS_TO_TICKS(1000));
+        // vTaskDelay(pdMS_TO_TICKS(1000));
         menuMode = 2;
       }
       // Mode menu active, Color
@@ -504,7 +534,7 @@ void button(void *pvParameters)
         change = (change < 0) ? n : change;
         change = (change > n) ? 0 : change;
 
-        if(change != colorCurrent) 
+        if (change != colorCurrent)
         {
           colorCurrent = change;
           action = 3;
@@ -532,7 +562,7 @@ void button(void *pvParameters)
         change = (change < 10) ? 128 : change;
         change = (change > 128) ? 10 : change;
 
-        if(change != brightnessCurrent) 
+        if (change != brightnessCurrent)
         {
           brightnessCurrent = change;
           preferences.putUInt("brightness", brightnessCurrent);
@@ -567,7 +597,7 @@ void button(void *pvParameters)
         change = (change < 0) ? n : change;
         change = (change > n) ? 0 : change;
 
-        if(change != sysopCurrent) 
+        if (change != sysopCurrent)
         {
           sysopCurrent = change;
           preferences.putUInt("sysop", sysopCurrent);
@@ -610,7 +640,7 @@ void button(void *pvParameters)
             menuSize = sizeof(menuSpotnikOff);
             menu = (char **)malloc(menuSize);
             memcpy(menu, menuSpotnikOff, menuSize);
-            
+
             followCurrent = (followCurrent == 1) ? 0 : 0;
             preferences.putUInt("follow", followCurrent);
           }
@@ -623,17 +653,17 @@ void button(void *pvParameters)
         change = (change < 0) ? n : change;
         change = (change > n) ? 0 : change;
 
-        if(change != configCurrent) 
+        if (change != configCurrent)
         {
           whereisString = "-";
           configCurrent = change;
         }
-      }        
+      }
       // Mode menu active, Escape
-      else if (option == "QUITTER")
+      else if (option == "ETEINDRE")
       {
-        menuMode = 2;
-      }      
+        shutdown();
+      }
     }
 
     // Escape game...
@@ -643,22 +673,22 @@ void button(void *pvParameters)
     }
 
     // Manage temporisation
-    if(btnA || btnC)
+    if (btnA || btnC)
     {
-      if(menuMode == 0)
+      if (menuMode == 0)
       {
-        //Serial.print("-");
+        // Serial.print("-");
         vTaskDelay(pdMS_TO_TICKS(200));
       }
-      else if(menuMode == 1)
+      else if (menuMode == 1)
       {
-        //Serial.print("+");
+        // Serial.print("+");
         vTaskDelay(pdMS_TO_TICKS(200));
       }
     }
     else
     {
-      //Serial.print(".");
+      // Serial.print(".");
       vTaskDelay(pdMS_TO_TICKS(150));
     }
   }
