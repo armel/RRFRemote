@@ -50,7 +50,7 @@
 #include <M5StackUpdater.h>
 
 // Version
-#define VERSION "2.9.3"
+#define VERSION "2.9.4"
 
 // Wifi
 WiFiClientSecure clientISS;
@@ -279,6 +279,7 @@ uint8_t htmlGetRefresh = 3;
 uint8_t alternance = 0;
 uint8_t type = 0;
 uint8_t action = 0; 
+uint8_t ping = 0;
 uint8_t dst;
 
 uint8_t transmitOn = 0;

@@ -889,7 +889,7 @@ void viewBaseline() {
   M5.Lcd.setTextColor(TFT_WHITE, TFT_HEADER);
   M5.Lcd.setTextDatum(CC_DATUM);
   M5.Lcd.setTextPadding(240);
-
+  
   baselineString = config[(configCurrent * 6) + 4];
 
   if ((String)config[(configCurrent * 6) + 5] != "")
@@ -1192,7 +1192,9 @@ void viewDTMF() {
   for (i = 0; i < 7; i++) {
     tmpString = String(room[i]);
     tmpString = tmpString.substring(0, 3);
-    M5.Lcd.drawString(tmpString, (50 + j), (123 + k));
+    M5.Lcd.drawString(tmpString, (50 + j), (115 + k));
+    tmpString = String(dtmf[i]);
+    M5.Lcd.drawString(tmpString, (50 + j), (115 + k + 16));
     j += 110;
     if (i == 2 || i == 5) {
       j = 0;

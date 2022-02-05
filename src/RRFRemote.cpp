@@ -330,6 +330,16 @@ void loop()
     message = String(lastRegion[0]) + " - "  + String(lastLocator[0]) + " - " + String(distance) + " Km";
   }
 
+  // Check network
+
+  if(ping != 0) {
+    switch (ping)
+    {
+    case 1: message = "Perte de connexion Spotnik"; break;
+    case 2: message = "Perte de connexion Wifi"; break;
+    }
+  }
+
   // Transmit or not transmit
 
   if ((tot > 0 && transmitOn == 0) || (tot > 0 && String(lastIndicatif[0]) != indicatifString))
