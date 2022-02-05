@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 // Board
-#define BOARD BASIC
+#define BOARD CORE2
 
 #define BASIC 1
 #define GREY  2
@@ -50,7 +50,7 @@
 #include <M5StackUpdater.h>
 
 // Version
-#define VERSION "2.9.3"
+#define VERSION "2.9.4"
 
 // Wifi
 WiFiClientSecure clientISS;
