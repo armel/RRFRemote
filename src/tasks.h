@@ -46,17 +46,18 @@ void rrfdata(void *pvParameters)
         jsonDataNew = http.getString(); // Get data
       }
 
-      // RRFTracker GET
+      // RRFRemote GET
       if (counter == 10)
       {
         // Serial.println("RRFRemote GET");
         http.begin(clientWhereis, config[(configCurrent * 6) + 5] + String("?cmd=0")); // Specify the URL
         http.addHeader("User-Agent", "M5Stack");                                       // Specify header
         http.addHeader("Connection", "keep-alive");                                    // Specify header
-        http.setTimeout(500);                                                          // Set Time Out
+        http.setTimeout(750);                                                          // Set Time Out
         httpCode = http.GET();                                                         // Make the request
         if (httpCode == 200)                                                           // Check for the returning code
         {
+          ping = 0;
           whereisData = http.getString(); // Get data
 
           whereisCurrent = whereisData.substring(0, whereisData.indexOf(", ")).toInt();
@@ -74,6 +75,9 @@ void rrfdata(void *pvParameters)
           {
             raptorCurrent = 1;
           }
+        }
+        else {
+          ping = 1;
         }
       }
       http.end(); // Free the resources

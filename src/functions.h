@@ -795,6 +795,24 @@ void getScreenshot()
 // Manage Wifi and try to reconnect
 
 void checkWifi() {
+  if(WiFi.status() != WL_CONNECTED) {
+    M5.Lcd.fillCircle(314, 6, 3, TFT_HEADER);
+    ping = 2;
+    WiFi.disconnect();
+    WiFi.reconnect();
+    delay(5 * 1000);
+  }
+  else {
+    if(ping == 1) {
+      M5.Lcd.fillCircle(314, 6, 3, TFT_HEADER);
+      M5.Lcd.drawCircle(314, 6, 3, TFT_WHITE); 
+    }
+    else {
+      M5.Lcd.fillCircle(314, 6, 3, TFT_WHITE); 
+    }
+  }
+
+  /*
   if (screensaverMode == 1) {
     if(WiFi.status() != WL_CONNECTED) {
       WiFi.disconnect();
@@ -802,6 +820,7 @@ void checkWifi() {
       delay(30 * 1000);
     }
   }
+  */
 }
 
 // Manage black and white list

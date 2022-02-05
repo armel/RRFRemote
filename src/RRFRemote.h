@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 // Board
-#define BOARD CORE2
+#define BOARD BASIC
 
 #define BASIC 1
 #define GREY  2
@@ -279,6 +279,7 @@ uint8_t htmlGetRefresh = 3;
 uint8_t alternance = 0;
 uint8_t type = 0;
 uint8_t action = 0; 
+uint8_t ping = 0;
 uint8_t dst;
 
 uint8_t transmitOn = 0;

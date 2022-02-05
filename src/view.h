@@ -889,7 +889,7 @@ void viewBaseline() {
   M5.Lcd.setTextColor(TFT_WHITE, TFT_HEADER);
   M5.Lcd.setTextDatum(CC_DATUM);
   M5.Lcd.setTextPadding(240);
-
+  
   baselineString = config[(configCurrent * 6) + 4];
 
   if ((String)config[(configCurrent * 6) + 5] != "")
