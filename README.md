@@ -117,6 +117,16 @@ Mais pourquoi avoir développé une telle fonctionnalité ? Pour 2 raisons :
 ![Capture](https://github.com/armel/RRFRemote/blob/main/img/basic.png)
 
 
+## Contrôle de l'état des connexions réseau
+
+Un petit cercle est affiché en haut, à droite de l'écran de votre RRFRemote. Il permet, à tout moment, de contrôler l'état des connexions réseau. En l'occurence : 
+
+- si ce cercle est plein (rempli), tout est nominal : connexion Wifi et connexion avec le Spotnik. 
+- si ce cercle est vide : il y a une perte *temporaire* de connexion avec le Spotnik. Pas de panique, ça arrive. Mais sauf problème grave, ça ne dure jamais. En complément, le message défilant affichera *Perte de connexion Spotnik*.
+- si ce cercle est invisible : il n'y a carrément plus de connexion Wifi. Le RRFRemote va automatiquement tenter de se reconnecter au point d'accès en cours d'utilisation. En complément, le message défilant affichera *Perte de connexion Wifi* (en mode très saccadé, c'est normal, la reconnexion Wifi prenant l'essentiel du CPU...).
+
+> Si la perte de connexion Wifi est normale (par exemple, vous n'êtes plus chez vous), le plus simple est d'éteindre le RRFRemote. Ce dernier tentera de se reconnecter aux différents points d'accès définis dans votre fichier `settings.h` (et pourra donc se reconnecter à votre partage de connexion Smartphone, si vous l'avez prévu).
+
 ## En complément 
 Il est possible de :
 
