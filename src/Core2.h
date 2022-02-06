@@ -128,7 +128,12 @@ uint8_t getBatteryLevel(bool type)
 // Control if charging
 bool isCharging()
 {
-  return M5.Axp.isCharging();
+  if(M5.Axp.GetBatCurrent() < 0) {
+    return 0;
+  }
+  else {
+    return 1;
+  }
 }
 
 // Get button
