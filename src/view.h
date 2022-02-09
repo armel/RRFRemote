@@ -892,23 +892,33 @@ void viewBaseline() {
   
   baselineString = config[(configCurrent * 6) + 4];
 
-  if ((String)config[(configCurrent * 6) + 5] != "")
-  {
-    if (dtmf[roomCurrent] != whereisCurrent && followCurrent == 0)
+  if(whereisString == "PERROQUET") {
+    if(alternance % 2 == 0) {
+      baselineString = "PERROQUET";
+    }
+    else {
+      baselineString = "";
+    } 
+  }
+  else {
+    if ((String)config[(configCurrent * 6) + 5] != "")
     {
-      baselineString += " - " + whereisString;
-    }
+      if (dtmf[roomCurrent] != whereisCurrent && followCurrent == 0)
+      {
+        baselineString += " - " + whereisString;
+      }
 
-    if(raptorCurrent == 1) {
-      baselineString += " - RAPTOR" ;
-    }
+      if(raptorCurrent == 1) {
+        baselineString += " - RAPTOR" ;
+      }
 
-    if(followCurrent == 1) {
-      baselineString += " - FOLLOW";
-    }
+      if(followCurrent == 1) {
+        baselineString += " - FOLLOW";
+      }
 
-    if(totCurrent == 1) {
-      baselineString += " - TOT";
+      if(totCurrent == 1) {
+        baselineString += " - TOT";
+      }
     }
   }
 
