@@ -468,7 +468,13 @@ void button(void *pvParameters)
       // Mode menu active, Parrot
       else if (option == "PERROQUET")
       {
-        qsy = 95;
+        if(whereisString == "PERROQUET") {
+          qsy = dtmf[roomCurrent];
+        }
+        else {
+          qsy = 95;
+        }
+        vTaskDelay(pdMS_TO_TICKS(1000));
         menuMode = 2;
       }
       // Mode menu active, Follow
