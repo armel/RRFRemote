@@ -50,7 +50,7 @@
 #include <M5StackUpdater.h>
 
 // Version
-#define VERSION "2.9.6"
+#define VERSION "2.9.7"
 
 // Wifi
 WiFiClientSecure clientISS;

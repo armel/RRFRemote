@@ -315,8 +315,12 @@ void button(void *pvParameters)
     }
     else if (btnDTMF8 == 1)
     {
-      // Serial.println("PERROQUET");
-      qsy = 95;
+      if(whereisString == "PERROQUET") {
+        qsy = dtmf[roomCurrent];
+      }
+      else {
+        qsy = 95;
+      }
       modeNew = modeOld;
       action = 5;
     }
