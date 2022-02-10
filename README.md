@@ -1,15 +1,15 @@
 # RRFRemote
+![basic](https://img.shields.io/badge/M5Stack-BASIC-blue)
+![grey](https://img.shields.io/badge/M5Stack-GREY-blue)
+![fire](https://img.shields.io/badge/M5Stack-FIRE-orange)
+![core2](https://img.shields.io/badge/M5Stack-CORE2-green)
+![aws](https://img.shields.io/badge/M5Stack-AWS-orange)
 
 ![licence](https://img.shields.io/github/license/armel/RRFRemote)
 ![language](https://img.shields.io/github/languages/top/armel/RRFRemote)
 ![size](https://img.shields.io/github/repo-size/armel/RRFRemote)
 ![version](https://img.shields.io/github/v/release/armel/RRFRemote)
 ![activity](https://img.shields.io/github/commit-activity/y/armel/RRFRemote)
-![basic](https://img.shields.io/badge/M5Stack-BASIC-blue)
-![grey](https://img.shields.io/badge/M5Stack-GREY-blue)
-![fire](https://img.shields.io/badge/M5Stack-FIRE-orange)
-![core2](https://img.shields.io/badge/M5Stack-CORE2-green)
-![aws](https://img.shields.io/badge/M5Stack-AWS-orange)
 
 Le projet RRFRemote permet de suivre l'activité du RRF et de piloter son point d'accès ou hotpsot. Il peut fonctionner en charge (via un connecteur USB) ou sur batterie. 
 
