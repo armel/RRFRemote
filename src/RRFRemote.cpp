@@ -78,6 +78,8 @@ void setup()
   // We start by connecting to the WiFi network
   M5.Lcd.setTextPadding(320);
 
+  uint32_t color = ((BMP_HEADER.r & 0xff) << 16) + ((BMP_HEADER.g & 0xff) << 8) + (BMP_HEADER.b & 0xff);
+
   while(true)
   {
     uint8_t attempt = 1;
@@ -89,10 +91,22 @@ void setup()
       if(attempt % 2 == 0)
       {
         M5.Lcd.drawString("Connexion en cours", 160, 70);
+        for(uint8_t j = 0; j <= 4 ; j++){
+          leds[j] = color;
+          leds[9 - j] = color;
+        }
+        FastLED.setBrightness(16);
+        FastLED.show();
       }
       else 
       {
         M5.Lcd.drawString(" ", 160, 70);
+        for(uint8_t j = 0; j <= 4 ; j++){
+          leds[j] = CRGB::Black;
+          leds[9 - j] = CRGB::Black;
+        }
+        FastLED.setBrightness(16);
+        FastLED.show();
       }
       attempt++;
       if(attempt > 10) {

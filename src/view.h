@@ -893,7 +893,7 @@ void viewBaseline() {
   baselineString = config[(configCurrent * 6) + 4];
 
   if(whereisString == "PERROQUET") {
-    if(alternance % 2 == 0) {
+    if(alternance % 2 == 0 || menuMode != 0) {
       baselineString = "PERROQUET";
     }
     else {
