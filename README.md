@@ -261,6 +261,8 @@ const char *config[] = {
 
 Toujours dans le fichier `src/settings.h`, si vous disposez d'un module aditionnel M5GO (GREY ou BASIC) ou M5GO2 (CORE2), vous pouvez ajouter des indicatifs à surveiller via le tableau `qrz`. Ce tableau est constitué d'une liste d'indicatifs et d'une couleur associée au format RGB. Si l'un de ces indicatifs passe en émission, les barres de leds présentent sur les modules M5GO et M5GO2 s'allumeront (avec la couleur associée). Cela permet d'avoir des alertes luminueuses.
 
+> Vous pouvez vous contenter d'indiquer seulement une partie d'un indicatif. Par exemple ```"F", "0xff0000"```, idéalement positionné en fin de liste, permettra d'allumer les leds en rouge, à chaque passage en émission d'une station donc l'indicatif commence par F (et non listé plus haut dans la liste).
+
 ### Modèle M5Stack Basic et M5Stack Grey
 
 Compiler et uploader le projet sur votre M5Stack. C'est terminé.
