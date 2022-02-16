@@ -885,6 +885,8 @@ void viewMenu() {
 
 // View baseline
 void viewBaseline() {
+  static uint8_t viewTemp = 0;
+
   M5.Lcd.setFreeFont(0);
   M5.Lcd.setTextColor(TFT_WHITE, TFT_HEADER);
   M5.Lcd.setTextDatum(CC_DATUM);
@@ -901,29 +903,36 @@ void viewBaseline() {
     } 
   }
   else {
-    if ((String)config[(configCurrent * 6) + 5] != "")
-    {
-      if (dtmf[roomCurrent] != whereisCurrent && followCurrent == 0)
+    if(viewTemp > 45 && tempCurrent != 0) {
+      baselineString = "TEMP SPOTNIK / " + String(tempCurrent) + " DEGRES CELSIUS";
+    }
+    else {
+      if ((String)config[(configCurrent * 6) + 5] != "")
       {
-        baselineString += " - " + whereisString;
-      }
+        if (dtmf[roomCurrent] != whereisCurrent && followCurrent == 0)
+        {
+          baselineString += " - " + whereisString;
+        }
 
-      if(raptorCurrent == 1) {
-        baselineString += " - RAPTOR" ;
-      }
+        if(raptorCurrent == 1) {
+          baselineString += " - RAPTOR" ;
+        }
 
-      if(followCurrent == 1) {
-        baselineString += " - FOLLOW";
-      }
+        if(followCurrent == 1) {
+          baselineString += " - FOLLOW";
+        }
 
-      if(totCurrent == 1) {
-        baselineString += " - TOT";
+        if(totCurrent == 1) {
+          baselineString += " - TOT";
+        }
       }
     }
   }
 
   M5.Lcd.drawString(baselineString, 160, 36);
   M5.Lcd.drawFastHLine(0, 0, 320, TFT_WHITE);
+
+  viewTemp = (viewTemp++ < 60) ? viewTemp : 0;
 }
 
 // View battery

@@ -85,6 +85,7 @@ const requestHandler = (request, response) => {
     });
   } else {
     var raptor = "";
+    var temp = "";
 
     exec('cat /tmp/RRFRaptor_status.tcl', (error, stdout, stderr) => {
       if (error || stderr) {
@@ -100,6 +101,15 @@ const requestHandler = (request, response) => {
       }
     });
 
+    exec('cat /sys/class/thermal/thermal_zone0/temp', (error, stdout, stderr) => {
+      if (error || stderr) {
+        temp = "0";
+      }
+      else{
+        temp = stdout.trim();
+      }
+    });
+
     exec('cat /etc/spotnik/network', (error, stdout, stderr) => {
       if (error || stderr) {
         //console.log(`error: ${error.message}`);
@@ -110,10 +120,10 @@ const requestHandler = (request, response) => {
         //console.log(`stdout: ${stdout}`);
         response.writeHead(200);
         if(stdout.trim() in room) {
-          response.end(room[stdout.trim()] + ", " + raptor);
+          response.end(room[stdout.trim()] + ", " + raptor + ", " + temp);
         }
         else {
-          response.end("0, UNDEFINED"  + ", " + raptor);
+          response.end("0, UNDEFINED"  + ", " + raptor + ", " + temp);
         }
       }
     });    

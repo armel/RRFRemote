@@ -66,7 +66,6 @@ void rrfdata(void *pvParameters)
           whereisString = whereisData.substring(0, whereisData.indexOf(", "));
 
           whereisData = whereisData.substring(whereisData.indexOf(", ") + 2);
-
           if (whereisData.substring(0, whereisData.indexOf(", ")) == "OFF")
           {
             raptorCurrent = 0;
@@ -75,6 +74,9 @@ void rrfdata(void *pvParameters)
           {
             raptorCurrent = 1;
           }
+          whereisData = whereisData.substring(whereisData.indexOf(", ") + 2);
+          tempCurrent = (whereisData.toInt()) / 1000;
+          //Serial.println(tempCurrent);
         }
         else {
           ping = 1;
