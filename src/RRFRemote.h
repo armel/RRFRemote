@@ -50,7 +50,7 @@
 #include <M5StackUpdater.h>
 
 // Version
-#define VERSION "2.9.7"
+#define VERSION "2.9.8"
 
 // Wifi
 WiFiClientSecure clientISS;
@@ -289,6 +289,7 @@ uint8_t brightnessCurrent = 32;
 uint8_t totCurrent = 0;
 uint8_t issCurrent = 0;
 uint8_t raptorCurrent = 0;
+uint8_t tempCurrent = 0;
 uint8_t followCurrent = 0;
 uint8_t batteryChargeCurrent = 0;
 uint8_t batteryLevelCurrent = 0;
