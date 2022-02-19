@@ -1,5 +1,9 @@
+// Copyright (c) F4HWN Armel. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 const http = require('http');
 const port = 3000;
+const version = 0.3;
 
 const requestHandler = (request, response) => {
   console.log(request.url);
@@ -7,16 +11,30 @@ const requestHandler = (request, response) => {
   const input = new URL('https://localhost/' + request.url);
   const cmd = parseInt(input.searchParams.get('cmd'));
 
-  var room = {"rrf":      "96, RRF", 
-              "fon":      "97, FON", 
-              "tec":      "98, TECHNIQUE",
-              "int":      "99, INTERNATIONAL",
-              "bav":      "100, BAVARDAGE",
-              "loc":      "101, LOCAL",
-              "exp":      "102, EXPERIMENTAL",
-              "reg":      "103, REGIONAL",
-              "default":  "95, PERROQUET"
-            };
+  var room = {
+    "default": "95, PERROQUET",
+    "rrf": "96, RRF",
+    "fon": "97, FON",
+    "tec": "98, TECHNIQUE",
+    "int": "99, INTERNATIONAL",
+    "bav": "100, BAVARDAGE",
+    "loc": "101, LOCAL",
+    "exp": "102, EXPERIMENTAL",
+    "reg": "103, REGIONAL",
+  };
+
+  var qsy = {
+    95: "/etc/spotnik/restart.default",
+    96: "/etc/spotnik/restart.rrf",
+    97: "/etc/spotnik/restart.fon",
+    98: "/etc/spotnik/restart.tec",
+    99: "/etc/spotnik/restart.int",
+    100: "/etc/spotnik/restart.bav",
+    101: "/etc/spotnik/restart.loc",
+    102: "/etc/spotnik/restart.exp",
+    103: "/etc/spotnik/restart.reg",
+  };
+
 
   if (cmd == 2000) {
     exec('reboot', (error, stdout, stderr) => {
@@ -71,18 +89,16 @@ const requestHandler = (request, response) => {
       }
     });
   } else if (cmd > 0 && cmd < 1000) {
-      exec('echo "' + cmd + '#" > /tmp/dtmf_uhf', (error, stdout, stderr) => {
-      if (error || stderr) {
-        //console.log(`error: ${error.message}`);
-        //console.log(`stderr: ${stderr}`);
-        response.writeHead(500);
-      }
-      else {
-        //console.log(`stdout: ${stdout}`);
-        response.writeHead(200);
-        response.end('QSY done');
-      }
-    });
+    var action = "";
+    if (cmd in qsy) {
+      action = qsy[cmd];
+    }
+    else {
+      action = 'echo "' + cmd + '#" > /tmp/dtmf_uhf';
+    }
+    exec(action);
+    response.writeHead(200);
+    response.end('QSY done');
   } else {
     var raptor = "";
     var temp = "";
@@ -91,8 +107,8 @@ const requestHandler = (request, response) => {
       if (error || stderr) {
         raptor = "OFF";
       }
-      else{
-        if (stdout.indexOf("ON") !== -1 ) {
+      else {
+        if (stdout.indexOf("ON") !== -1) {
           raptor = "ON";
         }
         else {
@@ -105,7 +121,7 @@ const requestHandler = (request, response) => {
       if (error || stderr) {
         temp = "0";
       }
-      else{
+      else {
         temp = stdout.trim();
       }
     });
@@ -119,14 +135,14 @@ const requestHandler = (request, response) => {
       else {
         //console.log(`stdout: ${stdout}`);
         response.writeHead(200);
-        if(stdout.trim() in room) {
+        if (stdout.trim() in room) {
           response.end(room[stdout.trim()] + ", " + raptor + ", " + temp);
         }
         else {
-          response.end("0, UNDEFINED"  + ", " + raptor + ", " + temp);
+          response.end("0, UNDEFINED" + ", " + raptor + ", " + temp);
         }
       }
-    });    
+    });
   }
 }
 

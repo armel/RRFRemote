@@ -164,7 +164,7 @@ void button(void *pvParameters)
   for (;;)
   {
     // Serial.println("button");
-    getButton(modeCurrent);
+    getButton(modeCurrent, menuMode);
 
     // Escape menu and submenus from CONFIG, SYSOP, QSY, COULEUR and LUMINOSTE
     if (menuMode == 1)

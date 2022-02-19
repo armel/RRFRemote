@@ -137,49 +137,63 @@ bool isCharging()
 }
 
 // Get button
-void getButton(uint8_t modeCurrent = 1)
+void getButton(uint8_t modeCurrent = 1, uint8_t menuMode = 0)
 {
   static uint8_t modeChange = 10;
 
-  if(modeChange != modeCurrent) {
-    modeChange = modeCurrent;
+  if(menuMode == 0) {
+    myBtnD.draw();
+    if(modeChange != modeCurrent) {
+      modeChange = modeCurrent;
 
-    if(modeChange != 2) {
-      myBtnDTMF1.hide();
-      myBtnDTMF2.hide();
-      myBtnDTMF3.hide();
-      myBtnDTMF4.hide();
-      myBtnDTMF5.hide();
-      myBtnDTMF6.hide();
-      myBtnDTMF7.hide();
-      myBtnDTMF8.hide();
-      myBtnDTMF9.hide();
+      if(modeChange != 2) {
+        myBtnDTMF1.hide();
+        myBtnDTMF2.hide();
+        myBtnDTMF3.hide();
+        myBtnDTMF4.hide();
+        myBtnDTMF5.hide();
+        myBtnDTMF6.hide();
+        myBtnDTMF7.hide();
+        myBtnDTMF8.hide();
+        myBtnDTMF9.hide();
 
-      myBtnA.draw();
-      myBtnB.draw();
-      myBtnC.draw();
-      //myBtnD.draw();
+        myBtnA.draw();
+        myBtnB.draw();
+        myBtnC.draw();
 
-      //Serial.println("DTMF OFF");
+        //Serial.println("DTMF OFF");
+      }
+      else {
+        myBtnDTMF1.draw();
+        myBtnDTMF2.draw();
+        myBtnDTMF3.draw();
+        myBtnDTMF4.draw();
+        myBtnDTMF5.draw();
+        myBtnDTMF6.draw();
+        myBtnDTMF7.draw();
+        myBtnDTMF8.draw();
+        myBtnDTMF9.draw();
+
+        myBtnA.hide();
+        myBtnB.hide();
+        myBtnC.hide();
+
+        //Serial.println("DTMF ON");
+      }
     }
-    else {
-      myBtnDTMF1.draw();
-      myBtnDTMF2.draw();
-      myBtnDTMF3.draw();
-      myBtnDTMF4.draw();
-      myBtnDTMF5.draw();
-      myBtnDTMF6.draw();
-      myBtnDTMF7.draw();
-      myBtnDTMF8.draw();
-      myBtnDTMF9.draw();
+  }
+  else {
+    myBtnDTMF1.hide();
+    myBtnDTMF2.hide();
+    myBtnDTMF3.hide();
+    myBtnDTMF4.hide();
+    myBtnDTMF5.hide();
+    myBtnDTMF6.hide();
+    myBtnDTMF7.hide();
+    myBtnDTMF8.hide();
+    myBtnDTMF9.hide();
 
-      myBtnA.hide();
-      myBtnB.hide();
-      myBtnC.hide();
-      //myBtnD.hide();
-
-      //Serial.println("DTMF ON");
-    }
+    myBtnD.hide();
   }
 
   M5.update();
