@@ -267,6 +267,7 @@ void scroll(uint8_t pause)
     Sprite.drawFastHLine(0, h, w, TFT_INFO);
 
   // Now print text on top of the graphics
+  Sprite.setFreeFont(&tahoma8pt7b);
   Sprite.setTextColor(TFT_WHITE); // White text, no background colour
   Sprite.setTextWrap(false);      // Turn of wrap so we can print past end of sprite
 

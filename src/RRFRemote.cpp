@@ -216,7 +216,7 @@ void loop()
   StaticJsonDocument<512> docISS;
 
   const char *emission = "", *salon = "", *entrant = "", *sortant = "";
-  const char *lastIndicatif[10], *lastDuree[10], *lastHeure[10], *lastLocator[10], *lastRegion[10];
+  const char *lastIndicatif[10], *lastDuree[10], *lastHeure[10], *lastLocator[10], *lastRegion[10], *lastPrenom[10];
   const char *allIndicatif[10], *allDuree[10];
   const char *iptableIndicatif[10], *iptableType[10];
 
@@ -286,6 +286,7 @@ void loop()
     lastLongitude[i] = doc["last"][i]["Longitude"];
     lastLocator[i] = doc["last"][i]["Locator"];
     lastRegion[i] = doc["last"][i]["Region"];
+    lastPrenom[i] = doc["last"][i]["Prenom"];
   }
 
   for (uint8_t i = 0; i < doc["all"].size(); i++)
@@ -341,7 +342,11 @@ void loop()
   else 
   {
     distance = computeDistance(lastLatitude[0], lastLongitude[0]);
-    message = String(lastRegion[0]) + " - "  + String(lastLocator[0]) + " - " + String(distance) + " Km";
+    message = "";
+    if(String(lastPrenom[0]) != "") {
+      message += String(lastPrenom[0]) + " - ";
+    }
+    message += String(lastRegion[0]) + " - "  + String(lastLocator[0]) + " - " + String(distance) + " Km";
   }
 
   // Check network
