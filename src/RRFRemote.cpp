@@ -16,7 +16,7 @@ void setup()
   screensaver = millis();
 
   // Init M5
-  M5.begin(true, false, false, false);
+  M5.begin(true, true, false, false);
 
   // Init Led
   FastLED.addLeds<NEOPIXEL, LED_PIN>(leds, NUM_LEDS);  // GRB ordering is assumed

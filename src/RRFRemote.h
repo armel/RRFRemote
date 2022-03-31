@@ -50,7 +50,7 @@
 #include <M5StackUpdater.h>
 
 // Version
-#define VERSION "3.0.0"
+#define VERSION "3.0.1"
 
 // Wifi
 WiFiClientSecure clientISS;
@@ -220,7 +220,7 @@ int16_t pos = 0;
 
 // Bin loader
 File root;
-String binFilename[8];
+String binFilename[128];
 uint8_t binIndex = 0;
 
 // Task Handle
