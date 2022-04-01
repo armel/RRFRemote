@@ -311,7 +311,7 @@ Evidement, vous devrez recompiler et uploader le projet sur votre M5Stack.
 
 ## Utilisation du Bin Loader (_power user only..._)
 
-Evolution récente de mes développements, il est désormais possible de stocker plusieurs applications dans la mémoire Flash de votre M5Stack. Au démarrage, une procédure est prévue pour charger une application en particulier.
+Evolution récente de mes développements, il est désormais possible de stocker plusieurs applications dans la mémoire SPI Flash de votre M5Stack ou sur une carte SD. Au démarrage, une procédure est prévue pour charger une application en particulier.
 
 ### Préparation
 
@@ -334,7 +334,28 @@ Placez vous à la racine du dossier RRFRemote, qui contient l'ensemble du projet
 - `.pio/build/m5stack-basic-grey`, si vous avez compilé pour un M5Stack GREY ou BASIC
 - `.pio/build/m5stack-core2`, si vous avez compilé pour un M5Stack CORE2 ou AWS
 
-Vous y trouverez un fichier `firmware.bin`. Copier le dans le répertoire `data` qui se trouve à la racine du dossier RRFRemote. Et profitez en pour le renommer en l'appelant, par exemple, `RRFRemote.bin`.
+Vous y trouverez un fichier `firmware.bin`. 
+
+Vous avez maintenant 2 solutions. 
+
+A vous de choisir celle que vous préférez : 
+
+- stockage sur carte SD : simple, offre une grosse capacité de stockage, mais nécessite d'avoir une carte disponible,
+- stockage sur la mémoire SPI Flash : plus compliqué, capacité de stockage réduite, mais aucun prérequis.
+
+#### Etape 2.1 - Stockage sur la carte SD (simple)
+
+Formater une carte SD au format FAT32.
+
+Copier le fichier `firmware.bin` de l'application RRFRemote et placer le à la racine de la carte SD. Et profitez en pour le renommer en l'appelant, par exemple, `RRFRemote.bin`.
+
+Faites de même avec l'application DXTracker. Copier le fichier `firmware.bin` de l'application DXTracker et placer le à la racine de la carte SD.  Et profitez en pour le renommer en l'appelant, par exemple, `DXTracker.bin`.
+
+Vous devez désormais avoir 2 fichiers binaires à la racine de votre carte SD : `RRFRemote.bin` et `DXTracker.bin`.
+
+#### Etape 2.2 - Stockage sur la mémoire SPI Flash (plus difficile)
+
+Copier le dans le répertoire `data` qui se trouve à la racine du dossier RRFRemote. Et profitez en pour le renommer en l'appelant, par exemple, `RRFRemote.bin`.
 
 > Si le dossier `data` n'existe pas, créé le.
 
