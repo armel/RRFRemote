@@ -27,10 +27,10 @@ void resetColor()
   switch (colorCurrent)
   {
   case 0:
-    TFT_HEADER = M5.Lcd.color565(TFT_HEADER_ROUGE.r, TFT_HEADER_ROUGE.g, TFT_HEADER_ROUGE.b);
-    TFT_INFO = M5.Lcd.color565(TFT_INFO_ROUGE.r, TFT_INFO_ROUGE.g, TFT_INFO_ROUGE.b);
-    TFT_FRONT = M5.Lcd.color565(TFT_FRONT_ROUGE.r, TFT_FRONT_ROUGE.g, TFT_FRONT_ROUGE.b);
-    TFT_BACK = M5.Lcd.color565(TFT_BACK_ROUGE.r, TFT_BACK_ROUGE.g, TFT_BACK_ROUGE.b);
+    TFT_HEADER = display.color565(TFT_HEADER_ROUGE.r, TFT_HEADER_ROUGE.g, TFT_HEADER_ROUGE.b);
+    TFT_INFO = display.color565(TFT_INFO_ROUGE.r, TFT_INFO_ROUGE.g, TFT_INFO_ROUGE.b);
+    TFT_FRONT = display.color565(TFT_FRONT_ROUGE.r, TFT_FRONT_ROUGE.g, TFT_FRONT_ROUGE.b);
+    TFT_BACK = display.color565(TFT_BACK_ROUGE.r, TFT_BACK_ROUGE.g, TFT_BACK_ROUGE.b);
     BMP_HEADER = TFT_HEADER_ROUGE;
     BMP_INFO = TFT_INFO_ROUGE;
     BMP_FRONT = TFT_FRONT_ROUGE;
@@ -38,10 +38,10 @@ void resetColor()
     break;
 
   case 1:
-    TFT_HEADER = M5.Lcd.color565(TFT_HEADER_ROSE.r, TFT_HEADER_ROSE.g, TFT_HEADER_ROSE.b);
-    TFT_INFO = M5.Lcd.color565(TFT_INFO_ROSE.r, TFT_INFO_ROSE.g, TFT_INFO_ROSE.b);
-    TFT_FRONT = M5.Lcd.color565(TFT_FRONT_ROSE.r, TFT_FRONT_ROSE.g, TFT_FRONT_ROSE.b);
-    TFT_BACK = M5.Lcd.color565(TFT_BACK_ROSE.r, TFT_BACK_ROSE.g, TFT_BACK_ROSE.b);
+    TFT_HEADER = display.color565(TFT_HEADER_ROSE.r, TFT_HEADER_ROSE.g, TFT_HEADER_ROSE.b);
+    TFT_INFO = display.color565(TFT_INFO_ROSE.r, TFT_INFO_ROSE.g, TFT_INFO_ROSE.b);
+    TFT_FRONT = display.color565(TFT_FRONT_ROSE.r, TFT_FRONT_ROSE.g, TFT_FRONT_ROSE.b);
+    TFT_BACK = display.color565(TFT_BACK_ROSE.r, TFT_BACK_ROSE.g, TFT_BACK_ROSE.b);
     BMP_HEADER = TFT_HEADER_ROSE;
     BMP_INFO = TFT_INFO_ROSE;
     BMP_FRONT = TFT_FRONT_ROSE;
@@ -49,10 +49,10 @@ void resetColor()
     break;
 
   case 2:
-    TFT_HEADER = M5.Lcd.color565(TFT_HEADER_VIOLET.r, TFT_HEADER_VIOLET.g, TFT_HEADER_VIOLET.b);
-    TFT_INFO = M5.Lcd.color565(TFT_INFO_VIOLET.r, TFT_INFO_VIOLET.g, TFT_INFO_VIOLET.b);
-    TFT_FRONT = M5.Lcd.color565(TFT_FRONT_VIOLET.r, TFT_FRONT_VIOLET.g, TFT_FRONT_VIOLET.b);
-    TFT_BACK = M5.Lcd.color565(TFT_BACK_VIOLET.r, TFT_BACK_VIOLET.g, TFT_BACK_VIOLET.b);
+    TFT_HEADER = display.color565(TFT_HEADER_VIOLET.r, TFT_HEADER_VIOLET.g, TFT_HEADER_VIOLET.b);
+    TFT_INFO = display.color565(TFT_INFO_VIOLET.r, TFT_INFO_VIOLET.g, TFT_INFO_VIOLET.b);
+    TFT_FRONT = display.color565(TFT_FRONT_VIOLET.r, TFT_FRONT_VIOLET.g, TFT_FRONT_VIOLET.b);
+    TFT_BACK = display.color565(TFT_BACK_VIOLET.r, TFT_BACK_VIOLET.g, TFT_BACK_VIOLET.b);
     BMP_HEADER = TFT_HEADER_VIOLET;
     BMP_INFO = TFT_INFO_VIOLET;
     BMP_FRONT = TFT_FRONT_VIOLET;
@@ -60,10 +60,10 @@ void resetColor()
     break;
 
   case 3:
-    TFT_HEADER = M5.Lcd.color565(TFT_HEADER_BLEU.r, TFT_HEADER_BLEU.g, TFT_HEADER_BLEU.b);
-    TFT_INFO = M5.Lcd.color565(TFT_INFO_BLEU.r, TFT_INFO_BLEU.g, TFT_INFO_BLEU.b);
-    TFT_FRONT = M5.Lcd.color565(TFT_FRONT_BLEU.r, TFT_FRONT_BLEU.g, TFT_FRONT_BLEU.b);
-    TFT_BACK = M5.Lcd.color565(TFT_BACK_BLEU.r, TFT_BACK_BLEU.g, TFT_BACK_BLEU.b);
+    TFT_HEADER = display.color565(TFT_HEADER_BLEU.r, TFT_HEADER_BLEU.g, TFT_HEADER_BLEU.b);
+    TFT_INFO = display.color565(TFT_INFO_BLEU.r, TFT_INFO_BLEU.g, TFT_INFO_BLEU.b);
+    TFT_FRONT = display.color565(TFT_FRONT_BLEU.r, TFT_FRONT_BLEU.g, TFT_FRONT_BLEU.b);
+    TFT_BACK = display.color565(TFT_BACK_BLEU.r, TFT_BACK_BLEU.g, TFT_BACK_BLEU.b);
     BMP_HEADER = TFT_HEADER_BLEU;
     BMP_INFO = TFT_INFO_BLEU;
     BMP_FRONT = TFT_FRONT_BLEU;
@@ -71,10 +71,10 @@ void resetColor()
     break;
 
   case 4:
-    TFT_HEADER = M5.Lcd.color565(TFT_HEADER_TURQUOISE.r, TFT_HEADER_TURQUOISE.g, TFT_HEADER_TURQUOISE.b);
-    TFT_INFO = M5.Lcd.color565(TFT_INFO_TURQUOISE.r, TFT_INFO_TURQUOISE.g, TFT_INFO_TURQUOISE.b);
-    TFT_FRONT = M5.Lcd.color565(TFT_FRONT_TURQUOISE.r, TFT_FRONT_TURQUOISE.g, TFT_FRONT_TURQUOISE.b);
-    TFT_BACK = M5.Lcd.color565(TFT_BACK_TURQUOISE.r, TFT_BACK_TURQUOISE.g, TFT_BACK_TURQUOISE.b);
+    TFT_HEADER = display.color565(TFT_HEADER_TURQUOISE.r, TFT_HEADER_TURQUOISE.g, TFT_HEADER_TURQUOISE.b);
+    TFT_INFO = display.color565(TFT_INFO_TURQUOISE.r, TFT_INFO_TURQUOISE.g, TFT_INFO_TURQUOISE.b);
+    TFT_FRONT = display.color565(TFT_FRONT_TURQUOISE.r, TFT_FRONT_TURQUOISE.g, TFT_FRONT_TURQUOISE.b);
+    TFT_BACK = display.color565(TFT_BACK_TURQUOISE.r, TFT_BACK_TURQUOISE.g, TFT_BACK_TURQUOISE.b);
     BMP_HEADER = TFT_HEADER_TURQUOISE;
     BMP_INFO = TFT_INFO_TURQUOISE;
     BMP_FRONT = TFT_FRONT_TURQUOISE;
@@ -82,10 +82,10 @@ void resetColor()
     break;
 
   case 5:
-    TFT_HEADER = M5.Lcd.color565(TFT_HEADER_VERT.r, TFT_HEADER_VERT.g, TFT_HEADER_VERT.b);
-    TFT_INFO = M5.Lcd.color565(TFT_INFO_VERT.r, TFT_INFO_VERT.g, TFT_INFO_VERT.b);
-    TFT_FRONT = M5.Lcd.color565(TFT_FRONT_VERT.r, TFT_FRONT_VERT.g, TFT_FRONT_VERT.b);
-    TFT_BACK = M5.Lcd.color565(TFT_BACK_VERT.r, TFT_BACK_VERT.g, TFT_BACK_VERT.b);
+    TFT_HEADER = display.color565(TFT_HEADER_VERT.r, TFT_HEADER_VERT.g, TFT_HEADER_VERT.b);
+    TFT_INFO = display.color565(TFT_INFO_VERT.r, TFT_INFO_VERT.g, TFT_INFO_VERT.b);
+    TFT_FRONT = display.color565(TFT_FRONT_VERT.r, TFT_FRONT_VERT.g, TFT_FRONT_VERT.b);
+    TFT_BACK = display.color565(TFT_BACK_VERT.r, TFT_BACK_VERT.g, TFT_BACK_VERT.b);
     BMP_HEADER = TFT_HEADER_VERT;
     BMP_INFO = TFT_INFO_VERT;
     BMP_FRONT = TFT_FRONT_VERT;
@@ -93,10 +93,10 @@ void resetColor()
     break;
 
   case 6:
-    TFT_HEADER = M5.Lcd.color565(TFT_HEADER_ORANGE.r, TFT_HEADER_ORANGE.g, TFT_HEADER_ORANGE.b);
-    TFT_INFO = M5.Lcd.color565(TFT_INFO_ORANGE.r, TFT_INFO_ORANGE.g, TFT_INFO_ORANGE.b);
-    TFT_FRONT = M5.Lcd.color565(TFT_FRONT_ORANGE.r, TFT_FRONT_ORANGE.g, TFT_FRONT_ORANGE.b);
-    TFT_BACK = M5.Lcd.color565(TFT_BACK_ORANGE.r, TFT_BACK_ORANGE.g, TFT_BACK_ORANGE.b);
+    TFT_HEADER = display.color565(TFT_HEADER_ORANGE.r, TFT_HEADER_ORANGE.g, TFT_HEADER_ORANGE.b);
+    TFT_INFO = display.color565(TFT_INFO_ORANGE.r, TFT_INFO_ORANGE.g, TFT_INFO_ORANGE.b);
+    TFT_FRONT = display.color565(TFT_FRONT_ORANGE.r, TFT_FRONT_ORANGE.g, TFT_FRONT_ORANGE.b);
+    TFT_BACK = display.color565(TFT_BACK_ORANGE.r, TFT_BACK_ORANGE.g, TFT_BACK_ORANGE.b);
     BMP_HEADER = TFT_HEADER_ORANGE;
     BMP_INFO = TFT_INFO_ORANGE;
     BMP_FRONT = TFT_FRONT_ORANGE;
@@ -104,10 +104,10 @@ void resetColor()
     break;
 
   case 7:
-    TFT_HEADER = M5.Lcd.color565(TFT_HEADER_MARRON.r, TFT_HEADER_MARRON.g, TFT_HEADER_MARRON.b);
-    TFT_INFO = M5.Lcd.color565(TFT_INFO_MARRON.r, TFT_INFO_MARRON.g, TFT_INFO_MARRON.b);
-    TFT_FRONT = M5.Lcd.color565(TFT_FRONT_MARRON.r, TFT_FRONT_MARRON.g, TFT_FRONT_MARRON.b);
-    TFT_BACK = M5.Lcd.color565(TFT_BACK_MARRON.r, TFT_BACK_MARRON.g, TFT_BACK_MARRON.b);
+    TFT_HEADER = display.color565(TFT_HEADER_MARRON.r, TFT_HEADER_MARRON.g, TFT_HEADER_MARRON.b);
+    TFT_INFO = display.color565(TFT_INFO_MARRON.r, TFT_INFO_MARRON.g, TFT_INFO_MARRON.b);
+    TFT_FRONT = display.color565(TFT_FRONT_MARRON.r, TFT_FRONT_MARRON.g, TFT_FRONT_MARRON.b);
+    TFT_BACK = display.color565(TFT_BACK_MARRON.r, TFT_BACK_MARRON.g, TFT_BACK_MARRON.b);
     BMP_HEADER = TFT_HEADER_MARRON;
     BMP_INFO = TFT_INFO_MARRON;
     BMP_FRONT = TFT_FRONT_MARRON;
@@ -115,10 +115,10 @@ void resetColor()
     break;
 
   case 8:
-    TFT_HEADER = M5.Lcd.color565(TFT_HEADER_GRIS.r, TFT_HEADER_GRIS.g, TFT_HEADER_GRIS.b);
-    TFT_INFO = M5.Lcd.color565(TFT_INFO_GRIS.r, TFT_INFO_GRIS.g, TFT_INFO_GRIS.b);
-    TFT_FRONT = M5.Lcd.color565(TFT_FRONT_GRIS.r, TFT_FRONT_GRIS.g, TFT_FRONT_GRIS.b);
-    TFT_BACK = M5.Lcd.color565(TFT_BACK_GRIS.r, TFT_BACK_GRIS.g, TFT_BACK_GRIS.b);
+    TFT_HEADER = display.color565(TFT_HEADER_GRIS.r, TFT_HEADER_GRIS.g, TFT_HEADER_GRIS.b);
+    TFT_INFO = display.color565(TFT_INFO_GRIS.r, TFT_INFO_GRIS.g, TFT_INFO_GRIS.b);
+    TFT_FRONT = display.color565(TFT_FRONT_GRIS.r, TFT_FRONT_GRIS.g, TFT_FRONT_GRIS.b);
+    TFT_BACK = display.color565(TFT_BACK_GRIS.r, TFT_BACK_GRIS.g, TFT_BACK_GRIS.b);
     BMP_HEADER = TFT_HEADER_GRIS;
     BMP_INFO = TFT_INFO_GRIS;
     BMP_FRONT = TFT_FRONT_GRIS;
@@ -126,10 +126,10 @@ void resetColor()
     break;
 
   case 9:
-    TFT_HEADER = M5.Lcd.color565(TFT_HEADER_CREPUSCULE.r, TFT_HEADER_CREPUSCULE.g, TFT_HEADER_CREPUSCULE.b);
-    TFT_INFO = M5.Lcd.color565(TFT_INFO_CREPUSCULE.r, TFT_INFO_CREPUSCULE.g, TFT_INFO_CREPUSCULE.b);
-    TFT_FRONT = M5.Lcd.color565(TFT_FRONT_CREPUSCULE.r, TFT_FRONT_CREPUSCULE.g, TFT_FRONT_CREPUSCULE.b);
-    TFT_BACK = M5.Lcd.color565(TFT_BACK_CREPUSCULE.r, TFT_BACK_CREPUSCULE.g, TFT_BACK_CREPUSCULE.b);
+    TFT_HEADER = display.color565(TFT_HEADER_CREPUSCULE.r, TFT_HEADER_CREPUSCULE.g, TFT_HEADER_CREPUSCULE.b);
+    TFT_INFO = display.color565(TFT_INFO_CREPUSCULE.r, TFT_INFO_CREPUSCULE.g, TFT_INFO_CREPUSCULE.b);
+    TFT_FRONT = display.color565(TFT_FRONT_CREPUSCULE.r, TFT_FRONT_CREPUSCULE.g, TFT_FRONT_CREPUSCULE.b);
+    TFT_BACK = display.color565(TFT_BACK_CREPUSCULE.r, TFT_BACK_CREPUSCULE.g, TFT_BACK_CREPUSCULE.b);
     BMP_HEADER = TFT_HEADER_CREPUSCULE;
     BMP_INFO = TFT_INFO_CREPUSCULE;
     BMP_FRONT = TFT_FRONT_CREPUSCULE;
@@ -137,10 +137,10 @@ void resetColor()
     break;
 
   case 10:
-    TFT_HEADER = M5.Lcd.color565(TFT_HEADER_FORET.r, TFT_HEADER_FORET.g, TFT_HEADER_FORET.b);
-    TFT_INFO = M5.Lcd.color565(TFT_INFO_FORET.r, TFT_INFO_FORET.g, TFT_INFO_FORET.b);
-    TFT_FRONT = M5.Lcd.color565(TFT_FRONT_FORET.r, TFT_FRONT_FORET.g, TFT_FRONT_FORET.b);
-    TFT_BACK = M5.Lcd.color565(TFT_BACK_FORET.r, TFT_BACK_FORET.g, TFT_BACK_FORET.b);
+    TFT_HEADER = display.color565(TFT_HEADER_FORET.r, TFT_HEADER_FORET.g, TFT_HEADER_FORET.b);
+    TFT_INFO = display.color565(TFT_INFO_FORET.r, TFT_INFO_FORET.g, TFT_INFO_FORET.b);
+    TFT_FRONT = display.color565(TFT_FRONT_FORET.r, TFT_FRONT_FORET.g, TFT_FRONT_FORET.b);
+    TFT_BACK = display.color565(TFT_BACK_FORET.r, TFT_BACK_FORET.g, TFT_BACK_FORET.b);
     BMP_HEADER = TFT_HEADER_FORET;
     BMP_INFO = TFT_INFO_FORET;
     BMP_FRONT = TFT_FRONT_FORET;
@@ -148,10 +148,10 @@ void resetColor()
     break;
 
   case 11:
-    TFT_HEADER = M5.Lcd.color565(TFT_HEADER_ARDOISE.r, TFT_HEADER_ARDOISE.g, TFT_HEADER_ARDOISE.b);
-    TFT_INFO = M5.Lcd.color565(TFT_INFO_ARDOISE.r, TFT_INFO_ARDOISE.g, TFT_INFO_ARDOISE.b);
-    TFT_FRONT = M5.Lcd.color565(TFT_FRONT_ARDOISE.r, TFT_FRONT_ARDOISE.g, TFT_FRONT_ARDOISE.b);
-    TFT_BACK = M5.Lcd.color565(TFT_BACK_ARDOISE.r, TFT_BACK_ARDOISE.g, TFT_BACK_ARDOISE.b);
+    TFT_HEADER = display.color565(TFT_HEADER_ARDOISE.r, TFT_HEADER_ARDOISE.g, TFT_HEADER_ARDOISE.b);
+    TFT_INFO = display.color565(TFT_INFO_ARDOISE.r, TFT_INFO_ARDOISE.g, TFT_INFO_ARDOISE.b);
+    TFT_FRONT = display.color565(TFT_FRONT_ARDOISE.r, TFT_FRONT_ARDOISE.g, TFT_FRONT_ARDOISE.b);
+    TFT_BACK = display.color565(TFT_BACK_ARDOISE.r, TFT_BACK_ARDOISE.g, TFT_BACK_ARDOISE.b);
     BMP_HEADER = TFT_HEADER_ARDOISE;
     BMP_INFO = TFT_INFO_ARDOISE;
     BMP_FRONT = TFT_FRONT_ARDOISE;
@@ -159,10 +159,10 @@ void resetColor()
     break;
 
   case 12:
-    TFT_HEADER = M5.Lcd.color565(TFT_HEADER_FLORAL.r, TFT_HEADER_FLORAL.g, TFT_HEADER_FLORAL.b);
-    TFT_INFO = M5.Lcd.color565(TFT_INFO_FLORAL.r, TFT_INFO_FLORAL.g, TFT_INFO_FLORAL.b);
-    TFT_FRONT = M5.Lcd.color565(TFT_FRONT_FLORAL.r, TFT_FRONT_FLORAL.g, TFT_FRONT_FLORAL.b);
-    TFT_BACK = M5.Lcd.color565(TFT_BACK_FLORAL.r, TFT_BACK_FLORAL.g, TFT_BACK_FLORAL.b);
+    TFT_HEADER = display.color565(TFT_HEADER_FLORAL.r, TFT_HEADER_FLORAL.g, TFT_HEADER_FLORAL.b);
+    TFT_INFO = display.color565(TFT_INFO_FLORAL.r, TFT_INFO_FLORAL.g, TFT_INFO_FLORAL.b);
+    TFT_FRONT = display.color565(TFT_FRONT_FLORAL.r, TFT_FRONT_FLORAL.g, TFT_FRONT_FLORAL.b);
+    TFT_BACK = display.color565(TFT_BACK_FLORAL.r, TFT_BACK_FLORAL.g, TFT_BACK_FLORAL.b);
     BMP_HEADER = TFT_HEADER_FLORAL;
     BMP_INFO = TFT_INFO_FLORAL;
     BMP_FRONT = TFT_FRONT_FLORAL;
@@ -178,59 +178,59 @@ void clear()
 
   // Reset
   message = "";
-  // M5.lcd.clear();
+  // display.clear();
   resetColor();
 
   if (menuMode != 1 || (menuMode == 1 && option == "COULEUR"))
   {
     // Header
-    M5.Lcd.fillRect(0, 0, 320, 44, TFT_HEADER);
-    M5.Lcd.fillRect(0, 45, 320, 55, TFT_INFO);
-    M5.Lcd.drawFastHLine(0, 0, 320, TFT_WHITE);
-    M5.Lcd.drawFastHLine(0, 44, 320, TFT_WHITE);
+    display.fillRect(0, 0, 320, 44, TFT_HEADER);
+    display.fillRect(0, 45, 320, 55, TFT_INFO);
+    display.drawFastHLine(0, 0, 320, TFT_WHITE);
+    display.drawFastHLine(0, 44, 320, TFT_WHITE);
   }
 
   // Info zone
-  M5.Lcd.fillRect(0, 98, 320, 2, TFT_INFO);
+  display.fillRect(0, 98, 320, 2, TFT_INFO);
 
   // Grey zone
-  M5.Lcd.drawFastHLine(0, 100, 320, TFT_WHITE);
-  M5.Lcd.fillRect(0, 101, 320, 239, TFT_BACK);
+  display.drawFastHLine(0, 100, 320, TFT_WHITE);
+  display.fillRect(0, 101, 320, 239, TFT_BACK);
 
   if (modeCurrent == 0)
   {
     // Elsewhere
-    M5.Lcd.fillRoundRect(0, 154, 155, 85, 4, TFT_WHITE);
-    M5.Lcd.fillRoundRect(1, 155, 26, 83, 4, TFT_FRONT);
+    display.fillRoundRect(0, 154, 155, 85, 4, TFT_WHITE);
+    display.fillRoundRect(1, 155, 26, 83, 4, TFT_FRONT);
 
     for (uint8_t i = 24; i < 27; i++)
     {
-      M5.Lcd.drawFastVLine(i, 155, 83, TFT_FRONT);
+      display.drawFastVLine(i, 155, 83, TFT_FRONT);
     }
 
-    M5.Lcd.drawFastVLine(27, 155, 83, TFT_BACK);
-    M5.Lcd.drawFastVLine(100, 155, 83, TFT_BACK);
+    display.drawFastVLine(27, 155, 83, TFT_BACK);
+    display.drawFastVLine(100, 155, 83, TFT_BACK);
 
     for (uint8_t i = 0; i < 5; i++)
     {
-      M5.Lcd.drawFastHLine(2, 168 + (i * 14), 152, TFT_BACK);
+      display.drawFastHLine(2, 168 + (i * 14), 152, TFT_BACK);
     }
 
     // Log
-    M5.Lcd.fillRoundRect(160, 117, 160, 122, 4, TFT_WHITE);
+    display.fillRoundRect(160, 117, 160, 122, 4, TFT_WHITE);
   }
   else if (modeCurrent == 1)
   {
     for (uint8_t i = 0; i <= 1; i++)
     {
-      M5.Lcd.fillRoundRect(0 + (170 * i), 125, 150, 115, 4, TFT_WHITE);
-      M5.Lcd.fillRoundRect(1 + (170 * i), 126, 148, 113, 4, TFT_FRONT);
-      M5.Lcd.fillRect(51 + (170 * i), 126, 98, 113, TFT_WHITE);
-      M5.Lcd.drawFastVLine(50 + (170 * i), 126, 113, TFT_BACK);
+      display.fillRoundRect(0 + (170 * i), 125, 150, 115, 4, TFT_WHITE);
+      display.fillRoundRect(1 + (170 * i), 126, 148, 113, 4, TFT_FRONT);
+      display.fillRect(51 + (170 * i), 126, 98, 113, TFT_WHITE);
+      display.drawFastVLine(50 + (170 * i), 126, 113, TFT_BACK);
 
       for (uint8_t k = 1; k <= 5; k++)
       {
-        M5.Lcd.drawFastHLine(1 + (170 * i), 125 + (k * 18) + k, 148, TFT_BACK);
+        display.drawFastHLine(1 + (170 * i), 125 + (k * 18) + k, 148, TFT_BACK);
       }
     }
   }
@@ -240,8 +240,8 @@ void clear()
     {
       for (uint8_t j = 0; j <= 2; j++)
       {
-        M5.Lcd.fillRoundRect(0 + (110 * j), 104 + (48 * i), 100, 40, 4, TFT_WHITE);
-        M5.Lcd.fillRoundRect(1 + (110 * j), 105 + (48 * i), 98, 38, 4, TFT_FRONT);
+        display.fillRoundRect(0 + (110 * j), 104 + (48 * i), 100, 40, 4, TFT_WHITE);
+        display.fillRoundRect(1 + (110 * j), 105 + (48 * i), 98, 38, 4, TFT_FRONT);
       }
     }
   }
@@ -249,10 +249,10 @@ void clear()
 
 // Scroll
 void scroll(uint8_t pause)
-{
+{  
   uint16_t h = 21;
   uint16_t w;
-  uint16_t limit = M5.Lcd.width();
+  uint16_t limit = display.width();
   static uint32_t timer = 0, wait = 0;
 
   timer = millis();
@@ -267,7 +267,7 @@ void scroll(uint8_t pause)
     Sprite.drawFastHLine(0, h, w, TFT_INFO);
 
   // Now print text on top of the graphics
-  Sprite.setFreeFont(&tahoma8pt7b);
+  Sprite.setFont(&tahoma8pt7b);
   Sprite.setTextColor(TFT_WHITE); // White text, no background colour
   Sprite.setTextWrap(false);      // Turn of wrap so we can print past end of sprite
 
@@ -292,6 +292,7 @@ void scroll(uint8_t pause)
 }
 
 // Detect rotation
+/*
 void checkAcceleration()
 {
   float accX = 0.0F;
@@ -302,24 +303,25 @@ void checkAcceleration()
   {
     M5.IMU.getAccelData(&accX, &accY, &accZ);
 
-    if (int(accY * 1000) < -500 && M5.Lcd.getRotation() != 3)
+    if (int(accY * 1000) < -500 &&display.getRotation() != 3)
     {
-      M5.lcd.clear();
+     display.clear();
       reset = 0;
       refresh = 0;
       menuRefresh = 0;
-      M5.Lcd.setRotation(3);
+     display.setRotation(3);
     }
-    else if (int(accY * 1000) > 500 && M5.Lcd.getRotation() != 1)
+    else if (int(accY * 1000) > 500 &&display.getRotation() != 1)
     {
-      M5.lcd.clear();
+     display.clear();
       reset = 0;
       refresh = 0;
       menuRefresh = 0;
-      M5.Lcd.setRotation(1);
+     display.setRotation(1);
     }
   }
 }
+*/
 
 // Compute distance
 int computeDistance(float latitudeLink, float longitudeLink)
@@ -364,8 +366,8 @@ void updateLocalTime()
 // M5Screen4bmp() (dump 4 bits screen to a WiFi client)
 bool M5Screen4bmp()
 {
-  uint16_t image_height = M5.Lcd.height();
-  uint16_t image_width = M5.Lcd.width();
+  uint16_t image_height = display.height();
+  uint16_t image_width = display.width();
   uint32_t filesize = 54 + 28 + ((image_width * image_height) / 2);
   uint8_t l = 0;
   uint8_t r = 0;
@@ -421,7 +423,7 @@ bool M5Screen4bmp()
     for (uint8_t z = 0; z < 10; z++)
     {
       // Get one line of the screen content
-      M5.Lcd.readRectRGB(0, y - 1 - z, image_width, 1, line_data_raw);
+      display.readRectRGB(0, y - 1 - z, image_width, 1, line_data_raw);
       // BMP color order is: Blue, Green, Red
       // Return values from readRectRGB is: Red, Green, Blue
       // Therefore: R und B need to be swapped
@@ -539,8 +541,8 @@ bool M5Screen4bmp()
 /*
 //M5Screen8bmp() (dump 8 bits screen to a WiFi client)
 bool M5Screen8bmp(){
-  uint16_t image_height = M5.Lcd.height();
-  uint16_t image_width = M5.Lcd.width();
+  uint16_t image_height =display.height();
+  uint16_t image_width =display.width();
   uint32_t filesize = 54 + 24 + (image_width * image_height);
 
   unsigned char line_data_raw[image_width * 3];
@@ -588,7 +590,7 @@ bool M5Screen8bmp(){
   // Therefore, the image must be read from bottom to top.
   for(uint16_t y = image_height; y > 0; y--){
     // Get one line of the screen content
-    M5.Lcd.readRectRGB(0, y - 1, image_width, 1, line_data_raw);
+   display.readRectRGB(0, y - 1, image_width, 1, line_data_raw);
     // BMP color order is: Blue, Green, Red
     // Return values from readRectRGB is: Red, Green, Blue
     // Therefore: R und B need to be swapped
@@ -644,8 +646,8 @@ bool M5Screen8bmp(){
 
 // M5Screen24bmp (dump 24 bits screen to a WiFi client)
 bool M5Screen24bmp(){
-  uint16_t image_height = M5.Lcd.height();
-  uint16_t image_width = M5.Lcd.width();
+  uint16_t image_height =display.height();
+  uint16_t image_width =display.width();
   const uint16_t pad = (4 - (3 * image_width) % 4) % 4;
   uint32_t filesize = 54 + (3 * image_width + pad) * image_height;
   unsigned char swap;
@@ -685,7 +687,7 @@ bool M5Screen24bmp(){
   // Therefore, the image must be read from bottom to top.
   for(uint16_t y = image_height; y > 0; y--){
     // Get one line of the screen content
-    M5.Lcd.readRectRGB(0, y - 1, image_width, 1, line_data);
+   display.readRectRGB(0, y - 1, image_width, 1, line_data);
     // BMP color order is: Blue, Green, Red
     // Return values from readRectRGB is: Red, Green, Blue
     // Therefore: R und B need to be swapped
@@ -748,7 +750,14 @@ void getScreenshot()
                 httpClient.println("HTTP/1.1 200 OK");
                 httpClient.println("Content-type:text/html");
                 httpClient.println();
-                httpClient.write_P(index_html, sizeof(index_html));
+                if (M5.getBoard() == m5::board_t::board_M5Stack)
+                {
+                  httpClient.write_P(index_m5stack_html, sizeof(index_m5stack_html));
+                }
+                else if (M5.getBoard() == m5::board_t::board_M5StackCore2)
+                {
+                  httpClient.write_P(index_core2_html, sizeof(index_core2_html));
+                }
                 break;
               }
               case GET_screenshot:
@@ -758,7 +767,7 @@ void getScreenshot()
                 httpClient.println();
                 if (screensaverMode == 1)
                 {
-                  M5.Lcd.wakeup();
+                  display.wakeup();
                 }
                 M5Screen4bmp();
                 screensaver = millis(); // Screensaver update !!!
@@ -841,7 +850,7 @@ void checkWifi()
 {
   if (WiFi.status() != WL_CONNECTED)
   {
-    M5.Lcd.fillCircle(314, 6, 3, TFT_HEADER);
+    display.fillCircle(314, 6, 3, TFT_HEADER);
     ping = 2;
     WiFi.disconnect();
     WiFi.reconnect();
@@ -851,12 +860,12 @@ void checkWifi()
   {
     if (ping == 1)
     {
-      M5.Lcd.fillCircle(314, 6, 3, TFT_HEADER);
-      M5.Lcd.drawCircle(314, 6, 3, TFT_WHITE);
+      display.fillCircle(314, 6, 3, TFT_HEADER);
+      display.drawCircle(314, 6, 3, TFT_WHITE);
     }
     else
     {
-      M5.Lcd.fillCircle(314, 6, 3, TFT_WHITE);
+      display.fillCircle(314, 6, 3, TFT_WHITE);
     }
   }
 
@@ -938,8 +947,8 @@ void getBinaryList(File dir, String type)
     }
 
     if (strstr(entry.name(), "/.") == NULL && strstr(entry.name(), ".bin") != NULL)
-    { 
-      //Serial.println(type + "_" + entry.name());     
+    {
+      // Serial.println(type + "_" + entry.name());
       binFilename[binIndex] = type + "_" + entry.name();
       binIndex++;
     }
@@ -968,23 +977,23 @@ void binLoader()
   {
     Serial.println("SPIFFS Mount Failed");
 
-    M5.Lcd.setTextFont(1);
-    M5.Lcd.setTextSize(2);
+    display.setTextFont(1);
+    display.setTextSize(2);
 
-    M5.Lcd.setTextColor(TFT_WHITE, TFT_BLACK);
-    M5.Lcd.setTextDatum(CC_DATUM);
-    M5.Lcd.drawString("Flash File System", 160, 20);
-    M5.Lcd.drawString("needs to be formated.", 160, 50);
-    M5.Lcd.drawString("It takes around 4 minutes.", 160, 100);
-    M5.Lcd.drawString("Please, wait until ", 160, 150);
-    M5.Lcd.drawString("the application starts !", 160, 180);
+    display.setTextColor(TFT_WHITE, TFT_BLACK);
+    display.setTextDatum(CC_DATUM);
+    display.drawString("Flash File System", 160, 20);
+    display.drawString("needs to be formated.", 160, 50);
+    display.drawString("It takes around 4 minutes.", 160, 100);
+    display.drawString("Please, wait until ", 160, 150);
+    display.drawString("the application starts !", 160, 180);
 
     Serial.println("SPIFFS Formating...");
 
     SPIFFS.format(); // Format SPIFFS...
 
-    M5.Lcd.setTextFont(0);
-    M5.Lcd.setTextSize(0);
+    display.setTextFont(0);
+    display.setTextSize(0);
 
     return;
   }
@@ -992,19 +1001,19 @@ void binLoader()
   root = SPIFFS.open("/");
   getBinaryList(root, "SP");
 
-
-  if (SD.begin()) {
+  if (SD.begin())
+  {
     root = SD.open("/");
     getBinaryList(root, "SD");
   }
 
   if (binIndex != 0)
   {
-    M5.Lcd.setTextFont(1);
-    M5.Lcd.setTextSize(1);
+    display.setTextFont(1);
+    display.setTextSize(1);
 
-    M5.Lcd.setTextColor(TFT_WHITE, TFT_BLACK);
-    M5.Lcd.setTextDatum(CC_DATUM);
+    display.setTextColor(TFT_WHITE, TFT_BLACK);
+    display.setTextDatum(CC_DATUM);
 
     for (uint8_t i = TIMEOUT_BIN_LOADER * 10; i > 0; i--)
     {
@@ -1013,7 +1022,7 @@ void binLoader()
       if (i % 10 == 0)
       {
         tmpName += ".";
-        M5.Lcd.drawString(tmpName, 160, 20);
+        display.drawString(tmpName, 160, 20);
       }
 
       if (btnA || btnC)
@@ -1038,12 +1047,12 @@ void binLoader()
       vTaskDelay(100);
     }
 
-    M5.Lcd.setTextFont(1);
-    M5.Lcd.setTextSize(2);
+    display.setTextFont(1);
+    display.setTextSize(2);
 
-    M5.Lcd.setTextColor(TFT_WHITE, TFT_BLACK);
-    M5.Lcd.setTextDatum(CC_DATUM);
-    M5.Lcd.drawString("Bin Loader V0.2", 160, 20);
+    display.setTextColor(TFT_WHITE, TFT_BLACK);
+    display.setTextDatum(CC_DATUM);
+    display.drawString("Bin Loader V0.2", 160, 20);
 
     getButton();
 
@@ -1057,10 +1066,12 @@ void binLoader()
     }
     else if (btnB)
     {
-      if(binFilename[cursor].substring(0, 4) == "SP_/") {
+      if (binFilename[cursor].substring(0, 4) == "SP_/")
+      {
         updateFromFS(SPIFFS, binFilename[cursor].substring(3));
       }
-      else {
+      else
+      {
         updateFromFS(SD, binFilename[cursor].substring(3));
       }
       ESP.restart();
@@ -1072,7 +1083,7 @@ void binLoader()
     start = cursor / limit;
 
     stop = (start * limit) + limit;
-    
+
     /*
     Serial.print(cursor);
     Serial.print("-");
@@ -1085,7 +1096,7 @@ void binLoader()
     if (change != cursor)
     {
       change = cursor;
-      M5.Lcd.setTextPadding(320);
+      display.setTextPadding(320);
 
       uint8_t i = 0;
       for (uint8_t j = (start * limit); j < stop; j++)
@@ -1096,17 +1107,19 @@ void binLoader()
         {
           tmpName = ">> " + tmpName + " <<";
 
-          M5.Lcd.setTextSize(1);
-          if(binFilename[cursor].substring(0, 4) == "SP_/") {
-            M5.Lcd.drawString("SPI Flash File Storage", 160, 50);
+          display.setTextSize(1);
+          if (binFilename[cursor].substring(0, 4) == "SP_/")
+          {
+            display.drawString("SPI Flash File Storage", 160, 50);
           }
-          else {
-            M5.Lcd.drawString("SD Card Storage", 160, 50);
+          else
+          {
+            display.drawString("SD Card Storage", 160, 50);
           }
         }
 
-        M5.Lcd.setTextSize(2);
-        M5.Lcd.drawString(tmpName, 160, 80 + i * 20);
+        display.setTextSize(2);
+        display.drawString(tmpName, 160, 80 + i * 20);
         i++;
       }
     }

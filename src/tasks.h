@@ -76,9 +76,10 @@ void rrfdata(void *pvParameters)
           }
           whereisData = whereisData.substring(whereisData.indexOf(", ") + 2);
           tempCurrent = (whereisData.toInt()) / 1000;
-          //Serial.println(tempCurrent);
+          // Serial.println(tempCurrent);
         }
-        else {
+        else
+        {
           ping = 1;
         }
       }
@@ -234,7 +235,7 @@ void button(void *pvParameters)
     }
     */
 
-    if (M5.Lcd.getRotation() == 1)
+    if (display.getRotation() == 1)
     {
       right = 1;
       left = -1;
@@ -317,10 +318,12 @@ void button(void *pvParameters)
     }
     else if (btnDTMF8 == 1)
     {
-      if(whereisString == "PERROQUET") {
+      if (whereisString == "PERROQUET")
+      {
         qsy = dtmf[roomCurrent];
       }
-      else {
+      else
+      {
         qsy = 95;
       }
       modeNew = modeOld;
@@ -474,10 +477,12 @@ void button(void *pvParameters)
       // Mode menu active, Parrot
       else if (option == "PERROQUET")
       {
-        if(whereisString == "PERROQUET") {
+        if (whereisString == "PERROQUET")
+        {
           qsy = dtmf[roomCurrent];
         }
-        else {
+        else
+        {
           qsy = 95;
         }
         vTaskDelay(pdMS_TO_TICKS(1000));
