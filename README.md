@@ -19,7 +19,7 @@ Le projet RRFRemote permet de suivre l'activité du RRF et de piloter son point 
 
 ![RRFRemote](https://github.com/armel/RRFRemote/blob/main/img/RRFRemote.jpeg)
 
-** Profiter de 5% de réduction, sur l'ensemble de la boutique M5Stack en utilisant le code de réduction F4HWN ou en cliquant directement sur [M5Stack](https://shop.m5stack.com/?ref=LUxetaH4)**
+**Profiter de 5% de réduction, sur l'ensemble de la boutique M5Stack en utilisant le code de réduction F4HWN ou en cliquant directement sur [M5Stack](https://shop.m5stack.com/?ref=LUxetaH4)**
 
 # Architecture technique
 
