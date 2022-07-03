@@ -5,6 +5,10 @@
 ![core2](https://img.shields.io/badge/M5Stack-CORE2-green)
 ![aws](https://img.shields.io/badge/M5Stack-AWS-orange)
 
+![ATOM Lite](https://img.shields.io/badge/M5Stack-ATOM%20Lite-darkgrey)
+![ATOM Echo Smart](https://img.shields.io/badge/M5Stack-ATOM%20Echo%20Smart-white)
+![ATOM Matrix](https://img.shields.io/badge/M5Stack-ATOM%20Matrix-blue)
+
 ![licence](https://img.shields.io/github/license/armel/RRFRemote)
 ![language](https://img.shields.io/github/languages/top/armel/RRFRemote)
 ![size](https://img.shields.io/github/repo-size/armel/RRFRemote)
@@ -54,7 +58,9 @@ Ce QSJ est à comparer à celui d'un écran Nextion type NX4832K035, neurasthén
 
 ## Versions supportées actuellement
 
-Le développement actuel du RRFRemote prend en charge le [M5Stack Basic](https://m5stack.com/collections/m5-core/products/basic-core-iot-development-kit), le [M5Stack Grey](https://m5stack.com/collections/m5-core/products/grey-development-core) ainsi que le [M5Stack Core2](https://m5stack.com/products/m5stack-core2-esp32-iot-development-kit). Je n'ai pas testé le M5Stack Fire, mais ca devrait fonctionner.
+Le développement actuel du RRFRemote prend en charge le [M5Stack Basic](https://m5stack.com/collections/m5-core/products/basic-core-iot-development-kit), le [M5Stack Grey](https://m5stack.com/collections/m5-core/products/grey-development-core), le [M5Stack Fire](https://shop.m5stack.com/collections/m5-controllers/products/m5stack-fire-iot-development-kit-psram-v2-6)  ainsi que les [M5Stack Core2](https://m5stack.com/products/m5stack-core2-esp32-iot-development-kit) et [M5Stack AWS](https://shop.m5stack.com/collections/m5-controllers/products/m5stack-core2-esp32-iot-development-kit-for-aws-iot-edukit). 
+
+En complément, il est désormais possible de faire fonctionne le RRFRemote avec l'[ATOM Display](https://shop.m5stack.com/products/m5stack-atom-psram-lcd-display-driver-kit) et profiter d'un écran plus grand en profitant de la sortie HDMI.
 
 # Fonctionnalités
 
@@ -197,32 +203,13 @@ Ouvrez le projet RRFRemote avec PlateformIO for VSCode.
 
 ### Fichier `src/RRFRemote.h`
 
-#### Type de carte
-
-Ligne 5, vérifier que la constante `BOARD` correspond bien à votre type de M5Stack (par défaut, la constante est initialisée à `GREY`). Donc, indiquer : 
-
-- `GREY` si vous avez un M5Stack GREY
-
-```
-#define BOARD GREY
-```
-
-- `BASIC` si vous avez un M5Stack BASIC
-
-```
-#define BOARD BASIC
-```
-
-- `CORE2` si vous avez un M5Stack CORE2
-
-```
-#define BOARD CORE2
-```
-
 #### Timezone
 
 Je hais la gestion des décalages horaires, des alternances hiver/été, etc. Néanmoins, si vous êtes hors de France, il est désormais possible de configurer votre _timezone_ afin qu'elle soit prise en compte lors de l'affichage de l'heure. Ligne 75, la variable `ntpTimeZone` est configurée, par défaut, pour la France. Mais j'ai indiqué d'autres configurations possibles pour d'autres régions du monde, régulièrement actives sur le RRF. Il vous suffit de décommenter uniquement la _timezone_ qui correspond à votre région. Si elle n'est pas présente, consultez cette [liste](https://github.com/blindsidenetworks/bigbluebutton-1/blob/master/bbb-voice-conference/config/freeswitch/conf/autoload_configs/timezones.conf.xml) plus détaillée. En dernier recours, me contacter si besoin d'aide ou si vous habitez dans une région exotique...
 
+#### ATOM Display
+
+Si et seulement si __vous utilisez l'ATOM Display__, ligne 9, vérifier que la constante `ATOM` est initialisée à 1. Elle est à 0 par défaut. 
 
 ### Fichier `src/settings.h`
 
@@ -263,32 +250,40 @@ Toujours dans le fichier `src/settings.h`, si vous disposez d'un module aditionn
 
 > Vous pouvez vous contenter d'indiquer seulement une partie d'un indicatif. Par exemple ```"F", "0xff0000"```, idéalement positionné en fin de liste, permettra d'allumer les leds en rouge, à chaque passage en émission d'une station donc l'indicatif commence par F (et non listé plus haut dans la liste).
 
-### Modèle M5Stack Basic et M5Stack Grey
+### Fichier `platformio.ini`
 
-Compiler et uploader le projet sur votre M5Stack. C'est terminé.
-
-### Modèle M5Core2
-
-Si et seulement si __vous utilisez le M5Stack Core2__, éditer le fichier `platformio.ini` et modifier les lignes,
+Si et seulement si __vous utilisez l'ATOM Display__, éditer le fichier `platformio.ini` et modifier les lignes,
 
 ```
-default_envs = m5stack-basic-grey
-;default_envs = m5stack-core2
+board_build.f_flash = 80000000L
+board_build.partitions = large_spiffs_16MB.csv
+board = m5stack-core2
+
+;board_build.f_flash = 40000000L
+;board_build.partitions = huge_app.csv
+;board = m5stack-atom
+
 ```
 
 Par,
 
 ```
-;default_envs = m5stack-basic-grey
-default_envs = m5stack-core2
+;board_build.f_flash = 80000000L
+;board_build.partitions = large_spiffs_16MB.csv
+;board = m5stack-core2
+
+board_build.f_flash = 40000000L
+board_build.partitions = huge_app.csv
+board = m5stack-atom
+
 ```
 
 Cela revient à changer la plate-forme cible, le point-virgule étant un commentaire.
 
-En complément, comme déjà évoqué, vérifier que vous avez bien modifié la constante `BOARD` dans le fichier `src/RRFRemote.h` en indiquant :
+En complément, comme déjà évoqué, vérifier que vous avez bien modifié la constante `ATOM` dans le fichier `src/RRFRemote.h`, ligne 9, en indiquant :
 
 ```
-#define BOARD CORE2
+#define ATOM 1
 ```
 
 Compiler et uploader le projet sur votre M5Stack. C'est terminé.
@@ -311,7 +306,7 @@ Evidement, vous devrez recompiler et uploader le projet sur votre M5Stack.
 
 ## Utilisation du Bin Loader (_power user only..._)
 
-Evolution récente de mes développements, il est désormais possible de stocker plusieurs applications dans la mémoire SPI Flash de votre M5Stack ou sur une carte SD. Au démarrage, une procédure est prévue pour charger une application en particulier.
+Evolution récente de mes développements, il est désormais possible de stocker plusieurs applications dans la mémoire SPI Flash de votre M5Stack ou sur une carte SD. Au démarrage, une procédure est prévue pour charger une application en particulier. Attention, ce Bin Loader ne fonctionne pas avec l'ATOM Display.
 
 ### Préparation
 
@@ -321,18 +316,15 @@ Je vais détailler ici la procédure pour déployer l'application RRFRemote et D
 
 Commencez par compiler vos applications, comme vous aviez l'habitude de le faire. Rien ne change ici. Par exemple, commencez par compiler l'application RRFRemote. Puis faites de même avec l'application DXTracker. 
 
-> À noter que l'application 705SMeter dispose aussi du Bin Loader. Mais elle n'a d'intérêt que si vous disposez d'un IC 705.
-
+> À noter que les applications ICSMeter et ICMultimeter disposent aussi du Bin Loader.
+> 
 #### Etape 2 - Collecte des fichiers binaires
 
 Ca y est, vous avez compiler l'application RRFRemote et DXTracker ? C'est parfait.
 
 Chaque compilation a produit un binaire. C'est ce binaire qui est envoyé / flashé sur votre M5Stack, via la connexion USB.
 
-Placez vous à la racine du dossier RRFRemote, qui contient l'ensemble du projet. Et allez dans le répertoire :
-
-- `.pio/build/m5stack-basic-grey`, si vous avez compilé pour un M5Stack GREY ou BASIC
-- `.pio/build/m5stack-core2`, si vous avez compilé pour un M5Stack CORE2 ou AWS
+Placez vous à la racine du dossier RRFRemote, qui contient l'ensemble du projet. Et allez dans le répertoire `.pio/build/m5stack`.
 
 Vous y trouverez un fichier `firmware.bin`. 
 
@@ -359,10 +351,7 @@ Copier le dans le répertoire `data` qui se trouve à la racine du dossier RRFRe
 
 > Si le dossier `data` n'existe pas, créé le.
 
-Faites de même avec l'application DXTracker. Placez vous à la racine du dossier DXTracker, qui contient l'ensemble du projet. Et allez dans le répertoire :
-
-- `.pio/build/m5stack-basic-grey`, si vous avez compilé pour un M5Stack GREY ou BASIC
-- `.pio/build/m5stack-core2`, si vous avez compilé pour un M5Stack CORE2 ou AWS
+Faites de même avec l'application DXTracker. Placez vous à la racine du dossier DXTracker, qui contient l'ensemble du projet. Et allez dans le répertoire `.pio/build/m5stack`.
 
 Vous y trouverez également un fichier `firmware.bin`. Copier le, lui aussi, dans le répertoire `data` qui se trouve à la racine du dossier RRFRemote. Et profitez en pour le renommer en l'appelant, par exemple, `DXTracker.bin`.
 
@@ -376,10 +365,7 @@ Passons à l'étape probablement la plus compliquée. Ouvrez le projet RRFRemote
 
 ![Capture](https://github.com/armel/RRFRemote/blob/main/img/flash_1.png)
 
-Etape 1, cliquez sur l'icône Platformio (l'icone avec une tête de fourmi...). Etape 2, déroulez la section :
-
-- `m5stack-basic-grey`, si vous avez compilé pour un M5Stack GREY ou BASIC
-- `m5stack-core2`, si vous avez compilé pour un M5Stack CORE2 ou AWS
+Etape 1, cliquez sur l'icône Platformio (l'icone avec une tête de fourmi...). Etape 2, déroulez la section `m5stack`.
 
 ![Capture](https://github.com/armel/RRFRemote/blob/main/img/flash_2.png)
 
@@ -404,7 +390,7 @@ Les boutons gauche et droite, permettent de passer d'un binaire à un autre. Et 
 
 ### Limitation
 
-Je pense qu'il est possible de faire cohabiter 5 ou 6 applications, dans la mémoire Flash de votre M5Stack. En l'état, ca me semble suffisant. Si besoin, j'adapterais le code pour les binaires sur la carte SD. 
+Je pense qu'il est possible de faire cohabiter 3 ou 4 applications, dans la mémoire Flash de votre M5Stack. En l'état, ca me semble suffisant. Si besoin, j'adapterais le code pour les binaires sur la carte SD. 
 
 # Remerciements
 

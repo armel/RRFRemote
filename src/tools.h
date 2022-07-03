@@ -150,9 +150,15 @@ void getButton(uint8_t modeCurrent = 1, uint8_t menuMode = 0)
 
   // Play sound
   if (
-      btnA || btnC || btnD)
+      btnA || btnC)
   {
     M5.Speaker.tone(1000, 50);
+  }
+  else if (
+    btnD)
+  {
+    M5.Speaker.tone(1000, 50);
+    vTaskDelay(pdMS_TO_TICKS(100));
   }
   else if (
       btnB ||
@@ -161,5 +167,6 @@ void getButton(uint8_t modeCurrent = 1, uint8_t menuMode = 0)
       btnDTMF7 || btnDTMF8 || btnDTMF9)
   {
     M5.Speaker.tone(2000, 50);
+    vTaskDelay(pdMS_TO_TICKS(100));
   }
 }
