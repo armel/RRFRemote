@@ -17,6 +17,9 @@ void setup()
   auto cfg = M5.config();
   M5.begin(cfg);
 
+  pinMode(32, INPUT);
+  pinMode(26, INPUT);
+
   // Init Display
   display.begin();
 
@@ -34,7 +37,7 @@ void setup()
   }
 
   // Bin Loader
-  //binLoader();
+  binLoader();
 
   // Preferences
   preferences.begin(NAME);
@@ -60,7 +63,8 @@ void setup()
 
   colorCurrent = preferences.getUInt("color", 0);
   menuCurrent = preferences.getUInt("menu", 0);
-  brightnessCurrent = preferences.getUInt("brightness", 128);
+  brightnessCurrent = preferences.getUInt("brightness", 32);
+  beepCurrent = preferences.getUInt("beep", 32);
   followCurrent = preferences.getUInt("follow", 0);
   issCurrent = preferences.getUInt("iss", 0);
   totCurrent = preferences.getUInt("tot", 0);
@@ -69,7 +73,7 @@ void setup()
 
   // LCD
   resetColor();
-  display.setBrightness(brightnessCurrent);
+  display.setBrightness(map(brightnessCurrent, 1, 100, 1, 254));
   display.fillScreen(TFT_HEADER);
 
   // Title
@@ -412,6 +416,7 @@ void loop()
     }
 
     scroll(20);
+    
     switch (type)
     {
     case 1:
@@ -487,7 +492,7 @@ void loop()
       {
         if (!isCharging() && screensaverMode == 0)
         {
-          setBrightness(brightnessCurrent);
+          display.setBrightness(map(brightnessCurrent, 1, 100, 1, 254));
         }
 
         display.fillRect(4, 2, 36, 42, TFT_HEADER);
@@ -532,35 +537,35 @@ void loop()
         }
 
         tmpString += " 0:00";
-        lengthData = display.textWidth(tmpString);
+        lengthData = M5.Lcd.textWidth(tmpString);
         centerData = (320 - lengthData) / 2;
 
-        display.drawString(tmpString, centerData, 60);
+        M5.Lcd.drawString(tmpString, centerData, 64);
 
         transmitOn = 2;
         transmitOff = 0;
       }
 
-      display.setFont(&rounded_led_board10pt7b);
-      display.setTextColor(TFT_WHITE, TFT_INFO);
-      display.setTextDatum(CL_DATUM);
+      M5.Lcd.setFont(&rounded_led_board10pt7b);
+      M5.Lcd.setTextColor(TFT_WHITE, TFT_INFO);
+      M5.Lcd.setTextDatum(CL_DATUM);
       dureeString = String(lastDuree[0]);
-      if (dureeStringOld != dureeString)
+      if (dureeStringOld != dureeString) 
       {
         dureeStringOld = dureeString;
-        display.drawString(dureeString.substring(1), (centerData + lengthData - 75), 60);
+        M5.Lcd.drawString(dureeString.substring(1), (centerData + lengthData - 80), 64);
       }
 
       if (totCurrent)
       {
         if ((String(salon) == "RRF" && tot > TIMEOUT_TOT_RRF) || (tot > TIMEOUT_TOT_ELSEWHERE))
         {
-          setBrightness(0);
+          display.setBrightness(0);
           M5.Speaker.tone(1000, 50);
           delay(10);
           M5.Speaker.tone(1000, 50);
           delay(80);
-          display.setBrightness(brightnessCurrent);
+          display.setBrightness(map(brightnessCurrent, 1, 100, 1, 254));
         }
       }
     }
@@ -572,7 +577,7 @@ void loop()
 
         if (!isCharging() && screensaverMode == 0)
         {
-          setBrightness(brightnessCurrent);
+          display.setBrightness(map(brightnessCurrent, 1, 100, 1, 254));
         }
 
         display.setTextColor(TFT_WHITE, TFT_HEADER);
@@ -684,7 +689,7 @@ void loop()
   {
     for (uint8_t i = brightnessCurrent; i >= 1; i--)
     {
-      setBrightness(i);
+      display.setBrightness(map(i, 1, 100, 1, 254));
       scroll(0);
       delay(50);
     }
@@ -697,7 +702,7 @@ void loop()
     screensaverMode = 0;
     for (uint8_t i = 1; i <= brightnessCurrent; i++)
     {
-      setBrightness(i);
+      display.setBrightness(map(i, 1, 100, 1, 254));
       scroll(0);
       delay(50);
     }

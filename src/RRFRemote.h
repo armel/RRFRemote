@@ -6,6 +6,7 @@
 #define NAME "RRFRemote"
 
 #define DEBUG 0
+#define ATOM 0
 
 #define TIMEOUT_BIN_LOADER 3              // 3 sec
 #define TIMEOUT_SCREENSAVER 5 * 60 * 1000 // 5 min
@@ -15,6 +16,13 @@
 
 #define FASTLED_INTERNAL // To disable pragma messages on compile
 
+#define WIDTH 320
+#define HEIGHT 240
+
+#define M5ATOMDISPLAY_LOGICAL_WIDTH  WIDTH    // width
+#define M5ATOMDISPLAY_LOGICAL_HEIGHT  HEIGHT  // height
+#define M5ATOMDISPLAY_REFRESH_RATE 60         // refresh rate
+
 #include <WiFiClientSecure.h>
 #include <HTTPClient.h>
 #include <Preferences.h>
@@ -23,6 +31,11 @@
 #include <ArduinoJson.h>
 #include <FastLED.h>
 #include <time.h>
+
+#if ATOM == 1
+  #include <M5AtomDisplay.h>
+#endif
+
 #include <M5Unified.h>
 #include <M5StackUpdater.h>
 
@@ -38,7 +51,11 @@ WiFiServer httpServer(80);
 #define GET_screenshot 2
 
 // Display
-M5GFX &display(M5.Lcd);
+#if ATOM == 0
+  M5GFX &display(M5.Lcd);
+#else
+  M5AtomDisplay display(WIDTH, HEIGHT);
+#endif
 
 // Flags for button presses via Web site Screen Capture
 bool buttonLeftPressed = false;
@@ -208,8 +225,8 @@ TaskHandle_t buttonHandle;
 // Misceleanous
 const char *room[] = {"RRF", "TECHNIQUE", "BAVARDAGE", "LOCAL", "INTERNATIONAL", "EXPERIMENTAL", "FON"};
 const uint8_t dtmf[] = {96, 98, 100, 101, 99, 102, 97};
-const char *menuSpotnikOn[] = {"CONFIG", "QSY", "FOLLOW", "RAPTOR", "PERROQUET", "SYSOP", "TOT", "ISS", "COULEUR", "LUMINOSITE", "MODE", "ETEINDRE"};
-const char *menuSpotnikOff[] = {"CONFIG", "TOT", "ISS", "COULEUR", "LUMINOSITE", "MODE", "ETEINDRE"};
+const char *menuSpotnikOn[] = {"CONFIG", "QSY", "FOLLOW", "RAPTOR", "PERROQUET", "SYSOP", "TOT", "ISS", "COULEUR", "LUMINOSITE", "BEEP", "MODE", "ETEINDRE"};
+const char *menuSpotnikOff[] = {"CONFIG", "TOT", "ISS", "COULEUR", "LUMINOSITE", "BEEP", "MODE", "ETEINDRE"};
 const char *sysop[] = {"REBOOT", "IP", "SCAN RAPIDE", "LIBRE"};
 char **menu;
 char swap[32];
@@ -264,6 +281,7 @@ uint8_t transmitOn = 0;
 uint8_t transmitOff = 0;
 uint8_t whereisCurrent = 0;
 uint8_t brightnessCurrent = 32;
+uint8_t beepCurrent = 32;
 uint8_t totCurrent = 0;
 uint8_t issCurrent = 0;
 uint8_t raptorCurrent = 0;

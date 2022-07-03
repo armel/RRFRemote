@@ -22,7 +22,7 @@ void viewHistogram(uint16_t maxLevel, uint16_t tx[])
     {
       display.fillRect(j, 139 - 34, 5, 34, TFT_BACK);
     }
-    display.fillRect(j, 140, 5, 1, TFT_LIGHTGREY);
+    display.fillRect(j, 140, 5, 1, TFT_FRONT);
     j += 6;
     k += 2;
   }
@@ -81,11 +81,11 @@ void viewElsewhere(DynamicJsonDocument doc, const char *salon)
   {
     display.setTextColor(TFT_WHITE, TFT_FRONT);
     display.setTextDatum(CC_DATUM);
-    display.setTextPadding(26);
+    display.setTextPadding(25);
 
     for (i = 0; i < stop; i++)
     {
-      display.drawString(leftOld[i].substring(0, 3), 14, 162 + (14 * i));
+      display.drawString(leftOld[i].substring(0, 3), 15, 162 + (14 * i));
     }
 
     display.setTextDatum(CC_DATUM);
@@ -95,12 +95,12 @@ void viewElsewhere(DynamicJsonDocument doc, const char *salon)
     {
       if (strstr(middleOld[i].c_str(), "LINK") != NULL)
       {
-        display.fillRect(28, 155 + (14 * i), 72, 13, TFT_WHITE);
+        display.fillRect(29, 155 + (14 * i), 71, 13, TFT_WHITE);
         display.setTextColor(TFT_BLACK, TFT_WHITE);
       }
       else
       {
-        display.fillRect(28, 155 + (14 * i), 72, 13, TFT_FRONT);
+        display.fillRect(29, 155 + (14 * i), 71, 13, TFT_FRONT);
         display.setTextColor(TFT_WHITE, TFT_FRONT);
       }
       // Serial.println(middleOld[i]);
@@ -172,14 +172,14 @@ void viewElsewhere(DynamicJsonDocument doc, const char *salon)
 
       display.setTextColor(TFT_WHITE, TFT_FRONT);
       display.setTextDatum(CC_DATUM);
-      display.setTextPadding(26);
+      display.setTextPadding(25);
 
       for (i = 0; i < stop; i++)
       {
         if (left[i] != leftOld[i])
         {
           leftOld[i] = left[i];
-          display.drawString(left[i].substring(0, 3), 14, 162 + (14 * i));
+          display.drawString(left[i].substring(0, 3), 15, 162 + (14 * i));
         }
       }
 
@@ -193,12 +193,12 @@ void viewElsewhere(DynamicJsonDocument doc, const char *salon)
           middleOld[i] = middle[i];
           if (strstr(middle[i].c_str(), "LINK") != NULL)
           {
-            display.fillRect(28, 155 + (14 * i), 72, 13, TFT_WHITE);
+            display.fillRect(29, 155 + (14 * i), 71, 13, TFT_WHITE);
             display.setTextColor(TFT_BLACK, TFT_WHITE);
           }
           else
           {
-            display.fillRect(28, 155 + (14 * i), 72, 13, TFT_FRONT);
+            display.fillRect(29, 155 + (14 * i), 71, 13, TFT_FRONT);
             display.setTextColor(TFT_WHITE, TFT_FRONT);
           }
           display.drawString(middle[i], 64, 162 + (14 * i));
@@ -235,7 +235,7 @@ void viewSettings()
 
     i = 161;
     j = 74;
-    display.fillRoundRect(160, 117, 160, 122, 4, TFT_WHITE);
+    display.fillRoundRect(160, 117, 159, 122, 4, TFT_WHITE);
     display.fillRoundRect(i, 118, j, 120, 4, TFT_FRONT);
     display.drawFastVLine(i + j - 3, 118, 120, TFT_BACK);
     display.drawFastVLine(i + j - 2, 118, 120, TFT_WHITE);
@@ -300,7 +300,7 @@ void viewPropagation()
 
     i = 161;
     j = 70;
-    display.fillRoundRect(160, 117, 160, 122, 4, TFT_WHITE);
+    display.fillRoundRect(160, 117, 159, 122, 4, TFT_WHITE);
     display.fillRoundRect(i, 118, j, 120, 4, TFT_FRONT);
     display.drawFastVLine(i + j - 3, 118, 120, TFT_BACK);
     display.drawFastVLine(i + j - 2, 118, 120, TFT_WHITE);
@@ -387,7 +387,7 @@ void viewTopLinks(uint8_t stop, uint16_t allTx[10], const char *allIndicatif[10]
 
     i = 161;
     j = 38;
-    display.fillRoundRect(160, 117, 160, 122, 4, TFT_WHITE);
+    display.fillRoundRect(160, 117, 159, 122, 4, TFT_WHITE);
     display.fillRoundRect(i, 118, j, 120, 4, TFT_FRONT);
     display.drawFastVLine(i + j - 3, 118, 120, TFT_BACK);
     display.drawFastVLine(i + j - 2, 118, 120, TFT_WHITE);
@@ -524,7 +524,7 @@ void viewBlocage(uint8_t stop, const char *iptableIndicatif[10], const char *ipt
       }
     }
 
-    display.fillRoundRect(160, 117, 160, 122, 4, TFT_WHITE);
+    display.fillRoundRect(160, 117, 159, 122, 4, TFT_WHITE);
     display.fillRoundRect(i, 118, j, 120, 4, TFT_FRONT);
     display.drawFastVLine(i + j - 3, 118, 120, TFT_BACK);
     display.drawFastVLine(i + j - 2, 118, 120, TFT_WHITE);
@@ -621,7 +621,7 @@ void viewISS(StaticJsonDocument<512> docISS)
 
     i = 161;
     j = 70;
-    display.fillRoundRect(160, 117, 160, 122, 4, TFT_WHITE);
+    display.fillRoundRect(160, 117, 159, 122, 4, TFT_WHITE);
     display.fillRoundRect(i, 118, j, 120, 4, TFT_FRONT);
     display.drawFastVLine(i + j - 3, 118, 120, TFT_BACK);
     display.drawFastVLine(i + j - 2, 118, 120, TFT_WHITE);
@@ -703,7 +703,7 @@ void viewLastLinks(uint8_t stop, const char *lastHeure[10], const char *lastIndi
 
     i = 161;
     j = 38;
-    display.fillRoundRect(160, 117, 160, 122, 4, TFT_WHITE);
+    display.fillRoundRect(160, 117, 159, 122, 4, TFT_WHITE);
     display.fillRoundRect(i, 118, j, 120, 4, TFT_FRONT);
     display.drawFastVLine(i + j - 3, 118, 120, TFT_BACK);
     display.drawFastVLine(i + j - 2, 118, 120, TFT_WHITE);
@@ -824,7 +824,7 @@ String viewData(uint8_t icon, String data, String dataOld)
 
     sprintf(swap, "%c", icon);
     tmpString = swap;
-    display.drawString(tmpString, 10, 20);
+    display.drawString(tmpString, 10, 22);
 
     display.setFont(&rounded_led_board10pt7b);
     display.setTextColor(TFT_WHITE, TFT_INFO);
@@ -849,7 +849,7 @@ void viewMenu()
 {
   if (menuRefresh == 0)
   {
-    setBrightness(brightnessCurrent);
+    display.setBrightness(map(brightnessCurrent, 1, 100, 1, 254));
 
     display.fillRect(4, 4, 316, 40, TFT_HEADER);
 
@@ -906,6 +906,10 @@ void viewMenu()
     else if (optionString == "LUMINOSITE")
     {
       optionString = "LEVEL " + String(brightnessCurrent);
+    }
+    else if (optionString == "BEEP")
+    {
+      optionString = "LEVEL " + String(beepCurrent);
     }
     else if (optionString == "CONFIG")
     {

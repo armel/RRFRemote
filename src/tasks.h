@@ -580,16 +580,45 @@ void button(void *pvParameters)
           menuMode = 2;
         }
 
-        change = (change < 10) ? 128 : change;
-        change = (change > 128) ? 10 : change;
+        change = (change < 1) ? 100 : change;
+        change = (change > 100) ? 1 : change;
 
         if (change != brightnessCurrent)
         {
           brightnessCurrent = change;
           preferences.putUInt("brightness", brightnessCurrent);
-          setBrightness(brightnessCurrent);
+          display.setBrightness(map(brightnessCurrent, 1, 100, 1, 254));
         }
       }
+      // Mode menu active, Beep
+      else if (option == "BEEP")
+      {
+        change = beepCurrent;
+        if (btnA)
+        {
+          change += left;
+          timer = millis();
+        }
+        else if (btnC)
+        {
+          change += right;
+          timer = millis();
+        }
+        else if (btnB)
+        {
+          menuMode = 2;
+        }
+
+        change = (change < 1) ? 100 : change;
+        change = (change > 100) ? 1 : change;
+
+        if (change != beepCurrent)
+        {
+          beepCurrent = change;
+          preferences.putUInt("beep", beepCurrent);
+        }
+      }
+
       // Mode menu active, Special
       else if (option == "SYSOP")
       {

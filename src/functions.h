@@ -200,15 +200,15 @@ void clear()
   if (modeCurrent == 0)
   {
     // Elsewhere
-    display.fillRoundRect(0, 154, 155, 85, 4, TFT_WHITE);
-    display.fillRoundRect(1, 155, 26, 83, 4, TFT_FRONT);
+    display.fillRoundRect(1, 154, 155, 85, 4, TFT_WHITE);
+    display.fillRoundRect(2, 155, 26, 83, 4, TFT_FRONT);
 
     for (uint8_t i = 24; i < 27; i++)
     {
       display.drawFastVLine(i, 155, 83, TFT_FRONT);
     }
 
-    display.drawFastVLine(27, 155, 83, TFT_BACK);
+    display.drawFastVLine(28, 155, 83, TFT_BACK);
     display.drawFastVLine(100, 155, 83, TFT_BACK);
 
     for (uint8_t i = 0; i < 5; i++)
@@ -217,20 +217,20 @@ void clear()
     }
 
     // Log
-    display.fillRoundRect(160, 117, 160, 122, 4, TFT_WHITE);
+    //display.fillRoundRect(160, 117, 160, 122, 4, TFT_WHITE);
   }
   else if (modeCurrent == 1)
   {
     for (uint8_t i = 0; i <= 1; i++)
     {
-      display.fillRoundRect(0 + (170 * i), 125, 150, 115, 4, TFT_WHITE);
-      display.fillRoundRect(1 + (170 * i), 126, 148, 113, 4, TFT_FRONT);
-      display.fillRect(51 + (170 * i), 126, 98, 113, TFT_WHITE);
-      display.drawFastVLine(50 + (170 * i), 126, 113, TFT_BACK);
+      display.fillRoundRect(1 + (169 * i), 125, 149, 115, 4, TFT_WHITE);
+      display.fillRoundRect(2 + (169 * i), 126, 147, 113, 4, TFT_FRONT);
+      display.fillRect(51 + (169 * i), 126, 98, 113, TFT_WHITE);
+      display.drawFastVLine(50 + (169 * i), 126, 113, TFT_BACK);
 
       for (uint8_t k = 1; k <= 5; k++)
       {
-        display.drawFastHLine(1 + (170 * i), 125 + (k * 18) + k, 148, TFT_BACK);
+        display.drawFastHLine(1 + (169 * i), 125 + (k * 18) + k, 148, TFT_BACK);
       }
     }
   }
@@ -1001,7 +1001,7 @@ void binLoader()
   root = SPIFFS.open("/");
   getBinaryList(root, "SP");
 
-  if (SD.begin())
+  if (SD.begin(GPIO_NUM_4, SPI, 25000000))
   {
     root = SD.open("/");
     getBinaryList(root, "SD");
