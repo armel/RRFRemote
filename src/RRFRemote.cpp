@@ -17,8 +17,8 @@ void setup()
   auto cfg = M5.config();
   M5.begin(cfg);
 
-  pinMode(32, INPUT);
-  pinMode(26, INPUT);
+  pinMode(32, INPUT_PULLUP);
+  pinMode(26, INPUT_PULLUP);
 
   // Init Display
   display.begin();

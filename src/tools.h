@@ -144,7 +144,7 @@ void getButton(uint8_t modeCurrent = 1, uint8_t menuMode = 0)
     btnDTMF9 = myBtn[12].read;
   }
 
-  //Serial.printf("%d %d %d \n", btnA, btnB, btnC);
+  //Serial.printf("%d %d %d %d\n", btnA, btnB, btnC, digitalRead(32));
 
   M5.Speaker.setVolume(beepCurrent);
 
