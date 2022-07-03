@@ -19,6 +19,8 @@ Le projet RRFRemote permet de suivre l'activité du RRF et de piloter son point 
 
 ![RRFRemote](https://github.com/armel/RRFRemote/blob/main/img/RRFRemote.jpeg)
 
+** Profiter de 5% de réduction, sur l'ensemble de la boutique M5Stack en utilisant le code de réduction F4HWN ou en cliquant directement sur [M5Stack](https://shop.m5stack.com/?ref=LUxetaH4)**
+
 # Architecture technique
 
 ## Présentation rapide
@@ -60,7 +62,7 @@ Ce QSJ est à comparer à celui d'un écran Nextion type NX4832K035, neurasthén
 
 Le développement actuel du RRFRemote prend en charge le [M5Stack Basic](https://m5stack.com/collections/m5-core/products/basic-core-iot-development-kit), le [M5Stack Grey](https://m5stack.com/collections/m5-core/products/grey-development-core), le [M5Stack Fire](https://shop.m5stack.com/collections/m5-controllers/products/m5stack-fire-iot-development-kit-psram-v2-6)  ainsi que les [M5Stack Core2](https://m5stack.com/products/m5stack-core2-esp32-iot-development-kit) et [M5Stack AWS](https://shop.m5stack.com/collections/m5-controllers/products/m5stack-core2-esp32-iot-development-kit-for-aws-iot-edukit). 
 
-En complément, il est désormais possible de faire fonctionner le RRFRemote avec l'[ATOM Display](https://shop.m5stack.com/products/m5stack-atom-psram-lcd-display-driver-kit) et profiter d'un écran plus grand en utilisant la sortie HDMI.
+En complément, il est désormais possible de faire fonctionner le RRFRemote avec l'[ATOM Display](https://shop.m5stack.com/products/m5stack-atom-psram-lcd-display-driver-kit) et profiter d'un écran plus grand en utilisant la sortie HDMI. Je vous recommande, en complément, de procéder à l'acquisition de l'unitié [Mini Dual Button](https://shop.m5stack.com/products/mini-dual-button-unit), dont le QSJ est inférieur à 3€, afin de pouvoir profiter de 2 boutons supplémentaire, en plus du bouton unique présent sur l'ATOM, afin de pouvoir utiliser l'ATOM comme un M5Stack à bouton.
 
 > Vous devez néanmoins disposer d'un écran supportant la résolution 320 x 240 pixels.
 
