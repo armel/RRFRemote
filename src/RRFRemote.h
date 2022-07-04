@@ -1,56 +1,43 @@
 // Copyright (c) F4HWN Armel. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-// Board
-#define BOARD BASIC
+#define VERSION "3.1.0"
+#define AUTHOR "F4HWN"
+#define NAME "RRFRemote"
 
-#define BASIC 1
-#define GREY  2
-#define CORE2 3
+#define DEBUG 0
+#define ATOM atom
 
-#define TIMEOUT_BIN_LOADER 3                // 3 sec
-#define TIMEOUT_SCREENSAVER 5 * 60 * 1000   // 5 min
-#define TIMEOUT_MENU 10 * 1000              // 10 sec
-#define TIMEOUT_TOT_RRF 140 * 1000          // 140 sec, 2min 20sec
-#define TIMEOUT_TOT_ELSEWHERE 285 * 1000    // 285 sec, 4min 45sec
-
-#if BOARD == BASIC
-  #define M5STACK_MPU6886
-  #define LED_PIN 15
-  #include <M5Stack.h>
-  #include "BasicAndGrey.h"
-  #include "WebIndexBasicAndGrey.h"
-#elif BOARD == GREY
-  #define M5STACK_MPU6886
-  #define LED_PIN 15
-  #include <M5Stack.h>
-  #include "BasicAndGrey.h"
-  #include "WebIndexBasicAndGrey.h"
-#elif BOARD == CORE2
-  #define M5STACK_MPU6886
-  #define LED_PIN 25
-  #include <M5Core2.h>
-  #include "Core2SPK.h"
-  #include "Core2.h"
-  #include "WebIndexCore2.h"
-#endif
+#define TIMEOUT_BIN_LOADER 3              // 3 sec
+#define TIMEOUT_SCREENSAVER 5 * 60 * 1000 // 5 min
+#define TIMEOUT_MENU 10 * 1000            // 10 sec
+#define TIMEOUT_TOT_RRF 140 * 1000        // 140 sec, 2min 20sec
+#define TIMEOUT_TOT_ELSEWHERE 285 * 1000  // 285 sec, 4min 45sec
 
 #define FASTLED_INTERNAL // To disable pragma messages on compile
 
+#define WIDTH 320
+#define HEIGHT 240
+
+#define M5ATOMDISPLAY_LOGICAL_WIDTH  WIDTH    // width
+#define M5ATOMDISPLAY_LOGICAL_HEIGHT  HEIGHT  // height
+#define M5ATOMDISPLAY_REFRESH_RATE 60         // refresh rate
+
 #include <WiFiClientSecure.h>
 #include <HTTPClient.h>
-#include <ArduinoJson.h>
 #include <Preferences.h>
+#include <FS.h>
+#include <SPIFFS.h>
+#include <ArduinoJson.h>
 #include <FastLED.h>
-#include "time.h"
-#include "font.h"
-#include "settings.h"
-#include "FS.h"
-#include "SPIFFS.h"
-#include <M5StackUpdater.h>
+#include <time.h>
 
-// Version
-#define VERSION "3.0.1"
+#if ATOM == 1
+  #include <M5AtomDisplay.h>
+#endif
+
+#include <M5Unified.h>
+#include <M5StackUpdater.h>
 
 // Wifi
 WiFiClientSecure clientISS;
@@ -60,8 +47,15 @@ WiFiServer httpServer(80);
 
 // Web site Screen Capture stuff
 #define GET_unknown 0
-#define GET_index_page  1
-#define GET_screenshot  2
+#define GET_index_page 1
+#define GET_screenshot 2
+
+// Display
+#if ATOM == 0
+  M5GFX &display(M5.Lcd);
+#else
+  M5AtomDisplay display(WIDTH, HEIGHT);
+#endif
 
 // Flags for button presses via Web site Screen Capture
 bool buttonLeftPressed = false;
@@ -69,18 +63,19 @@ bool buttonCenterPressed = false;
 bool buttonRightPressed = false;
 
 // LED
+#define FASTLED_INTERNAL // To disable pragma messages on compile
 #define NUM_LEDS 10
 CRGB leds[NUM_LEDS];
 
 // Timezone
-const char* ntpServer = "pool.ntp.org";
-const char* ntpTimeZone = "CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00"; // For Europe/Paris
-//const char* ntpTimeZone = "CET-1CEST,M3.5.0,M10.5.0/3"; // For Europe/Brussels
-//const char* ntpTimeZone = "EET-2EEST,M3.5.0/3,M10.5.0/4"; // For Europe/Sofia 
-//const char* ntpTimeZone = "EST5EDT,M3.2.0,M11.1.0"; // For America/Montreal
-//const char* ntpTimeZone = "AST4"; // For America/Martinique
-//const char* ntpTimeZone = "AST4"; // For America/Guadeloupe
-//const char* ntpTimeZone = "NCT-11"; // For Pacific/Noumea
+const char *ntpServer = "pool.ntp.org";
+const char *ntpTimeZone = "CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00"; // For Europe/Paris
+// const char* ntpTimeZone = "CET-1CEST,M3.5.0,M10.5.0/3"; // For Europe/Brussels
+// const char* ntpTimeZone = "EET-2EEST,M3.5.0/3,M10.5.0/4"; // For Europe/Sofia
+// const char* ntpTimeZone = "EST5EDT,M3.2.0,M11.1.0"; // For America/Montreal
+// const char* ntpTimeZone = "AST4"; // For America/Martinique
+// const char* ntpTimeZone = "AST4"; // For America/Guadeloupe
+// const char* ntpTimeZone = "NCT-11"; // For Pacific/Noumea
 
 int utc = 1;
 
@@ -102,14 +97,14 @@ typedef struct __attribute__((__packed__))
 } colorType;
 
 uint16_t TFT_HEADER = 0x0000;
-uint16_t TFT_INFO   = 0x0000;
-uint16_t TFT_FRONT  = 0x0000;
-uint16_t TFT_BACK   = 0x0000;
+uint16_t TFT_INFO = 0x0000;
+uint16_t TFT_FRONT = 0x0000;
+uint16_t TFT_BACK = 0x0000;
 
 // http://www.rinkydinkelectronics.com/calc_rgb565.php
-// #undef TFT_BLACK 
+// #undef TFT_BLACK
 // #define TFT_BLACK 0x2945
-// #define TFT_BLACK M5.Lcd.color565(40, 40, 40)
+// #define TFT_BLACKdisplay.color565(40, 40, 40)
 
 const char *color[] = {"ROUGE", "ROSE", "VIOLET", "BLEU", "TURQUOISE", "VERT", "ORANGE", "MARRON", "GRIS", "CREPUSCULE", "FORET", "ARDOISE", "FLORAL"};
 
@@ -214,7 +209,7 @@ String endpointRRF[] = {
     "http://rrf.f5nlg.ovh:8080/RRFTracker/FON-today/rrf_tiny.json"};
 
 // Scroll
-TFT_eSprite Sprite = TFT_eSprite(&M5.Lcd); // Create Sprite object "img" with pointer to "tft" object
+LGFX_Sprite Sprite(&M5.Lcd); // Create Sprite object "img" with pointer to "tft" object
 String message;
 int16_t pos = 0;
 
@@ -230,8 +225,8 @@ TaskHandle_t buttonHandle;
 // Misceleanous
 const char *room[] = {"RRF", "TECHNIQUE", "BAVARDAGE", "LOCAL", "INTERNATIONAL", "EXPERIMENTAL", "FON"};
 const uint8_t dtmf[] = {96, 98, 100, 101, 99, 102, 97};
-const char *menuSpotnikOn[]  = {"CONFIG", "QSY", "FOLLOW", "RAPTOR", "PERROQUET", "SYSOP", "TOT", "ISS", "COULEUR", "LUMINOSITE", "MODE", "ETEINDRE"};
-const char *menuSpotnikOff[] = {"CONFIG", "TOT", "ISS", "COULEUR", "LUMINOSITE", "MODE", "ETEINDRE"};
+const char *menuSpotnikOn[] = {"CONFIG", "QSY", "FOLLOW", "RAPTOR", "PERROQUET", "SYSOP", "TOT", "ISS", "COULEUR", "LUMINOSITE", "BEEP", "MODE", "ETEINDRE"};
+const char *menuSpotnikOff[] = {"CONFIG", "TOT", "ISS", "COULEUR", "LUMINOSITE", "BEEP", "MODE", "ETEINDRE"};
 const char *sysop[] = {"REBOOT", "IP", "SCAN RAPIDE", "LIBRE"};
 char **menu;
 char swap[32];
@@ -278,7 +273,7 @@ uint8_t htmlGetRequest;
 uint8_t htmlGetRefresh = 3;
 uint8_t alternance = 0;
 uint8_t type = 0;
-uint8_t action = 0; 
+uint8_t action = 0;
 uint8_t ping = 0;
 uint8_t dst;
 
@@ -286,6 +281,7 @@ uint8_t transmitOn = 0;
 uint8_t transmitOff = 0;
 uint8_t whereisCurrent = 0;
 uint8_t brightnessCurrent = 32;
+uint8_t beepCurrent = 32;
 uint8_t totCurrent = 0;
 uint8_t issCurrent = 0;
 uint8_t raptorCurrent = 0;
