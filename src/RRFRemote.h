@@ -6,7 +6,7 @@
 #define NAME "RRFRemote"
 
 #define DEBUG 0
-#define ATOM 1
+#define ATOM atom
 
 #define TIMEOUT_BIN_LOADER 3              // 3 sec
 #define TIMEOUT_SCREENSAVER 5 * 60 * 1000 // 5 min

@@ -201,21 +201,17 @@ Pour qu'il se lance automatiquement en cas de reboot, ajouter la ligne suivante 
 nohup node /root/RRFRemote.js & 
 ``
 
-## Coté PC : compilation et flashage du M5Stack
+## Coté PC : paramétrage, compilation et flashage du M5Stack
 
 Ouvrez le projet RRFRemote avec PlateformIO for VSCode.
 
-### Fichier `src/RRFRemote.h`
+### Paramétrage
 
-#### Timezone
+#### Fichier `src/RRFRemote.h`
 
-Je hais la gestion des décalages horaires, des alternances hiver/été, etc. Néanmoins, si vous êtes hors de France, il est désormais possible de configurer votre _timezone_ afin qu'elle soit prise en compte lors de l'affichage de l'heure. Ligne 72, la variable `ntpTimeZone` est configurée, par défaut, pour la France. Mais j'ai indiqué d'autres configurations possibles pour d'autres régions du monde, régulièrement actives sur le RRF. Il vous suffit de décommenter uniquement la _timezone_ qui correspond à votre région. Si elle n'est pas présente, consultez cette [liste](https://github.com/blindsidenetworks/bigbluebutton-1/blob/master/bbb-voice-conference/config/freeswitch/conf/autoload_configs/timezones.conf.xml) plus détaillée. En dernier recours, me contacter si besoin d'aide ou si vous habitez dans une région exotique...
+Petit confidence : je hais la gestion des décalages horaires, des alternances hiver/été, etc. Néanmoins, si vous êtes hors de France, il est désormais possible de configurer votre _timezone_ afin qu'elle soit prise en compte lors de l'affichage de l'heure. Ligne 72, la variable `ntpTimeZone` est configurée, par défaut, pour la France. Mais j'ai indiqué d'autres configurations possibles pour d'autres régions du monde, régulièrement actives sur le RRF. Il vous suffit de décommenter uniquement la _timezone_ qui correspond à votre région. Si elle n'est pas présente, consultez cette [liste](https://github.com/blindsidenetworks/bigbluebutton-1/blob/master/bbb-voice-conference/config/freeswitch/conf/autoload_configs/timezones.conf.xml) plus détaillée. En dernier recours, me contacter si besoin d'aide ou si vous habitez dans une région exotique...
 
-#### ATOM Display
-
-Si et seulement si __vous utilisez l'ATOM Display__, ligne 9, vérifier que la constante `ATOM` est initialisée à 1. Elle est à 0 par défaut. 
-
-### Fichier `src/settings.h`
+#### Fichier `src/settings.h`
 
 Editer le fichier `src/settings.h` afin de renseigner vos paramétrages via le tableau `config`, à savoir :
 
@@ -254,43 +250,26 @@ Toujours dans le fichier `src/settings.h`, si vous disposez d'un module aditionn
 
 > Vous pouvez vous contenter d'indiquer seulement une partie d'un indicatif. Par exemple ```"F", "0xff0000"```, idéalement positionné en fin de liste, permettra d'allumer les leds en rouge, à chaque passage en émission d'une station donc l'indicatif commence par F (et non listé plus haut dans la liste).
 
-### Fichier `platformio.ini` (ATOM Display uniquement)
+#### Fichier `platformio.ini` (pour l'ATOM Display uniquement)
 
-Si et seulement si __vous utilisez l'ATOM Display__, éditer le fichier `platformio.ini` et modifier les lignes,
+Si et seulement si __vous utilisez l'ATOM Display__, éditer le fichier `platformio.ini` et modifier la ligne 12,
 
 ```
-board_build.f_flash = 80000000L
-board_build.partitions = large_spiffs_16MB.csv
-board = m5stack-core2
-
-;board_build.f_flash = 40000000L
-;board_build.partitions = huge_app.csv
-;board = m5stack-atom
+default_envs = m5stack
 
 ```
 
 Par,
 
 ```
-;board_build.f_flash = 80000000L
-;board_build.partitions = large_spiffs_16MB.csv
-;board = m5stack-core2
-
-board_build.f_flash = 40000000L
-board_build.partitions = huge_app.csv
-board = m5stack-atom
-
+default_envs = atom
 ```
 
-Cela revient à changer la plate-forme cible, le point-virgule étant un commentaire.
+Cela revient à changer la plate-forme cible.
 
-En complément, comme déjà évoqué, vérifier que vous avez bien modifié la constante `ATOM` dans le fichier `src/RRFRemote.h`, ligne 9, en indiquant :
+### Compilation et flashage
 
-```
-#define ATOM 1
-```
-
-Compiler et uploader le projet sur votre M5Stack. C'est terminé.
+Compiler et flasher le projet sur votre M5Stack. C'est terminé.
 
 ## Mise à jour
 
@@ -310,11 +289,13 @@ Evidement, vous devrez recompiler et uploader le projet sur votre M5Stack.
 
 ## Utilisation du Bin Loader (_power user only..._)
 
-Evolution récente de mes développements, il est désormais possible de stocker plusieurs applications dans la mémoire SPI Flash de votre M5Stack ou sur une carte SD. Au démarrage, une procédure est prévue pour charger une application en particulier. Attention, ce Bin Loader ne fonctionne pas avec l'ATOM Display.
+Evolution récente de mes développements, il est désormais possible de stocker plusieurs applications dans la mémoire SPI Flash de votre M5Stack ou sur une carte SD. Au démarrage, une procédure est prévue pour charger une application en particulier. 
+
+> Attention, ce Bin Loader ne fonctionne pas avec l'ATOM Display.
 
 ### Préparation
 
-Je vais détailler ici la procédure pour déployer l'application RRFRemote et DXTRacker sur un même M5Stack.
+Je vais détailler ici la procédure pour déployer l'application RRFRemote et DXTracker sur un même M5Stack.
 
 #### Etape 1 - Compilation
 
@@ -375,7 +356,7 @@ Etape 1, cliquez sur l'icône Platformio (l'icone avec une tête de fourmi...). 
 
 Enfin, étape 3, allez dans la sous section `Platform`. Et cliquez sur `Upload Filesystem Image`.
 
-Patientez. Le contenu du répertoire `data` va être écrit dans la mémoire Flash de votre M5Stack. Ca y est ? Vous y êtes !!!!
+Patientez. Le contenu du répertoire `data` va être écrit dans la mémoire Flash de votre M5Stack. Ca y est ? Vous y êtes !!!
 
 ### Utilisation
 
