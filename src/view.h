@@ -1018,45 +1018,47 @@ void viewBaseline()
 // View battery
 void viewBattery()
 {
-  if (reset == 0 || batteryLevelCurrent != getBatteryLevel(0) || batteryChargeCurrent != isCharging())
-  {
-    batteryLevelCurrent = getBatteryLevel(0);
-    batteryChargeCurrent = isCharging();
-
-    display.setFont(&Battery_Icons21pt7b);
-    display.setTextColor(TFT_WHITE, TFT_HEADER);
-    display.setTextDatum(CR_DATUM);
-    display.setTextPadding(0);
-
-    if (isCharging() && screensaverMode == 0)
+  if (M5.getBoard() != m5::board_t::board_M5ATOM) {
+    if (reset == 0 || batteryLevelCurrent != getBatteryLevel(0) || batteryChargeCurrent != isCharging())
     {
-      sprintf(swap, "%c", ICON_CHARGING);
-      tmpString = swap;
-      display.drawString(tmpString, 310 + offsetX, 22 + offsetY);
-      // display.setBrightness(128);
-    }
-    else
-    {
-      switch (getBatteryLevel(0))
+      batteryLevelCurrent = getBatteryLevel(0);
+      batteryChargeCurrent = isCharging();
+
+      display.setFont(&Battery_Icons21pt7b);
+      display.setTextColor(TFT_WHITE, TFT_HEADER);
+      display.setTextDatum(CR_DATUM);
+      display.setTextPadding(0);
+
+      if (isCharging() && screensaverMode == 0)
       {
-      case 100:
-        sprintf(swap, "%c", ICON_BAT100);
-        break;
-      case 75:
-        sprintf(swap, "%c", ICON_BAT075);
-        break;
-      case 50:
-        sprintf(swap, "%c", ICON_BAT050);
-        break;
-      case 25:
-        sprintf(swap, "%c", ICON_BAT025);
-        break;
-      default:
-        sprintf(swap, "%c", ICON_BAT000);
-        break;
+        sprintf(swap, "%c", ICON_CHARGING);
+        tmpString = swap;
+        display.drawString(tmpString, 310 + offsetX, 22 + offsetY);
+        // display.setBrightness(128);
       }
-      tmpString = swap;
-      display.drawString(tmpString, 310 + offsetX, 22 + offsetY);
+      else
+      {
+        switch (getBatteryLevel(0))
+        {
+        case 100:
+          sprintf(swap, "%c", ICON_BAT100);
+          break;
+        case 75:
+          sprintf(swap, "%c", ICON_BAT075);
+          break;
+        case 50:
+          sprintf(swap, "%c", ICON_BAT050);
+          break;
+        case 25:
+          sprintf(swap, "%c", ICON_BAT025);
+          break;
+        default:
+          sprintf(swap, "%c", ICON_BAT000);
+          break;
+        }
+        tmpString = swap;
+        display.drawString(tmpString, 310 + offsetX, 22 + offsetY);
+      }
     }
   }
 }
