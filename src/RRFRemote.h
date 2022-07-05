@@ -1,12 +1,14 @@
 // Copyright (c) F4HWN Armel. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-#define VERSION "3.1.0"
+#define VERSION "3.1.1"
 #define AUTHOR "F4HWN"
 #define NAME "RRFRemote"
 
 #define DEBUG 0
 #define ATOM atom
+#define WIDTH displayWidth
+#define HEIGHT displayHeight
 
 #define TIMEOUT_BIN_LOADER 3              // 3 sec
 #define TIMEOUT_SCREENSAVER 5 * 60 * 1000 // 5 min
@@ -15,9 +17,6 @@
 #define TIMEOUT_TOT_ELSEWHERE 285 * 1000  // 285 sec, 4min 45sec
 
 #define FASTLED_INTERNAL // To disable pragma messages on compile
-
-#define WIDTH 320
-#define HEIGHT 240
 
 #define M5ATOMDISPLAY_LOGICAL_WIDTH  WIDTH    // width
 #define M5ATOMDISPLAY_LOGICAL_HEIGHT  HEIGHT  // height
@@ -51,6 +50,9 @@ WiFiServer httpServer(80);
 #define GET_screenshot 2
 
 // Display
+uint16_t offsetX = 0;
+uint16_t offsetY = 0;
+
 #if ATOM == 0
   M5GFX &display(M5.Lcd);
 #else

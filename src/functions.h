@@ -184,36 +184,36 @@ void clear()
   if (menuMode != 1 || (menuMode == 1 && option == "COULEUR"))
   {
     // Header
-    display.fillRect(0, 0, 320, 44, TFT_HEADER);
-    display.fillRect(0, 45, 320, 55, TFT_INFO);
-    display.drawFastHLine(0, 0, 320, TFT_WHITE);
-    display.drawFastHLine(0, 44, 320, TFT_WHITE);
+    display.fillRect(0 + offsetX, 0 + offsetY, 320, 44, TFT_HEADER);
+    display.fillRect(0 + offsetX, 45 + offsetY, 320, 55, TFT_INFO);
+    display.drawFastHLine(0 + offsetX, 0 + offsetY, 320, TFT_WHITE);
+    display.drawFastHLine(0 + offsetX, 44 + offsetY, 320, TFT_WHITE);
   }
 
   // Info zone
-  display.fillRect(0, 98, 320, 2, TFT_INFO);
+  display.fillRect(0 + offsetX, 98 + offsetY, 320, 2, TFT_INFO);
 
   // Grey zone
-  display.drawFastHLine(0, 100, 320, TFT_WHITE);
-  display.fillRect(0, 101, 320, 239, TFT_BACK);
+  display.drawFastHLine(0 + offsetX, 100 + offsetY, 320, TFT_WHITE);
+  display.fillRect(0 + offsetX, 101 + offsetY, 320, 240 - 101, TFT_BACK);
 
   if (modeCurrent == 0)
   {
     // Elsewhere
-    display.fillRoundRect(1, 154, 155, 85, 4, TFT_WHITE);
-    display.fillRoundRect(2, 155, 26, 83, 4, TFT_FRONT);
+    display.fillRoundRect(1 + offsetX, 154 + offsetY, 155, 85, 4, TFT_WHITE);
+    display.fillRoundRect(2 + offsetX, 155 + offsetY, 26, 83, 4, TFT_FRONT);
 
     for (uint8_t i = 24; i < 27; i++)
     {
-      display.drawFastVLine(i, 155, 83, TFT_FRONT);
+      display.drawFastVLine(i + offsetX, 155 + offsetY, 83, TFT_FRONT);
     }
 
-    display.drawFastVLine(28, 155, 83, TFT_BACK);
-    display.drawFastVLine(100, 155, 83, TFT_BACK);
+    display.drawFastVLine(28 + offsetX, 155 + offsetY, 83, TFT_BACK);
+    display.drawFastVLine(100 + offsetX, 155 + offsetY, 83, TFT_BACK);
 
     for (uint8_t i = 0; i < 5; i++)
     {
-      display.drawFastHLine(2, 168 + (i * 14), 152, TFT_BACK);
+      display.drawFastHLine(2 + offsetX, 168 + (i * 14) + offsetY, 152, TFT_BACK);
     }
 
     // Log
@@ -223,14 +223,14 @@ void clear()
   {
     for (uint8_t i = 0; i <= 1; i++)
     {
-      display.fillRoundRect(1 + (169 * i), 125, 149, 115, 4, TFT_WHITE);
-      display.fillRoundRect(2 + (169 * i), 126, 147, 113, 4, TFT_FRONT);
-      display.fillRect(51 + (169 * i), 126, 98, 113, TFT_WHITE);
-      display.drawFastVLine(50 + (169 * i), 126, 113, TFT_BACK);
+      display.fillRoundRect(1 + (169 * i) + offsetX, 125 + offsetY, 149, 115, 4, TFT_WHITE);
+      display.fillRoundRect(2 + (169 * i) + offsetX, 126 + offsetY, 147, 113, 4, TFT_FRONT);
+      display.fillRect(51 + (169 * i) + offsetX, 126 + offsetY, 98, 113, TFT_WHITE);
+      display.drawFastVLine(50 + (169 * i) + offsetX, 126 + offsetY, 113, TFT_BACK);
 
       for (uint8_t k = 1; k <= 5; k++)
       {
-        display.drawFastHLine(1 + (169 * i), 125 + (k * 18) + k, 148, TFT_BACK);
+        display.drawFastHLine(1 + (169 * i) + offsetX, 125 + (k * 18) + k + offsetY, 148, TFT_BACK);
       }
     }
   }
@@ -240,8 +240,8 @@ void clear()
     {
       for (uint8_t j = 0; j <= 2; j++)
       {
-        display.fillRoundRect(0 + (110 * j), 104 + (48 * i), 100, 40, 4, TFT_WHITE);
-        display.fillRoundRect(1 + (110 * j), 105 + (48 * i), 98, 38, 4, TFT_FRONT);
+        display.fillRoundRect(0 + (110 * j) + offsetX, 104 + (48 * i) + offsetY, 100, 40, 4, TFT_WHITE);
+        display.fillRoundRect(1 + (110 * j) + offsetX, 105 + (48 * i) + offsetY, 98, 38, 4, TFT_FRONT);
       }
     }
   }
@@ -275,7 +275,7 @@ void scroll(uint8_t pause)
   Sprite.drawString(message, pos, 2);
   Sprite.drawString(message, pos - w, 2);
 
-  Sprite.pushSprite(0, 78);
+  Sprite.pushSprite(0 + offsetX, 78 + offsetY);
 
   pos -= 1;
   if (pos == 0)
@@ -850,7 +850,7 @@ void checkWifi()
 {
   if (WiFi.status() != WL_CONNECTED)
   {
-    display.fillCircle(314, 6, 3, TFT_HEADER);
+    display.fillCircle(314 + offsetX, 6 + offsetY, 3, TFT_HEADER);
     ping = 2;
     WiFi.disconnect();
     WiFi.reconnect();
@@ -860,12 +860,12 @@ void checkWifi()
   {
     if (ping == 1)
     {
-      display.fillCircle(314, 6, 3, TFT_HEADER);
-      display.drawCircle(314, 6, 3, TFT_WHITE);
+      display.fillCircle(314 + offsetX, 6 + offsetY, 3, TFT_HEADER);
+      display.drawCircle(314 + offsetX, 6 + offsetY, 3, TFT_WHITE);
     }
     else
     {
-      display.fillCircle(314, 6, 3, TFT_WHITE);
+      display.fillCircle(314 + offsetX, 6 + offsetY, 3, TFT_WHITE);
     }
   }
 
