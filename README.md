@@ -209,7 +209,7 @@ Ouvrez le projet RRFRemote avec PlateformIO for VSCode.
 
 #### Fichier `src/RRFRemote.h`
 
-Petit confidence : je hais la gestion des décalages horaires, des alternances hiver/été, etc. Néanmoins, si vous êtes hors de France, il est désormais possible de configurer votre _timezone_ afin qu'elle soit prise en compte lors de l'affichage de l'heure. Ligne 72, la variable `ntpTimeZone` est configurée, par défaut, pour la France. Mais j'ai indiqué d'autres configurations possibles pour d'autres régions du monde, régulièrement actives sur le RRF. Il vous suffit de décommenter uniquement la _timezone_ qui correspond à votre région. Si elle n'est pas présente, consultez cette [liste](https://github.com/blindsidenetworks/bigbluebutton-1/blob/master/bbb-voice-conference/config/freeswitch/conf/autoload_configs/timezones.conf.xml) plus détaillée. En dernier recours, me contacter si besoin d'aide ou si vous habitez dans une région exotique...
+Petit confidence : je hais la gestion des décalages horaires, des alternances hiver/été, etc. Néanmoins, si vous êtes hors de France, il est désormais possible de configurer votre _timezone_ afin qu'elle soit prise en compte lors de l'affichage de l'heure. Ligne 74, la variable `ntpTimeZone` est configurée, par défaut, pour la France. Mais j'ai indiqué d'autres configurations possibles pour d'autres régions du monde, régulièrement actives sur le RRF. Il vous suffit de décommenter uniquement la _timezone_ qui correspond à votre région. Si elle n'est pas présente, consultez cette [liste](https://github.com/blindsidenetworks/bigbluebutton-1/blob/master/bbb-voice-conference/config/freeswitch/conf/autoload_configs/timezones.conf.xml) plus détaillée. En dernier recours, me contacter si besoin d'aide ou si vous habitez dans une région exotique...
 
 #### Fichier `src/settings.h`
 
@@ -256,7 +256,6 @@ Si et seulement si __vous utilisez l'ATOM Display__, éditer le fichier `platfor
 
 ```
 default_envs = m5stack
-
 ```
 
 Par,
@@ -266,6 +265,18 @@ default_envs = atom
 ```
 
 Cela revient à changer la plate-forme cible.
+
+En complément, vous pouvez préciser la résolution de votre écran. Attention, le RRFRemote s'affichera toujours en 320 x 240, mais sera centré à l'écran. Par défaut, la résolution de l'écran est initialisée à 320 x 240. Mais si vous souhaitez la changer en 480 x 320, modifier la ligne 43,
+
+```
+build_flags = ${env.build_flags} -D atom=1 -D displayWidth=320 -D displayHeight=240
+```
+
+Par,
+
+```
+build_flags = ${env.build_flags} -D atom=1 -D displayWidth=480 -D displayHeight=320
+```
 
 ### Compilation et flashage
 

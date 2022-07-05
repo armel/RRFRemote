@@ -23,6 +23,9 @@ void setup()
   // Init Display
   display.begin();
 
+  offsetX = (display.width() - 320) / 2; 
+  offsetY = (display.height() - 240) / 2;
+
   // Init screensaver timer
   screensaver = millis();
 
@@ -80,12 +83,12 @@ void setup()
   display.setFont(&rounded_led_board10pt7b);
   display.setTextColor(TFT_WHITE, TFT_HEADER);
   display.setTextDatum(CC_DATUM);
-  display.drawString("RRFRemote", 160, 20);
+  display.drawString("RRFRemote", 160 + offsetX, 20 + offsetY);
   display.setFont(0);
-  display.drawString("Version " + String(VERSION) + " par F4HWN", 160, 50);
+  display.drawString("Version " + String(VERSION) + " par F4HWN", 160 + offsetX, 50 + offsetY);
 
   // QRCode
-  display.qrcode("https://github.com/armel/RRFRemote", 90, 80, 140, 6);
+  display.qrcode("https://github.com/armel/RRFRemote", 90 + offsetX, 80 + offsetY, 140, 6);
 
   // We start by connecting to the WiFi network
   display.setTextPadding(320);
@@ -95,14 +98,14 @@ void setup()
   while (true)
   {
     uint8_t attempt = 1;
-    display.drawString(String(config[(configCurrent * 6)]), 160, 60);
+    display.drawString(String(config[(configCurrent * 6)]), 160 + offsetX, 60 + offsetY);
     WiFi.begin(config[(configCurrent * 6)], config[(configCurrent * 6) + 1]);
     while (WiFi.status() != WL_CONNECTED)
     {
       delay(500);
       if (attempt % 2 == 0)
       {
-        display.drawString("Connexion en cours", 160, 70);
+        display.drawString("Connexion en cours", 160 + offsetX, 70 + offsetY);
         for (uint8_t j = 0; j <= 4; j++)
         {
           leds[j] = color;
@@ -113,7 +116,7 @@ void setup()
       }
       else
       {
-        display.drawString(" ", 160, 70);
+        display.drawString(" ", 160 + offsetX, 70 + offsetY);
         for (uint8_t j = 0; j <= 4; j++)
         {
           leds[j] = CRGB::Black;
@@ -149,7 +152,7 @@ void setup()
 
   clientISS.setInsecure(); // For ISS
 
-  display.drawString(String(WiFi.localIP().toString().c_str()), 160, 70);
+  display.drawString(String(WiFi.localIP().toString().c_str()), 160 + offsetX, 70 + offsetY);
 
   // Create menu
   if ((String)config[(configCurrent * 6) + 5] != "")
@@ -169,7 +172,7 @@ void setup()
   }
 
   // Scroll
-  pos = display.width();
+  pos = 320;
   Sprite.setTextSize(1); // Font size scaling is x1
   Sprite.setTextFont(2); // Font 2 selected
   Sprite.createSprite(pos, 20);
@@ -214,11 +217,12 @@ void setup()
 
   for (uint8_t i = 0; i <= 120; i++)
   {
-    display.drawFastHLine(0, i, 320, TFT_BLACK);
-    display.drawFastHLine(0, 240 - i, 320, TFT_BLACK);
+    display.drawFastHLine(0 + offsetX, i + offsetY, 320, TFT_BLACK);
+    display.drawFastHLine(0 + offsetX, 240 - i + offsetY, 320, TFT_BLACK);
     delay(5);
   }
 
+  display.fillScreen(TFT_BLACK);
   clear();
 }
 
@@ -495,13 +499,13 @@ void loop()
           display.setBrightness(map(brightnessCurrent, 1, 100, 1, 254));
         }
 
-        display.fillRect(4, 2, 36, 42, TFT_HEADER);
+        display.fillRect(4 + offsetX, 2 + offsetY, 36, 42, TFT_HEADER);
 
         display.setTextColor(TFT_WHITE, TFT_HEADER);
         display.setFont(&dot15pt7b);
         display.setTextDatum(CC_DATUM);
         display.setTextPadding(240);
-        display.drawString(String(salon), 160, 16);
+        display.drawString(String(salon), 160 + offsetX, 16 + offsetY);
 
         display.setTextColor(TFT_WHITE, TFT_HEADER);
         display.setFont(ICON_FONT);
@@ -509,9 +513,9 @@ void loop()
         display.setTextPadding(20);
         sprintf(swap, "%c", ICON_CALL);
         tmpString = swap;
-        display.drawString(tmpString, 10, 22);
+        display.drawString(tmpString, 10 + offsetX, 22 + offsetY);
 
-        display.fillRect(0, 46, 320, 32, TFT_INFO);
+        display.fillRect(0 + offsetX, 46 + offsetY, 320, 32, TFT_INFO);
 
         display.setFont(&rounded_led_board10pt7b);
         display.setTextColor(TFT_WHITE, TFT_INFO);
@@ -540,7 +544,7 @@ void loop()
         lengthData = M5.Lcd.textWidth(tmpString);
         centerData = (320 - lengthData) / 2;
 
-        M5.Lcd.drawString(tmpString, centerData, 64);
+        M5.Lcd.drawString(tmpString, centerData + offsetX, 64 + offsetY);
 
         transmitOn = 2;
         transmitOff = 0;
@@ -553,7 +557,7 @@ void loop()
       if (dureeStringOld != dureeString) 
       {
         dureeStringOld = dureeString;
-        M5.Lcd.drawString(dureeString.substring(1), (centerData + lengthData - 80), 64);
+        M5.Lcd.drawString(dureeString.substring(1), (centerData + lengthData - 80) + offsetX, 64 + offsetY);
       }
 
       if (totCurrent)
@@ -584,7 +588,7 @@ void loop()
         display.setFont(&dot15pt7b);
         display.setTextDatum(CC_DATUM);
         display.setTextPadding(240);
-        display.drawString(String(salon), 160, 16);
+        display.drawString(String(salon), 160 + offsetX, 16 + offsetY);
 
         dateStringOld = "";
         linkTotalStringOld = "";

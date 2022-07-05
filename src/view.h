@@ -15,14 +15,14 @@ void viewHistogram(uint16_t maxLevel, uint16_t tx[])
     if (tx[i] != 0)
     {
       tmp = map(tx[i], 0, maxLevel, 0, 34);
-      display.fillRect(j, 139 - tmp, 5, tmp, TFT_FRONT);
-      display.fillRect(j, 139 - 34, 5, 34 - tmp, TFT_BACK);
+      display.fillRect(j + offsetX, 139 - tmp + offsetY, 5, tmp, TFT_FRONT);
+      display.fillRect(j + offsetX, 139 - 34 + offsetY, 5, 34 - tmp, TFT_BACK);
     }
     else
     {
-      display.fillRect(j, 139 - 34, 5, 34, TFT_BACK);
+      display.fillRect(j + offsetX, 139 - 34 + offsetY, 5, 34, TFT_BACK);
     }
-    display.fillRect(j, 140, 5, 1, TFT_FRONT);
+    display.fillRect(j + offsetX, 140 + offsetY, 5, 1, TFT_FRONT);
     j += 6;
     k += 2;
   }
@@ -44,11 +44,11 @@ void viewHistogram(uint16_t maxLevel, uint16_t tx[])
 
     if (delta < 10)
     {
-      display.drawString("0" + String(delta), 4 + (i * 34), 148);
+      display.drawString("0" + String(delta), 4 + (i * 34) + offsetX, 148 + offsetY);
     }
     else
     {
-      display.drawString(String(delta), 4 + (i * 34), 148);
+      display.drawString(String(delta), 4 + (i * 34) + offsetX, 148 + offsetY);
     }
   }
 }
@@ -85,7 +85,7 @@ void viewElsewhere(DynamicJsonDocument doc, const char *salon)
 
     for (i = 0; i < stop; i++)
     {
-      display.drawString(leftOld[i].substring(0, 3), 15, 162 + (14 * i));
+      display.drawString(leftOld[i].substring(0, 3), 15 + offsetX, 162 + (14 * i) + offsetY);
     }
 
     display.setTextDatum(CC_DATUM);
@@ -95,16 +95,16 @@ void viewElsewhere(DynamicJsonDocument doc, const char *salon)
     {
       if (strstr(middleOld[i].c_str(), "LINK") != NULL)
       {
-        display.fillRect(29, 155 + (14 * i), 71, 13, TFT_WHITE);
+        display.fillRect(29 + offsetX, 155 + (14 * i) + offsetY, 71, 13, TFT_WHITE);
         display.setTextColor(TFT_BLACK, TFT_WHITE);
       }
       else
       {
-        display.fillRect(29, 155 + (14 * i), 71, 13, TFT_FRONT);
+        display.fillRect(29 + offsetX, 155 + (14 * i) + offsetY, 71, 13, TFT_FRONT);
         display.setTextColor(TFT_WHITE, TFT_FRONT);
       }
       // Serial.println(middleOld[i]);
-      display.drawString(middleOld[i], 64, 162 + (14 * i));
+      display.drawString(middleOld[i], 64 + offsetX, 162 + (14 * i) + offsetY);
     }
 
     display.setTextColor(TFT_BLACK, TFT_WHITE);
@@ -113,7 +113,7 @@ void viewElsewhere(DynamicJsonDocument doc, const char *salon)
 
     for (i = 0; i < stop; i++)
     {
-      display.drawString(rightOld[i], 128, 162 + (14 * i));
+      display.drawString(rightOld[i], 128 + offsetX, 162 + (14 * i) + offsetY);
     }
   }
 
@@ -179,7 +179,7 @@ void viewElsewhere(DynamicJsonDocument doc, const char *salon)
         if (left[i] != leftOld[i])
         {
           leftOld[i] = left[i];
-          display.drawString(left[i].substring(0, 3), 15, 162 + (14 * i));
+          display.drawString(left[i].substring(0, 3), 15 + offsetX, 162 + (14 * i) + offsetY);
         }
       }
 
@@ -193,15 +193,15 @@ void viewElsewhere(DynamicJsonDocument doc, const char *salon)
           middleOld[i] = middle[i];
           if (strstr(middle[i].c_str(), "LINK") != NULL)
           {
-            display.fillRect(29, 155 + (14 * i), 71, 13, TFT_WHITE);
+            display.fillRect(29 + offsetX, 155 + (14 * i) + offsetY, 71, 13, TFT_WHITE);
             display.setTextColor(TFT_BLACK, TFT_WHITE);
           }
           else
           {
-            display.fillRect(29, 155 + (14 * i), 71, 13, TFT_FRONT);
+            display.fillRect(29 + offsetX, 155 + (14 * i) + offsetY, 71, 13, TFT_FRONT);
             display.setTextColor(TFT_WHITE, TFT_FRONT);
           }
-          display.drawString(middle[i], 64, 162 + (14 * i));
+          display.drawString(middle[i], 64 + offsetX, 162 + (14 * i) + offsetY);
         }
       }
 
@@ -214,7 +214,7 @@ void viewElsewhere(DynamicJsonDocument doc, const char *salon)
         if (right[i] != rightOld[i])
         {
           rightOld[i] = right[i];
-          display.drawString(right[i], 128, 162 + (14 * i));
+          display.drawString(right[i], 128 + offsetX, 162 + (14 * i) + offsetY);
         }
       }
     }
@@ -231,15 +231,15 @@ void viewSettings()
   if (refresh == 0)
   {
     display.setTextPadding(160);
-    display.drawString("RRFRemote " + String(VERSION), 240, 110);
+    display.drawString("RRFRemote " + String(VERSION), 240 + offsetX, 110 + offsetY);
 
     i = 161;
     j = 74;
-    display.fillRoundRect(160, 117, 159, 122, 4, TFT_WHITE);
-    display.fillRoundRect(i, 118, j, 120, 4, TFT_FRONT);
-    display.drawFastVLine(i + j - 3, 118, 120, TFT_BACK);
-    display.drawFastVLine(i + j - 2, 118, 120, TFT_WHITE);
-    display.drawFastVLine(i + j - 1, 118, 120, TFT_WHITE);
+    display.fillRoundRect(160 + offsetX, 117 + offsetY, 159, 122, 4, TFT_WHITE);
+    display.fillRoundRect(i + offsetX, 118 + offsetY, j, 120, 4, TFT_FRONT);
+    display.drawFastVLine(i + j - 3 + offsetX, 118 + offsetY, 120, TFT_BACK);
+    display.drawFastVLine(i + j - 2 + offsetX, 118 + offsetY, 120, TFT_WHITE);
+    display.drawFastVLine(i + j - 1 + offsetX, 118 + offsetY, 120, TFT_WHITE);
 
     String system[] = {"CPU", "CPU Cores", "CPU Freq", "Chip Rev", "Flash Speed", "Flash Size", "Free RAM", "Free Heap", "IP", "Battery"};
 
@@ -248,12 +248,12 @@ void viewSettings()
       display.setTextColor(TFT_WHITE, TFT_FRONT);
       display.setTextDatum(CL_DATUM);
       display.setTextPadding(0);
-      display.drawString(system[i], 163, 124 + (12 * i));
+      display.drawString(system[i], 163 + offsetX, 124 + (12 * i) + offsetY);
 
       display.setTextColor(TFT_BLACK, TFT_WHITE);
       display.setTextDatum(CR_DATUM);
       display.setTextPadding(70);
-      display.drawString(dataOld[i], 318, 124 + (12 * i));
+      display.drawString(dataOld[i], 318 + offsetX, 124 + (12 * i) + offsetY);
     }
 
     refresh = 1;
@@ -279,7 +279,7 @@ void viewSettings()
     if (data[i] != dataOld[i])
     {
       dataOld[i] = data[i];
-      display.drawString(data[i], 318, 124 + (12 * i));
+      display.drawString(data[i], 318 + offsetX, 124 + (12 * i) + offsetY);
     }
   }
 }
@@ -296,15 +296,15 @@ void viewPropagation()
   if (refresh == 0)
   {
     display.setTextPadding(160);
-    display.drawString("Propagation", 240, 110);
+    display.drawString("Propagation", 240 + offsetX, 110 + offsetY);
 
     i = 161;
     j = 70;
-    display.fillRoundRect(160, 117, 159, 122, 4, TFT_WHITE);
-    display.fillRoundRect(i, 118, j, 120, 4, TFT_FRONT);
-    display.drawFastVLine(i + j - 3, 118, 120, TFT_BACK);
-    display.drawFastVLine(i + j - 2, 118, 120, TFT_WHITE);
-    display.drawFastVLine(i + j - 1, 118, 120, TFT_WHITE);
+    display.fillRoundRect(160 + offsetX, 117 + offsetY, 159, 122, 4, TFT_WHITE);
+    display.fillRoundRect(i + offsetX, 118 + offsetY, j, 120, 4, TFT_FRONT);
+    display.drawFastVLine(i + j - 3 + offsetX, 118 + offsetY, 120, TFT_BACK);
+    display.drawFastVLine(i + j - 2 + offsetX, 118 + offsetY, 120, TFT_WHITE);
+    display.drawFastVLine(i + j - 1 + offsetX, 118 + offsetY, 120, TFT_WHITE);
 
     display.setTextColor(TFT_WHITE, TFT_FRONT);
     display.setTextDatum(CL_DATUM);
@@ -317,12 +317,12 @@ void viewPropagation()
       display.setTextColor(TFT_WHITE, TFT_FRONT);
       display.setTextDatum(CL_DATUM);
       display.setTextPadding(0);
-      display.drawString(solar[i], 163, 124 + (12 * i));
+      display.drawString(solar[i], 163 + offsetX, 124 + (12 * i) + offsetY);
 
       display.setTextColor(TFT_BLACK, TFT_WHITE);
       display.setTextDatum(CR_DATUM);
       display.setTextPadding(70);
-      display.drawString(dataOld[i], 318, 124 + (12 * i));
+      display.drawString(dataOld[i], 318 + offsetX, 124 + (12 * i) + offsetY);
     }
 
     refresh = 1;
@@ -364,7 +364,7 @@ void viewPropagation()
     if (data[i] != dataOld[i])
     {
       dataOld[i] = data[i];
-      display.drawString(data[i], 318, 124 + (12 * i));
+      display.drawString(data[i], 318 + offsetX, 124 + (12 * i) + offsetY);
     }
   }
 }
@@ -383,15 +383,15 @@ void viewTopLinks(uint8_t stop, uint16_t allTx[10], const char *allIndicatif[10]
   if (refresh == 0)
   {
     display.setTextPadding(160);
-    display.drawString("Top Links sur " + String(salon).substring(0, 3), 240, 110);
+    display.drawString("Top Links sur " + String(salon).substring(0, 3), 240 + offsetX, 110 + offsetY);
 
     i = 161;
     j = 38;
-    display.fillRoundRect(160, 117, 159, 122, 4, TFT_WHITE);
-    display.fillRoundRect(i, 118, j, 120, 4, TFT_FRONT);
-    display.drawFastVLine(i + j - 3, 118, 120, TFT_BACK);
-    display.drawFastVLine(i + j - 2, 118, 120, TFT_WHITE);
-    display.drawFastVLine(i + j - 1, 118, 120, TFT_WHITE);
+    display.fillRoundRect(160 + offsetX, 117 + offsetY, 159, 122, 4, TFT_WHITE);
+    display.fillRoundRect(i + offsetX, 118 + offsetY, j, 120, 4, TFT_FRONT);
+    display.drawFastVLine(i + j - 3 + offsetX, 118 + offsetY, 120, TFT_BACK);
+    display.drawFastVLine(i + j - 2 + offsetX, 118 + offsetY, 120, TFT_WHITE);
+    display.drawFastVLine(i + j - 1 + offsetX, 118 + offsetY, 120, TFT_WHITE);
 
     display.setTextColor(TFT_WHITE, TFT_FRONT);
     display.setTextDatum(CL_DATUM);
@@ -399,7 +399,7 @@ void viewTopLinks(uint8_t stop, uint16_t allTx[10], const char *allIndicatif[10]
 
     for (i = 0; i < stop; i++)
     {
-      display.drawString(leftOld[i], 163, 124 + (12 * i));
+      display.drawString(leftOld[i], 163 + offsetX, 124 + (12 * i) + offsetY);
     }
 
     display.setTextColor(TFT_BLACK, TFT_WHITE);
@@ -408,7 +408,7 @@ void viewTopLinks(uint8_t stop, uint16_t allTx[10], const char *allIndicatif[10]
 
     for (i = 0; i < stop; i++)
     {
-      display.drawString(middleOld[i], 234, 124 + (12 * i));
+      display.drawString(middleOld[i], 234 + offsetX, 124 + (12 * i) + offsetY);
     }
 
     display.setTextDatum(CR_DATUM);
@@ -416,7 +416,7 @@ void viewTopLinks(uint8_t stop, uint16_t allTx[10], const char *allIndicatif[10]
 
     for (i = 0; i < stop; i++)
     {
-      display.drawString(rightOld[i], 318, 124 + (12 * i));
+      display.drawString(rightOld[i], 318 + offsetX, 124 + (12 * i) + offsetY);
     }
 
     refresh = 1;
@@ -459,7 +459,7 @@ void viewTopLinks(uint8_t stop, uint16_t allTx[10], const char *allIndicatif[10]
     if (left[i] != leftOld[i])
     {
       leftOld[i] = left[i];
-      display.drawString(left[i], 163, 124 + (12 * i));
+      display.drawString(left[i], 163 + offsetX, 124 + (12 * i) + offsetY);
     }
   }
 
@@ -472,7 +472,7 @@ void viewTopLinks(uint8_t stop, uint16_t allTx[10], const char *allIndicatif[10]
     if (middle[i] != middleOld[i])
     {
       middleOld[i] = middle[i];
-      display.drawString(middle[i], 234, 124 + (12 * i));
+      display.drawString(middle[i], 234 + offsetX, 124 + (12 * i) + offsetY);
     }
   }
 
@@ -484,13 +484,12 @@ void viewTopLinks(uint8_t stop, uint16_t allTx[10], const char *allIndicatif[10]
     if (right[i] != rightOld[i])
     {
       rightOld[i] = right[i];
-      display.drawString(right[i], 318, 124 + (12 * i));
+      display.drawString(right[i], 318 + offsetX, 124 + (12 * i) + offsetY);
     }
   }
 }
 
 // View blocages
-
 void viewBlocage(uint8_t stop, const char *iptableIndicatif[10], const char *iptableType[10], const char *salon)
 {
   uint8_t i, j;
@@ -509,7 +508,7 @@ void viewBlocage(uint8_t stop, const char *iptableIndicatif[10], const char *ipt
   if (refresh == 0)
   {
     display.setTextPadding(160);
-    display.drawString("Blocages sur " + String(salon).substring(0, 3), 240, 110);
+    display.drawString("Blocages sur " + String(salon).substring(0, 3), 240 + offsetX, 110 + offsetY);
 
     i = 161;
     j = 50;
@@ -524,11 +523,11 @@ void viewBlocage(uint8_t stop, const char *iptableIndicatif[10], const char *ipt
       }
     }
 
-    display.fillRoundRect(160, 117, 159, 122, 4, TFT_WHITE);
-    display.fillRoundRect(i, 118, j, 120, 4, TFT_FRONT);
-    display.drawFastVLine(i + j - 3, 118, 120, TFT_BACK);
-    display.drawFastVLine(i + j - 2, 118, 120, TFT_WHITE);
-    display.drawFastVLine(i + j - 1, 118, 120, TFT_WHITE);
+    display.fillRoundRect(160 + offsetX, 117 + offsetY, 159, 122, 4, TFT_WHITE);
+    display.fillRoundRect(i + offsetX, 118 + offsetY, j, 120, 4, TFT_FRONT);
+    display.drawFastVLine(i + j - 3 + offsetX, 118 + offsetY, 120, TFT_BACK);
+    display.drawFastVLine(i + j - 2 + offsetX, 118 + offsetY, 120, TFT_WHITE);
+    display.drawFastVLine(i + j - 1 + offsetX, 118 + offsetY, 120, TFT_WHITE);
 
     display.setTextColor(TFT_WHITE, TFT_FRONT);
     display.setTextDatum(CL_DATUM);
@@ -536,7 +535,7 @@ void viewBlocage(uint8_t stop, const char *iptableIndicatif[10], const char *ipt
 
     for (i = 0; i < stop; i++)
     {
-      display.drawString(leftOld[i], 163, 124 + (12 * i));
+      display.drawString(leftOld[i], 163 + offsetX, 124 + (12 * i) + offsetY);
     }
 
     display.setTextColor(TFT_BLACK, TFT_WHITE);
@@ -545,7 +544,7 @@ void viewBlocage(uint8_t stop, const char *iptableIndicatif[10], const char *ipt
 
     for (i = 0; i < stop; i++)
     {
-      display.drawString(rightOld[i], 318, 124 + (12 * i));
+      display.drawString(rightOld[i], 318 + offsetX, 124 + (12 * i) + offsetY);
     }
 
     refresh = 1;
@@ -587,7 +586,7 @@ void viewBlocage(uint8_t stop, const char *iptableIndicatif[10], const char *ipt
     if (left[i] != leftOld[i])
     {
       leftOld[i] = left[i];
-      display.drawString(left[i], 163, 124 + (12 * i));
+      display.drawString(left[i], 163 + offsetX, 124 + (12 * i) + offsetY);
     }
   }
 
@@ -600,7 +599,7 @@ void viewBlocage(uint8_t stop, const char *iptableIndicatif[10], const char *ipt
     if (right[i] != rightOld[i])
     {
       rightOld[i] = right[i];
-      display.drawString(right[i], 318, 124 + (12 * i));
+      display.drawString(right[i], 318 + offsetX, 124 + (12 * i) + offsetY);
     }
   }
 }
@@ -617,15 +616,15 @@ void viewISS(StaticJsonDocument<512> docISS)
   if (refresh == 0)
   {
     display.setTextPadding(160);
-    display.drawString("ISS", 240, 110);
+    display.drawString("ISS", 240 + offsetX, 110 + offsetY);
 
     i = 161;
     j = 70;
-    display.fillRoundRect(160, 117, 159, 122, 4, TFT_WHITE);
-    display.fillRoundRect(i, 118, j, 120, 4, TFT_FRONT);
-    display.drawFastVLine(i + j - 3, 118, 120, TFT_BACK);
-    display.drawFastVLine(i + j - 2, 118, 120, TFT_WHITE);
-    display.drawFastVLine(i + j - 1, 118, 120, TFT_WHITE);
+    display.fillRoundRect(160 + offsetX, 117 + offsetY, 159, 122, 4, TFT_WHITE);
+    display.fillRoundRect(i + offsetX, 118 + offsetY, j, 120, 4, TFT_FRONT);
+    display.drawFastVLine(i + j - 3 + offsetX, 118 + offsetY, 120, TFT_BACK);
+    display.drawFastVLine(i + j - 2 + offsetX, 118 + offsetY, 120, TFT_WHITE);
+    display.drawFastVLine(i + j - 1 + offsetX, 118 + offsetY, 120, TFT_WHITE);
 
     String iss[] = {"Distance", "Units", "Visibility", "Latitude", "Longitude", "Altitude", "Velocity", "Footprint", "Solar Lat", "Solar Long"};
 
@@ -634,12 +633,12 @@ void viewISS(StaticJsonDocument<512> docISS)
       display.setTextColor(TFT_WHITE, TFT_FRONT);
       display.setTextDatum(CL_DATUM);
       display.setTextPadding(0);
-      display.drawString(iss[i], 163, 124 + (12 * i));
+      display.drawString(iss[i], 163 + offsetX, 124 + (12 * i) + offsetY);
 
       display.setTextColor(TFT_BLACK, TFT_WHITE);
       display.setTextDatum(CR_DATUM);
       display.setTextPadding(70);
-      display.drawString(dataOld[i], 318, 124 + (12 * i));
+      display.drawString(dataOld[i], 318 + offsetX, 124 + (12 * i) + offsetY);
     }
 
     refresh = 1;
@@ -680,7 +679,7 @@ void viewISS(StaticJsonDocument<512> docISS)
     if (data[i] != dataOld[i])
     {
       dataOld[i] = data[i];
-      display.drawString(data[i], 318, 124 + (12 * i));
+      display.drawString(data[i], 318 + offsetX, 124 + (12 * i) + offsetY);
     }
   }
 }
@@ -699,15 +698,15 @@ void viewLastLinks(uint8_t stop, const char *lastHeure[10], const char *lastIndi
   if (refresh == 0)
   {
     display.setTextPadding(160);
-    display.drawString("Derniers TX sur " + String(salon).substring(0, 3), 240, 110);
+    display.drawString("Derniers TX sur " + String(salon).substring(0, 3), 240 + offsetX, 110 + offsetY);
 
     i = 161;
     j = 38;
-    display.fillRoundRect(160, 117, 159, 122, 4, TFT_WHITE);
-    display.fillRoundRect(i, 118, j, 120, 4, TFT_FRONT);
-    display.drawFastVLine(i + j - 3, 118, 120, TFT_BACK);
-    display.drawFastVLine(i + j - 2, 118, 120, TFT_WHITE);
-    display.drawFastVLine(i + j - 1, 118, 120, TFT_WHITE);
+    display.fillRoundRect(160 + offsetX, 117 + offsetY, 159, 122, 4, TFT_WHITE);
+    display.fillRoundRect(i + offsetX, 118 + offsetY, j, 120, 4, TFT_FRONT);
+    display.drawFastVLine(i + j - 3 + offsetX, 118 + offsetY, 120, TFT_BACK);
+    display.drawFastVLine(i + j - 2 + offsetX, 118 + offsetY, 120, TFT_WHITE);
+    display.drawFastVLine(i + j - 1 + offsetX, 118 + offsetY, 120, TFT_WHITE);
 
     display.setTextColor(TFT_WHITE, TFT_FRONT);
     display.setTextDatum(CL_DATUM);
@@ -715,7 +714,7 @@ void viewLastLinks(uint8_t stop, const char *lastHeure[10], const char *lastIndi
 
     for (i = 0; i < stop; i++)
     {
-      display.drawString(leftOld[i], 163, 124 + (12 * i));
+      display.drawString(leftOld[i], 163 + offsetX, 124 + (12 * i) + offsetY);
     }
 
     display.setTextColor(TFT_BLACK, TFT_WHITE);
@@ -724,7 +723,7 @@ void viewLastLinks(uint8_t stop, const char *lastHeure[10], const char *lastIndi
 
     for (i = 0; i < stop; i++)
     {
-      display.drawString(middleOld[i], 242, 124 + (12 * i));
+      display.drawString(middleOld[i], 242 + offsetX, 124 + (12 * i) + offsetY);
     }
 
     display.setTextDatum(CR_DATUM);
@@ -732,7 +731,7 @@ void viewLastLinks(uint8_t stop, const char *lastHeure[10], const char *lastIndi
 
     for (i = 0; i < stop; i++)
     {
-      display.drawString(rightOld[i], 318, 124 + (12 * i));
+      display.drawString(rightOld[i], 318 + offsetX, 124 + (12 * i) + offsetY);
     }
 
     refresh = 1;
@@ -784,7 +783,7 @@ void viewLastLinks(uint8_t stop, const char *lastHeure[10], const char *lastIndi
     if (left[i] != leftOld[i])
     {
       leftOld[i] = left[i];
-      display.drawString(left[i], 163, 124 + (12 * i));
+      display.drawString(left[i], 163 + offsetX, 124 + (12 * i) + offsetY);
     }
   }
 
@@ -797,7 +796,7 @@ void viewLastLinks(uint8_t stop, const char *lastHeure[10], const char *lastIndi
     if (middle[i] != middleOld[i])
     {
       middleOld[i] = middle[i];
-      display.drawString(middle[i], 242, 124 + (12 * i));
+      display.drawString(middle[i], 242 + offsetX, 124 + (12 * i) + offsetY);
     }
   }
 
@@ -809,7 +808,7 @@ void viewLastLinks(uint8_t stop, const char *lastHeure[10], const char *lastIndi
     if (right[i] != rightOld[i])
     {
       rightOld[i] = right[i];
-      display.drawString(right[i], 318, 124 + (12 * i));
+      display.drawString(right[i], 318 + offsetX, 124 + (12 * i) + offsetY);
     }
   }
 }
@@ -819,18 +818,18 @@ String viewData(uint8_t icon, String data, String dataOld)
 {
   if (dataOld != data)
   {
-    display.fillRect(4, 2, 36, 42, TFT_HEADER);
+    display.fillRect(4 + offsetX, 2 + offsetY, 36, 42, TFT_HEADER);
     // Serial.println(data);
 
     sprintf(swap, "%c", icon);
     tmpString = swap;
-    display.drawString(tmpString, 10, 22);
+    display.drawString(tmpString, 10 + offsetX, 22 + offsetY);
 
     display.setFont(&rounded_led_board10pt7b);
     display.setTextColor(TFT_WHITE, TFT_INFO);
     display.setTextDatum(CC_DATUM);
     display.setTextPadding(320);
-    display.drawString(data, 160, 64);
+    display.drawString(data, 160 + offsetX, 64 + offsetY);
 
     dateStringOld = "";
     linkTotalStringOld = "";
@@ -851,7 +850,7 @@ void viewMenu()
   {
     display.setBrightness(map(brightnessCurrent, 1, 100, 1, 254));
 
-    display.fillRect(4, 4, 316, 40, TFT_HEADER);
+    display.fillRect(4 + offsetX, 4 + offsetY, 316, 40, TFT_HEADER);
 
     display.setFont(ICON_FONT);
     display.setTextColor(TFT_WHITE, TFT_HEADER);
@@ -859,7 +858,7 @@ void viewMenu()
     display.setTextPadding(40);
     sprintf(swap, "%c", ICON_LEFT);
     tmpString = swap;
-    display.drawString(tmpString, 10, 22);
+    display.drawString(tmpString, 10 + offsetX, 22 + offsetY);
 
     display.setFont(ICON_FONT);
     display.setTextColor(TFT_WHITE, TFT_HEADER);
@@ -867,7 +866,7 @@ void viewMenu()
     display.setTextPadding(40);
     sprintf(swap, "%c", ICON_RIGHT);
     tmpString = swap;
-    display.drawString(tmpString, 310, 22);
+    display.drawString(tmpString, 310 + offsetX, 22 + offsetY);
 
     titleStringOld = "";
     optionStringOld = "";
@@ -940,7 +939,7 @@ void viewMenu()
   if (titleString != titleStringOld)
   {
     titleStringOld = titleString;
-    display.drawString(titleString, 160, 16);
+    display.drawString(titleString, 160 + offsetX, 16 + offsetY);
   }
 
   if (optionString != optionStringOld)
@@ -950,7 +949,7 @@ void viewMenu()
     display.setTextColor(TFT_WHITE, TFT_INFO);
     display.setTextDatum(CC_DATUM);
     display.setTextPadding(320);
-    display.drawString(optionString, 160, 64);
+    display.drawString(optionString, 160 + offsetX, 64 + offsetY);
   }
 }
 
@@ -1010,8 +1009,8 @@ void viewBaseline()
     }
   }
 
-  display.drawString(baselineString, 160, 36);
-  display.drawFastHLine(0, 0, 320, TFT_WHITE);
+  display.drawString(baselineString, 160 + offsetX, 36 + offsetY);
+  display.drawFastHLine(0 + offsetX, 0 + offsetY, 320, TFT_WHITE);
 
   viewTemp = (viewTemp++ < 60) ? viewTemp : 0;
 }
@@ -1033,7 +1032,7 @@ void viewBattery()
     {
       sprintf(swap, "%c", ICON_CHARGING);
       tmpString = swap;
-      display.drawString(tmpString, 310, 22);
+      display.drawString(tmpString, 310 + offsetX, 22 + offsetY);
       // display.setBrightness(128);
     }
     else
@@ -1057,7 +1056,7 @@ void viewBattery()
         break;
       }
       tmpString = swap;
-      display.drawString(tmpString, 310, 22);
+      display.drawString(tmpString, 310 + offsetX, 22 + offsetY);
     }
   }
 }
@@ -1088,7 +1087,7 @@ void viewElsewhereBig(DynamicJsonDocument doc, const char *salon)
   {
     display.setTextColor(TFT_WHITE, TFT_BACK);
     display.setTextPadding(0);
-    display.drawString("Trafic en cours", 75, 114);
+    display.drawString("Trafic en cours", 75 + offsetX, 114 + offsetY);
 
     display.setTextColor(TFT_WHITE, TFT_FRONT);
     display.setTextDatum(CC_DATUM);
@@ -1096,7 +1095,7 @@ void viewElsewhereBig(DynamicJsonDocument doc, const char *salon)
 
     for (i = 0; i < stop; i++)
     {
-      display.drawString(leftOld[i], 25, 136 + (19 * i));
+      display.drawString(leftOld[i], 25 + offsetX, 136 + (19 * i) + offsetY);
     }
 
     display.setTextDatum(CC_DATUM);
@@ -1106,15 +1105,15 @@ void viewElsewhereBig(DynamicJsonDocument doc, const char *salon)
     {
       if (strstr(rightOld[i].c_str(), "LINK") != NULL)
       {
-        display.fillRect(51, 126 + (18 * i) + i, 98, 18, TFT_WHITE);
+        display.fillRect(51 + offsetX, 126 + (18 * i) + i + offsetY, 98, 18, TFT_WHITE);
         display.setTextColor(TFT_BLACK, TFT_WHITE);
       }
       else
       {
-        display.fillRect(51, 126 + (18 * i) + i, 98, 18, TFT_FRONT);
+        display.fillRect(51 + offsetX, 126 + (18 * i) + i + offsetY, 98, 18, TFT_FRONT);
         display.setTextColor(TFT_WHITE, TFT_FRONT);
       }
-      display.drawString(rightOld[i], 100, 136 + (19 * i));
+      display.drawString(rightOld[i], 100 + offsetX, 136 + (19 * i) + offsetY);
     }
   }
 
@@ -1179,7 +1178,7 @@ void viewElsewhereBig(DynamicJsonDocument doc, const char *salon)
       if (left[i] != leftOld[i])
       {
         leftOld[i] = left[i];
-        display.drawString(left[i].substring(0, 3), 25, 136 + (19 * i));
+        display.drawString(left[i].substring(0, 3), 25 + offsetX, 136 + (19 * i) + offsetY);
       }
     }
 
@@ -1193,15 +1192,15 @@ void viewElsewhereBig(DynamicJsonDocument doc, const char *salon)
         rightOld[i] = right[i];
         if (strstr(right[i].c_str(), "LINK") != NULL)
         {
-          display.fillRect(51, 126 + (18 * i) + i, 98, 18, TFT_WHITE);
+          display.fillRect(51 + offsetX, 126 + (18 * i) + i + offsetY, 98, 18, TFT_WHITE);
           display.setTextColor(TFT_BLACK, TFT_WHITE);
         }
         else
         {
-          display.fillRect(51, 126 + (18 * i) + i, 98, 18, TFT_FRONT);
+          display.fillRect(51 + offsetX, 126 + (18 * i) + i + offsetY, 98, 18, TFT_FRONT);
           display.setTextColor(TFT_WHITE, TFT_FRONT);
         }
-        display.drawString(right[i], 100, 136 + (19 * i));
+        display.drawString(right[i], 100 + offsetX, 136 + (19 * i) + offsetY);
       }
     }
   }
@@ -1230,7 +1229,7 @@ void viewLastLinksBig(uint8_t stop, const char *lastHeure[10], const char *lastI
     display.setTextColor(TFT_WHITE, TFT_BACK);
     display.setTextDatum(CC_DATUM);
     display.setTextPadding(150);
-    display.drawString("Derniers TX sur " + String(salon).substring(0, 3), 245, 114);
+    display.drawString("Derniers TX sur " + String(salon).substring(0, 3), 245 + offsetX, 114 + offsetY);
 
     display.setTextColor(TFT_WHITE, TFT_FRONT);
     display.setTextDatum(CC_DATUM);
@@ -1238,7 +1237,7 @@ void viewLastLinksBig(uint8_t stop, const char *lastHeure[10], const char *lastI
 
     for (i = 0; i < stop; i++)
     {
-      display.drawString(leftOld[i], 195, 136 + (19 * i));
+      display.drawString(leftOld[i], 195 + offsetX, 136 + (19 * i) + offsetY);
     }
 
     display.setTextColor(TFT_BLACK, TFT_WHITE);
@@ -1247,7 +1246,7 @@ void viewLastLinksBig(uint8_t stop, const char *lastHeure[10], const char *lastI
 
     for (i = 0; i < stop; i++)
     {
-      display.drawString(rightOld[i], 270, 136 + (19 * i));
+      display.drawString(rightOld[i], 270 + offsetX, 136 + (19 * i) + offsetY);
     }
   }
 
@@ -1296,7 +1295,7 @@ void viewLastLinksBig(uint8_t stop, const char *lastHeure[10], const char *lastI
     if (left[i] != leftOld[i])
     {
       leftOld[i] = left[i];
-      display.drawString(left[i], 195, 136 + (19 * i));
+      display.drawString(left[i], 195 + offsetX, 136 + (19 * i) + offsetY);
     }
   }
 
@@ -1309,7 +1308,7 @@ void viewLastLinksBig(uint8_t stop, const char *lastHeure[10], const char *lastI
     if (right[i] != rightOld[i])
     {
       rightOld[i] = right[i];
-      display.drawString(right[i], 270, 136 + (19 * i));
+      display.drawString(right[i], 270 + offsetX, 136 + (19 * i) + offsetY);
     }
   }
 }
@@ -1331,9 +1330,9 @@ void viewDTMF()
   {
     tmpString = String(room[i]);
     tmpString = tmpString.substring(0, 3);
-    display.drawString(tmpString, (50 + j), (115 + k));
+    display.drawString(tmpString, (50 + j) + offsetX, (115 + k) + offsetY);
     tmpString = String(dtmf[i]);
-    display.drawString(tmpString, (50 + j), (115 + k + 16));
+    display.drawString(tmpString, (50 + j) + offsetX, (115 + k + 16) + offsetY);
     j += 110;
     if (i == 2 || i == 5)
     {
@@ -1342,7 +1341,7 @@ void viewDTMF()
     }
   }
 
-  display.drawString("PERROQUET", (50 + j), (123 + k));
+  display.drawString("PERROQUET", (50 + j) + offsetX, (123 + k) + offsetY);
   j += 110;
-  display.drawString("RAPTOR", (50 + j), (123 + k));
+  display.drawString("RAPTOR", (50 + j) + offsetX, (123 + k) + offsetY);
 }
