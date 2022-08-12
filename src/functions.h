@@ -292,18 +292,17 @@ void scroll(uint8_t pause)
 }
 
 // Detect rotation
-/*
 void checkAcceleration()
 {
   float accX = 0.0F;
   float accY = 0.0F;
   float accZ = 0.0F;
 
-  if (BOARD == GREY || BOARD == CORE2)
+  if (M5.Imu.isEnabled())
   {
-    M5.IMU.getAccelData(&accX, &accY, &accZ);
+    M5.Imu.getAccel(&accX, &accY, &accZ);
 
-    if (int(accY * 1000) < -500 &&display.getRotation() != 3)
+    if (int(accY * 1000) < -500 && display.getRotation() != 3)
     {
      display.clear();
       reset = 0;
@@ -311,7 +310,7 @@ void checkAcceleration()
       menuRefresh = 0;
      display.setRotation(3);
     }
-    else if (int(accY * 1000) > 500 &&display.getRotation() != 1)
+    else if (int(accY * 1000) > 500 && display.getRotation() != 1)
     {
      display.clear();
       reset = 0;
@@ -321,7 +320,6 @@ void checkAcceleration()
     }
   }
 }
-*/
 
 // Compute distance
 int computeDistance(float latitudeLink, float longitudeLink)

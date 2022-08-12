@@ -747,7 +747,7 @@ void loop()
   // Manage rotation
   if (menuMode != 1)
   {
-    // checkAcceleration();
+    checkAcceleration();
   }
 
   // Manage Wifi
