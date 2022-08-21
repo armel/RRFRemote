@@ -7,6 +7,7 @@
 #include "tools.h"
 #include "webIndex.h"
 #include "functions.h"
+#include "binLoader.h"
 #include "tasks.h"
 #include "view.h"
 
@@ -38,9 +39,6 @@ void setup()
   {
     FastLED.addLeds<NEOPIXEL, 25>(leds, NUM_LEDS); // GRB ordering is assumed
   }
-
-  // Bin Loader
-  binLoader();
 
   // Preferences
   preferences.begin(NAME);
@@ -74,6 +72,9 @@ void setup()
   sysopCurrent = preferences.getUInt("sysop", 0);
   modeCurrent = preferences.getUInt("mode", 0);
 
+  // Bin Loader
+  binLoader();
+
   // LCD
   resetColor();
   display.setBrightness(map(brightnessCurrent, 1, 100, 1, 254));
@@ -83,12 +84,12 @@ void setup()
   display.setFont(&rounded_led_board10pt7b);
   display.setTextColor(TFT_WHITE, TFT_HEADER);
   display.setTextDatum(CC_DATUM);
-  display.drawString("RRFRemote", 160 + offsetX, 20 + offsetY);
+  display.drawString(String(NAME), 160 + offsetX, 20 + offsetY);
   display.setFont(0);
-  display.drawString("Version " + String(VERSION) + " par F4HWN", 160 + offsetX, 50 + offsetY);
+  display.drawString("Version " + String(VERSION) + " par " + String(AUTHOR), 160 + offsetX, 50 + offsetY);
 
   // QRCode
-  display.qrcode("https://github.com/armel/RRFRemote", 90 + offsetX, 80 + offsetY, 140, 6);
+  display.qrcode("https://github.com/armel/" + String(NAME), 90 + offsetX, 80 + offsetY, 140, 6);
 
   // We start by connecting to the WiFi network
   display.setTextPadding(320);

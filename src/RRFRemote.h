@@ -22,6 +22,8 @@
 #define M5ATOMDISPLAY_LOGICAL_HEIGHT  HEIGHT  // height
 #define M5ATOMDISPLAY_REFRESH_RATE 60         // refresh rate
 
+#define SDU_HEADLESS // For Bin Loader
+
 #include <WiFiClientSecure.h>
 #include <HTTPClient.h>
 #include <Preferences.h>
@@ -215,10 +217,13 @@ LGFX_Sprite Sprite(&M5.Lcd); // Create Sprite object "img" with pointer to "tft"
 String message;
 int16_t pos = 0;
 
-// Bin loader
+// Bin Loader && Ini Loader
+#define NUMBER_OF_FILENAME 64
+#define MAX_FILENAME_SIZE 64
+
 File root;
-String binFilename[128];
-uint8_t binIndex = 0;
+char fileName[NUMBER_OF_FILENAME][MAX_FILENAME_SIZE];
+uint8_t fileIndex = 0;
 
 // Task Handle
 TaskHandle_t rrfdataHandle;
