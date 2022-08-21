@@ -263,6 +263,7 @@ bool reset = 0;
 bool refresh = 0;
 bool menuRefresh = 0;
 bool screensaverMode = 0;
+bool wifiConnected = 0;
 
 int8_t menuSize;
 int8_t menuMode = 0;

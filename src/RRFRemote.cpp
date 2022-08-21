@@ -96,6 +96,10 @@ void setup()
 
   uint32_t color = ((BMP_HEADER.r & 0xff) << 16) + ((BMP_HEADER.g & 0xff) << 8) + (BMP_HEADER.b & 0xff);
 
+  WiFi.onEvent(callbackWifiOn, ARDUINO_EVENT_WIFI_STA_CONNECTED);
+  WiFi.onEvent(callbackWifiGotIP, ARDUINO_EVENT_WIFI_STA_GOT_IP);
+  WiFi.onEvent(callbackWifiOff, ARDUINO_EVENT_WIFI_STA_DISCONNECTED);
+
   while (true)
   {
     uint8_t attempt = 1;

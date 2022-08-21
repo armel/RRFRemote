@@ -1,6 +1,27 @@
 // Copyright (c) F4HWN Armel. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+// Wifi callback On
+void callbackWifiOn(WiFiEvent_t event, WiFiEventInfo_t info)
+{
+  wifiConnected = true;
+  Serial.println("Wifi Client Connected");
+}
+
+// Wifi callback Got IP
+void callbackWifiGotIP(WiFiEvent_t event, WiFiEventInfo_t info){
+  Serial.println(WiFi.localIP());
+}
+
+// Wifi callback Off
+void callbackWifiOff(WiFiEvent_t event, WiFiEventInfo_t info)
+{
+  wifiConnected = false;
+  Serial.println("Wifi Client Disconnected");
+
+  WiFi.begin(config[(configCurrent * 6)], config[(configCurrent * 6) + 1]);
+}
+
 // Parse data
 String getValue(String data, char separator, uint8_t index)
 {
@@ -850,9 +871,6 @@ void checkWifi()
   {
     display.fillCircle(314 + offsetX, 6 + offsetY, 3, TFT_HEADER);
     ping = 2;
-    WiFi.disconnect();
-    WiFi.reconnect();
-    delay(5 * 1000);
   }
   else
   {
@@ -866,16 +884,6 @@ void checkWifi()
       display.fillCircle(314 + offsetX, 6 + offsetY, 3, TFT_WHITE);
     }
   }
-
-  /*
-  if (screensaverMode == 1) {
-    if(WiFi.status() != WL_CONNECTED) {
-      WiFi.disconnect();
-      WiFi.reconnect();
-      delay(30 * 1000);
-    }
-  }
-  */
 }
 
 // Manage black and white list
