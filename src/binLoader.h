@@ -58,16 +58,16 @@ void myProgressFunction( int state, int size )
   gauge = map(percent, 0, 100, 0, 276);
   if(gauge != 0)
   {
-    for (uint8_t i = 0; i <= 7; i++)
+    for (uint8_t j = 0; j <= 5; j++)
     {
-      display.drawGradientHLine(22, 29 + i, gauge, TFT_BLACK, TFT_RED);
+      display.drawGradientHLine(22, 30 + j, gauge, TFT_BLACK, TFT_RED);
     }
 
-    for (uint16_t j = 0; j <= gauge; j++)
+    for (uint16_t j = 1; j < gauge; j++)
     {
-      if(j % 12 == 0)
+      if(j % 23 == 0)
       {
-        display.drawFastVLine(22 + j, 29, 8, TFT_BLACK);
+        display.drawFastVLine(22 + j, 30, 6, TFT_BLACK);
       }
     }
   }
@@ -99,7 +99,7 @@ void binLoader()
 {
   String tmpName;
 
-  char version[] = "BIN LOADER V0.4";
+  char version[] = "Bin Loader V0.4";
 
   boolean click = false;
   boolean blink = false;
@@ -155,22 +155,22 @@ void binLoader()
     display.setTextPadding(320);
     display.drawString(version, 160, 20);
     display.drawRect(20, 28, 280, 10, TFT_DARKGRAY);
-
+    
     for (uint16_t i = 0; i < TIMEOUT_BIN_LOADER * 10; i++)
     {
       gauge = map(i, 0, (TIMEOUT_BIN_LOADER * 10) - 1, 0, 276);
       if(gauge != 0)
       {
-        for (uint8_t j = 0; j <= 7; j++)
+        for (uint8_t j = 0; j <= 5; j++)
         {
-          display.drawGradientHLine(22, 29 + j, gauge, TFT_BLACK, TFT_GREEN);
+          display.drawGradientHLine(22, 30 + j, gauge, TFT_BLACK, TFT_GREEN);
         }
-
-        for (uint16_t j = 0; j <= gauge; j++)
+       
+        for (uint16_t j = 1; j < gauge; j++)
         {
-          if(j % 12 == 0)
+          if(j % 23 == 0)
           {
-            display.drawFastVLine(22 + j, 29, 8, TFT_BLACK);
+            display.drawFastVLine(22 + j, 30, 6, TFT_BLACK);
           }
         }
       }
