@@ -1,7 +1,7 @@
 // Copyright (c) F4HWN Armel. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-#define VERSION "3.1.2"
+#define VERSION "3.1.3"
 #define AUTHOR "F4HWN"
 #define NAME "RRFRemote"
 
@@ -204,13 +204,23 @@ String endpointHamQSL = "http://www.hamqsl.com/solarxml.php";
 String endpointISS = "https://api.wheretheiss.at/v1/satellites/25544";
 
 String endpointRRF[] = {
+    /*
     "http://rrf.f5nlg.ovh:8080/RRFTracker/RRF-today/rrf_tiny.json",
     "http://rrf.f5nlg.ovh:8080/RRFTracker/TECHNIQUE-today/rrf_tiny.json",
     "http://rrf.f5nlg.ovh:8080/RRFTracker/BAVARDAGE-today/rrf_tiny.json",
     "http://rrf.f5nlg.ovh:8080/RRFTracker/LOCAL-today/rrf_tiny.json",
     "http://rrf.f5nlg.ovh:8080/RRFTracker/INTERNATIONAL-today/rrf_tiny.json",
     "http://rrf.f5nlg.ovh:8080/RRFTracker/EXPERIMENTAL-today/rrf_tiny.json",
-    "http://rrf.f5nlg.ovh:8080/RRFTracker/FON-today/rrf_tiny.json"};
+    "http://rrf.f5nlg.ovh:8080/RRFTracker/FON-today/rrf_tiny.json"
+    */
+    "http://rrf.globalis-dev.com:8080/RRFTracker/RRF-today/rrf_tiny.json",
+    "http://rrf.globalis-dev.com:8080/RRFTracker/TECHNIQUE-today/rrf_tiny.json",
+    "http://rrf.globalis-dev.com:8080/RRFTracker/BAVARDAGE-today/rrf_tiny.json",
+    "http://rrf.globalis-dev.com:8080/RRFTracker/LOCAL-today/rrf_tiny.json",
+    "http://rrf.globalis-dev.com:8080/RRFTracker/INTERNATIONAL-today/rrf_tiny.json",
+    "http://rrf.globalis-dev.com:8080/RRFTracker/REGIONAL-today/rrf_tiny.json",
+    "http://rrf.globalis-dev.com:8080/RRFTracker/FON-today/rrf_tiny.json"
+    };
 
 // Scroll
 LGFX_Sprite Sprite(&M5.Lcd); // Create Sprite object "img" with pointer to "tft" object
@@ -230,8 +240,10 @@ TaskHandle_t rrfdataHandle;
 TaskHandle_t buttonHandle;
 
 // Misceleanous
-const char *room[] = {"RRF", "TECHNIQUE", "BAVARDAGE", "LOCAL", "INTERNATIONAL", "EXPERIMENTAL", "FON"};
-const uint8_t dtmf[] = {96, 98, 100, 101, 99, 102, 97};
+//const char *room[] = {"RRF", "TECHNIQUE", "BAVARDAGE", "LOCAL", "INTERNATIONAL", "EXPERIMENTAL", "FON"};
+//const uint8_t dtmf[] = {96, 98, 100, 101, 99, 102, 97};
+const char *room[] = {"RRF", "TECHNIQUE", "BAVARDAGE", "LOCAL", "INTERNATIONAL", "REGIONAL", "FON"};
+const uint8_t dtmf[] = {96, 98, 100, 101, 99, 104, 97};
 const char *menuSpotnikOn[] = {"CONFIG", "QSY", "FOLLOW", "RAPTOR", "PERROQUET", "SYSOP", "TOT", "ISS", "COULEUR", "LUMINOSITE", "BEEP", "MODE", "ETEINDRE"};
 const char *menuSpotnikOff[] = {"CONFIG", "TOT", "ISS", "COULEUR", "LUMINOSITE", "BEEP", "MODE", "ETEINDRE"};
 const char *sysop[] = {"REBOOT", "IP", "SCAN RAPIDE", "LIBRE"};
