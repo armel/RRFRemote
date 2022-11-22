@@ -516,7 +516,7 @@ void viewBlocage(uint8_t stop, const char *iptableIndicatif[10], const char *ipt
     for (uint8_t k = 0; k < stop; k++)
     {
       tmpString = String(iptableType[k]);
-      if (tmpString == "INTEMPESTIF")
+      if (tmpString.substring(0, 11) == "INTEMPESTIF")
       {
         j = 80;
         break;
@@ -561,7 +561,16 @@ void viewBlocage(uint8_t stop, const char *iptableIndicatif[10], const char *ipt
       tmpString = tmpString.substring(parenthesisBegin + 1, parenthesisLast);
     }
 
-    left[i] = tmpString;
+    left[i] = tmpString.substring(0, 14);
+
+    if (left[i] == "INTEMPESTIFS C")
+    {
+      left[i] = "INT. COURTS";
+    }
+    else if (left[i] == "INTEMPESTIFS I")
+    {
+      left[i] = "INT. ISOLES";
+    }
 
     tmpString = String(iptableIndicatif[i]);
     if (tmpString.substring(0, 3) == "GW-")
