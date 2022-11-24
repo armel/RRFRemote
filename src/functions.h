@@ -1,6 +1,27 @@
 // Copyright (c) F4HWN Armel. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+// Wifi callback On
+void callbackWifiOn(WiFiEvent_t event, WiFiEventInfo_t info)
+{
+  wifiConnected = true;
+  Serial.println("Wifi Client Connected");
+}
+
+// Wifi callback Got IP
+void callbackWifiGotIP(WiFiEvent_t event, WiFiEventInfo_t info){
+  Serial.println(WiFi.localIP());
+}
+
+// Wifi callback Off
+void callbackWifiOff(WiFiEvent_t event, WiFiEventInfo_t info)
+{
+  wifiConnected = false;
+  Serial.println("Wifi Client Disconnected");
+
+  WiFi.begin(config[(configCurrent * 6)], config[(configCurrent * 6) + 1]);
+}
+
 // Parse data
 String getValue(String data, char separator, uint8_t index)
 {
@@ -292,18 +313,17 @@ void scroll(uint8_t pause)
 }
 
 // Detect rotation
-/*
 void checkAcceleration()
 {
   float accX = 0.0F;
   float accY = 0.0F;
   float accZ = 0.0F;
 
-  if (BOARD == GREY || BOARD == CORE2)
+  if (M5.Imu.isEnabled())
   {
-    M5.IMU.getAccelData(&accX, &accY, &accZ);
+    M5.Imu.getAccel(&accX, &accY, &accZ);
 
-    if (int(accY * 1000) < -500 &&display.getRotation() != 3)
+    if (int(accY * 1000) < -500 && display.getRotation() != 3)
     {
      display.clear();
       reset = 0;
@@ -311,7 +331,7 @@ void checkAcceleration()
       menuRefresh = 0;
      display.setRotation(3);
     }
-    else if (int(accY * 1000) > 500 &&display.getRotation() != 1)
+    else if (int(accY * 1000) > 500 && display.getRotation() != 1)
     {
      display.clear();
       reset = 0;
@@ -321,7 +341,6 @@ void checkAcceleration()
     }
   }
 }
-*/
 
 // Compute distance
 int computeDistance(float latitudeLink, float longitudeLink)
@@ -852,9 +871,6 @@ void checkWifi()
   {
     display.fillCircle(314 + offsetX, 6 + offsetY, 3, TFT_HEADER);
     ping = 2;
-    WiFi.disconnect();
-    WiFi.reconnect();
-    delay(5 * 1000);
   }
   else
   {
@@ -868,16 +884,6 @@ void checkWifi()
       display.fillCircle(314 + offsetX, 6 + offsetY, 3, TFT_WHITE);
     }
   }
-
-  /*
-  if (screensaverMode == 1) {
-    if(WiFi.status() != WL_CONNECTED) {
-      WiFi.disconnect();
-      WiFi.reconnect();
-      delay(30 * 1000);
-    }
-  }
-  */
 }
 
 // Manage black and white list
@@ -931,198 +937,5 @@ void ledAlert(bool type)
     }
     FastLED.setBrightness(16);
     FastLED.show();
-  }
-}
-
-// List files on SPIFFS or SD
-void getBinaryList(File dir, String type)
-{
-  while (true)
-  {
-    File entry = dir.openNextFile();
-    if (!entry)
-    {
-      // no more files
-      break;
-    }
-
-    if (strstr(entry.name(), "/.") == NULL && strstr(entry.name(), ".bin") != NULL)
-    {
-      // Serial.println(type + "_" + entry.name());
-      binFilename[binIndex] = type + "_" + entry.name();
-      binIndex++;
-    }
-
-    if (entry.isDirectory() && strstr(entry.name(), "/.") == NULL)
-    {
-      getBinaryList(entry, type);
-    }
-
-    entry.close();
-  }
-}
-
-// Bin Loader
-void binLoader()
-{
-  boolean click = 0;
-  int8_t cursor = 0;
-  int8_t start = 0;
-  int8_t stop = 0;
-  int8_t limit = 8;
-  int8_t change = 255;
-  String tmpName;
-
-  if (!SPIFFS.begin())
-  {
-    Serial.println("SPIFFS Mount Failed");
-
-    display.setTextFont(1);
-    display.setTextSize(2);
-
-    display.setTextColor(TFT_WHITE, TFT_BLACK);
-    display.setTextDatum(CC_DATUM);
-    display.drawString("Flash File System", 160, 20);
-    display.drawString("needs to be formated.", 160, 50);
-    display.drawString("It takes around 4 minutes.", 160, 100);
-    display.drawString("Please, wait until ", 160, 150);
-    display.drawString("the application starts !", 160, 180);
-
-    Serial.println("SPIFFS Formating...");
-
-    SPIFFS.format(); // Format SPIFFS...
-
-    display.setTextFont(0);
-    display.setTextSize(0);
-
-    return;
-  }
-
-  root = SPIFFS.open("/");
-  getBinaryList(root, "SP");
-
-  if (SD.begin(GPIO_NUM_4, SPI, 25000000))
-  {
-    root = SD.open("/");
-    getBinaryList(root, "SD");
-  }
-
-  if (binIndex != 0)
-  {
-    display.setTextFont(1);
-    display.setTextSize(1);
-
-    display.setTextColor(TFT_WHITE, TFT_BLACK);
-    display.setTextDatum(CC_DATUM);
-
-    for (uint8_t i = TIMEOUT_BIN_LOADER * 10; i > 0; i--)
-    {
-      getButton();
-
-      if (i % 10 == 0)
-      {
-        tmpName += ".";
-        display.drawString(tmpName, 160, 20);
-      }
-
-      if (btnA || btnC)
-      {
-        return;
-      }
-      else if (btnB)
-      {
-        click = 1;
-        break;
-      }
-
-      vTaskDelay(100);
-    }
-  }
-
-  while (click == 1)
-  {
-    while (btnB != 0)
-    {
-      getButton();
-      vTaskDelay(100);
-    }
-
-    display.setTextFont(1);
-    display.setTextSize(2);
-
-    display.setTextColor(TFT_WHITE, TFT_BLACK);
-    display.setTextDatum(CC_DATUM);
-    display.drawString("Bin Loader V0.2", 160, 20);
-
-    getButton();
-
-    if (btnA)
-    {
-      cursor--;
-    }
-    else if (btnC)
-    {
-      cursor++;
-    }
-    else if (btnB)
-    {
-      if (binFilename[cursor].substring(0, 4) == "SP_/")
-      {
-        updateFromFS(SPIFFS, binFilename[cursor].substring(3));
-      }
-      else
-      {
-        updateFromFS(SD, binFilename[cursor].substring(3));
-      }
-      ESP.restart();
-    }
-
-    cursor = (cursor < 0) ? binIndex - 1 : cursor;
-    cursor = (cursor > binIndex - 1) ? 0 : cursor;
-
-    start = cursor / limit;
-
-    stop = (start * limit) + limit;
-
-    /*
-    Serial.print(cursor);
-    Serial.print("-");
-    Serial.print(start);
-    Serial.print("-");
-    Serial.print(stop);
-    Serial.println("----------");
-    */
-
-    if (change != cursor)
-    {
-      change = cursor;
-      display.setTextPadding(320);
-
-      uint8_t i = 0;
-      for (uint8_t j = (start * limit); j < stop; j++)
-      {
-        tmpName = binFilename[j].substring(4);
-
-        if (cursor == j)
-        {
-          tmpName = ">> " + tmpName + " <<";
-
-          display.setTextSize(1);
-          if (binFilename[cursor].substring(0, 4) == "SP_/")
-          {
-            display.drawString("SPI Flash File Storage", 160, 50);
-          }
-          else
-          {
-            display.drawString("SD Card Storage", 160, 50);
-          }
-        }
-
-        display.setTextSize(2);
-        display.drawString(tmpName, 160, 80 + i * 20);
-        i++;
-      }
-    }
-    vTaskDelay(100);
   }
 }

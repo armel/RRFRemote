@@ -3,7 +3,7 @@
 
 const http = require('http');
 const port = 3000;
-const version = 0.3;
+const version = 0.4;
 
 const requestHandler = (request, response) => {
   console.log(request.url);
@@ -20,7 +20,7 @@ const requestHandler = (request, response) => {
     "bav": "100, BAVARDAGE",
     "loc": "101, LOCAL",
     "exp": "102, EXPERIMENTAL",
-    "reg": "103, REGIONAL",
+    "reg": "104, REGIONAL",
   };
 
   var qsy = {
@@ -32,7 +32,7 @@ const requestHandler = (request, response) => {
     100: "/etc/spotnik/restart.bav",
     101: "/etc/spotnik/restart.loc",
     102: "/etc/spotnik/restart.exp",
-    103: "/etc/spotnik/restart.reg",
+    104: "/etc/spotnik/restart.reg",
   };
 
 
