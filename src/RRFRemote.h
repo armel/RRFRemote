@@ -204,13 +204,13 @@ String endpointHamQSL = "http://www.hamqsl.com/solarxml.php";
 String endpointISS = "https://api.wheretheiss.at/v1/satellites/25544";
 
 String endpointRRF[] = {
-    "http://rrf.f5nlg.ovh:8080/RRFTracker/RRF-today/rrf_tiny.json",
-    "http://rrf.f5nlg.ovh:8080/RRFTracker/FON-today/rrf_tiny.json",
-    "http://rrf.f5nlg.ovh:8080/RRFTracker/TECHNIQUE-today/rrf_tiny.json",
-    "http://rrf.f5nlg.ovh:8080/RRFTracker/INTERNATIONAL-today/rrf_tiny.json",
-    "http://rrf.f5nlg.ovh:8080/RRFTracker/BAVARDAGE-today/rrf_tiny.json",
-    "http://rrf.f5nlg.ovh:8080/RRFTracker/LOCAL-today/rrf_tiny.json",
-    "http://rrf.f5nlg.ovh:8080/RRFTracker/EXPERIMENTAL-today/rrf_tiny.json"
+    "http://rrf.globalis-dev.com:8080/RRFTracker/RRF-today/rrf_tiny.json",
+    "http://rrf.globalis-dev.com:8080/RRFTracker/FON-today/rrf_tiny.json",
+    "http://rrf.globalis-dev.com:8080/RRFTracker/TECHNIQUE-today/rrf_tiny.json",
+    "http://rrf.globalis-dev.com:8080/RRFTracker/INTERNATIONAL-today/rrf_tiny.json",
+    "http://rrf.globalis-dev.com:8080/RRFTracker/BAVARDAGE-today/rrf_tiny.json",
+    "http://rrf.globalis-dev.com:8080/RRFTracker/LOCAL-today/rrf_tiny.json",
+    "http://rrf.globalis-dev.com:8080/RRFTracker/REGIONAL-today/rrf_tiny.json"
     };
 
 // Scroll
@@ -231,8 +231,8 @@ TaskHandle_t rrfdataHandle;
 TaskHandle_t buttonHandle;
 
 // Misceleanous
-const char *room[] = {"RRF", "FON", "TECHNIQUE", "INTERNATIONAL", "BAVARDAGE", "LOCAL", "EXPERIMENTAL"};
-const uint8_t dtmf[] = {96, 97, 98, 99, 100, 101, 102};
+const char *room[] = {"RRF", "FON", "TECHNIQUE", "INTERNATIONAL", "BAVARDAGE", "LOCAL", "REGIONAL"};
+const uint8_t dtmf[] = {96, 97, 98, 99, 100, 101, 104};
 const char *menuSpotnikOn[] = {"CONFIG", "QSY", "FOLLOW", "RAPTOR", "PERROQUET", "SYSOP", "TOT", "ISS", "COULEUR", "LUMINOSITE", "BEEP", "MODE", "ETEINDRE"};
 const char *menuSpotnikOff[] = {"CONFIG", "TOT", "ISS", "COULEUR", "LUMINOSITE", "BEEP", "MODE", "ETEINDRE"};
 const char *sysop[] = {"REBOOT", "IP", "SCAN RAPIDE", "LIBRE"};
