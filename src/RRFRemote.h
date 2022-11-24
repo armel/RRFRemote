@@ -205,12 +205,12 @@ String endpointISS = "https://api.wheretheiss.at/v1/satellites/25544";
 
 String endpointRRF[] = {
     "http://rrf.f5nlg.ovh:8080/RRFTracker/RRF-today/rrf_tiny.json",
+    "http://rrf.f5nlg.ovh:8080/RRFTracker/FON-today/rrf_tiny.json",
     "http://rrf.f5nlg.ovh:8080/RRFTracker/TECHNIQUE-today/rrf_tiny.json",
+    "http://rrf.f5nlg.ovh:8080/RRFTracker/INTERNATIONAL-today/rrf_tiny.json",
     "http://rrf.f5nlg.ovh:8080/RRFTracker/BAVARDAGE-today/rrf_tiny.json",
     "http://rrf.f5nlg.ovh:8080/RRFTracker/LOCAL-today/rrf_tiny.json",
-    "http://rrf.f5nlg.ovh:8080/RRFTracker/INTERNATIONAL-today/rrf_tiny.json",
-    "http://rrf.f5nlg.ovh:8080/RRFTracker/EXPERIMENTAL-today/rrf_tiny.json",
-    "http://rrf.f5nlg.ovh:8080/RRFTracker/FON-today/rrf_tiny.json"
+    "http://rrf.f5nlg.ovh:8080/RRFTracker/EXPERIMENTAL-today/rrf_tiny.json"
     };
 
 // Scroll
