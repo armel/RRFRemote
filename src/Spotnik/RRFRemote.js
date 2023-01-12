@@ -20,7 +20,7 @@ const requestHandler = (request, response) => {
     "bav": "100, BAVARDAGE",
     "loc": "101, LOCAL",
     "exp": "102, EXPERIMENTAL",
-    "reg": "104, REGIONAL",
+    "reg": "104, IDF",
   };
 
   var qsy = {
