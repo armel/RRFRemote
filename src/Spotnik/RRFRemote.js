@@ -20,7 +20,7 @@ const requestHandler = (request, response) => {
     "bav": "100, BAVARDAGE",
     "loc": "101, LOCAL",
     "exp": "102, EXPERIMENTAL",
-    "reg": "104, IDF",
+    "idf": "104, IDF",
   };
 
   var qsy = {
@@ -32,7 +32,7 @@ const requestHandler = (request, response) => {
     100: "/etc/spotnik/restart.bav",
     101: "/etc/spotnik/restart.loc",
     102: "/etc/spotnik/restart.exp",
-    104: "/etc/spotnik/restart.reg",
+    104: "/etc/spotnik/restart.idf",
   };
 
 
