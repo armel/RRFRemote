@@ -3,7 +3,7 @@
 
 const http = require('http');
 const port = 3000;
-const version = 0.4;
+const version = 0.5;
 
 const requestHandler = (request, response) => {
   console.log(request.url);
