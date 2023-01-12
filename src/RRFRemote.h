@@ -1,7 +1,7 @@
 // Copyright (c) F4HWN Armel. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-#define VERSION "3.1.4"
+#define VERSION "3.1.5"
 #define AUTHOR "F4HWN"
 #define NAME "RRFRemote"
 
@@ -210,7 +210,7 @@ String endpointRRF[] = {
     "http://rrf.globalis-dev.com:8080/RRFTracker/INTERNATIONAL-today/rrf_tiny.json",
     "http://rrf.globalis-dev.com:8080/RRFTracker/BAVARDAGE-today/rrf_tiny.json",
     "http://rrf.globalis-dev.com:8080/RRFTracker/LOCAL-today/rrf_tiny.json",
-    "http://rrf.globalis-dev.com:8080/RRFTracker/REGIONAL-today/rrf_tiny.json"
+    "http://rrf.globalis-dev.com:8080/RRFTracker/IDF-today/rrf_tiny.json"
     };
 
 // Scroll
@@ -231,7 +231,7 @@ TaskHandle_t rrfdataHandle;
 TaskHandle_t buttonHandle;
 
 // Misceleanous
-const char *room[] = {"RRF", "FON", "TECHNIQUE", "INTERNATIONAL", "BAVARDAGE", "LOCAL", "REGIONAL"};
+const char *room[] = {"RRF", "FON", "TECHNIQUE", "INTERNATIONAL", "BAVARDAGE", "LOCAL", "IDF"};
 const uint8_t dtmf[] = {96, 97, 98, 99, 100, 101, 104};
 const char *menuSpotnikOn[] = {"CONFIG", "QSY", "FOLLOW", "RAPTOR", "PERROQUET", "SYSOP", "TOT", "ISS", "COULEUR", "LUMINOSITE", "BEEP", "MODE", "ETEINDRE"};
 const char *menuSpotnikOff[] = {"CONFIG", "TOT", "ISS", "COULEUR", "LUMINOSITE", "BEEP", "MODE", "ETEINDRE"};

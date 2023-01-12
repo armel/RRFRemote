@@ -516,7 +516,7 @@ void viewBlocage(uint8_t stop, const char *iptableIndicatif[10], const char *ipt
     for (uint8_t k = 0; k < stop; k++)
     {
       tmpString = String(iptableType[k]);
-      if (tmpString.substring(0, 11) == "INTEMPESTIF")
+      if (tmpString.substring(0, 11) == "INTEMPESTIF" || tmpString == "CAMPEUR")
       {
         j = 80;
         break;
