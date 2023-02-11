@@ -16,29 +16,26 @@ void setup()
 {
   // Init M5
   auto cfg = M5.config();
-  M5.begin(cfg);
 
+  cfg.clear_display = true;  // default=true. clear the screen when begin.
+  cfg.output_power  = true;  // default=true. use external port 5V output.
+  cfg.internal_imu  = true;  // default=true. use internal IMU.
+  cfg.internal_rtc  = true;  // default=true. use internal RTC.
+  cfg.internal_spk  = true;  // default=true. use internal speaker.
+  cfg.internal_mic  = true;  // default=true. use internal microphone.
+  cfg.external_imu  = true;  // default=false. use Unit Accel & Gyro.
+  cfg.external_rtc  = true;  // default=false. use Unit RTC.
+
+  cfg.external_display.module_display = true;  // default=true. use ModuleDisplay
+  cfg.external_display.atom_display   = true;  // default=true. use AtomDisplay
+  cfg.external_display.unit_oled      = true;  // default=true. use UnitOLED
+  cfg.external_display.unit_lcd       = true;  // default=true. use UnitLCD
+  cfg.external_display.unit_rca       = false; // default=false. use UnitRCA VideoOutput
+  cfg.external_display.module_rca     = false; // default=false. use ModuleRCA VideoOutput
+
+  M5.begin(cfg);
   pinMode(32, INPUT_PULLUP);
   pinMode(26, INPUT_PULLUP);
-
-  // Init Display
-  display.begin();
-
-  offsetX = (display.width() - 320) / 2; 
-  offsetY = (display.height() - 240) / 2;
-
-  // Init screensaver timer
-  screensaver = millis();
-
-  // Init Led
-  if (M5.getBoard() == m5::board_t::board_M5Stack)
-  {
-    FastLED.addLeds<NEOPIXEL, 15>(leds, NUM_LEDS); // GRB ordering is assumed
-  }
-  else if (M5.getBoard() == m5::board_t::board_M5StackCore2)
-  {
-    FastLED.addLeds<NEOPIXEL, 25>(leds, NUM_LEDS); // GRB ordering is assumed
-  }
 
   // Preferences
   preferences.begin(NAME);
@@ -71,28 +68,49 @@ void setup()
   totCurrent = preferences.getUInt("tot", 0);
   sysopCurrent = preferences.getUInt("sysop", 0);
   modeCurrent = preferences.getUInt("mode", 0);
+  hdmiCurrent = preferences.getUInt("hdmi", 0);
+
+  // Init Display
+  display = hdmiCurrent;
+  M5.setPrimaryDisplay(display);
+
+  offsetX = (M5.Displays(display).width() - 320) / 2; 
+  offsetY = (M5.Displays(display).height() - 240) / 2;
+
+  // Init screensaver timer
+  screensaver = millis();
+
+  // Init Led
+  if (M5.getBoard() == m5::board_t::board_M5Stack)
+  {
+    FastLED.addLeds<NEOPIXEL, 15>(leds, NUM_LEDS); // GRB ordering is assumed
+  }
+  else if (M5.getBoard() == m5::board_t::board_M5StackCore2)
+  {
+    FastLED.addLeds<NEOPIXEL, 25>(leds, NUM_LEDS); // GRB ordering is assumed
+  }
 
   // Bin Loader
   binLoader();
 
   // LCD
   resetColor();
-  display.setBrightness(map(brightnessCurrent, 1, 100, 1, 254));
-  display.fillScreen(TFT_HEADER);
+  M5.Displays(display).setBrightness(map(brightnessCurrent, 1, 100, 1, 254));
+  M5.Displays(display).fillScreen(TFT_HEADER);
 
   // Title
-  display.setFont(&rounded_led_board10pt7b);
-  display.setTextColor(TFT_WHITE, TFT_HEADER);
-  display.setTextDatum(CC_DATUM);
-  display.drawString(String(NAME), 160 + offsetX, 20 + offsetY);
-  display.setFont(0);
-  display.drawString("Version " + String(VERSION) + " par " + String(AUTHOR), 160 + offsetX, 50 + offsetY);
+  M5.Displays(display).setFont(&rounded_led_board10pt7b);
+  M5.Displays(display).setTextColor(TFT_WHITE, TFT_HEADER);
+  M5.Displays(display).setTextDatum(CC_DATUM);
+  M5.Displays(display).drawString(String(NAME), 160 + offsetX, 20 + offsetY);
+  M5.Displays(display).setFont(0);
+  M5.Displays(display).drawString("Version " + String(VERSION) + " par " + String(AUTHOR), 160 + offsetX, 50 + offsetY);
 
   // QRCode
-  display.qrcode("https://github.com/armel/" + String(NAME), 90 + offsetX, 80 + offsetY, 140, 6);
+  M5.Displays(display).qrcode("https://github.com/armel/" + String(NAME), 90 + offsetX, 80 + offsetY, 140, 6);
 
   // We start by connecting to the WiFi network
-  display.setTextPadding(320);
+  M5.Displays(display).setTextPadding(320);
 
   uint32_t color = ((BMP_HEADER.r & 0xff) << 16) + ((BMP_HEADER.g & 0xff) << 8) + (BMP_HEADER.b & 0xff);
 
@@ -103,14 +121,14 @@ void setup()
   while (true)
   {
     uint8_t attempt = 1;
-    display.drawString(String(config[(configCurrent * 6)]), 160 + offsetX, 60 + offsetY);
+    M5.Displays(display).drawString(String(config[(configCurrent * 6)]), 160 + offsetX, 60 + offsetY);
     WiFi.begin(config[(configCurrent * 6)], config[(configCurrent * 6) + 1]);
     while (WiFi.status() != WL_CONNECTED)
     {
       delay(500);
       if (attempt % 2 == 0)
       {
-        display.drawString("Connexion en cours", 160 + offsetX, 70 + offsetY);
+        M5.Displays(display).drawString("Connexion en cours", 160 + offsetX, 70 + offsetY);
         for (uint8_t j = 0; j <= 4; j++)
         {
           leds[j] = color;
@@ -121,7 +139,7 @@ void setup()
       }
       else
       {
-        display.drawString(" ", 160 + offsetX, 70 + offsetY);
+        M5.Displays(display).drawString(" ", 160 + offsetX, 70 + offsetY);
         for (uint8_t j = 0; j <= 4; j++)
         {
           leds[j] = CRGB::Black;
@@ -157,7 +175,7 @@ void setup()
 
   clientISS.setInsecure(); // For ISS
 
-  display.drawString(String(WiFi.localIP().toString().c_str()), 160 + offsetX, 70 + offsetY);
+  M5.Displays(display).drawString(String(WiFi.localIP().toString().c_str()), 160 + offsetX, 70 + offsetY);
 
   // Create menu
   if ((String)config[(configCurrent * 6) + 5] != "")
@@ -222,12 +240,12 @@ void setup()
 
   for (uint8_t i = 0; i <= 120; i++)
   {
-    display.drawFastHLine(0 + offsetX, i + offsetY, 320, TFT_BLACK);
-    display.drawFastHLine(0 + offsetX, 240 - i + offsetY, 320, TFT_BLACK);
+    M5.Displays(display).drawFastHLine(0 + offsetX, i + offsetY, 320, TFT_BLACK);
+    M5.Displays(display).drawFastHLine(0 + offsetX, 240 - i + offsetY, 320, TFT_BLACK);
     delay(5);
   }
 
-  display.fillScreen(TFT_BLACK);
+  M5.Displays(display).fillScreen(TFT_BLACK);
   clear();
 }
 
@@ -257,6 +275,8 @@ void loop()
   uint32_t timer = 0;
 
   // Let's go
+  display = hdmiCurrent;
+
   if (reset == 0)
   {
     clear();
@@ -409,9 +429,9 @@ void loop()
     viewElsewhere(doc, salon);
 
     // View many datas
-    display.setFont(&tahoma6pt7b);
-    display.setTextColor(TFT_WHITE, TFT_BACK);
-    display.setTextDatum(CC_DATUM);
+    M5.Displays(display).setFont(&tahoma6pt7b);
+    M5.Displays(display).setTextColor(TFT_WHITE, TFT_BACK);
+    M5.Displays(display).setTextDatum(CC_DATUM);
 
     if (tot > 0)
     {
@@ -501,30 +521,30 @@ void loop()
       {
         if (!isCharging() && screensaverMode == 0)
         {
-          display.setBrightness(map(brightnessCurrent, 1, 100, 1, 254));
+          M5.Displays(display).setBrightness(map(brightnessCurrent, 1, 100, 1, 254));
         }
 
-        display.fillRect(4 + offsetX, 2 + offsetY, 36, 42, TFT_HEADER);
+        M5.Displays(display).fillRect(4 + offsetX, 2 + offsetY, 36, 42, TFT_HEADER);
 
-        display.setTextColor(TFT_WHITE, TFT_HEADER);
-        display.setFont(&dot15pt7b);
-        display.setTextDatum(CC_DATUM);
-        display.setTextPadding(240);
-        display.drawString(String(salon), 160 + offsetX, 16 + offsetY);
+        M5.Displays(display).setTextColor(TFT_WHITE, TFT_HEADER);
+        M5.Displays(display).setFont(&dot15pt7b);
+        M5.Displays(display).setTextDatum(CC_DATUM);
+        M5.Displays(display).setTextPadding(240);
+        M5.Displays(display).drawString(String(salon), 160 + offsetX, 16 + offsetY);
 
-        display.setTextColor(TFT_WHITE, TFT_HEADER);
-        display.setFont(ICON_FONT);
-        display.setTextDatum(CL_DATUM);
-        display.setTextPadding(20);
+        M5.Displays(display).setTextColor(TFT_WHITE, TFT_HEADER);
+        M5.Displays(display).setFont(ICON_FONT);
+        M5.Displays(display).setTextDatum(CL_DATUM);
+        M5.Displays(display).setTextPadding(20);
         sprintf(swap, "%c", ICON_CALL);
         tmpString = swap;
-        display.drawString(tmpString, 10 + offsetX, 22 + offsetY);
+        M5.Displays(display).drawString(tmpString, 10 + offsetX, 22 + offsetY);
 
-        display.fillRect(0 + offsetX, 46 + offsetY, 320, 32, TFT_INFO);
+        M5.Displays(display).fillRect(0 + offsetX, 46 + offsetY, 320, 32, TFT_INFO);
 
-        display.setFont(&rounded_led_board10pt7b);
-        display.setTextColor(TFT_WHITE, TFT_INFO);
-        display.setTextDatum(CL_DATUM);
+        M5.Displays(display).setFont(&rounded_led_board10pt7b);
+        M5.Displays(display).setTextColor(TFT_WHITE, TFT_INFO);
+        M5.Displays(display).setTextDatum(CL_DATUM);
 
         tmpString = String(lastIndicatif[0]);
         indicatifString = tmpString;
@@ -555,26 +575,26 @@ void loop()
         transmitOff = 0;
       }
 
-      M5.Lcd.setFont(&rounded_led_board10pt7b);
-      M5.Lcd.setTextColor(TFT_WHITE, TFT_INFO);
-      M5.Lcd.setTextDatum(CL_DATUM);
+      M5.Displays(display).setFont(&rounded_led_board10pt7b);
+      M5.Displays(display).setTextColor(TFT_WHITE, TFT_INFO);
+      M5.Displays(display).setTextDatum(CL_DATUM);
       dureeString = String(lastDuree[0]);
       if (dureeStringOld != dureeString) 
       {
         dureeStringOld = dureeString;
-        M5.Lcd.drawString(dureeString.substring(1), (centerData + lengthData - 80) + offsetX, 64 + offsetY);
+        M5.Displays(display).drawString(dureeString.substring(1), (centerData + lengthData - 80) + offsetX, 64 + offsetY);
       }
 
       if (totCurrent)
       {
         if ((String(salon) == "RRF" && tot > TIMEOUT_TOT_RRF) || (tot > TIMEOUT_TOT_ELSEWHERE))
         {
-          display.setBrightness(0);
+          M5.Displays(display).setBrightness(0);
           M5.Speaker.tone(1000, 50);
           delay(10);
           M5.Speaker.tone(1000, 50);
           delay(80);
-          display.setBrightness(map(brightnessCurrent, 1, 100, 1, 254));
+          M5.Displays(display).setBrightness(map(brightnessCurrent, 1, 100, 1, 254));
         }
       }
     }
@@ -586,14 +606,14 @@ void loop()
 
         if (!isCharging() && screensaverMode == 0)
         {
-          display.setBrightness(map(brightnessCurrent, 1, 100, 1, 254));
+          M5.Displays(display).setBrightness(map(brightnessCurrent, 1, 100, 1, 254));
         }
 
-        display.setTextColor(TFT_WHITE, TFT_HEADER);
-        display.setFont(&dot15pt7b);
-        display.setTextDatum(CC_DATUM);
-        display.setTextPadding(240);
-        display.drawString(String(salon), 160 + offsetX, 16 + offsetY);
+        M5.Displays(display).setTextColor(TFT_WHITE, TFT_HEADER);
+        M5.Displays(display).setFont(&dot15pt7b);
+        M5.Displays(display).setTextDatum(CC_DATUM);
+        M5.Displays(display).setTextPadding(240);
+        M5.Displays(display).drawString(String(salon), 160 + offsetX, 16 + offsetY);
 
         dateStringOld = "";
         linkTotalStringOld = "";
@@ -606,10 +626,10 @@ void loop()
         transmitOff = 2;
       }
 
-      display.setFont(ICON_FONT);
-      display.setTextColor(TFT_WHITE, TFT_HEADER);
-      display.setTextDatum(CL_DATUM);
-      display.setTextPadding(0);
+      M5.Displays(display).setFont(ICON_FONT);
+      M5.Displays(display).setTextColor(TFT_WHITE, TFT_HEADER);
+      M5.Displays(display).setTextDatum(CL_DATUM);
+      M5.Displays(display).setTextPadding(0);
 
       switch (type)
       {
@@ -698,20 +718,20 @@ void loop()
   {
     for (uint8_t i = brightnessCurrent; i >= 1; i--)
     {
-      display.setBrightness(map(i, 1, 100, 1, 254));
+      M5.Displays(display).setBrightness(map(i, 1, 100, 1, 254));
       scroll(0);
       delay(50);
     }
     screensaverMode = 1;
-    display.sleep();
+    M5.Displays(display).sleep();
   }
   else if (screensaverMode == 1 && millis() - screensaver < TIMEOUT_SCREENSAVER)
   {
-    display.wakeup();
+    M5.Displays(display).wakeup();
     screensaverMode = 0;
     for (uint8_t i = 1; i <= brightnessCurrent; i++)
     {
-      display.setBrightness(map(i, 1, 100, 1, 254));
+      M5.Displays(display).setBrightness(map(i, 1, 100, 1, 254));
       scroll(0);
       delay(50);
     }

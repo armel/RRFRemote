@@ -235,7 +235,7 @@ void button(void *pvParameters)
     }
     */
 
-    if (display.getRotation() == 1)
+    if (M5.Displays(display).getRotation() == 1)
     {
       right = 1;
       left = -1;
@@ -474,6 +474,21 @@ void button(void *pvParameters)
         vTaskDelay(pdMS_TO_TICKS(1000));
         menuMode = 2;
       }
+      // Mode menu active, HDMI
+      else if (option == "HDMI")
+      {
+        change = hdmiCurrent;
+        change = (change == 0) ? 1 : 0;
+        hdmiCurrent = change;
+        M5.Displays(display).fillScreen(TFT_BLACK);
+        display = hdmiCurrent;
+        M5.setPrimaryDisplay(display);
+        offsetX = (M5.Displays(display).width() - 320) / 2; 
+        offsetY = (M5.Displays(display).height() - 240) / 2;
+        preferences.putUInt("hdmi", hdmiCurrent);
+        //vTaskDelay(pdMS_TO_TICKS(1000));
+        menuMode = 2;
+      }
       // Mode menu active, Parrot
       else if (option == "PERROQUET")
       {
@@ -587,7 +602,7 @@ void button(void *pvParameters)
         {
           brightnessCurrent = change;
           preferences.putUInt("brightness", brightnessCurrent);
-          display.setBrightness(map(brightnessCurrent, 1, 100, 1, 254));
+          M5.Displays(display).setBrightness(map(brightnessCurrent, 1, 100, 1, 254));
         }
       }
       // Mode menu active, Beep

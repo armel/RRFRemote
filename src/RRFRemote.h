@@ -1,7 +1,7 @@
 // Copyright (c) F4HWN Armel. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-#define VERSION "3.1.6"
+#define VERSION "3.2.0"
 #define AUTHOR "F4HWN"
 #define NAME "RRFRemote"
 
@@ -18,9 +18,13 @@
 
 #define FASTLED_INTERNAL // To disable pragma messages on compile
 
-#define M5ATOMDISPLAY_LOGICAL_WIDTH  WIDTH    // width
-#define M5ATOMDISPLAY_LOGICAL_HEIGHT  HEIGHT  // height
+#define M5ATOMDISPLAY_LOGICAL_WIDTH WIDTH     // width
+#define M5ATOMDISPLAY_LOGICAL_HEIGHT HEIGHT   // height
 #define M5ATOMDISPLAY_REFRESH_RATE 60         // refresh rate
+
+#define M5MODULEDISPLAY_LOGICAL_WIDTH WIDTH   // Width
+#define M5MODULEDISPLAY_LOGICAL_HEIGHT HEIGHT // Height
+#define M5MODULEDISPLAY_REFRESH_RATE 60       // Refresh rate
 
 #define SDU_HEADLESS // For Bin Loader
 
@@ -35,6 +39,8 @@
 
 #if ATOM == 1
   #include <M5AtomDisplay.h>
+#else
+  #include <M5ModuleDisplay.h>
 #endif
 
 #include <M5Unified.h>
@@ -54,12 +60,6 @@ WiFiServer httpServer(80);
 // Display
 uint16_t offsetX = 0;
 uint16_t offsetY = 0;
-
-#if ATOM == 0
-  M5GFX &display(M5.Lcd);
-#else
-  M5AtomDisplay display(WIDTH, HEIGHT);
-#endif
 
 // Flags for button presses via Web site Screen Capture
 bool buttonLeftPressed = false;
@@ -233,8 +233,8 @@ TaskHandle_t buttonHandle;
 // Misceleanous
 const char *room[] = {"RRF", "FON", "TECHNIQUE", "INTERNATIONAL", "BAVARDAGE", "LOCAL", "IDF"};
 const uint8_t dtmf[] = {96, 97, 98, 99, 100, 101, 104};
-const char *menuSpotnikOn[] = {"CONFIG", "QSY", "FOLLOW", "RAPTOR", "PERROQUET", "SYSOP", "TOT", "ISS", "COULEUR", "LUMINOSITE", "BEEP", "MODE", "ETEINDRE"};
-const char *menuSpotnikOff[] = {"CONFIG", "TOT", "ISS", "COULEUR", "LUMINOSITE", "BEEP", "MODE", "ETEINDRE"};
+const char *menuSpotnikOn[] = {"CONFIG", "QSY", "FOLLOW", "RAPTOR", "PERROQUET", "SYSOP", "TOT", "ISS", "COULEUR", "HDMI", "LUMINOSITE", "BEEP", "MODE", "ETEINDRE"};
+const char *menuSpotnikOff[] = {"CONFIG", "TOT", "ISS", "COULEUR", "HDMI", "LUMINOSITE", "BEEP", "MODE", "ETEINDRE"};
 const char *sysop[] = {"REBOOT", "IP", "SCAN RAPIDE", "LIBRE"};
 char **menu;
 char swap[32];
@@ -275,8 +275,10 @@ int8_t configCurrent = 0;
 int8_t sysopCurrent = 0;
 int8_t roomCurrent = 0;
 int8_t modeCurrent = 1;
+int8_t hdmiCurrent = 0;
 int8_t modeOld = 1;
 int8_t modeNew = 1;
+int8_t display = 0;
 
 uint8_t htmlGetRequest;
 uint8_t htmlGetRefresh = 3;

@@ -60,30 +60,30 @@ void myProgressFunction( int state, int size )
   {
     for (uint8_t j = 0; j <= 5; j++)
     {
-      display.drawGradientHLine(22, 30 + j, gauge, TFT_BLACK, TFT_RED);
+      M5.Displays(display).drawGradientHLine(22, 30 + j, gauge, TFT_BLACK, TFT_RED);
     }
 
     for (uint16_t j = 1; j < gauge; j++)
     {
       if(j % 23 == 0)
       {
-        display.drawFastVLine(22 + j, 30, 6, TFT_BLACK);
+        M5.Displays(display).drawFastVLine(22 + j, 30, 6, TFT_BLACK);
       }
     }
   }
 
-  display.drawString(String(percent) + " %", 160, 70);
+  M5.Displays(display).drawString(String(percent) + " %", 160, 70);
 
   if (percent % 2 == 0)
   {
     if(blink == false)
     {
-      display.drawString("Loading in progress, please wait...", 160, 50);
+      M5.Displays(display).drawString("Loading in progress, please wait...", 160, 50);
       blink = true;
     }
     else
     {
-      display.drawString("", 160, 50);
+      M5.Displays(display).drawString("", 160, 50);
       blink = false;
     }
   }
@@ -117,18 +117,18 @@ void binLoader()
   {
     Serial.println("SPIFFS Mount Failed");
 
-    display.fillScreen(TFT_BLACK);
+    M5.Displays(display).fillScreen(TFT_BLACK);
 
-    display.setFont(&tahoma8pt7b);
-    display.setTextColor(TFT_WHITE, TFT_BLACK);
-    display.setTextDatum(CC_DATUM);
-    display.drawString("BUILD SPIFFS", 160, 20);
+    M5.Displays(display).setFont(&tahoma8pt7b);
+    M5.Displays(display).setTextColor(TFT_WHITE, TFT_BLACK);
+    M5.Displays(display).setTextDatum(CC_DATUM);
+    M5.Displays(display).drawString("BUILD SPIFFS", 160, 20);
 
-    display.drawString("SPI Flash File System", 160, 80);
-    display.drawString("needs to be formated.", 160, 100);
-    display.drawString("It takes around 4 minutes.", 160, 140);
-    display.drawString("Please, wait until ", 160, 180);
-    display.drawString("the application starts !", 160, 200);
+    M5.Displays(display).drawString("SPI Flash File System", 160, 80);
+    M5.Displays(display).drawString("needs to be formated.", 160, 100);
+    M5.Displays(display).drawString("It takes around 4 minutes.", 160, 140);
+    M5.Displays(display).drawString("Please, wait until ", 160, 180);
+    M5.Displays(display).drawString("the application starts !", 160, 200);
 
     Serial.println("SPIFFS Formating...");
 
@@ -147,14 +147,14 @@ void binLoader()
 
   if (fileIndex != 0)
   {
-    display.fillScreen(TFT_BLACK);
+    M5.Displays(display).fillScreen(TFT_BLACK);
 
-    display.setFont(&tahoma8pt7b);
-    display.setTextColor(TFT_DARKGRAY, TFT_BLACK);
-    display.setTextDatum(CC_DATUM);
-    display.setTextPadding(320);
-    display.drawString(version, 160, 20);
-    display.drawRect(20, 28, 280, 10, TFT_DARKGRAY);
+    M5.Displays(display).setFont(&tahoma8pt7b);
+    M5.Displays(display).setTextColor(TFT_DARKGRAY, TFT_BLACK);
+    M5.Displays(display).setTextDatum(CC_DATUM);
+    M5.Displays(display).setTextPadding(320);
+    M5.Displays(display).drawString(version, 160, 20);
+    M5.Displays(display).drawRect(20, 28, 280, 10, TFT_DARKGRAY);
     
     for (uint16_t i = 0; i < TIMEOUT_BIN_LOADER * 10; i++)
     {
@@ -163,14 +163,14 @@ void binLoader()
       {
         for (uint8_t j = 0; j <= 5; j++)
         {
-          display.drawGradientHLine(22, 30 + j, gauge, TFT_BLACK, TFT_GREEN);
+          M5.Displays(display).drawGradientHLine(22, 30 + j, gauge, TFT_BLACK, TFT_GREEN);
         }
        
         for (uint16_t j = 1; j < gauge; j++)
         {
           if(j % 23 == 0)
           {
-            display.drawFastVLine(22 + j, 30, 6, TFT_BLACK);
+            M5.Displays(display).drawFastVLine(22 + j, 30, 6, TFT_BLACK);
           }
         }
       }
@@ -179,16 +179,16 @@ void binLoader()
 
       if (i % 5 == 0)
       {
-        display.setTextFont(1);
-        display.setTextSize(1);
+        M5.Displays(display).setTextFont(1);
+        M5.Displays(display).setTextSize(1);
         if(blink == false)
         {
-          display.drawString("Push middle button to enter", 160, 50);
+          M5.Displays(display).drawString("Push middle button to enter", 160, 50);
           blink = true;
         }
         else
         {
-          display.drawString("", 160, 50);
+          M5.Displays(display).drawString("", 160, 50);
           blink = false;
         }
       }
@@ -201,7 +201,7 @@ void binLoader()
       else if (btnB)
       {
         click = true;
-        display.fillScreen(TFT_BLACK);
+        M5.Displays(display).fillScreen(TFT_BLACK);
         break;
       }
 
@@ -217,9 +217,9 @@ void binLoader()
       vTaskDelay(100);
     }
 
-    display.setTextColor(TFT_WHITE, TFT_BLACK);
-    display.setTextDatum(CC_DATUM);
-    display.drawString(version, 160, 20);
+    M5.Displays(display).setTextColor(TFT_WHITE, TFT_BLACK);
+    M5.Displays(display).setTextDatum(CC_DATUM);
+    M5.Displays(display).drawString(version, 160, 20);
 
     getButton();
 
@@ -233,14 +233,14 @@ void binLoader()
     }
     else if (btnB)
     {
-      display.fillScreen(TFT_BLACK);
-      display.setFont(&tahoma8pt7b);
-      display.setTextColor(TFT_WHITE, TFT_BLACK);
-      display.setTextDatum(CC_DATUM);
-      display.setTextPadding(320);
-      display.drawString(version, 160, 20);
+      M5.Displays(display).fillScreen(TFT_BLACK);
+      M5.Displays(display).setFont(&tahoma8pt7b);
+      M5.Displays(display).setTextColor(TFT_WHITE, TFT_BLACK);
+      M5.Displays(display).setTextDatum(CC_DATUM);
+      M5.Displays(display).setTextPadding(320);
+      M5.Displays(display).drawString(version, 160, 20);
 
-      display.drawRect(20, 28, 280, 10, TFT_WHITE);
+      M5.Displays(display).drawRect(20, 28, 280, 10, TFT_WHITE);
 
       SDUCfg.setProgressCb  ( myProgressFunction );
       SDUCfg.setWaitForActionCb( myActionTrigger );
@@ -249,7 +249,7 @@ void binLoader()
       switch (pos)
       {
       case 6:
-        display.drawString(String(fileName[cursor]).substring(pos + 1), 160, 100);
+        M5.Displays(display).drawString(String(fileName[cursor]).substring(pos + 1), 160, 100);
         checkSDUpdater(
           SPIFFS,                                   // filesystem (default=SD)
           String(fileName[cursor]).substring(pos),  // path to binary (default=/menu.bin, empty string=rollback only)
@@ -258,7 +258,7 @@ void binLoader()
         );
         break;
       case 2:
-        display.drawString(String(fileName[cursor]).substring(pos + 1), 160, 100);
+        M5.Displays(display).drawString(String(fileName[cursor]).substring(pos + 1), 160, 100);
         checkSDUpdater(
           SD,                                       // filesystem (default=SD)
           String(fileName[cursor]).substring(pos),  // path to binary (default=/menu.bin, empty string=rollback only)
@@ -284,7 +284,7 @@ void binLoader()
     if (change != cursor)
     {
       change = cursor;
-      display.setTextPadding(320);
+      M5.Displays(display).setTextPadding(320);
 
       Serial.printf("%d %d %d %d\n", start, stop, cursor, limit);
 
@@ -299,7 +299,7 @@ void binLoader()
           if(j == cursor)
           {
             tmpName = ">> " + tmpName + " <<";
-            display.drawString("SPI Flash File Storage", 160, 50);
+            M5.Displays(display).drawString("SPI Flash File Storage", 160, 50);
           }
           break;
         case 2:
@@ -307,12 +307,12 @@ void binLoader()
           if(j == cursor)
           {
             tmpName = ">> " + tmpName + " <<";
-            display.drawString("SD Card Storage", 160, 50);
+            M5.Displays(display).drawString("SD Card Storage", 160, 50);
           }
           break;  
         }
 
-        display.drawString(tmpName, 160, 80 + i * 20);
+        M5.Displays(display).drawString(tmpName, 160, 80 + i * 20);
         i++;
       }
     }

@@ -48,10 +48,10 @@ void resetColor()
   switch (colorCurrent)
   {
   case 0:
-    TFT_HEADER = display.color565(TFT_HEADER_ROUGE.r, TFT_HEADER_ROUGE.g, TFT_HEADER_ROUGE.b);
-    TFT_INFO = display.color565(TFT_INFO_ROUGE.r, TFT_INFO_ROUGE.g, TFT_INFO_ROUGE.b);
-    TFT_FRONT = display.color565(TFT_FRONT_ROUGE.r, TFT_FRONT_ROUGE.g, TFT_FRONT_ROUGE.b);
-    TFT_BACK = display.color565(TFT_BACK_ROUGE.r, TFT_BACK_ROUGE.g, TFT_BACK_ROUGE.b);
+    TFT_HEADER = M5.Displays(display).color565(TFT_HEADER_ROUGE.r, TFT_HEADER_ROUGE.g, TFT_HEADER_ROUGE.b);
+    TFT_INFO = M5.Displays(display).color565(TFT_INFO_ROUGE.r, TFT_INFO_ROUGE.g, TFT_INFO_ROUGE.b);
+    TFT_FRONT = M5.Displays(display).color565(TFT_FRONT_ROUGE.r, TFT_FRONT_ROUGE.g, TFT_FRONT_ROUGE.b);
+    TFT_BACK = M5.Displays(display).color565(TFT_BACK_ROUGE.r, TFT_BACK_ROUGE.g, TFT_BACK_ROUGE.b);
     BMP_HEADER = TFT_HEADER_ROUGE;
     BMP_INFO = TFT_INFO_ROUGE;
     BMP_FRONT = TFT_FRONT_ROUGE;
@@ -59,10 +59,10 @@ void resetColor()
     break;
 
   case 1:
-    TFT_HEADER = display.color565(TFT_HEADER_ROSE.r, TFT_HEADER_ROSE.g, TFT_HEADER_ROSE.b);
-    TFT_INFO = display.color565(TFT_INFO_ROSE.r, TFT_INFO_ROSE.g, TFT_INFO_ROSE.b);
-    TFT_FRONT = display.color565(TFT_FRONT_ROSE.r, TFT_FRONT_ROSE.g, TFT_FRONT_ROSE.b);
-    TFT_BACK = display.color565(TFT_BACK_ROSE.r, TFT_BACK_ROSE.g, TFT_BACK_ROSE.b);
+    TFT_HEADER = M5.Displays(display).color565(TFT_HEADER_ROSE.r, TFT_HEADER_ROSE.g, TFT_HEADER_ROSE.b);
+    TFT_INFO = M5.Displays(display).color565(TFT_INFO_ROSE.r, TFT_INFO_ROSE.g, TFT_INFO_ROSE.b);
+    TFT_FRONT = M5.Displays(display).color565(TFT_FRONT_ROSE.r, TFT_FRONT_ROSE.g, TFT_FRONT_ROSE.b);
+    TFT_BACK = M5.Displays(display).color565(TFT_BACK_ROSE.r, TFT_BACK_ROSE.g, TFT_BACK_ROSE.b);
     BMP_HEADER = TFT_HEADER_ROSE;
     BMP_INFO = TFT_INFO_ROSE;
     BMP_FRONT = TFT_FRONT_ROSE;
@@ -70,10 +70,10 @@ void resetColor()
     break;
 
   case 2:
-    TFT_HEADER = display.color565(TFT_HEADER_VIOLET.r, TFT_HEADER_VIOLET.g, TFT_HEADER_VIOLET.b);
-    TFT_INFO = display.color565(TFT_INFO_VIOLET.r, TFT_INFO_VIOLET.g, TFT_INFO_VIOLET.b);
-    TFT_FRONT = display.color565(TFT_FRONT_VIOLET.r, TFT_FRONT_VIOLET.g, TFT_FRONT_VIOLET.b);
-    TFT_BACK = display.color565(TFT_BACK_VIOLET.r, TFT_BACK_VIOLET.g, TFT_BACK_VIOLET.b);
+    TFT_HEADER = M5.Displays(display).color565(TFT_HEADER_VIOLET.r, TFT_HEADER_VIOLET.g, TFT_HEADER_VIOLET.b);
+    TFT_INFO = M5.Displays(display).color565(TFT_INFO_VIOLET.r, TFT_INFO_VIOLET.g, TFT_INFO_VIOLET.b);
+    TFT_FRONT = M5.Displays(display).color565(TFT_FRONT_VIOLET.r, TFT_FRONT_VIOLET.g, TFT_FRONT_VIOLET.b);
+    TFT_BACK = M5.Displays(display).color565(TFT_BACK_VIOLET.r, TFT_BACK_VIOLET.g, TFT_BACK_VIOLET.b);
     BMP_HEADER = TFT_HEADER_VIOLET;
     BMP_INFO = TFT_INFO_VIOLET;
     BMP_FRONT = TFT_FRONT_VIOLET;
@@ -81,10 +81,10 @@ void resetColor()
     break;
 
   case 3:
-    TFT_HEADER = display.color565(TFT_HEADER_BLEU.r, TFT_HEADER_BLEU.g, TFT_HEADER_BLEU.b);
-    TFT_INFO = display.color565(TFT_INFO_BLEU.r, TFT_INFO_BLEU.g, TFT_INFO_BLEU.b);
-    TFT_FRONT = display.color565(TFT_FRONT_BLEU.r, TFT_FRONT_BLEU.g, TFT_FRONT_BLEU.b);
-    TFT_BACK = display.color565(TFT_BACK_BLEU.r, TFT_BACK_BLEU.g, TFT_BACK_BLEU.b);
+    TFT_HEADER = M5.Displays(display).color565(TFT_HEADER_BLEU.r, TFT_HEADER_BLEU.g, TFT_HEADER_BLEU.b);
+    TFT_INFO = M5.Displays(display).color565(TFT_INFO_BLEU.r, TFT_INFO_BLEU.g, TFT_INFO_BLEU.b);
+    TFT_FRONT = M5.Displays(display).color565(TFT_FRONT_BLEU.r, TFT_FRONT_BLEU.g, TFT_FRONT_BLEU.b);
+    TFT_BACK = M5.Displays(display).color565(TFT_BACK_BLEU.r, TFT_BACK_BLEU.g, TFT_BACK_BLEU.b);
     BMP_HEADER = TFT_HEADER_BLEU;
     BMP_INFO = TFT_INFO_BLEU;
     BMP_FRONT = TFT_FRONT_BLEU;
@@ -92,10 +92,10 @@ void resetColor()
     break;
 
   case 4:
-    TFT_HEADER = display.color565(TFT_HEADER_TURQUOISE.r, TFT_HEADER_TURQUOISE.g, TFT_HEADER_TURQUOISE.b);
-    TFT_INFO = display.color565(TFT_INFO_TURQUOISE.r, TFT_INFO_TURQUOISE.g, TFT_INFO_TURQUOISE.b);
-    TFT_FRONT = display.color565(TFT_FRONT_TURQUOISE.r, TFT_FRONT_TURQUOISE.g, TFT_FRONT_TURQUOISE.b);
-    TFT_BACK = display.color565(TFT_BACK_TURQUOISE.r, TFT_BACK_TURQUOISE.g, TFT_BACK_TURQUOISE.b);
+    TFT_HEADER = M5.Displays(display).color565(TFT_HEADER_TURQUOISE.r, TFT_HEADER_TURQUOISE.g, TFT_HEADER_TURQUOISE.b);
+    TFT_INFO = M5.Displays(display).color565(TFT_INFO_TURQUOISE.r, TFT_INFO_TURQUOISE.g, TFT_INFO_TURQUOISE.b);
+    TFT_FRONT = M5.Displays(display).color565(TFT_FRONT_TURQUOISE.r, TFT_FRONT_TURQUOISE.g, TFT_FRONT_TURQUOISE.b);
+    TFT_BACK = M5.Displays(display).color565(TFT_BACK_TURQUOISE.r, TFT_BACK_TURQUOISE.g, TFT_BACK_TURQUOISE.b);
     BMP_HEADER = TFT_HEADER_TURQUOISE;
     BMP_INFO = TFT_INFO_TURQUOISE;
     BMP_FRONT = TFT_FRONT_TURQUOISE;
@@ -103,10 +103,10 @@ void resetColor()
     break;
 
   case 5:
-    TFT_HEADER = display.color565(TFT_HEADER_VERT.r, TFT_HEADER_VERT.g, TFT_HEADER_VERT.b);
-    TFT_INFO = display.color565(TFT_INFO_VERT.r, TFT_INFO_VERT.g, TFT_INFO_VERT.b);
-    TFT_FRONT = display.color565(TFT_FRONT_VERT.r, TFT_FRONT_VERT.g, TFT_FRONT_VERT.b);
-    TFT_BACK = display.color565(TFT_BACK_VERT.r, TFT_BACK_VERT.g, TFT_BACK_VERT.b);
+    TFT_HEADER = M5.Displays(display).color565(TFT_HEADER_VERT.r, TFT_HEADER_VERT.g, TFT_HEADER_VERT.b);
+    TFT_INFO = M5.Displays(display).color565(TFT_INFO_VERT.r, TFT_INFO_VERT.g, TFT_INFO_VERT.b);
+    TFT_FRONT = M5.Displays(display).color565(TFT_FRONT_VERT.r, TFT_FRONT_VERT.g, TFT_FRONT_VERT.b);
+    TFT_BACK = M5.Displays(display).color565(TFT_BACK_VERT.r, TFT_BACK_VERT.g, TFT_BACK_VERT.b);
     BMP_HEADER = TFT_HEADER_VERT;
     BMP_INFO = TFT_INFO_VERT;
     BMP_FRONT = TFT_FRONT_VERT;
@@ -114,10 +114,10 @@ void resetColor()
     break;
 
   case 6:
-    TFT_HEADER = display.color565(TFT_HEADER_ORANGE.r, TFT_HEADER_ORANGE.g, TFT_HEADER_ORANGE.b);
-    TFT_INFO = display.color565(TFT_INFO_ORANGE.r, TFT_INFO_ORANGE.g, TFT_INFO_ORANGE.b);
-    TFT_FRONT = display.color565(TFT_FRONT_ORANGE.r, TFT_FRONT_ORANGE.g, TFT_FRONT_ORANGE.b);
-    TFT_BACK = display.color565(TFT_BACK_ORANGE.r, TFT_BACK_ORANGE.g, TFT_BACK_ORANGE.b);
+    TFT_HEADER = M5.Displays(display).color565(TFT_HEADER_ORANGE.r, TFT_HEADER_ORANGE.g, TFT_HEADER_ORANGE.b);
+    TFT_INFO = M5.Displays(display).color565(TFT_INFO_ORANGE.r, TFT_INFO_ORANGE.g, TFT_INFO_ORANGE.b);
+    TFT_FRONT = M5.Displays(display).color565(TFT_FRONT_ORANGE.r, TFT_FRONT_ORANGE.g, TFT_FRONT_ORANGE.b);
+    TFT_BACK = M5.Displays(display).color565(TFT_BACK_ORANGE.r, TFT_BACK_ORANGE.g, TFT_BACK_ORANGE.b);
     BMP_HEADER = TFT_HEADER_ORANGE;
     BMP_INFO = TFT_INFO_ORANGE;
     BMP_FRONT = TFT_FRONT_ORANGE;
@@ -125,10 +125,10 @@ void resetColor()
     break;
 
   case 7:
-    TFT_HEADER = display.color565(TFT_HEADER_MARRON.r, TFT_HEADER_MARRON.g, TFT_HEADER_MARRON.b);
-    TFT_INFO = display.color565(TFT_INFO_MARRON.r, TFT_INFO_MARRON.g, TFT_INFO_MARRON.b);
-    TFT_FRONT = display.color565(TFT_FRONT_MARRON.r, TFT_FRONT_MARRON.g, TFT_FRONT_MARRON.b);
-    TFT_BACK = display.color565(TFT_BACK_MARRON.r, TFT_BACK_MARRON.g, TFT_BACK_MARRON.b);
+    TFT_HEADER = M5.Displays(display).color565(TFT_HEADER_MARRON.r, TFT_HEADER_MARRON.g, TFT_HEADER_MARRON.b);
+    TFT_INFO = M5.Displays(display).color565(TFT_INFO_MARRON.r, TFT_INFO_MARRON.g, TFT_INFO_MARRON.b);
+    TFT_FRONT = M5.Displays(display).color565(TFT_FRONT_MARRON.r, TFT_FRONT_MARRON.g, TFT_FRONT_MARRON.b);
+    TFT_BACK = M5.Displays(display).color565(TFT_BACK_MARRON.r, TFT_BACK_MARRON.g, TFT_BACK_MARRON.b);
     BMP_HEADER = TFT_HEADER_MARRON;
     BMP_INFO = TFT_INFO_MARRON;
     BMP_FRONT = TFT_FRONT_MARRON;
@@ -136,10 +136,10 @@ void resetColor()
     break;
 
   case 8:
-    TFT_HEADER = display.color565(TFT_HEADER_GRIS.r, TFT_HEADER_GRIS.g, TFT_HEADER_GRIS.b);
-    TFT_INFO = display.color565(TFT_INFO_GRIS.r, TFT_INFO_GRIS.g, TFT_INFO_GRIS.b);
-    TFT_FRONT = display.color565(TFT_FRONT_GRIS.r, TFT_FRONT_GRIS.g, TFT_FRONT_GRIS.b);
-    TFT_BACK = display.color565(TFT_BACK_GRIS.r, TFT_BACK_GRIS.g, TFT_BACK_GRIS.b);
+    TFT_HEADER = M5.Displays(display).color565(TFT_HEADER_GRIS.r, TFT_HEADER_GRIS.g, TFT_HEADER_GRIS.b);
+    TFT_INFO = M5.Displays(display).color565(TFT_INFO_GRIS.r, TFT_INFO_GRIS.g, TFT_INFO_GRIS.b);
+    TFT_FRONT = M5.Displays(display).color565(TFT_FRONT_GRIS.r, TFT_FRONT_GRIS.g, TFT_FRONT_GRIS.b);
+    TFT_BACK = M5.Displays(display).color565(TFT_BACK_GRIS.r, TFT_BACK_GRIS.g, TFT_BACK_GRIS.b);
     BMP_HEADER = TFT_HEADER_GRIS;
     BMP_INFO = TFT_INFO_GRIS;
     BMP_FRONT = TFT_FRONT_GRIS;
@@ -147,10 +147,10 @@ void resetColor()
     break;
 
   case 9:
-    TFT_HEADER = display.color565(TFT_HEADER_CREPUSCULE.r, TFT_HEADER_CREPUSCULE.g, TFT_HEADER_CREPUSCULE.b);
-    TFT_INFO = display.color565(TFT_INFO_CREPUSCULE.r, TFT_INFO_CREPUSCULE.g, TFT_INFO_CREPUSCULE.b);
-    TFT_FRONT = display.color565(TFT_FRONT_CREPUSCULE.r, TFT_FRONT_CREPUSCULE.g, TFT_FRONT_CREPUSCULE.b);
-    TFT_BACK = display.color565(TFT_BACK_CREPUSCULE.r, TFT_BACK_CREPUSCULE.g, TFT_BACK_CREPUSCULE.b);
+    TFT_HEADER = M5.Displays(display).color565(TFT_HEADER_CREPUSCULE.r, TFT_HEADER_CREPUSCULE.g, TFT_HEADER_CREPUSCULE.b);
+    TFT_INFO = M5.Displays(display).color565(TFT_INFO_CREPUSCULE.r, TFT_INFO_CREPUSCULE.g, TFT_INFO_CREPUSCULE.b);
+    TFT_FRONT = M5.Displays(display).color565(TFT_FRONT_CREPUSCULE.r, TFT_FRONT_CREPUSCULE.g, TFT_FRONT_CREPUSCULE.b);
+    TFT_BACK = M5.Displays(display).color565(TFT_BACK_CREPUSCULE.r, TFT_BACK_CREPUSCULE.g, TFT_BACK_CREPUSCULE.b);
     BMP_HEADER = TFT_HEADER_CREPUSCULE;
     BMP_INFO = TFT_INFO_CREPUSCULE;
     BMP_FRONT = TFT_FRONT_CREPUSCULE;
@@ -158,10 +158,10 @@ void resetColor()
     break;
 
   case 10:
-    TFT_HEADER = display.color565(TFT_HEADER_FORET.r, TFT_HEADER_FORET.g, TFT_HEADER_FORET.b);
-    TFT_INFO = display.color565(TFT_INFO_FORET.r, TFT_INFO_FORET.g, TFT_INFO_FORET.b);
-    TFT_FRONT = display.color565(TFT_FRONT_FORET.r, TFT_FRONT_FORET.g, TFT_FRONT_FORET.b);
-    TFT_BACK = display.color565(TFT_BACK_FORET.r, TFT_BACK_FORET.g, TFT_BACK_FORET.b);
+    TFT_HEADER = M5.Displays(display).color565(TFT_HEADER_FORET.r, TFT_HEADER_FORET.g, TFT_HEADER_FORET.b);
+    TFT_INFO = M5.Displays(display).color565(TFT_INFO_FORET.r, TFT_INFO_FORET.g, TFT_INFO_FORET.b);
+    TFT_FRONT = M5.Displays(display).color565(TFT_FRONT_FORET.r, TFT_FRONT_FORET.g, TFT_FRONT_FORET.b);
+    TFT_BACK = M5.Displays(display).color565(TFT_BACK_FORET.r, TFT_BACK_FORET.g, TFT_BACK_FORET.b);
     BMP_HEADER = TFT_HEADER_FORET;
     BMP_INFO = TFT_INFO_FORET;
     BMP_FRONT = TFT_FRONT_FORET;
@@ -169,10 +169,10 @@ void resetColor()
     break;
 
   case 11:
-    TFT_HEADER = display.color565(TFT_HEADER_ARDOISE.r, TFT_HEADER_ARDOISE.g, TFT_HEADER_ARDOISE.b);
-    TFT_INFO = display.color565(TFT_INFO_ARDOISE.r, TFT_INFO_ARDOISE.g, TFT_INFO_ARDOISE.b);
-    TFT_FRONT = display.color565(TFT_FRONT_ARDOISE.r, TFT_FRONT_ARDOISE.g, TFT_FRONT_ARDOISE.b);
-    TFT_BACK = display.color565(TFT_BACK_ARDOISE.r, TFT_BACK_ARDOISE.g, TFT_BACK_ARDOISE.b);
+    TFT_HEADER = M5.Displays(display).color565(TFT_HEADER_ARDOISE.r, TFT_HEADER_ARDOISE.g, TFT_HEADER_ARDOISE.b);
+    TFT_INFO = M5.Displays(display).color565(TFT_INFO_ARDOISE.r, TFT_INFO_ARDOISE.g, TFT_INFO_ARDOISE.b);
+    TFT_FRONT = M5.Displays(display).color565(TFT_FRONT_ARDOISE.r, TFT_FRONT_ARDOISE.g, TFT_FRONT_ARDOISE.b);
+    TFT_BACK = M5.Displays(display).color565(TFT_BACK_ARDOISE.r, TFT_BACK_ARDOISE.g, TFT_BACK_ARDOISE.b);
     BMP_HEADER = TFT_HEADER_ARDOISE;
     BMP_INFO = TFT_INFO_ARDOISE;
     BMP_FRONT = TFT_FRONT_ARDOISE;
@@ -180,10 +180,10 @@ void resetColor()
     break;
 
   case 12:
-    TFT_HEADER = display.color565(TFT_HEADER_FLORAL.r, TFT_HEADER_FLORAL.g, TFT_HEADER_FLORAL.b);
-    TFT_INFO = display.color565(TFT_INFO_FLORAL.r, TFT_INFO_FLORAL.g, TFT_INFO_FLORAL.b);
-    TFT_FRONT = display.color565(TFT_FRONT_FLORAL.r, TFT_FRONT_FLORAL.g, TFT_FRONT_FLORAL.b);
-    TFT_BACK = display.color565(TFT_BACK_FLORAL.r, TFT_BACK_FLORAL.g, TFT_BACK_FLORAL.b);
+    TFT_HEADER = M5.Displays(display).color565(TFT_HEADER_FLORAL.r, TFT_HEADER_FLORAL.g, TFT_HEADER_FLORAL.b);
+    TFT_INFO = M5.Displays(display).color565(TFT_INFO_FLORAL.r, TFT_INFO_FLORAL.g, TFT_INFO_FLORAL.b);
+    TFT_FRONT = M5.Displays(display).color565(TFT_FRONT_FLORAL.r, TFT_FRONT_FLORAL.g, TFT_FRONT_FLORAL.b);
+    TFT_BACK = M5.Displays(display).color565(TFT_BACK_FLORAL.r, TFT_BACK_FLORAL.g, TFT_BACK_FLORAL.b);
     BMP_HEADER = TFT_HEADER_FLORAL;
     BMP_INFO = TFT_INFO_FLORAL;
     BMP_FRONT = TFT_FRONT_FLORAL;
@@ -205,36 +205,36 @@ void clear()
   if (menuMode != 1 || (menuMode == 1 && option == "COULEUR"))
   {
     // Header
-    display.fillRect(0 + offsetX, 0 + offsetY, 320, 44, TFT_HEADER);
-    display.fillRect(0 + offsetX, 45 + offsetY, 320, 55, TFT_INFO);
-    display.drawFastHLine(0 + offsetX, 0 + offsetY, 320, TFT_WHITE);
-    display.drawFastHLine(0 + offsetX, 44 + offsetY, 320, TFT_WHITE);
+    M5.Displays(display).fillRect(0 + offsetX, 0 + offsetY, 320, 44, TFT_HEADER);
+    M5.Displays(display).fillRect(0 + offsetX, 45 + offsetY, 320, 55, TFT_INFO);
+    M5.Displays(display).drawFastHLine(0 + offsetX, 0 + offsetY, 320, TFT_WHITE);
+    M5.Displays(display).drawFastHLine(0 + offsetX, 44 + offsetY, 320, TFT_WHITE);
   }
 
   // Info zone
-  display.fillRect(0 + offsetX, 98 + offsetY, 320, 2, TFT_INFO);
+  M5.Displays(display).fillRect(0 + offsetX, 98 + offsetY, 320, 2, TFT_INFO);
 
   // Grey zone
-  display.drawFastHLine(0 + offsetX, 100 + offsetY, 320, TFT_WHITE);
-  display.fillRect(0 + offsetX, 101 + offsetY, 320, 240 - 101, TFT_BACK);
+  M5.Displays(display).drawFastHLine(0 + offsetX, 100 + offsetY, 320, TFT_WHITE);
+  M5.Displays(display).fillRect(0 + offsetX, 101 + offsetY, 320, 240 - 101, TFT_BACK);
 
   if (modeCurrent == 0)
   {
     // Elsewhere
-    display.fillRoundRect(1 + offsetX, 154 + offsetY, 155, 85, 4, TFT_WHITE);
-    display.fillRoundRect(2 + offsetX, 155 + offsetY, 26, 83, 4, TFT_FRONT);
+    M5.Displays(display).fillRoundRect(1 + offsetX, 154 + offsetY, 155, 85, 4, TFT_WHITE);
+    M5.Displays(display).fillRoundRect(2 + offsetX, 155 + offsetY, 26, 83, 4, TFT_FRONT);
 
     for (uint8_t i = 24; i < 27; i++)
     {
-      display.drawFastVLine(i + offsetX, 155 + offsetY, 83, TFT_FRONT);
+      M5.Displays(display).drawFastVLine(i + offsetX, 155 + offsetY, 83, TFT_FRONT);
     }
 
-    display.drawFastVLine(28 + offsetX, 155 + offsetY, 83, TFT_BACK);
-    display.drawFastVLine(100 + offsetX, 155 + offsetY, 83, TFT_BACK);
+    M5.Displays(display).drawFastVLine(28 + offsetX, 155 + offsetY, 83, TFT_BACK);
+    M5.Displays(display).drawFastVLine(100 + offsetX, 155 + offsetY, 83, TFT_BACK);
 
     for (uint8_t i = 0; i < 5; i++)
     {
-      display.drawFastHLine(2 + offsetX, 168 + (i * 14) + offsetY, 152, TFT_BACK);
+      M5.Displays(display).drawFastHLine(2 + offsetX, 168 + (i * 14) + offsetY, 152, TFT_BACK);
     }
 
     // Log
@@ -244,14 +244,14 @@ void clear()
   {
     for (uint8_t i = 0; i <= 1; i++)
     {
-      display.fillRoundRect(1 + (169 * i) + offsetX, 125 + offsetY, 149, 115, 4, TFT_WHITE);
-      display.fillRoundRect(2 + (169 * i) + offsetX, 126 + offsetY, 147, 113, 4, TFT_FRONT);
-      display.fillRect(51 + (169 * i) + offsetX, 126 + offsetY, 98, 113, TFT_WHITE);
-      display.drawFastVLine(50 + (169 * i) + offsetX, 126 + offsetY, 113, TFT_BACK);
+      M5.Displays(display).fillRoundRect(1 + (169 * i) + offsetX, 125 + offsetY, 149, 115, 4, TFT_WHITE);
+      M5.Displays(display).fillRoundRect(2 + (169 * i) + offsetX, 126 + offsetY, 147, 113, 4, TFT_FRONT);
+      M5.Displays(display).fillRect(51 + (169 * i) + offsetX, 126 + offsetY, 98, 113, TFT_WHITE);
+      M5.Displays(display).drawFastVLine(50 + (169 * i) + offsetX, 126 + offsetY, 113, TFT_BACK);
 
       for (uint8_t k = 1; k <= 5; k++)
       {
-        display.drawFastHLine(1 + (169 * i) + offsetX, 125 + (k * 18) + k + offsetY, 148, TFT_BACK);
+        M5.Displays(display).drawFastHLine(1 + (169 * i) + offsetX, 125 + (k * 18) + k + offsetY, 148, TFT_BACK);
       }
     }
   }
@@ -261,8 +261,8 @@ void clear()
     {
       for (uint8_t j = 0; j <= 2; j++)
       {
-        display.fillRoundRect(0 + (110 * j) + offsetX, 104 + (48 * i) + offsetY, 100, 40, 4, TFT_WHITE);
-        display.fillRoundRect(1 + (110 * j) + offsetX, 105 + (48 * i) + offsetY, 98, 38, 4, TFT_FRONT);
+        M5.Displays(display).fillRoundRect(0 + (110 * j) + offsetX, 104 + (48 * i) + offsetY, 100, 40, 4, TFT_WHITE);
+        M5.Displays(display).fillRoundRect(1 + (110 * j) + offsetX, 105 + (48 * i) + offsetY, 98, 38, 4, TFT_FRONT);
       }
     }
   }
@@ -273,7 +273,7 @@ void scroll(uint8_t pause)
 {  
   uint16_t h = 21;
   uint16_t w;
-  uint16_t limit = display.width();
+  uint16_t limit = M5.Displays(display).width();
   static uint32_t timer = 0, wait = 0;
 
   timer = millis();
@@ -323,21 +323,21 @@ void checkAcceleration()
   {
     M5.Imu.getAccel(&accX, &accY, &accZ);
 
-    if (int(accY * 1000) < -500 && display.getRotation() != 3)
+    if (int(accY * 1000) < -500 && M5.Displays(display).getRotation() != 3)
     {
-     display.clear();
+     M5.Displays(display).clear();
       reset = 0;
       refresh = 0;
       menuRefresh = 0;
-     display.setRotation(3);
+     M5.Displays(display).setRotation(3);
     }
-    else if (int(accY * 1000) > 500 && display.getRotation() != 1)
+    else if (int(accY * 1000) > 500 && M5.Displays(display).getRotation() != 1)
     {
-     display.clear();
+     M5.Displays(display).clear();
       reset = 0;
       refresh = 0;
       menuRefresh = 0;
-     display.setRotation(1);
+     M5.Displays(display).setRotation(1);
     }
   }
 }
@@ -385,8 +385,8 @@ void updateLocalTime()
 // M5Screen4bmp() (dump 4 bits screen to a WiFi client)
 bool M5Screen4bmp()
 {
-  uint16_t image_height = display.height();
-  uint16_t image_width = display.width();
+  uint16_t image_height = M5.Displays(display).height();
+  uint16_t image_width = M5.Displays(display).width();
   uint32_t filesize = 54 + 28 + ((image_width * image_height) / 2);
   uint8_t l = 0;
   uint8_t r = 0;
@@ -442,7 +442,7 @@ bool M5Screen4bmp()
     for (uint8_t z = 0; z < 10; z++)
     {
       // Get one line of the screen content
-      display.readRectRGB(0, y - 1 - z, image_width, 1, line_data_raw);
+      M5.Displays(display).readRectRGB(0, y - 1 - z, image_width, 1, line_data_raw);
       // BMP color order is: Blue, Green, Red
       // Return values from readRectRGB is: Red, Green, Blue
       // Therefore: R und B need to be swapped
@@ -786,7 +786,7 @@ void getScreenshot()
                 httpClient.println();
                 if (screensaverMode == 1)
                 {
-                  display.wakeup();
+                  M5.Displays(display).wakeup();
                 }
                 M5Screen4bmp();
                 screensaver = millis(); // Screensaver update !!!
@@ -869,19 +869,19 @@ void checkWifi()
 {
   if (WiFi.status() != WL_CONNECTED)
   {
-    display.fillCircle(314 + offsetX, 6 + offsetY, 3, TFT_HEADER);
+    M5.Displays(display).fillCircle(314 + offsetX, 6 + offsetY, 3, TFT_HEADER);
     ping = 2;
   }
   else
   {
     if (ping == 1)
     {
-      display.fillCircle(314 + offsetX, 6 + offsetY, 3, TFT_HEADER);
-      display.drawCircle(314 + offsetX, 6 + offsetY, 3, TFT_WHITE);
+      M5.Displays(display).fillCircle(314 + offsetX, 6 + offsetY, 3, TFT_HEADER);
+      M5.Displays(display).drawCircle(314 + offsetX, 6 + offsetY, 3, TFT_WHITE);
     }
     else
     {
-      display.fillCircle(314 + offsetX, 6 + offsetY, 3, TFT_WHITE);
+      M5.Displays(display).fillCircle(314 + offsetX, 6 + offsetY, 3, TFT_WHITE);
     }
   }
 }

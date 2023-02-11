@@ -50,7 +50,7 @@ void iniLogMessage(char* message, uint16_t x = 160, uint16_t y = 50, boolean ver
 {
   if(verbose == true)
   {
-    display.drawString(message, x, y);
+    M5.Displays(display).drawString(message, x, y);
   }
   else
   {
@@ -358,22 +358,22 @@ void backupLoad(String fileNameSelected, boolean verbose)
 {
   String tmpName;
 
-  display.setTextColor(TFT_DARKGRAY, TFT_BLACK);
+  M5.Displays(display).setTextColor(TFT_DARKGRAY, TFT_BLACK);
   iniLogMessage((char*) "Loading config file...", 160, 50, verbose);
 
   iniParser("/.backup.ini", (char*) "SPIFFS", verbose);
   
   if(iniValid == false)
   {
-    display.drawString("Please, add a valid config file", 160, 110);
-    display.drawString("on SPIFFS or SD Card.", 160, 130);
+    M5.Displays(display).drawString("Please, add a valid config file", 160, 110);
+    M5.Displays(display).drawString("on SPIFFS or SD Card.", 160, 130);
   }
 
   while(iniValid == false)
   {
-    display.drawString("Failed to load config file.", 160, 70);
+    M5.Displays(display).drawString("Failed to load config file.", 160, 70);
     vTaskDelay(pdMS_TO_TICKS(500));
-    display.drawString(" ", 160, 70);
+    M5.Displays(display).drawString(" ", 160, 70);
     vTaskDelay(pdMS_TO_TICKS(500));
   }
   return;
@@ -409,17 +409,17 @@ void iniLoader() {
     SD.end(); // If not Bluetooth doesn't work !!!
   }
 
-  display.fillScreen(TFT_BLACK);
+  M5.Displays(display).fillScreen(TFT_BLACK);
 
-  display.setFont(&tahoma8pt7b);
-  display.setTextColor(TFT_DARKGRAY, TFT_BLACK);
-  display.setTextDatum(CC_DATUM);
-  display.setTextPadding(320);
+  M5.Displays(display).setFont(&tahoma8pt7b);
+  M5.Displays(display).setTextColor(TFT_DARKGRAY, TFT_BLACK);
+  M5.Displays(display).setTextDatum(CC_DATUM);
+  M5.Displays(display).setTextPadding(320);
 
   if (fileIndex != 0)
   {
-    display.drawString(version, 160, 20);
-    display.drawRect(20, 28, 280, 10, TFT_DARKGRAY);
+    M5.Displays(display).drawString(version, 160, 20);
+    M5.Displays(display).drawRect(20, 28, 280, 10, TFT_DARKGRAY);
 
     for (uint16_t i = 0; i < TIMEOUT_INI_LOADER * 10; i++)
     {
@@ -428,14 +428,14 @@ void iniLoader() {
       {
         for (uint8_t j = 0; j <= 5; j++)
         {
-          display.drawGradientHLine(22, 30 + j, gauge, TFT_BLACK, TFT_SKYBLUE);
+          M5.Displays(display).drawGradientHLine(22, 30 + j, gauge, TFT_BLACK, TFT_SKYBLUE);
         }
 
         for (uint16_t j = 1; j < gauge; j++)
         {
           if(j % 23 == 0)
           {
-            display.drawFastVLine(22 + j, 30, 6, TFT_BLACK);
+            M5.Displays(display).drawFastVLine(22 + j, 30, 6, TFT_BLACK);
           }
         }
       }
@@ -446,12 +446,12 @@ void iniLoader() {
       {
         if(blink == false)
         {
-          display.drawString("Push middle button to enter", 160, 50);
+          M5.Displays(display).drawString("Push middle button to enter", 160, 50);
           blink = true;
         }
         else
         {
-          display.drawString("", 160, 50);
+          M5.Displays(display).drawString("", 160, 50);
           blink = false;
         }
       }
@@ -464,7 +464,7 @@ void iniLoader() {
       else if (btnB)
       {
         click = true;
-        display.fillScreen(TFT_BLACK);
+        M5.Displays(display).fillScreen(TFT_BLACK);
         break;
       }
 
@@ -479,8 +479,8 @@ void iniLoader() {
         vTaskDelay(100);
       }
 
-      display.setTextColor(TFT_WHITE, TFT_BLACK);
-      display.drawString(version, 160, 20);
+      M5.Displays(display).setTextColor(TFT_WHITE, TFT_BLACK);
+      M5.Displays(display).drawString(version, 160, 20);
 
       getButton();
 
@@ -530,7 +530,7 @@ void iniLoader() {
       if (change != cursor)
       {
         change = cursor;
-        display.setTextPadding(320);
+        M5.Displays(display).setTextPadding(320);
 
         uint8_t i = 0;
         for (uint8_t j = (start * limit); j < stop; j++)
@@ -543,7 +543,7 @@ void iniLoader() {
             if(j == cursor)
             {
               tmpName = ">> " + tmpName + " <<";
-              display.drawString("SPI Flash File Storage", 160, 50);
+              M5.Displays(display).drawString("SPI Flash File Storage", 160, 50);
             }
             break;
           case 2:
@@ -551,12 +551,12 @@ void iniLoader() {
             if(j == cursor)
             {
               tmpName = ">> " + tmpName + " <<";
-              display.drawString("SD Card Storage", 160, 50);
+              M5.Displays(display).drawString("SD Card Storage", 160, 50);
             }
             break;  
           }
 
-          display.drawString(tmpName, 160, 80 + i * 20);
+          M5.Displays(display).drawString(tmpName, 160, 80 + i * 20);
           i++;
         }
       }
