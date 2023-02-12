@@ -71,7 +71,14 @@ void setup()
   hdmiCurrent = preferences.getUInt("hdmi", 0);
 
   // Init Display
-  display = hdmiCurrent;
+  if(M5.getDisplayCount() == 1)
+  {
+    display = 0;
+  }
+  else
+  {
+    display = hdmiCurrent;
+  }
   M5.setPrimaryDisplay(display);
 
   offsetX = (M5.Displays(display).width() - 320) / 2; 
@@ -566,7 +573,7 @@ void loop()
         }
 
         tmpString += " 0:00";
-        lengthData = M5.Lcd.textWidth(tmpString);
+        lengthData = M5.Displays(display).textWidth(tmpString);
         centerData = (320 - lengthData) / 2;
 
         M5.Lcd.drawString(tmpString, centerData + offsetX, 64 + offsetY);

@@ -421,6 +421,20 @@ void button(void *pvParameters)
           change = (change < 0) ? n : change;
           change = (change > n) ? 0 : change;
           menuCurrent = change;
+
+          // If no external ModuleDisplay...
+          if(String(menu[menuCurrent]) == "HDMI" && M5.getDisplayCount() == 1)
+          {
+            if (btnA)
+            {
+              menuCurrent += left;
+            }
+            else if(btnC)
+            {
+              menuCurrent += right;
+            }
+          }
+
           preferences.putUInt("menu", menuCurrent);
         }
       }
@@ -429,6 +443,7 @@ void button(void *pvParameters)
     if (menuMode == 1 && menuSelected != -1)
     {
       String option = String(menu[menuCurrent]);
+
       // Mode menu active, QSY
       if (option == "QSY")
       {
