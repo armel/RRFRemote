@@ -18,24 +18,29 @@ void setup()
   auto cfg = M5.config();
 
   cfg.clear_display = true;  // default=true. clear the screen when begin.
-  cfg.output_power  = true;  // default=true. use external port 5V output.
+  cfg.output_power  = false;  // default=true. use external port 5V output.
   cfg.internal_imu  = true;  // default=true. use internal IMU.
   cfg.internal_rtc  = true;  // default=true. use internal RTC.
   cfg.internal_spk  = true;  // default=true. use internal speaker.
   cfg.internal_mic  = true;  // default=true. use internal microphone.
-  cfg.external_imu  = true;  // default=false. use Unit Accel & Gyro.
-  cfg.external_rtc  = true;  // default=false. use Unit RTC.
+  cfg.external_imu  = false;  // default=false. use Unit Accel & Gyro.
+  cfg.external_rtc  = false;  // default=false. use Unit RTC.
 
   cfg.external_display.module_display = true;  // default=true. use ModuleDisplay
   cfg.external_display.atom_display   = true;  // default=true. use AtomDisplay
-  cfg.external_display.unit_oled      = true;  // default=true. use UnitOLED
-  cfg.external_display.unit_lcd       = true;  // default=true. use UnitLCD
+  cfg.external_display.unit_oled      = false;  // default=true. use UnitOLED
+  cfg.external_display.unit_lcd       = false;  // default=true. use UnitLCD
   cfg.external_display.unit_rca       = false; // default=false. use UnitRCA VideoOutput
   cfg.external_display.module_rca     = false; // default=false. use ModuleRCA VideoOutput
 
   M5.begin(cfg);
-  pinMode(32, INPUT_PULLUP);
-  pinMode(26, INPUT_PULLUP);
+
+  // Manage external buttons for atom only
+  if(atom == 1) 
+  {  
+    pinMode(32, INPUT_PULLUP);
+    pinMode(26, INPUT_PULLUP);
+  }
 
   // Preferences
   preferences.begin(NAME);
