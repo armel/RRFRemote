@@ -18,9 +18,9 @@
 
 #define FASTLED_INTERNAL // To disable pragma messages on compile
 
-#define M5ATOMDISPLAY_LOGICAL_WIDTH WIDTH     // width
-#define M5ATOMDISPLAY_LOGICAL_HEIGHT HEIGHT   // height
-#define M5ATOMDISPLAY_REFRESH_RATE 60         // refresh rate
+#define M5ATOMDISPLAY_LOGICAL_WIDTH WIDTH     // Width
+#define M5ATOMDISPLAY_LOGICAL_HEIGHT HEIGHT   // Height
+#define M5ATOMDISPLAY_REFRESH_RATE 60         // Refresh rate
 #define M5ATOMDISPLAY_OUTPUT_WIDTH 960
 #define M5ATOMDISPLAY_OUTPUT_HEIGHT 480
 
