@@ -178,7 +178,7 @@ void button(void *pvParameters)
     h = 185;
 
     // Get screenshot
-    getScreenshot();
+    //getScreenshot();
 
     // Get button
     getButton(modeCurrent, menuMode);

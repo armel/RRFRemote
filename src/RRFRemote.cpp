@@ -847,4 +847,8 @@ void loop()
       getScreenshot();
     }
   }
+  else
+  {
+      getScreenshot();
+  }
 }
