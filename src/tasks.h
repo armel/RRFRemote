@@ -451,7 +451,7 @@ void button(void *pvParameters)
             clear();
             settingsSelect = false;
             settingsMode = false;
-            vTaskDelay(pdMS_TO_TICKS(150));
+            vTaskDelay(pdMS_TO_TICKS(100));
           }
           vTaskDelay(pdMS_TO_TICKS(150));
         }
@@ -486,7 +486,7 @@ void button(void *pvParameters)
             clear();
             settingsSelect = false;
             settingsMode = false;
-            vTaskDelay(pdMS_TO_TICKS(150));
+            vTaskDelay(pdMS_TO_TICKS(100));
           }
           vTaskDelay(pdMS_TO_TICKS(150));
         }
@@ -519,7 +519,7 @@ void button(void *pvParameters)
             clear();
             settingsSelect = false;
             settingsMode = false;
-            vTaskDelay(pdMS_TO_TICKS(150));
+            vTaskDelay(pdMS_TO_TICKS(100));
           }
           vTaskDelay(pdMS_TO_TICKS(150));
         }
@@ -552,7 +552,7 @@ void button(void *pvParameters)
             clear();
             settingsSelect = false;
             settingsMode = false;
-            vTaskDelay(pdMS_TO_TICKS(150));
+            vTaskDelay(pdMS_TO_TICKS(100));
           }
           vTaskDelay(pdMS_TO_TICKS(150));
         }
@@ -582,7 +582,7 @@ void button(void *pvParameters)
             clear();
             settingsSelect = false;
             settingsMode = false;
-            vTaskDelay(pdMS_TO_TICKS(150));
+            vTaskDelay(pdMS_TO_TICKS(100));
           }
           vTaskDelay(pdMS_TO_TICKS(150));
         }
@@ -613,7 +613,7 @@ void button(void *pvParameters)
             clear();
             settingsSelect = false;
             settingsMode = false;
-            vTaskDelay(pdMS_TO_TICKS(150));
+            vTaskDelay(pdMS_TO_TICKS(100));
           }
           vTaskDelay(pdMS_TO_TICKS(150));
         }
@@ -643,7 +643,7 @@ void button(void *pvParameters)
             clear();
             settingsSelect = false;
             settingsMode = false;
-            vTaskDelay(pdMS_TO_TICKS(150));
+            vTaskDelay(pdMS_TO_TICKS(100));
           }
           vTaskDelay(pdMS_TO_TICKS(150));
         }
@@ -673,7 +673,7 @@ void button(void *pvParameters)
             clear();
             settingsSelect = false;
             settingsMode = false;
-            vTaskDelay(pdMS_TO_TICKS(150));
+            vTaskDelay(pdMS_TO_TICKS(100));
           }
           vTaskDelay(pdMS_TO_TICKS(150));
         }
@@ -702,7 +702,7 @@ void button(void *pvParameters)
             clear();
             settingsSelect = false;
             settingsMode = false;
-            vTaskDelay(pdMS_TO_TICKS(150));
+            vTaskDelay(pdMS_TO_TICKS(100));
           }
           vTaskDelay(pdMS_TO_TICKS(150));
         }
@@ -737,7 +737,7 @@ void button(void *pvParameters)
             clear();
             settingsSelect = false;
             settingsMode = false;
-            vTaskDelay(pdMS_TO_TICKS(150));
+            vTaskDelay(pdMS_TO_TICKS(100));
           }
           vTaskDelay(pdMS_TO_TICKS(150));
         }
@@ -766,7 +766,7 @@ void button(void *pvParameters)
             clear();
             settingsSelect = false;
             settingsMode = false;
-            vTaskDelay(pdMS_TO_TICKS(150));
+            vTaskDelay(pdMS_TO_TICKS(100));
           }
           vTaskDelay(pdMS_TO_TICKS(150));
         }
@@ -793,7 +793,7 @@ void button(void *pvParameters)
             clear();
             settingsSelect = false;
             settingsMode = false;
-            vTaskDelay(pdMS_TO_TICKS(150));
+            vTaskDelay(pdMS_TO_TICKS(100));
           }
           vTaskDelay(pdMS_TO_TICKS(150));
         }
@@ -814,12 +814,16 @@ void button(void *pvParameters)
             change = (change > 60) ? 1 : change;
          }
           else if(btnB == 1) {
-            preferences.putUInt("screensaver", change);
+            if(screensaverCurrent != change)
+            {
+              screensaverCurrent = change;
+              preferences.putUInt("screensaver", change);
+            }
             reset = 0;
             clear();
             settingsSelect = false;
             settingsMode = false;
-            vTaskDelay(pdMS_TO_TICKS(150));
+            vTaskDelay(pdMS_TO_TICKS(100));
           }
           vTaskDelay(pdMS_TO_TICKS(150));
         }
@@ -846,7 +850,7 @@ void button(void *pvParameters)
             clear();
             settingsSelect = false;
             settingsMode = false;
-            vTaskDelay(pdMS_TO_TICKS(150));
+            vTaskDelay(pdMS_TO_TICKS(100));
           }
           vTaskDelay(pdMS_TO_TICKS(150));
         }
@@ -861,7 +865,7 @@ void button(void *pvParameters)
             clear();
             settingsSelect = false;
             settingsMode = false;
-            vTaskDelay(pdMS_TO_TICKS(150));
+            vTaskDelay(pdMS_TO_TICKS(100));
           }
           vTaskDelay(pdMS_TO_TICKS(150));
         }
