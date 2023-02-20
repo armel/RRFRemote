@@ -159,7 +159,7 @@ void button(void *pvParameters)
 {
   int8_t right;
   int8_t left;
-  int16_t change;
+  int16_t change = 0;
 
   static int8_t settingsChoice = 0;
   static boolean settingsSelect = false;

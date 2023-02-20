@@ -117,8 +117,6 @@ uint16_t TFT_BACK = 0x0000;
 // #define TFT_BLACK 0x2945
 // #define TFT_BLACKdisplay.color565(40, 40, 40)
 
-const char *color[] = {"ROUGE", "ROSE", "VIOLET", "BLEU", "TURQUOISE", "VERT", "ORANGE", "MARRON", "GRIS", "CREPUSCULE", "FORET", "ARDOISE", "FLORAL"};
-
 const colorType TFT_HEADER_ROUGE = {152, 0, 0};
 const colorType TFT_INFO_ROUGE = {0, 0, 0};
 const colorType TFT_FRONT_ROUGE = {255, 104, 104};
@@ -220,6 +218,9 @@ String endpointRRF[] = {
     "http://rrf.globalis-dev.com:8080/RRFTracker/IDF-today/rrf_tiny.json"
     };
 
+const char *room[] = {"RRF", "FON", "TECHNIQUE", "INTERNATIONAL", "BAVARDAGE", "LOCAL", "IDF"};
+const uint8_t dtmf[] = {96, 97, 98, 99, 100, 101, 104};
+
 // Scroll
 LGFX_Sprite Sprite(&M5.Lcd); // Create Sprite object "img" with pointer to "tft" object
 String message;
@@ -238,8 +239,6 @@ TaskHandle_t rrfdataHandle;
 TaskHandle_t buttonHandle;
 
 // Misceleanous
-const char *room[] = {"RRF", "FON", "TECHNIQUE", "INTERNATIONAL", "BAVARDAGE", "LOCAL", "IDF"};
-const uint8_t dtmf[] = {96, 97, 98, 99, 100, 101, 104};
 char **settingsMenu;
 char swap[32];
 
