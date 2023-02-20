@@ -154,86 +154,38 @@ void hamdata(void *pvParameters)
   }
 }
 
-// Manage buttons
+// Get Button
 void button(void *pvParameters)
 {
   int8_t right;
   int8_t left;
   int16_t change;
-  static uint32_t timer = 0;
+
+  static int8_t settingsChoice = 0;
+  static boolean settingsSelect = false;
+
+  uint16_t x;
+  uint16_t y;
+  uint16_t w;
+  uint16_t h;
 
   for (;;)
   {
-    // Serial.println("button");
+    // Position
+    x = 44 + offsetX;
+    y = 4 + offsetY;
+    w = M5.Displays(display).width() - (x * 2);
+    h = 185;
+
+    // Get screenshot
+    getScreenshot();
+
+    // Get button
     getButton(modeCurrent, menuMode);
 
-    // Escape menu and submenus from CONFIG, SYSOP, QSY, COULEUR and LUMINOSTE
-    if (menuMode == 1)
-    {
-      // Serial.println(millis() - timer);
-      if (menuSelected != -1)
-      {
-        if ((millis() - timer) > TIMEOUT_MENU)
-        {
-          String option = String(menu[menuCurrent]);
-          menuSelected = -1;
-          if (option == "COULEUR")
-          {
-            colorCurrent = preferences.getUInt("color", 0);
-          }
-          else if (option == "CONFIG")
-          {
-            configCurrent = preferences.getUInt("config", 0);
-          }
-          action = 3;
-          timer = millis();
-        }
-      }
-      else
-      {
-        if ((millis() - timer) > TIMEOUT_MENU)
-        {
-          menuMode = 2;
-        }
-      }
+    if(btnA || btnB || btnC) {     
+      screensaver = millis(); // Screensaver update !!!
     }
-
-    if (buttonLeftPressed)
-    {
-      btnA = true;
-      buttonLeftPressed = false;
-    }
-    if (buttonCenterPressed)
-    {
-      btnB = true;
-      buttonCenterPressed = false;
-    }
-    if (buttonRightPressed)
-    {
-      btnC = true;
-      buttonRightPressed = false;
-    }
-
-    if (htmlGetRefresh == 1)
-    {
-      htmlGetRefresh = 2;
-    }
-
-    /*
-    if (btnA || btnB || btnC)
-    {
-      Serial.println(".");
-      Serial.print(btnA);
-      Serial.print("-");
-      Serial.print(btnB);
-      Serial.print("-");
-      Serial.println(btnC);
-    }
-    else
-    {
-      Serial.print(".");
-    }
-    */
 
     if (M5.Displays(display).getRotation() == 1)
     {
@@ -266,7 +218,6 @@ void button(void *pvParameters)
     }
 
     // Manage DTMF on CORE2
-
     if (btnDTMF1 == 1)
     {
       // Serial.println("QSY RRF");
@@ -337,439 +288,585 @@ void button(void *pvParameters)
       action = 5;
     }
 
-    if ((btnA || btnB || btnC))
+    if(settingsMode == false)
     {
-      screensaver = millis(); // Screensaver update !!!
-      if (screensaverMode == 1)
-      {
-        // Serial.println("Wake up");
-        btnA = 0;
-        btnB = 0;
-        btnC = 0;
-      }
-
-      // Mode menu inactive
-      if (menuMode == 0)
-      {
-        if (followCurrent == 0)
-        {
-          change = roomCurrent;
-
-          int n = sizeof(room) / sizeof(room[0]);
-          n -= 1;
-
-          if (btnA)
-          {
-            change += left;
-
-            change = (change < 0) ? n : change;
-            change = (change > n) ? 0 : change;
-            roomCurrent = change;
-            preferences.putUInt("room", roomCurrent);
-          }
-          else if (btnC)
-          {
-            change += right;
-
-            change = (change < 0) ? n : change;
-            change = (change > n) ? 0 : change;
-            roomCurrent = change;
-            preferences.putUInt("room", roomCurrent);
-          }
-          action = 2;
+      // Enter settings
+      if(btnB) {
+        settingsMode = true;
+        while(settingLock == true) {
+          vTaskDelay(10);
         }
-        if (btnB)
-        {
-          // Serial.println("Click A");
-          timer = millis();
-          vTaskDelay(pdMS_TO_TICKS(250));
-          menuMode = 1;
-          btnB = 0;
-          action = 1;
-        }
+        viewMenu(x, y, w, h);
+        viewOption(settingsChoice, settingsSelect, x, y, w);
+        vTaskDelay(300);
       }
-      // Mode menu active
-      else if (menuMode == 1 && menuSelected == -1)
-      {
-        // If no selection
-        if (menuSelected == -1)
-        {
-          change = menuCurrent;
-
-          if (btnA)
-          {
-            change += left;
-            timer = millis();
+      vTaskDelay(100);
+    }
+    // Select settings
+    else if(settingsMode == true)
+    {
+      if(settingsSelect == false) {
+        if(btnA || btnC) {
+          if(btnA) {
+            settingsChoice--;
           }
-          else if (btnC)
-          {
-            change += right;
-            timer = millis();
-          }
-          else if (btnB)
-          {
-            // Serial.println("Click B");
-            vTaskDelay(pdMS_TO_TICKS(250));
-            menuSelected = menuCurrent;
-            btnB = 0;
-            timer = millis();
+          else if(btnC) {
+            settingsChoice++;
           }
 
-          int n = menuSize / sizeof(char *);
-          n -= 1;
+          uint8_t stop = menuSize;
+          stop--;
 
-          change = (change < 0) ? n : change;
-          change = (change > n) ? 0 : change;
-          menuCurrent = change;
-
-          // If no external ModuleDisplay...
-          if(String(menu[menuCurrent]) == "HDMI" && M5.getDisplayCount() == 1)
+          // If settings from SD
+          /*
+          if(iniValid == true)
           {
-            if (btnA)
+            stop--;
+          }
+          */
+
+          settingsChoice = (settingsChoice < 0) ? stop : settingsChoice;
+          settingsChoice = (settingsChoice > stop) ? 0 : settingsChoice;
+
+          viewOption(settingsChoice, settingsSelect, x, y, w);
+        }
+        else if(btnB) {
+          Serial.printf(">>>>>>> ecran %d", M5.getDisplayCount());
+
+          settingsSelect = true;
+          viewOption(settingsChoice, settingsSelect, x, y, w);
+
+          String settingsString = String(settingsMenu[settingsChoice]);
+
+          if     (settingsString == "Config")       change = configCurrent;
+          else if(settingsString == "Sysop")        change = sysopCurrent;
+          else if(settingsString == "QSY")          change = roomCurrent;
+          else if(settingsString == "Follow")       change = followCurrent;
+          else if(settingsString == "Raptor")       change = raptorCurrent;
+          else if(settingsString == "TOT")          change = totCurrent;
+          else if(settingsString == "ISS")          change = issCurrent;
+          else if(settingsString == "Affichage")    change = modeCurrent;
+          else if(settingsString == "Themes")       change = colorCurrent;
+          else if(settingsString == "Luminosite")   change = brightnessCurrent;
+          else if(settingsString == "Beep")         change = beepCurrent;
+          else if(settingsString == "Screensaver")  change = screensaverCurrent;
+          else if(settingsString == "Eteindre")     shutdown();
+          else if(settingsString == "Perroquet")
+          {
+            if (whereisString == "PERROQUET")
             {
-              menuCurrent += left;
+              change = 1;
             }
-            else if(btnC)
+            else
             {
-              menuCurrent += right;
+              change = 0;
             }
           }
-
-          preferences.putUInt("menu", menuCurrent);
-        }
-      }
-    }
-
-    if (menuMode == 1 && menuSelected != -1)
-    {
-      String option = String(menu[menuCurrent]);
-
-      // Mode menu active, QSY
-      if (option == "QSY")
-      {
-        change = roomCurrent;
-
-        if (btnA)
-        {
-          change += left;
-          timer = millis();
-        }
-        else if (btnC)
-        {
-          change += right;
-          timer = millis();
-        }
-        else if (btnB)
-        {
-          qsy = dtmf[roomCurrent];
-          preferences.putUInt("room", roomCurrent);
-          menuMode = 2;
-        }
-
-        size_t n = sizeof(room) / sizeof(room[0]);
-        n -= 1;
-
-        change = (change < 0) ? n : change;
-        change = (change > n) ? 0 : change;
-
-        if (change != roomCurrent)
-        {
-          type = 0; // View last TX
-          action = 2;
-          roomCurrent = change;
-        }
-      }
-      // Mode menu active, Raptor
-      else if (option == "RAPTOR")
-      {
-        change = raptorCurrent;
-        change = (change == 0) ? 1 : 0;
-        raptorCurrent = change;
-        qsy = 200;
-        vTaskDelay(pdMS_TO_TICKS(1000));
-        menuMode = 2;
-      }
-      // Mode menu active, HDMI
-      else if (option == "HDMI")
-      {
-        change = hdmiCurrent;
-        change = (change == 0) ? 1 : 0;
-        hdmiCurrent = change;
-        M5.Displays(display).fillScreen(TFT_BLACK);
-        display = hdmiCurrent;
-        M5.setPrimaryDisplay(display);
-        offsetX = (M5.Displays(display).width() - 320) / 2; 
-        offsetY = (M5.Displays(display).height() - 240) / 2;
-        preferences.putUInt("hdmi", hdmiCurrent);
-        //vTaskDelay(pdMS_TO_TICKS(1000));
-        menuMode = 2;
-      }
-      // Mode menu active, Parrot
-      else if (option == "PERROQUET")
-      {
-        if (whereisString == "PERROQUET")
-        {
-          qsy = dtmf[roomCurrent];
-        }
-        else
-        {
-          qsy = 95;
-        }
-        vTaskDelay(pdMS_TO_TICKS(1000));
-        menuMode = 2;
-      }
-      // Mode menu active, Follow
-      else if (option == "FOLLOW")
-      {
-        change = followCurrent;
-        change = (change == 0) ? 1 : 0;
-        followCurrent = change;
-        preferences.putUInt("follow", followCurrent);
-        vTaskDelay(pdMS_TO_TICKS(1000));
-        menuMode = 2;
-      }
-      // Mode menu active, ISS
-      else if (option == "ISS")
-      {
-        change = issCurrent;
-        change = (change == 0) ? 1 : 0;
-        issCurrent = change;
-        preferences.putUInt("iss", issCurrent);
-        vTaskDelay(pdMS_TO_TICKS(1000));
-        menuMode = 2;
-      }
-      // Mode menu active, TOT
-      else if (option == "TOT")
-      {
-        change = totCurrent;
-        change = (change == 0) ? 1 : 0;
-        totCurrent = change;
-        preferences.putUInt("tot", totCurrent);
-        vTaskDelay(pdMS_TO_TICKS(1000));
-        menuMode = 2;
-      }
-      else if (option == "MODE")
-      {
-        change = modeCurrent;
-        change = (change == 0) ? 1 : 0;
-        modeCurrent = change;
-        preferences.putUInt("mode", modeCurrent);
-        // vTaskDelay(pdMS_TO_TICKS(1000));
-        menuMode = 2;
-      }
-      // Mode menu active, Color
-      else if (option == "COULEUR")
-      {
-        change = colorCurrent;
-
-        if (btnA)
-        {
-          change += left;
-          timer = millis();
-        }
-        else if (btnC)
-        {
-          change += right;
-          timer = millis();
-        }
-        else if (btnB)
-        {
-          menuMode = 2;
-          colorCurrent = change;
-          preferences.putUInt("color", colorCurrent);
-        }
-
-        size_t n = sizeof(color) / sizeof(color[0]);
-        n -= 1;
-
-        change = (change < 0) ? n : change;
-        change = (change > n) ? 0 : change;
-
-        if (change != colorCurrent)
-        {
-          colorCurrent = change;
-          action = 3;
-        }
-      }
-      // Mode menu active, Brightness
-      else if (option == "LUMINOSITE")
-      {
-        change = brightnessCurrent;
-        if (btnA)
-        {
-          change += left;
-          timer = millis();
-        }
-        else if (btnC)
-        {
-          change += right;
-          timer = millis();
-        }
-        else if (btnB)
-        {
-          menuMode = 2;
-        }
-
-        change = (change < 1) ? 100 : change;
-        change = (change > 100) ? 1 : change;
-
-        if (change != brightnessCurrent)
-        {
-          brightnessCurrent = change;
-          preferences.putUInt("brightness", brightnessCurrent);
-          M5.Displays(display).setBrightness(map(brightnessCurrent, 1, 100, 1, 254));
-        }
-      }
-      // Mode menu active, Beep
-      else if (option == "BEEP")
-      {
-        change = beepCurrent;
-        if (btnA)
-        {
-          change += left;
-          timer = millis();
-        }
-        else if (btnC)
-        {
-          change += right;
-          timer = millis();
-        }
-        else if (btnB)
-        {
-          menuMode = 2;
-        }
-
-        change = (change < 1) ? 100 : change;
-        change = (change > 100) ? 1 : change;
-
-        if (change != beepCurrent)
-        {
-          beepCurrent = change;
-          preferences.putUInt("beep", beepCurrent);
-        }
-      }
-
-      // Mode menu active, Special
-      else if (option == "SYSOP")
-      {
-        change = sysopCurrent;
-
-        if (btnA)
-        {
-          change += left;
-          timer = millis();
-        }
-        else if (btnC)
-        {
-          change += right;
-          timer = millis();
-        }
-        else if (btnB)
-        {
-          qsy = 2000;
-          qsy += sysopCurrent;
-          menuMode = 2;
-        }
-
-        size_t n = sizeof(sysop) / sizeof(sysop[0]);
-        n -= 1;
-
-        change = (change < 0) ? n : change;
-        change = (change > n) ? 0 : change;
-
-        if (change != sysopCurrent)
-        {
-          sysopCurrent = change;
-          preferences.putUInt("sysop", sysopCurrent);
-        }
-      }
-      // Mode menu active, Config
-      else if (option == "CONFIG")
-      {
-        change = configCurrent;
-
-        if (btnA)
-        {
-          change += left;
-          timer = millis();
-        }
-        else if (btnC)
-        {
-          change += right;
-          timer = millis();
-        }
-        else if (btnB)
-        {
-          configCurrent = change;
-          preferences.putUInt("config", configCurrent);
-          WiFi.begin(config[(configCurrent * 6)], config[(configCurrent * 6) + 1]);
-          while (WiFi.status() != WL_CONNECTED)
+          else if(settingsString == "HDMI")
           {
-            vTaskDelay(pdMS_TO_TICKS(250));
+            if(M5.getDisplayCount() == 1)
+            {
+              reset = 0;
+              clear();
+              settingsSelect = false;
+              settingsMode = false;
+              vTaskDelay(pdMS_TO_TICKS(150));
+            }
+            else
+            {
+              change = hdmiCurrent;
+            }
           }
-
-          // Create menu
-          if ((String)config[(configCurrent * 6) + 5] != "")
+          else if(settingsString == "Exit") 
           {
-            menuSize = sizeof(menuSpotnikOn);
-            menu = (char **)malloc(menuSize);
-            memcpy(menu, menuSpotnikOn, menuSize);
+            reset = 0;
+            clear();
+            settingsSelect = false;
+            settingsMode = false;
+            vTaskDelay(pdMS_TO_TICKS(150));
           }
-          else
-          {
-            menuSize = sizeof(menuSpotnikOff);
-            menu = (char **)malloc(menuSize);
-            memcpy(menu, menuSpotnikOff, menuSize);
-
-            followCurrent = (followCurrent == 1) ? 0 : 0;
-            preferences.putUInt("follow", followCurrent);
-          }
-          menuMode = 2;
         }
+        vTaskDelay(pdMS_TO_TICKS(150));
+      }
+      // Manage settings
+      else if(settingsSelect == true) {
+        String settingsString = String(settingsMenu[settingsChoice]);
 
-        size_t n = sizeof(config) / sizeof(config[0]);
-        n = (n / 6) - 1;
+        M5.Displays(display).setTextDatum(CC_DATUM);
+        M5.Displays(display).setFont(&YELLOWCRE8pt7b);
+        M5.Displays(display).setTextPadding(w - 2);
+        M5.Displays(display).setTextColor(TFT_MENU_SELECT, TFT_BACK);
 
-        change = (change < 0) ? n : change;
-        change = (change > n) ? 0 : change;
-
-        if (change != configCurrent)
+        // Config
+        if(settingsString == "Config")
         {
-          whereisString = "-";
-          configCurrent = change;
+          String tmp = (String)config[(change * 6) + 4];
+          tmp.toUpperCase();
+
+          M5.Displays(display).drawString(tmp, 160 + offsetX, h - 6 + offsetY);
+          size_t stop = sizeof(config) / sizeof(config[0]);
+          stop = (stop / 6) - 1;
+
+          if(btnA || btnC) {
+            if(btnA) {
+              change += left;
+            }
+            else if(btnC) {
+              change += right;
+            }
+            change = (change < 0) ? stop : change;
+            change = (change > stop) ? 0 : change;
+          }
+          else if(btnB == 1) {
+            if(configCurrent != change)
+            {
+              configCurrent = change;
+              preferences.putUInt("config", configCurrent);
+              WiFi.begin(config[(configCurrent * 6)], config[(configCurrent * 6) + 1]);
+              while (WiFi.status() != WL_CONNECTED)
+              {
+                vTaskDelay(pdMS_TO_TICKS(250));
+              }
+
+              // Create menu
+              if ((String)config[(configCurrent * 6) + 5] != "")
+              {
+                menuSize = sizeof(menuSpotnikOn);
+                settingsMenu = (char **)malloc(menuSize);
+                memcpy(settingsMenu, menuSpotnikOn, menuSize);
+                menuSize = sizeof(menuSpotnikOn) / sizeof(menuSpotnikOn[0]);
+              }
+              else
+              {
+                menuSize = sizeof(menuSpotnikOff);
+                settingsMenu = (char **)malloc(menuSize);
+                memcpy(settingsMenu, menuSpotnikOff, menuSize);
+                menuSize = sizeof(menuSpotnikOff) / sizeof(menuSpotnikOff[0]);
+
+                followCurrent = (followCurrent == 1) ? 0 : 0;
+                preferences.putUInt("follow", followCurrent);
+              }
+            }
+            reset = 0;
+            clear();
+            settingsSelect = false;
+            settingsMode = false;
+            vTaskDelay(pdMS_TO_TICKS(150));
+          }
+          vTaskDelay(pdMS_TO_TICKS(150));
+        }
+
+        // Sysop
+        else if(settingsString == "Sysop")
+        {
+          M5.Displays(display).drawString(String(choiceSysop[change]), 160 + offsetX, h - 6 + offsetY);
+          size_t stop = sizeof(choiceSysop) / sizeof(choiceSysop[0]);
+          stop--;
+
+          if(btnA || btnC) {
+            if(btnA) {
+              change += left;
+            }
+            else if(btnC) {
+              change += right;
+            }
+            change = (change < 0) ? stop : change;
+            change = (change > stop) ? 0 : change;
+         }
+          else if(btnB == 1) {
+            if(change != sysopCurrent)
+            {
+              sysopCurrent = change;
+              preferences.putUInt("sysop", sysopCurrent);
+            }
+            qsy = 2000;
+            qsy += sysopCurrent;
+          
+            reset = 0;
+            clear();
+            settingsSelect = false;
+            settingsMode = false;
+            vTaskDelay(pdMS_TO_TICKS(150));
+          }
+          vTaskDelay(pdMS_TO_TICKS(150));
+        }
+
+        // Perroquet
+        if(settingsString == "Perroquet")
+        {
+          M5.Displays(display).drawString(String(choicePerroquet[change]), 160 + offsetX, h - 6 + offsetY);
+
+          if(btnA || btnC) {
+            if(btnA) {
+              change += left;
+            }
+            else if(btnC) {
+              change += right;
+            }
+            change = (change < 0) ? 1 : change;
+            change = (change > 1) ? 0 : change;
+          }
+          else if(btnB == 1) {
+            if (whereisString == "PERROQUET" && change == 0)
+            {
+              qsy = dtmf[roomCurrent];
+            }
+            else if(whereisString != "PERROQUET" && change == 1)
+            {
+              qsy = 95;
+            }
+            reset = 0;
+            clear();
+            settingsSelect = false;
+            settingsMode = false;
+            vTaskDelay(pdMS_TO_TICKS(150));
+          }
+          vTaskDelay(pdMS_TO_TICKS(150));
+        }
+
+        // QSY
+        if(settingsString == "QSY")
+        {
+          M5.Displays(display).drawString(String(room[change]), 160 + offsetX, h - 6 + offsetY);
+          size_t stop = sizeof(room) / sizeof(room[0]);
+          stop--;
+
+          if(btnA || btnC) {
+            if(btnA) {
+              change += left;
+            }
+            else if(btnC) {
+              change += right;
+            }
+            change = (change < 0) ? stop : change;
+            change = (change > stop) ? 0 : change;
+          }
+          else if(btnB == 1) {
+            if(change != roomCurrent)
+            {
+              roomCurrent = change;
+              preferences.putUInt("room", roomCurrent);
+              qsy = dtmf[roomCurrent];
+            }
+            reset = 0;
+            clear();
+            settingsSelect = false;
+            settingsMode = false;
+            vTaskDelay(pdMS_TO_TICKS(150));
+          }
+          vTaskDelay(pdMS_TO_TICKS(150));
+        }
+
+        // Follow
+        if(settingsString == "Follow")
+        {
+          M5.Displays(display).drawString(String(choiceFollow[change]), 160 + offsetX, h - 6 + offsetY);
+
+          if(btnA || btnC) {
+            if(btnA) {
+              change += left;
+            }
+            else if(btnC) {
+              change += right;
+            }
+            change = (change < 0) ? 1 : change;
+            change = (change > 1) ? 0 : change;
+          }
+          else if(btnB == 1) {
+            if(followCurrent != change)
+            {
+              followCurrent = change;
+              preferences.putUInt("follow", followCurrent);
+            }
+            reset = 0;
+            clear();
+            settingsSelect = false;
+            settingsMode = false;
+            vTaskDelay(pdMS_TO_TICKS(150));
+          }
+          vTaskDelay(pdMS_TO_TICKS(150));
+        }
+
+        // Raptor
+        if(settingsString == "Raptor")
+        {
+          M5.Displays(display).drawString(String(choiceRaptor[change]), 160 + offsetX, h - 6 + offsetY);
+
+          if(btnA || btnC) {
+            if(btnA) {
+              change += left;
+            }
+            else if(btnC) {
+              change += right;
+            }
+            change = (change < 0) ? 1 : change;
+            change = (change > 1) ? 0 : change;
+         }
+          else if(btnB == 1) {
+            if(raptorCurrent != change)
+            {
+              raptorCurrent = change;
+              preferences.putUInt("raptor", raptorCurrent);
+              qsy = 200;
+            }
+            reset = 0;
+            clear();
+            settingsSelect = false;
+            settingsMode = false;
+            vTaskDelay(pdMS_TO_TICKS(150));
+          }
+          vTaskDelay(pdMS_TO_TICKS(150));
+        }
+
+        // TOT
+        if(settingsString == "TOT")
+        {
+          M5.Displays(display).drawString(String(choiceTOT[change]), 160 + offsetX, h - 6 + offsetY);
+
+          if(btnA || btnC) {
+            if(btnA) {
+              change += left;
+            }
+            else if(btnC) {
+              change += right;
+            }
+            change = (change < 0) ? 1 : change;
+            change = (change > 1) ? 0 : change;
+         }
+          else if(btnB == 1) {
+            if(totCurrent != change)
+            {
+              totCurrent = change;
+              preferences.putUInt("tot", totCurrent);
+            }
+            reset = 0;
+            clear();
+            settingsSelect = false;
+            settingsMode = false;
+            vTaskDelay(pdMS_TO_TICKS(150));
+          }
+          vTaskDelay(pdMS_TO_TICKS(150));
+        }
+
+        // ISS
+        if(settingsString == "ISS")
+        {
+          M5.Displays(display).drawString(String(choiceISS[change]), 160 + offsetX, h - 6 + offsetY);
+
+          if(btnA || btnC) {
+            if(btnA) {
+              change += left;
+            }
+            else if(btnC) {
+              change += right;
+            }
+            change = (change < 0) ? 1 : change;
+            change = (change > 1) ? 0 : change;
+         }
+          else if(btnB == 1) {
+            if(issCurrent != change)
+            {
+              issCurrent = change;
+              preferences.putUInt("iss", issCurrent);
+            }
+            reset = 0;
+            clear();
+            settingsSelect = false;
+            settingsMode = false;
+            vTaskDelay(pdMS_TO_TICKS(150));
+          }
+          vTaskDelay(pdMS_TO_TICKS(150));
+        }
+
+        // Themes
+        if(settingsString == "Themes")
+        {
+          M5.Displays(display).drawString(String(choiceThemes[change]), 160 + offsetX, h - 6 + offsetY);
+          size_t stop = sizeof(choiceThemes) / sizeof(choiceThemes[0]);
+          stop--;
+
+          if(btnA || btnC) {
+            if(btnA) {
+              change += left;
+            }
+            else if(btnC) {
+              change += right;
+            }
+            change = (change < 0) ? stop : change;
+            change = (change > stop) ? 0 : change;
+            colorCurrent = change;
+         }
+          else if(btnB == 1) {
+            preferences.putUInt("color", colorCurrent);
+            reset = 0;
+            clear();
+            settingsSelect = false;
+            settingsMode = false;
+            vTaskDelay(pdMS_TO_TICKS(150));
+          }
+          vTaskDelay(pdMS_TO_TICKS(150));
+        }
+
+        // HDMI
+        if(settingsString == "HDMI")
+        {
+          M5.Displays(display).drawString(String(choiceHDMI[change]), 160 + offsetX, h - 6 + offsetY);
+
+          if(btnA || btnC) {
+            if(btnA) {
+              change += left;
+            }
+            else if(btnC) {
+              change += right;
+            }
+            change = (change < 0) ? 1 : change;
+            change = (change > 1) ? 0 : change;
+         }
+          else if(btnB == 1) {
+            if(hdmiCurrent != change)
+            {
+              M5.Displays(display).fillScreen(TFT_BLACK);
+              hdmiCurrent = change;
+              preferences.putUInt("hdmi", hdmiCurrent);
+              display = hdmiCurrent;
+              M5.setPrimaryDisplay(display);
+              offsetX = (M5.Displays(display).width() - 320) / 2; 
+              offsetY = (M5.Displays(display).height() - 240) / 2;
+            }
+            reset = 0;
+            clear();
+            settingsSelect = false;
+            settingsMode = false;
+            vTaskDelay(pdMS_TO_TICKS(150));
+          }
+          vTaskDelay(pdMS_TO_TICKS(150));
+        }
+
+        // Brightness
+        if(settingsString == "Luminosite")
+        {
+          M5.Displays(display).drawString(String(change) + "%", 160 + offsetX, h - 6 + offsetY);
+
+          if(btnA || btnC) {
+            if(btnA) {
+              change += left;
+            }
+            else if(btnC) {
+              change += right;
+            }
+            change = (change < 1) ? 100 : change;
+            change = (change > 100) ? 1 : change;
+
+            brightnessCurrent = change;
+            M5.Lcd.setBrightness(map(brightnessCurrent, 1, 100, 1, 254));
+          }
+          else if(btnB) {
+            preferences.putUInt("brightness", brightnessCurrent);
+            reset = 0;
+            clear();
+            settingsSelect = false;
+            settingsMode = false;
+            vTaskDelay(pdMS_TO_TICKS(150));
+          }
+          vTaskDelay(pdMS_TO_TICKS(150));
+        }
+
+        // Beep
+        else if(settingsString == "Beep")
+        {
+          M5.Displays(display).drawString(String(change) + "%", 160 + offsetX, h - 6 + offsetY);
+
+          if(btnA || btnC) {
+            if(btnA) {
+              change += left;
+            }
+            else if(btnC) {
+              change += right;
+            }
+            change = (change < 0) ? 100 : change;
+            change = (change > 100) ? 0 : change;
+            beepCurrent = change;
+          }
+          else if(btnB == 1) {
+            preferences.putUInt("beep", beepCurrent);
+            reset = 0;
+            clear();
+            settingsSelect = false;
+            settingsMode = false;
+            vTaskDelay(pdMS_TO_TICKS(150));
+          }
+          vTaskDelay(pdMS_TO_TICKS(150));
+        }
+
+        // Screensaver
+        if(settingsString == "Screensaver")
+        {
+          M5.Displays(display).drawString(String(change) + " MIN", 160 + offsetX, h - 6 + offsetY);
+
+         if(btnA || btnC) {
+            if(btnA) {
+              change += left;
+            }
+            else if(btnC) {
+              change += right;
+            }
+            change = (change < 1) ? 60 : change;
+            change = (change > 60) ? 1 : change;
+         }
+          else if(btnB == 1) {
+            preferences.putUInt("screensaver", change);
+            reset = 0;
+            clear();
+            settingsSelect = false;
+            settingsMode = false;
+            vTaskDelay(pdMS_TO_TICKS(150));
+          }
+          vTaskDelay(pdMS_TO_TICKS(150));
+        }
+
+        // Mode
+        else if(settingsString == "Affichage")
+        {
+          M5.Displays(display).drawString(String(choiceAffichage[change]), 160 + offsetX, h - 6 + offsetY);
+
+          if(btnA || btnC) {
+            if(btnA) {
+              change += left;
+            }
+            else if(btnC) {
+              change += right;
+            }
+            change = (change < 0) ? 1 : change;
+            change = (change > 1) ? 0 : change;
+            modeCurrent = change;
+         }
+          else if(btnB == 1) {
+            preferences.putUInt("mode", change);
+            reset = 0;
+            clear();
+            settingsSelect = false;
+            settingsMode = false;
+            vTaskDelay(pdMS_TO_TICKS(150));
+          }
+          vTaskDelay(pdMS_TO_TICKS(150));
+        }
+
+        // IP Address
+        else if(settingsString == "Addresse IP")
+        {
+          M5.Displays(display).drawString(String(WiFi.localIP().toString().c_str()), 160 + offsetX, h - 6 + offsetY);
+
+          if(btnB == 1) {
+            reset = 0;
+            clear();
+            settingsSelect = false;
+            settingsMode = false;
+            vTaskDelay(pdMS_TO_TICKS(150));
+          }
+          vTaskDelay(pdMS_TO_TICKS(150));
         }
       }
-      // Mode menu active, Escape
-      else if (option == "ETEINDRE")
-      {
-        shutdown();
-      }
     }
-
-    // Escape game...
-    if (menuMode == 2)
-    {
-      action = 4;
-    }
-
-    // Manage temporisation
-    if (btnA || btnC)
-    {
-      if (menuMode == 0)
-      {
-        // Serial.print("-");
-        vTaskDelay(pdMS_TO_TICKS(200));
-      }
-      else if (menuMode == 1)
-      {
-        // Serial.print("+");
-        vTaskDelay(pdMS_TO_TICKS(200));
-      }
-    }
-    else
-    {
-      // Serial.print(".");
-      vTaskDelay(pdMS_TO_TICKS(150));
-    }
-  }
+    vTaskDelay(pdMS_TO_TICKS(10));  
+  }    
 }

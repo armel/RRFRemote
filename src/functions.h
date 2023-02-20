@@ -195,7 +195,7 @@ void resetColor()
 // Clear screen
 void clear()
 {
-  String option = String(menu[menuCurrent]);
+  String option = String(settingsMenu[menuCurrent]);
 
   // Reset
   message = "";
