@@ -10,7 +10,7 @@ void viewMenu(uint16_t x, uint16_t y, uint16_t w, uint16_t h)
   M5.Displays(display).setFont(&YELLOWCRE8pt7b);
   M5.Displays(display).setTextPadding(w - 2);
   M5.Displays(display).setTextColor(TFT_MENU_SELECT);
-  M5.Displays(display).drawString("SETTINGS", 160 + offsetX, 14 + y);
+  M5.Displays(display).drawString("PARAMETRES", 160 + offsetX, 14 + y);
 
   M5.Displays(display).setTextDatum(CC_DATUM);
   M5.Displays(display).setFont(0);
