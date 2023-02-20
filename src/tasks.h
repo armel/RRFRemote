@@ -367,6 +367,7 @@ void button(void *pvParameters)
             if(M5.getDisplayCount() == 1)
             {
               reset = 0;
+              refresh = 0;
               clear();
               settingsSelect = false;
               settingsMode = false;
@@ -380,6 +381,7 @@ void button(void *pvParameters)
           else if(settingsString == "Exit") 
           {
             reset = 0;
+            refresh = 0;
             clear();
             settingsSelect = false;
             settingsMode = false;
@@ -448,6 +450,7 @@ void button(void *pvParameters)
               }
             }
             reset = 0;
+            refresh = 0;
             clear();
             settingsSelect = false;
             settingsMode = false;
@@ -483,6 +486,7 @@ void button(void *pvParameters)
             qsy += sysopCurrent;
           
             reset = 0;
+            refresh = 0;
             clear();
             settingsSelect = false;
             settingsMode = false;
@@ -516,6 +520,7 @@ void button(void *pvParameters)
               qsy = 95;
             }
             reset = 0;
+            refresh = 0;
             clear();
             settingsSelect = false;
             settingsMode = false;
@@ -549,6 +554,7 @@ void button(void *pvParameters)
               qsy = dtmf[roomCurrent];
             }
             reset = 0;
+            refresh = 0;
             clear();
             settingsSelect = false;
             settingsMode = false;
@@ -579,6 +585,7 @@ void button(void *pvParameters)
               preferences.putUInt("follow", followCurrent);
             }
             reset = 0;
+            refresh = 0;
             clear();
             settingsSelect = false;
             settingsMode = false;
@@ -610,6 +617,7 @@ void button(void *pvParameters)
               qsy = 200;
             }
             reset = 0;
+            refresh = 0;
             clear();
             settingsSelect = false;
             settingsMode = false;
@@ -640,6 +648,7 @@ void button(void *pvParameters)
               preferences.putUInt("tot", totCurrent);
             }
             reset = 0;
+            refresh = 0;
             clear();
             settingsSelect = false;
             settingsMode = false;
@@ -670,6 +679,7 @@ void button(void *pvParameters)
               preferences.putUInt("iss", issCurrent);
             }
             reset = 0;
+            refresh = 0;
             clear();
             settingsSelect = false;
             settingsMode = false;
@@ -699,6 +709,7 @@ void button(void *pvParameters)
           else if(btnB == 1) {
             preferences.putUInt("color", colorCurrent);
             reset = 0;
+            refresh = 0;
             clear();
             settingsSelect = false;
             settingsMode = false;
@@ -734,6 +745,7 @@ void button(void *pvParameters)
               offsetY = (M5.Displays(display).height() - 240) / 2;
             }
             reset = 0;
+            refresh = 0;
             clear();
             settingsSelect = false;
             settingsMode = false;
@@ -763,6 +775,7 @@ void button(void *pvParameters)
           else if(btnB) {
             preferences.putUInt("brightness", brightnessCurrent);
             reset = 0;
+            refresh = 0;
             clear();
             settingsSelect = false;
             settingsMode = false;
@@ -790,6 +803,7 @@ void button(void *pvParameters)
           else if(btnB == 1) {
             preferences.putUInt("beep", beepCurrent);
             reset = 0;
+            refresh = 0;
             clear();
             settingsSelect = false;
             settingsMode = false;
@@ -820,6 +834,7 @@ void button(void *pvParameters)
               preferences.putUInt("screensaver", change);
             }
             reset = 0;
+            refresh = 0;
             clear();
             settingsSelect = false;
             settingsMode = false;
@@ -847,6 +862,7 @@ void button(void *pvParameters)
           else if(btnB == 1) {
             preferences.putUInt("mode", change);
             reset = 0;
+            refresh = 0;
             clear();
             settingsSelect = false;
             settingsMode = false;
@@ -862,6 +878,7 @@ void button(void *pvParameters)
 
           if(btnB == 1) {
             reset = 0;
+            refresh = 0;
             clear();
             settingsSelect = false;
             settingsMode = false;
