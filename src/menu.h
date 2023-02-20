@@ -4,7 +4,7 @@
 void viewMenu(uint16_t x, uint16_t y, uint16_t w, uint16_t h)
 {
   M5.Displays(display).fillRoundRect(x, y, w, h, 8, TFT_BACK);
-  M5.Displays(display).drawRoundRect(x, y, w, h, 8, TFT_MENU_BORDER);
+  M5.Displays(display).drawRoundRect(x, y, w, h, 8, TFT_MENU_SELECT);
 
   M5.Displays(display).setTextDatum(CC_DATUM);
   M5.Displays(display).setFont(&YELLOWCRE8pt7b);
@@ -48,31 +48,47 @@ void viewOption(int8_t settingsChoice, boolean settingsSelect, uint16_t x, uint1
   j = 0;
   for (i = start; i < stop; i++)
   {
-    //Serial.printf("%d %d %d %d %d\n", i, j, start, stop, settingsChoice);
+    Serial.printf("%d %d %d %d %d %s\n", i, j, start, stop, settingsChoice, settingsMenu[i]);
     if (settingsSelect == false)
     {
       if (settingsChoice == i)
       {
-        M5.Displays(display).setTextColor(TFT_BLACK, TFT_MENU_SELECT);
+        M5.Displays(display).setTextColor(TFT_MENU_SELECT, TFT_FRONT);
         M5.Displays(display).drawString(settingsMenu[i], 160 + offsetX, 45 + y + (j * 18));
+        if(j0 > 0)
+          M5.Displays(display).drawFastHLine(x + 1, 45 + y + (j * 18) - 9, w - 2, TFT_MENU_SELECT);
+        if(j < 6)
+          M5.Displays(display).drawFastHLine(x + 1, 45 + y + (j * 18) + 8, w - 2, TFT_MENU_SELECT);
       }
       else
       {
         M5.Displays(display).setTextColor(TFT_MENU_SELECT, TFT_BACK);
         M5.Displays(display).drawString(settingsMenu[i], 160 + offsetX, 45 + y + (j * 18));
+        if(j > 0)
+          M5.Displays(display).drawFastHLine(x + 1, 45 + y + (j * 18) - 9, w - 2, TFT_BACK);
+        if(j < 6)
+          M5.Displays(display).drawFastHLine(x + 1, 45 + y + (j * 18) + 8, w - 2, TFT_BACK);
       }
     }
     else
     {
       if (settingsChoice == i)
       {
-        M5.Displays(display).setTextColor(TFT_BLACK, TFT_MENU_SELECT);
+        M5.Displays(display).setTextColor(TFT_MENU_SELECT, TFT_FRONT);
         M5.Displays(display).drawString(settingsMenu[i], 160 + offsetX, 45 + y + (j * 18));
+        if(j > 0)
+          M5.Displays(display).drawFastHLine(x + 1, 45 + y + (j * 18) - 9, w - 2, TFT_MENU_SELECT);
+        if(j < 6)
+          M5.Displays(display).drawFastHLine(x + 1, 45 + y + (j * 18) + 8, w - 2, TFT_MENU_SELECT);
       }
       else
       {
-        M5.Displays(display).setTextColor(TFT_SILVER, TFT_BACK);
+        M5.Displays(display).setTextColor(TFT_FRONT, TFT_BACK);
         M5.Displays(display).drawString(settingsMenu[i], 160 + offsetX, 45 + y + (j * 18));
+        if(j > 0)
+          M5.Displays(display).drawFastHLine(x + 1, 45 + y + (j * 18) - 9, w - 2, TFT_BACK);
+        if(j < 6)
+          M5.Displays(display).drawFastHLine(x + 1, 45 + y + (j * 18) + 8, w - 2, TFT_BACK);
       }
     }
     j++;
@@ -81,5 +97,5 @@ void viewOption(int8_t settingsChoice, boolean settingsSelect, uint16_t x, uint1
       j = 7;
     }
   }
-  //Serial.println("-----");
+  Serial.println("-----");
 }
