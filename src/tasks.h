@@ -331,7 +331,7 @@ void button(void *pvParameters)
           viewOption(settingsChoice, settingsSelect, x, y, w);
         }
         else if(btnB) {
-          Serial.printf(">>>>>>> ecran %d", M5.getDisplayCount());
+          Serial.printf(">>>>>>> ecran %d\n", M5.getDisplayCount());
 
           settingsSelect = true;
           viewOption(settingsChoice, settingsSelect, x, y, w);
