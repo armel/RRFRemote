@@ -308,6 +308,34 @@ void button(void *pvParameters)
 
     if(settingsMode == false)
     {
+      if (followCurrent == 0)
+      {
+        change = roomCurrent;
+
+        int n = sizeof(room) / sizeof(room[0]);
+        n -= 1;
+
+        if (btnA)
+        {
+          change += left;
+
+          change = (change < 0) ? n : change;
+          change = (change > n) ? 0 : change;
+          roomCurrent = change;
+          preferences.putUInt("room", roomCurrent);
+          action = 2;
+        }
+        else if (btnC)
+        {
+          change += right;
+
+          change = (change < 0) ? n : change;
+          change = (change > n) ? 0 : change;
+          roomCurrent = change;
+          preferences.putUInt("room", roomCurrent);
+          action = 2;
+        }
+      }
       // Enter settings
       if(btnB) {
         settingsMode = true;
@@ -576,12 +604,9 @@ void button(void *pvParameters)
             change = (change > stop) ? 0 : change;
           }
           else if(btnB == 1) {
-            if(change != roomCurrent)
-            {
-              roomCurrent = change;
-              preferences.putUInt("room", roomCurrent);
-              qsy = dtmf[roomCurrent];
-            }
+            roomCurrent = change;
+            preferences.putUInt("room", roomCurrent);
+            qsy = dtmf[roomCurrent];
             reset = 0;
             refresh = 0;
             clear();
