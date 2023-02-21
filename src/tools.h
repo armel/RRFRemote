@@ -87,6 +87,7 @@ void getButton(uint8_t modeCurrent = 1, uint8_t menuMode = 0)
 
         if (modeChange != 2)
         {
+          Serial.println("A");
           for (uint8_t i = 0; i < 3; i++)
             myBtn[i].active = true; // active btnA, btnB, btnC
           for (uint8_t i = 4; i < limit; i++)
@@ -94,6 +95,7 @@ void getButton(uint8_t modeCurrent = 1, uint8_t menuMode = 0)
         }
         else
         {
+          Serial.println("B");
           for (uint8_t i = 0; i < 3; i++)
             myBtn[i].active = false; // active btnA, btnB, btnC
           for (uint8_t i = 4; i < limit; i++)

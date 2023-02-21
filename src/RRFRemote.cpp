@@ -7,6 +7,7 @@
 #include "tools.h"
 #include "webIndex.h"
 #include "functions.h"
+#include "menu.h"
 #include "binLoader.h"
 #include "tasks.h"
 #include "view.h"
@@ -16,28 +17,32 @@ void setup()
 {
   // Init M5
   auto cfg = M5.config();
+
+  cfg.clear_display = true;  // default=true. clear the screen when begin.
+  //cfg.output_power  = false;  // default=true. use external port 5V output.
+  cfg.internal_imu  = true;  // default=true. use internal IMU.
+  cfg.internal_rtc  = true;  // default=true. use internal RTC.
+  cfg.internal_spk  = true;  // default=true. use internal speaker.
+  cfg.internal_mic  = true;  // default=true. use internal microphone.
+  cfg.external_imu  = false;  // default=false. use Unit Accel & Gyro.
+  cfg.external_rtc  = false;  // default=false. use Unit RTC.
+
+  cfg.external_display.module_display = true;  // default=true. use ModuleDisplay
+  cfg.external_display.atom_display   = true;  // default=true. use AtomDisplay
+  cfg.external_display.unit_oled      = false;  // default=true. use UnitOLED
+  cfg.external_display.unit_lcd       = false;  // default=true. use UnitLCD
+  cfg.external_display.unit_rca       = false; // default=false. use UnitRCA VideoOutput
+  cfg.external_display.module_rca     = false; // default=false. use ModuleRCA VideoOutput
+
   M5.begin(cfg);
 
-  pinMode(32, INPUT_PULLUP);
-  pinMode(26, INPUT_PULLUP);
+  Serial.printf("On start %d\n", M5.getDisplayCount());
 
-  // Init Display
-  display.begin();
-
-  offsetX = (display.width() - 320) / 2; 
-  offsetY = (display.height() - 240) / 2;
-
-  // Init screensaver timer
-  screensaver = millis();
-
-  // Init Led
-  if (M5.getBoard() == m5::board_t::board_M5Stack)
-  {
-    FastLED.addLeds<NEOPIXEL, 15>(leds, NUM_LEDS); // GRB ordering is assumed
-  }
-  else if (M5.getBoard() == m5::board_t::board_M5StackCore2)
-  {
-    FastLED.addLeds<NEOPIXEL, 25>(leds, NUM_LEDS); // GRB ordering is assumed
+  // Manage external buttons for atom only
+  if(atom == 1) 
+  {  
+    pinMode(32, INPUT_PULLUP);
+    pinMode(26, INPUT_PULLUP);
   }
 
   // Preferences
@@ -71,28 +76,57 @@ void setup()
   totCurrent = preferences.getUInt("tot", 0);
   sysopCurrent = preferences.getUInt("sysop", 0);
   modeCurrent = preferences.getUInt("mode", 0);
+  screensaverCurrent = preferences.getUInt("screensaver", 5);
+  hdmiCurrent = preferences.getUInt("hdmi", 0);
+
+  // Init Display
+  if(M5.getDisplayCount() == 1)
+  {
+    display = 0;
+  }
+  else
+  {
+    display = hdmiCurrent;
+  }
+  M5.setPrimaryDisplay(display);
+
+  offsetX = (M5.Displays(display).width() - 320) / 2; 
+  offsetY = (M5.Displays(display).height() - 240) / 2;
+
+  // Init screensaver timer
+  screensaver = millis();
+
+  // Init Led
+  if (M5.getBoard() == m5::board_t::board_M5Stack)
+  {
+    FastLED.addLeds<NEOPIXEL, 15>(leds, NUM_LEDS); // GRB ordering is assumed
+  }
+  else if (M5.getBoard() == m5::board_t::board_M5StackCore2)
+  {
+    FastLED.addLeds<NEOPIXEL, 25>(leds, NUM_LEDS); // GRB ordering is assumed
+  }
 
   // Bin Loader
   binLoader();
 
   // LCD
   resetColor();
-  display.setBrightness(map(brightnessCurrent, 1, 100, 1, 254));
-  display.fillScreen(TFT_HEADER);
+  M5.Displays(display).setBrightness(map(brightnessCurrent, 1, 100, 1, 254));
+  M5.Displays(display).fillScreen(TFT_HEADER);
 
   // Title
-  display.setFont(&rounded_led_board10pt7b);
-  display.setTextColor(TFT_WHITE, TFT_HEADER);
-  display.setTextDatum(CC_DATUM);
-  display.drawString(String(NAME), 160 + offsetX, 20 + offsetY);
-  display.setFont(0);
-  display.drawString("Version " + String(VERSION) + " par " + String(AUTHOR), 160 + offsetX, 50 + offsetY);
+  M5.Displays(display).setFont(&rounded_led_board10pt7b);
+  M5.Displays(display).setTextColor(TFT_WHITE, TFT_HEADER);
+  M5.Displays(display).setTextDatum(CC_DATUM);
+  M5.Displays(display).drawString(String(NAME), 160 + offsetX, 20 + offsetY);
+  M5.Displays(display).setFont(0);
+  M5.Displays(display).drawString("Version " + String(VERSION) + " par " + String(AUTHOR), 160 + offsetX, 50 + offsetY);
 
   // QRCode
-  display.qrcode("https://github.com/armel/" + String(NAME), 90 + offsetX, 80 + offsetY, 140, 6);
+  M5.Displays(display).qrcode("https://github.com/armel/" + String(NAME), 90 + offsetX, 80 + offsetY, 140, 6);
 
   // We start by connecting to the WiFi network
-  display.setTextPadding(320);
+  M5.Displays(display).setTextPadding(320);
 
   uint32_t color = ((BMP_HEADER.r & 0xff) << 16) + ((BMP_HEADER.g & 0xff) << 8) + (BMP_HEADER.b & 0xff);
 
@@ -103,14 +137,14 @@ void setup()
   while (true)
   {
     uint8_t attempt = 1;
-    display.drawString(String(config[(configCurrent * 6)]), 160 + offsetX, 60 + offsetY);
+    M5.Displays(display).drawString(String(config[(configCurrent * 6)]), 160 + offsetX, 60 + offsetY);
     WiFi.begin(config[(configCurrent * 6)], config[(configCurrent * 6) + 1]);
     while (WiFi.status() != WL_CONNECTED)
     {
       delay(500);
       if (attempt % 2 == 0)
       {
-        display.drawString("Connexion en cours", 160 + offsetX, 70 + offsetY);
+        M5.Displays(display).drawString("Connexion en cours", 160 + offsetX, 70 + offsetY);
         for (uint8_t j = 0; j <= 4; j++)
         {
           leds[j] = color;
@@ -121,7 +155,7 @@ void setup()
       }
       else
       {
-        display.drawString(" ", 160 + offsetX, 70 + offsetY);
+        M5.Displays(display).drawString(" ", 160 + offsetX, 70 + offsetY);
         for (uint8_t j = 0; j <= 4; j++)
         {
           leds[j] = CRGB::Black;
@@ -157,20 +191,22 @@ void setup()
 
   clientISS.setInsecure(); // For ISS
 
-  display.drawString(String(WiFi.localIP().toString().c_str()), 160 + offsetX, 70 + offsetY);
+  M5.Displays(display).drawString(String(WiFi.localIP().toString().c_str()), 160 + offsetX, 70 + offsetY);
 
   // Create menu
   if ((String)config[(configCurrent * 6) + 5] != "")
   {
     menuSize = sizeof(menuSpotnikOn);
-    menu = (char **)malloc(menuSize);
-    memcpy(menu, menuSpotnikOn, menuSize);
+    settingsMenu = (char **)malloc(menuSize);
+    memcpy(settingsMenu, menuSpotnikOn, menuSize);
+    menuSize = sizeof(menuSpotnikOn) / sizeof(menuSpotnikOn[0]);
   }
   else
   {
     menuSize = sizeof(menuSpotnikOff);
-    menu = (char **)malloc(menuSize);
-    memcpy(menu, menuSpotnikOff, menuSize);
+    settingsMenu = (char **)malloc(menuSize);
+    memcpy(settingsMenu, menuSpotnikOff, menuSize);
+    menuSize = sizeof(menuSpotnikOff) / sizeof(menuSpotnikOff[0]);
 
     followCurrent = (followCurrent == 1) ? 0 : 0;
     preferences.putUInt("follow", followCurrent);
@@ -222,12 +258,12 @@ void setup()
 
   for (uint8_t i = 0; i <= 120; i++)
   {
-    display.drawFastHLine(0 + offsetX, i + offsetY, 320, TFT_BLACK);
-    display.drawFastHLine(0 + offsetX, 240 - i + offsetY, 320, TFT_BLACK);
+    M5.Displays(display).drawFastHLine(0 + offsetX, i + offsetY, 320, TFT_BLACK);
+    M5.Displays(display).drawFastHLine(0 + offsetX, 240 - i + offsetY, 320, TFT_BLACK);
     delay(5);
   }
 
-  display.fillScreen(TFT_BLACK);
+  M5.Displays(display).fillScreen(TFT_BLACK);
   clear();
 }
 
@@ -257,6 +293,9 @@ void loop()
   uint32_t timer = 0;
 
   // Let's go
+  settingLock = false;
+  //display = hdmiCurrent;
+
   if (reset == 0)
   {
     clear();
@@ -400,410 +439,416 @@ void loop()
     transmitOff = 1;
   }
 
-  if (modeCurrent == 0)
+  if(settingsMode == false) // Lock menu operation...
   {
-    // View histogram
-    viewHistogram(maxLevel, tx);
+    settingLock = true;
 
-    // View elsewhere
-    viewElsewhere(doc, salon);
-
-    // View many datas
-    display.setFont(&tahoma6pt7b);
-    display.setTextColor(TFT_WHITE, TFT_BACK);
-    display.setTextDatum(CC_DATUM);
-
-    if (tot > 0)
+    if (modeCurrent == 0)
     {
-      if (type != 0)
-      {
-        refresh = 0;
-      }
+      // View histogram
+      viewHistogram(maxLevel, tx);
 
-      alternance = 5;
-      type = 0;
-    }
+      // View elsewhere
+      viewElsewhere(doc, salon);
 
-    scroll(20);
-    
-    switch (type)
-    {
-    case 1:
-      viewSettings();
-      break;
+      // View many datas
+      M5.Displays(display).setFont(&tahoma6pt7b);
+      M5.Displays(display).setTextColor(TFT_WHITE, TFT_BACK);
+      M5.Displays(display).setTextDatum(CC_DATUM);
 
-    case 2:
-      viewPropagation();
-      break;
-
-    case 3:
-      if (doc["all"].size() != 0)
+      if (tot > 0)
       {
-        viewTopLinks(doc["all"].size(), allTx, allIndicatif, allDuree, salon);
-      }
-      else
-      {
-        viewLastLinks(doc["last"].size(), lastHeure, lastIndicatif, lastDuree, salon);
-      }
-      break;
-
-    case 4:
-      if (doc["iptable"].size() != 0)
-      {
-        viewBlocage(doc["iptable"].size(), iptableIndicatif, iptableType, salon);
-      }
-      else
-      {
-        viewLastLinks(doc["last"].size(), lastHeure, lastIndicatif, lastDuree, salon);
-      }
-      break;
-
-    case 5:
-      if (issCurrent == 1)
-      {
-        viewISS(docISS);
-      }
-      else
-      {
-        viewLastLinks(doc["last"].size(), lastHeure, lastIndicatif, lastDuree, salon);
-      }
-      break;
-
-    default:
-      if (doc["last"].size() != 0)
-      {
-        viewLastLinks(doc["last"].size(), lastHeure, lastIndicatif, lastDuree, salon);
-      }
-    }
-  }
-  else if (modeCurrent == 1)
-  {
-    viewElsewhereBig(doc, salon);
-    if (doc["last"].size() != 0)
-    {
-      viewLastLinksBig(doc["last"].size(), lastHeure, lastIndicatif, lastDuree, salon);
-    }
-  }
-  else
-  {
-    viewDTMF();
-  }
-
-  // Transmit or no transmit
-  scroll(20);
-  if (menuMode == 0)
-  {
-    menuSelected = -1;
-    if (tot != 0)
-    {                         // If transmit
-      screensaver = millis(); // Screensaver update !!!
-      if (transmitOn == 1 || reset == 0)
-      {
-        if (!isCharging() && screensaverMode == 0)
+        if (type != 0)
         {
-          display.setBrightness(map(brightnessCurrent, 1, 100, 1, 254));
+          refresh = 0;
         }
 
-        display.fillRect(4 + offsetX, 2 + offsetY, 36, 42, TFT_HEADER);
-
-        display.setTextColor(TFT_WHITE, TFT_HEADER);
-        display.setFont(&dot15pt7b);
-        display.setTextDatum(CC_DATUM);
-        display.setTextPadding(240);
-        display.drawString(String(salon), 160 + offsetX, 16 + offsetY);
-
-        display.setTextColor(TFT_WHITE, TFT_HEADER);
-        display.setFont(ICON_FONT);
-        display.setTextDatum(CL_DATUM);
-        display.setTextPadding(20);
-        sprintf(swap, "%c", ICON_CALL);
-        tmpString = swap;
-        display.drawString(tmpString, 10 + offsetX, 22 + offsetY);
-
-        display.fillRect(0 + offsetX, 46 + offsetY, 320, 32, TFT_INFO);
-
-        display.setFont(&rounded_led_board10pt7b);
-        display.setTextColor(TFT_WHITE, TFT_INFO);
-        display.setTextDatum(CL_DATUM);
-
-        tmpString = String(lastIndicatif[0]);
-        indicatifString = tmpString;
-
-        ledAlert(true);
-
-        if (tmpString.substring(0, 3) == "GW-")
-        {
-          tmpString = "GW";
-        }
-        else
-        {
-          tmpString = getValue(lastIndicatif[0], ' ', 1);
-          if (tmpString.length() > 6)
-          {
-            tmpString = tmpString.substring(0, 6);
-          }
-          tmpString = (tmpString == "") ? "RTFM" : tmpString;
-        }
-
-        tmpString += " 0:00";
-        lengthData = M5.Lcd.textWidth(tmpString);
-        centerData = (320 - lengthData) / 2;
-
-        M5.Lcd.drawString(tmpString, centerData + offsetX, 64 + offsetY);
-
-        transmitOn = 2;
-        transmitOff = 0;
+        alternance = 5;
+        type = 0;
       }
 
-      M5.Lcd.setFont(&rounded_led_board10pt7b);
-      M5.Lcd.setTextColor(TFT_WHITE, TFT_INFO);
-      M5.Lcd.setTextDatum(CL_DATUM);
-      dureeString = String(lastDuree[0]);
-      if (dureeStringOld != dureeString) 
-      {
-        dureeStringOld = dureeString;
-        M5.Lcd.drawString(dureeString.substring(1), (centerData + lengthData - 80) + offsetX, 64 + offsetY);
-      }
-
-      if (totCurrent)
-      {
-        if ((String(salon) == "RRF" && tot > TIMEOUT_TOT_RRF) || (tot > TIMEOUT_TOT_ELSEWHERE))
-        {
-          display.setBrightness(0);
-          M5.Speaker.tone(1000, 50);
-          delay(10);
-          M5.Speaker.tone(1000, 50);
-          delay(80);
-          display.setBrightness(map(brightnessCurrent, 1, 100, 1, 254));
-        }
-      }
-    }
-    else
-    { // If no transmit
-      if (transmitOff == 1 || reset == 0)
-      {
-        ledAlert(false);
-
-        if (!isCharging() && screensaverMode == 0)
-        {
-          display.setBrightness(map(brightnessCurrent, 1, 100, 1, 254));
-        }
-
-        display.setTextColor(TFT_WHITE, TFT_HEADER);
-        display.setFont(&dot15pt7b);
-        display.setTextDatum(CC_DATUM);
-        display.setTextPadding(240);
-        display.drawString(String(salon), 160 + offsetX, 16 + offsetY);
-
-        dateStringOld = "";
-        linkTotalStringOld = "";
-        linkActifStringOld = "";
-        txTotalStringOld = "";
-        emissionStringOld = "";
-        issStringOld = "";
-
-        transmitOn = 0;
-        transmitOff = 2;
-      }
-
-      display.setFont(ICON_FONT);
-      display.setTextColor(TFT_WHITE, TFT_HEADER);
-      display.setTextDatum(CL_DATUM);
-      display.setTextPadding(0);
-
+      scroll(20);
+      
       switch (type)
       {
-      case 0:
-        updateLocalTime();
-        dateStringOld = viewData(ICON_CLOCK, dateString, dateStringOld);
-        break;
-
       case 1:
-        sprintf(swap, "%d", linkTotal);
-        tmpString = swap;
-        linkTotalString = "Links total " + tmpString;
-        linkTotalStringOld = viewData(ICON_STAT, linkTotalString, linkTotalStringOld);
+        viewSettings();
         break;
 
       case 2:
-        sprintf(swap, "%d", linkActif);
-        tmpString = swap;
-        linkActifString = "Links actifs " + tmpString;
-        linkActifStringOld = viewData(ICON_STAT, linkActifString, linkActifStringOld);
+        viewPropagation();
         break;
 
       case 3:
-        sprintf(swap, "%d", txTotal);
-        tmpString = swap;
-        txTotalString = "TX total " + tmpString;
-        txTotalStringOld = viewData(ICON_STAT, txTotalString, txTotalStringOld);
+        if (doc["all"].size() != 0)
+        {
+          viewTopLinks(doc["all"].size(), allTx, allIndicatif, allDuree, salon);
+        }
+        else
+        {
+          viewLastLinks(doc["last"].size(), lastHeure, lastIndicatif, lastDuree, salon);
+        }
         break;
 
       case 4:
-        tmpString = String(emission);
-        emissionString = (strlen(emission) == 5) ? "BF 00:" + tmpString : "BF " + tmpString;
-        emissionStringOld = viewData(ICON_CLOCK, emissionString, emissionStringOld);
+        if (doc["iptable"].size() != 0)
+        {
+          viewBlocage(doc["iptable"].size(), iptableIndicatif, iptableType, salon);
+        }
+        else
+        {
+          viewLastLinks(doc["last"].size(), lastHeure, lastIndicatif, lastDuree, salon);
+        }
         break;
 
       case 5:
         if (issCurrent == 1)
         {
-          tmpString = String(issDistance);
-          issString = "ISS " + tmpString + " Km";
-          issStringOld = viewData(ICON_ISS, issString, issStringOld);
+          viewISS(docISS);
         }
         else
         {
+          viewLastLinks(doc["last"].size(), lastHeure, lastIndicatif, lastDuree, salon);
+        }
+        break;
+
+      default:
+        if (doc["last"].size() != 0)
+        {
+          viewLastLinks(doc["last"].size(), lastHeure, lastIndicatif, lastDuree, salon);
+        }
+      }
+    }
+    else if (modeCurrent == 1)
+    {
+      viewElsewhereBig(doc, salon);
+      if (doc["last"].size() != 0)
+      {
+        viewLastLinksBig(doc["last"].size(), lastHeure, lastIndicatif, lastDuree, salon);
+      }
+    }
+    else
+    {
+      viewDTMF();
+    }
+
+    // Transmit or no transmit
+    scroll(20);
+    if (menuMode == 0)
+    {
+      menuSelected = -1;
+      if (tot != 0)
+      {                         // If transmit
+        screensaver = millis(); // Screensaver update !!!
+        if (transmitOn == 1 || reset == 0)
+        {
+          if (!isCharging() && screensaverMode == 0)
+          {
+            M5.Displays(display).setBrightness(map(brightnessCurrent, 1, 100, 1, 254));
+          }
+
+          M5.Displays(display).fillRect(4 + offsetX, 2 + offsetY, 36, 42, TFT_HEADER);
+
+          M5.Displays(display).setTextColor(TFT_WHITE, TFT_HEADER);
+          M5.Displays(display).setFont(&dot15pt7b);
+          M5.Displays(display).setTextDatum(CC_DATUM);
+          M5.Displays(display).setTextPadding(240);
+          M5.Displays(display).drawString(String(salon), 160 + offsetX, 16 + offsetY);
+
+          M5.Displays(display).setTextColor(TFT_WHITE, TFT_HEADER);
+          M5.Displays(display).setFont(ICON_FONT);
+          M5.Displays(display).setTextDatum(CL_DATUM);
+          M5.Displays(display).setTextPadding(20);
+          sprintf(swap, "%c", ICON_CALL);
+          tmpString = swap;
+          M5.Displays(display).drawString(tmpString, 10 + offsetX, 22 + offsetY);
+
+          M5.Displays(display).fillRect(0 + offsetX, 46 + offsetY, 320, 32, TFT_INFO);
+
+          M5.Displays(display).setFont(&rounded_led_board10pt7b);
+          M5.Displays(display).setTextColor(TFT_WHITE, TFT_INFO);
+          M5.Displays(display).setTextDatum(CL_DATUM);
+
+          tmpString = String(lastIndicatif[0]);
+          indicatifString = tmpString;
+
+          ledAlert(true);
+
+          if (tmpString.substring(0, 3) == "GW-")
+          {
+            tmpString = "GW";
+          }
+          else
+          {
+            tmpString = getValue(lastIndicatif[0], ' ', 1);
+            if (tmpString.length() > 6)
+            {
+              tmpString = tmpString.substring(0, 6);
+            }
+            tmpString = (tmpString == "") ? "RTFM" : tmpString;
+          }
+
+          tmpString += " 0:00";
+          lengthData = M5.Displays(display).textWidth(tmpString);
+          centerData = (320 - lengthData) / 2;
+
+          M5.Lcd.drawString(tmpString, centerData + offsetX, 64 + offsetY);
+
+          transmitOn = 2;
+          transmitOff = 0;
+        }
+
+        M5.Displays(display).setFont(&rounded_led_board10pt7b);
+        M5.Displays(display).setTextColor(TFT_WHITE, TFT_INFO);
+        M5.Displays(display).setTextDatum(CL_DATUM);
+        dureeString = String(lastDuree[0]);
+        if (dureeStringOld != dureeString) 
+        {
+          dureeStringOld = dureeString;
+          M5.Displays(display).drawString(dureeString.substring(1), (centerData + lengthData - 80) + offsetX, 64 + offsetY);
+        }
+
+        if (totCurrent)
+        {
+          if ((String(salon) == "RRF" && tot > TIMEOUT_TOT_RRF) || (tot > TIMEOUT_TOT_ELSEWHERE))
+          {
+            M5.Displays(display).setBrightness(0);
+            M5.Speaker.tone(1000, 50);
+            delay(10);
+            M5.Speaker.tone(1000, 50);
+            delay(80);
+            M5.Displays(display).setBrightness(map(brightnessCurrent, 1, 100, 1, 254));
+          }
+        }
+      }
+      else
+      { // If no transmit
+        if (transmitOff == 1 || reset == 0)
+        {
+          ledAlert(false);
+
+          if (!isCharging() && screensaverMode == 0)
+          {
+            M5.Displays(display).setBrightness(map(brightnessCurrent, 1, 100, 1, 254));
+          }
+
+          M5.Displays(display).setTextColor(TFT_WHITE, TFT_HEADER);
+          M5.Displays(display).setFont(&dot15pt7b);
+          M5.Displays(display).setTextDatum(CC_DATUM);
+          M5.Displays(display).setTextPadding(240);
+          M5.Displays(display).drawString(String(salon), 160 + offsetX, 16 + offsetY);
+
+          dateStringOld = "";
+          linkTotalStringOld = "";
+          linkActifStringOld = "";
+          txTotalStringOld = "";
+          emissionStringOld = "";
+          issStringOld = "";
+
+          transmitOn = 0;
+          transmitOff = 2;
+        }
+
+        M5.Displays(display).setFont(ICON_FONT);
+        M5.Displays(display).setTextColor(TFT_WHITE, TFT_HEADER);
+        M5.Displays(display).setTextDatum(CL_DATUM);
+        M5.Displays(display).setTextPadding(0);
+
+        switch (type)
+        {
+        case 0:
+          updateLocalTime();
+          dateStringOld = viewData(ICON_CLOCK, dateString, dateStringOld);
+          break;
+
+        case 1:
+          sprintf(swap, "%d", linkTotal);
+          tmpString = swap;
+          linkTotalString = "Links total " + tmpString;
+          linkTotalStringOld = viewData(ICON_STAT, linkTotalString, linkTotalStringOld);
+          break;
+
+        case 2:
+          sprintf(swap, "%d", linkActif);
+          tmpString = swap;
+          linkActifString = "Links actifs " + tmpString;
+          linkActifStringOld = viewData(ICON_STAT, linkActifString, linkActifStringOld);
+          break;
+
+        case 3:
+          sprintf(swap, "%d", txTotal);
+          tmpString = swap;
+          txTotalString = "TX total " + tmpString;
+          txTotalStringOld = viewData(ICON_STAT, txTotalString, txTotalStringOld);
+          break;
+
+        case 4:
           tmpString = String(emission);
           emissionString = (strlen(emission) == 5) ? "BF 00:" + tmpString : "BF " + tmpString;
           emissionStringOld = viewData(ICON_CLOCK, emissionString, emissionStringOld);
+          break;
+
+        case 5:
+          if (issCurrent == 1)
+          {
+            tmpString = String(issDistance);
+            issString = "ISS " + tmpString + " Km";
+            issStringOld = viewData(ICON_ISS, issString, issStringOld);
+          }
+          else
+          {
+            tmpString = String(emission);
+            emissionString = (strlen(emission) == 5) ? "BF 00:" + tmpString : "BF " + tmpString;
+            emissionStringOld = viewData(ICON_CLOCK, emissionString, emissionStringOld);
+          }
+          break;
         }
-        break;
+      }
+
+      // Baterry
+      viewBattery();
+    }
+
+    // View Baseline
+    scroll(20);
+    viewBaseline();
+ 
+
+    // Manage alternance and type
+    if (menuMode == 0)
+    {
+      alternance++;
+      if (alternance == 10)
+      {
+        refresh = 0;
+        if (issCurrent == 1 && modeCurrent == 0)
+        {
+          type = (type++ < 5) ? type : 0;
+        }
+        else
+        {
+          type = (type++ < 4) ? type : 0;
+        }
+        alternance = 0;
       }
     }
 
-    // Baterry
-    viewBattery();
+    // Manage screensaver
+    if (screensaverMode == 0 && millis() - screensaver > screensaverCurrent * 60 * 1000)
+    {
+      for (uint8_t i = brightnessCurrent; i >= 1; i--)
+      {
+        M5.Displays(display).setBrightness(map(i, 1, 100, 1, 254));
+        scroll(0);
+        delay(50);
+      }
+      screensaverMode = 1;
+      M5.Displays(display).sleep();
+    }
+    else if (screensaverMode == 1 && millis() - screensaver < screensaverCurrent * 60 * 1000)
+    {
+      M5.Displays(display).wakeup();
+      screensaverMode = 0;
+      for (uint8_t i = 1; i <= brightnessCurrent; i++)
+      {
+        M5.Displays(display).setBrightness(map(i, 1, 100, 1, 254));
+        scroll(0);
+        delay(50);
+      }
+    }
+
+    // Manage action
+    reset = (reset == 0) ? 1 : 1;
+
+    switch (action)
+    {
+    case 1:
+      menuRefresh = 0;
+      break;
+    case 2:
+      reset = 0;
+      refresh = 0;
+      break;
+    case 3:
+      reset = 0;
+      refresh = 0;
+      menuRefresh = 0;
+      break;
+    case 4:
+      reset = 0;
+      refresh = 0;
+      menuMode = 0;
+      menuSelected = -1;
+      break;
+    case 5:
+      reset = 0;
+      refresh = 0;
+      modeCurrent = modeNew;
+      break;
+    }
+
+    action = 0;
+
+    // Manage rotation
+    if (menuMode != 1)
+    {
+      checkAcceleration();
+    }
+
+    // Manage Wifi
+    checkWifi();
+
+    // Manage follow
+    if (followCurrent == 1 && menuMode != 1)
+    {
+
+      size_t n = sizeof(room) / sizeof(room[0]);
+      n -= 1;
+
+      for (uint8_t i = 0; i <= n; i++)
+      {
+        if (dtmf[i] == whereisCurrent)
+        {
+          if (i != roomCurrent)
+          {
+            roomCurrent = i;
+            preferences.putUInt("room", roomCurrent);
+            reset = 0;
+            refresh = 0;
+          }
+          break;
+        }
+      }
+    }
+
+    // Manage temporisation
+
+    // Serial.print(millis() - timer);
+    // Serial.print(" - ");
+
+    if (menuMode == 0 && htmlGetRefresh != 2)
+    {
+      while (millis() - timer < REFRESH)
+      {
+        scroll(20);
+      }
+    }
+
+    // Serial.println(millis() - timer);
+
+    // Manage Web site Screen Capture
+
+    if (htmlGetRefresh == 2)
+    {
+      htmlGetRefresh = 3;
+    }
+    else if (htmlGetRefresh == 3)
+    {
+      getScreenshot();
+    }
   }
   else
   {
-    viewMenu();
-  }
-
-  // View Baseline
-  scroll(20);
-  viewBaseline();
-
-  // Manage alternance and type
-  if (menuMode == 0)
-  {
-    alternance++;
-    if (alternance == 10)
-    {
-      refresh = 0;
-      if (issCurrent == 1 && modeCurrent == 0)
-      {
-        type = (type++ < 5) ? type : 0;
-      }
-      else
-      {
-        type = (type++ < 4) ? type : 0;
-      }
-      alternance = 0;
-    }
-  }
-
-  // Manage screensaver
-  if (screensaverMode == 0 && millis() - screensaver > TIMEOUT_SCREENSAVER)
-  {
-    for (uint8_t i = brightnessCurrent; i >= 1; i--)
-    {
-      display.setBrightness(map(i, 1, 100, 1, 254));
-      scroll(0);
-      delay(50);
-    }
-    screensaverMode = 1;
-    display.sleep();
-  }
-  else if (screensaverMode == 1 && millis() - screensaver < TIMEOUT_SCREENSAVER)
-  {
-    display.wakeup();
-    screensaverMode = 0;
-    for (uint8_t i = 1; i <= brightnessCurrent; i++)
-    {
-      display.setBrightness(map(i, 1, 100, 1, 254));
-      scroll(0);
-      delay(50);
-    }
-  }
-
-  // Manage action
-  reset = (reset == 0) ? 1 : 1;
-
-  switch (action)
-  {
-  case 1:
-    menuRefresh = 0;
-    break;
-  case 2:
-    reset = 0;
-    refresh = 0;
-    break;
-  case 3:
-    reset = 0;
-    refresh = 0;
-    menuRefresh = 0;
-    break;
-  case 4:
-    reset = 0;
-    refresh = 0;
-    menuMode = 0;
-    menuSelected = -1;
-    break;
-  case 5:
-    reset = 0;
-    refresh = 0;
-    modeCurrent = modeNew;
-    break;
-  }
-
-  action = 0;
-
-  // Manage rotation
-  if (menuMode != 1)
-  {
-    checkAcceleration();
-  }
-
-  // Manage Wifi
-  checkWifi();
-
-  // Manage follow
-  if (followCurrent == 1 && menuMode != 1)
-  {
-
-    size_t n = sizeof(room) / sizeof(room[0]);
-    n -= 1;
-
-    for (uint8_t i = 0; i <= n; i++)
-    {
-      if (dtmf[i] == whereisCurrent)
-      {
-        if (i != roomCurrent)
-        {
-          roomCurrent = i;
-          preferences.putUInt("room", roomCurrent);
-          reset = 0;
-          refresh = 0;
-        }
-        break;
-      }
-    }
-  }
-
-  // Manage temporisation
-
-  // Serial.print(millis() - timer);
-  // Serial.print(" - ");
-
-  if (menuMode == 0 && htmlGetRefresh != 2)
-  {
-    while (millis() - timer < REFRESH)
-    {
-      scroll(20);
-    }
-  }
-
-  // Serial.println(millis() - timer);
-
-  // Manage Web site Screen Capture
-
-  if (htmlGetRefresh == 2)
-  {
-    htmlGetRefresh = 3;
-  }
-  else if (htmlGetRefresh == 3)
-  {
-    getScreenshot();
+      getScreenshot();
   }
 }

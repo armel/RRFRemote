@@ -1,7 +1,7 @@
 // Copyright (c) F4HWN Armel. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-#define VERSION "3.1.4"
+#define VERSION "3.2.0"
 #define AUTHOR "F4HWN"
 #define NAME "RRFRemote"
 
@@ -11,16 +11,23 @@
 #define HEIGHT displayHeight
 
 #define TIMEOUT_BIN_LOADER 3              // 3 sec
-#define TIMEOUT_SCREENSAVER 5 * 60 * 1000 // 5 min
 #define TIMEOUT_MENU 10 * 1000            // 10 sec
-#define TIMEOUT_TOT_RRF 140 * 1000        // 140 sec, 2min 20sec
+#define TIMEOUT_TOT_RRF 55 * 1000         // 55 sec
 #define TIMEOUT_TOT_ELSEWHERE 285 * 1000  // 285 sec, 4min 45sec
 
 #define FASTLED_INTERNAL // To disable pragma messages on compile
 
-#define M5ATOMDISPLAY_LOGICAL_WIDTH  WIDTH    // width
-#define M5ATOMDISPLAY_LOGICAL_HEIGHT  HEIGHT  // height
-#define M5ATOMDISPLAY_REFRESH_RATE 60         // refresh rate
+#define M5ATOMDISPLAY_LOGICAL_WIDTH WIDTH     // Width
+#define M5ATOMDISPLAY_LOGICAL_HEIGHT HEIGHT   // Height
+#define M5ATOMDISPLAY_REFRESH_RATE 60         // Refresh rate
+#define M5ATOMDISPLAY_OUTPUT_WIDTH 960
+#define M5ATOMDISPLAY_OUTPUT_HEIGHT 480
+
+#define M5MODULEDISPLAY_LOGICAL_WIDTH WIDTH   // Width
+#define M5MODULEDISPLAY_LOGICAL_HEIGHT HEIGHT // Height
+#define M5MODULEDISPLAY_REFRESH_RATE 60       // Refresh rate
+#define M5MODULEDISPLAY_OUTPUT_WIDTH 960
+#define M5MODULEDISPLAY_OUTPUT_HEIGHT 480
 
 #define SDU_HEADLESS // For Bin Loader
 
@@ -35,6 +42,8 @@
 
 #if ATOM == 1
   #include <M5AtomDisplay.h>
+#else
+  #include <M5ModuleDisplay.h>
 #endif
 
 #include <M5Unified.h>
@@ -55,16 +64,10 @@ WiFiServer httpServer(80);
 uint16_t offsetX = 0;
 uint16_t offsetY = 0;
 
-#if ATOM == 0
-  M5GFX &display(M5.Lcd);
-#else
-  M5AtomDisplay display(WIDTH, HEIGHT);
-#endif
-
 // Flags for button presses via Web site Screen Capture
-bool buttonLeftPressed = false;
-bool buttonCenterPressed = false;
-bool buttonRightPressed = false;
+boolean buttonLeftPressed = false;
+boolean buttonCenterPressed = false;
+boolean buttonRightPressed = false;
 
 // LED
 #define FASTLED_INTERNAL // To disable pragma messages on compile
@@ -105,12 +108,14 @@ uint16_t TFT_INFO = 0x0000;
 uint16_t TFT_FRONT = 0x0000;
 uint16_t TFT_BACK = 0x0000;
 
+#define TFT_MENU_BORDER M5.Displays(display).color565(115, 135, 159)
+#define TFT_MENU_BACK M5.Displays(display).color565(24, 57, 92)
+#define TFT_MENU_SELECT M5.Displays(display).color565(255, 255, 255)
+
 // http://www.rinkydinkelectronics.com/calc_rgb565.php
 // #undef TFT_BLACK
 // #define TFT_BLACK 0x2945
 // #define TFT_BLACKdisplay.color565(40, 40, 40)
-
-const char *color[] = {"ROUGE", "ROSE", "VIOLET", "BLEU", "TURQUOISE", "VERT", "ORANGE", "MARRON", "GRIS", "CREPUSCULE", "FORET", "ARDOISE", "FLORAL"};
 
 const colorType TFT_HEADER_ROUGE = {152, 0, 0};
 const colorType TFT_INFO_ROUGE = {0, 0, 0};
@@ -204,14 +209,17 @@ String endpointHamQSL = "http://www.hamqsl.com/solarxml.php";
 String endpointISS = "https://api.wheretheiss.at/v1/satellites/25544";
 
 String endpointRRF[] = {
-    "http://rrf.f5nlg.ovh:8080/RRFTracker/RRF-today/rrf_tiny.json",
-    "http://rrf.f5nlg.ovh:8080/RRFTracker/FON-today/rrf_tiny.json",
-    "http://rrf.f5nlg.ovh:8080/RRFTracker/TECHNIQUE-today/rrf_tiny.json",
-    "http://rrf.f5nlg.ovh:8080/RRFTracker/INTERNATIONAL-today/rrf_tiny.json",
-    "http://rrf.f5nlg.ovh:8080/RRFTracker/BAVARDAGE-today/rrf_tiny.json",
-    "http://rrf.f5nlg.ovh:8080/RRFTracker/LOCAL-today/rrf_tiny.json",
-    "http://rrf.f5nlg.ovh:8080/RRFTracker/EXPERIMENTAL-today/rrf_tiny.json"
+    "http://rrf.globalis-dev.com:8080/RRFTracker/RRF-today/rrf_tiny.json",
+    "http://rrf.globalis-dev.com:8080/RRFTracker/FON-today/rrf_tiny.json",
+    "http://rrf.globalis-dev.com:8080/RRFTracker/TECHNIQUE-today/rrf_tiny.json",
+    "http://rrf.globalis-dev.com:8080/RRFTracker/INTERNATIONAL-today/rrf_tiny.json",
+    "http://rrf.globalis-dev.com:8080/RRFTracker/BAVARDAGE-today/rrf_tiny.json",
+    "http://rrf.globalis-dev.com:8080/RRFTracker/LOCAL-today/rrf_tiny.json",
+    "http://rrf.globalis-dev.com:8080/RRFTracker/IDF-today/rrf_tiny.json"
     };
+
+const char *room[] = {"RRF", "FON", "TECHNIQUE", "INTERNATIONAL", "BAVARDAGE", "LOCAL", "IDF"};
+const uint8_t dtmf[] = {96, 97, 98, 99, 100, 101, 104};
 
 // Scroll
 LGFX_Sprite Sprite(&M5.Lcd); // Create Sprite object "img" with pointer to "tft" object
@@ -231,12 +239,7 @@ TaskHandle_t rrfdataHandle;
 TaskHandle_t buttonHandle;
 
 // Misceleanous
-const char *room[] = {"RRF", "FON", "TECHNIQUE", "INTERNATIONAL", "BAVARDAGE", "LOCAL", "EXPERIMENTAL"};
-const uint8_t dtmf[] = {96, 97, 98, 99, 100, 101, 102};
-const char *menuSpotnikOn[] = {"CONFIG", "QSY", "FOLLOW", "RAPTOR", "PERROQUET", "SYSOP", "TOT", "ISS", "COULEUR", "LUMINOSITE", "BEEP", "MODE", "ETEINDRE"};
-const char *menuSpotnikOff[] = {"CONFIG", "TOT", "ISS", "COULEUR", "LUMINOSITE", "BEEP", "MODE", "ETEINDRE"};
-const char *sysop[] = {"REBOOT", "IP", "SCAN RAPIDE", "LIBRE"};
-char **menu;
+char **settingsMenu;
 char swap[32];
 
 String tmpString;
@@ -260,11 +263,13 @@ String titleString, titleStringOld;
 String indicatifString;
 String whereisString;
 
-bool reset = 0;
-bool refresh = 0;
-bool menuRefresh = 0;
-bool screensaverMode = 0;
-bool wifiConnected = 0;
+boolean settingsMode = false;
+boolean settingLock = true;
+boolean reset = 0;
+boolean refresh = 0;
+boolean menuRefresh = 0;
+boolean screensaverMode = 0;
+boolean wifiConnected = 0;
 
 int8_t menuSize;
 int8_t menuMode = 0;
@@ -275,8 +280,17 @@ int8_t configCurrent = 0;
 int8_t sysopCurrent = 0;
 int8_t roomCurrent = 0;
 int8_t modeCurrent = 1;
+int8_t hdmiCurrent = 0;
+int8_t followCurrent = 0;
+int8_t screensaverCurrent = 0;
+int8_t issCurrent = 0;
+int8_t totCurrent = 0;
+int8_t raptorCurrent = 0;
+int8_t brightnessCurrent = 32;
+int8_t beepCurrent = 32;
 int8_t modeOld = 1;
 int8_t modeNew = 1;
+int8_t display = 0;
 
 uint8_t htmlGetRequest;
 uint8_t htmlGetRefresh = 3;
@@ -289,13 +303,7 @@ uint8_t dst;
 uint8_t transmitOn = 0;
 uint8_t transmitOff = 0;
 uint8_t whereisCurrent = 0;
-uint8_t brightnessCurrent = 32;
-uint8_t beepCurrent = 32;
-uint8_t totCurrent = 0;
-uint8_t issCurrent = 0;
-uint8_t raptorCurrent = 0;
 uint8_t tempCurrent = 0;
-uint8_t followCurrent = 0;
 uint8_t batteryChargeCurrent = 0;
 uint8_t batteryLevelCurrent = 0;
 
@@ -306,3 +314,17 @@ uint32_t screensaver;
 
 #undef SPI_READ_FREQUENCY
 #define SPI_READ_FREQUENCY 40000000
+
+// Menu
+const char *menuSpotnikOn[] = {(char*)"Config", (char*)"Sysop", (char*)"Perroquet", (char*)"QSY", (char*)"Follow", (char*)"Raptor", (char*)"TOT", (char*)"ISS", (char*)"Affichage", (char*)"Themes", (char*)"Luminosite", (char*)"Beep", (char*)"Screensaver", (char*)"HDMI", (char*)"Addresse IP", (char*)"Eteindre", (char*)"Exit"};
+const char *menuSpotnikOff[] = {(char*)"Config",(char*)"TOT", (char*)"ISS", (char*)"Affichage", (char*)"Themes", (char*)"Luminosite", (char*)"Beep", (char*)"Screensaver", (char*)"HDMI", (char*)"Addresse IP", (char*)"Eteindre", (char*)"Exit"};
+
+const char *choiceSysop[] = {"REBOOT", "IP", "SCAN RAPIDE", "LIBRE"};
+const char *choicePerroquet[] = {"OFF", "ON"};
+const char *choiceFollow[] = {"OFF", "ON"};
+const char *choiceRaptor[] = {"OFF", "ON"};
+const char *choiceTOT[] = {"OFF", "ON"};
+const char *choiceISS[] = {"OFF", "ON"};
+const char *choiceThemes[] = {"ROUGE", "ROSE", "VIOLET", "BLEU", "TURQUOISE", "VERT", "ORANGE", "MARRON", "GRIS", "CREPUSCULE", "FORET", "ARDOISE", "FLORAL"};
+const char *choiceHDMI[] = {"OFF", "ON"};
+const char *choiceAffichage[] = {"EXPERT", "BASIC"};

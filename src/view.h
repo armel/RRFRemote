@@ -15,22 +15,22 @@ void viewHistogram(uint16_t maxLevel, uint16_t tx[])
     if (tx[i] != 0)
     {
       tmp = map(tx[i], 0, maxLevel, 0, 34);
-      display.fillRect(j + offsetX, 139 - tmp + offsetY, 5, tmp, TFT_FRONT);
-      display.fillRect(j + offsetX, 139 - 34 + offsetY, 5, 34 - tmp, TFT_BACK);
+      M5.Displays(display).fillRect(j + offsetX, 139 - tmp + offsetY, 5, tmp, TFT_FRONT);
+      M5.Displays(display).fillRect(j + offsetX, 139 - 34 + offsetY, 5, 34 - tmp, TFT_BACK);
     }
     else
     {
-      display.fillRect(j + offsetX, 139 - 34 + offsetY, 5, 34, TFT_BACK);
+      M5.Displays(display).fillRect(j + offsetX, 139 - 34 + offsetY, 5, 34, TFT_BACK);
     }
-    display.fillRect(j + offsetX, 140 + offsetY, 5, 1, TFT_FRONT);
+    M5.Displays(display).fillRect(j + offsetX, 140 + offsetY, 5, 1, TFT_FRONT);
     j += 6;
     k += 2;
   }
 
-  display.setFont(0);
-  display.setTextColor(TFT_WHITE, TFT_BACK);
-  display.setTextDatum(CL_DATUM);
-  display.setTextPadding(0);
+  M5.Displays(display).setFont(0);
+  M5.Displays(display).setTextColor(TFT_WHITE, TFT_BACK);
+  M5.Displays(display).setTextDatum(CL_DATUM);
+  M5.Displays(display).setTextPadding(0);
 
   for (i = 0; i < 5; i++)
   {
@@ -44,11 +44,11 @@ void viewHistogram(uint16_t maxLevel, uint16_t tx[])
 
     if (delta < 10)
     {
-      display.drawString("0" + String(delta), 4 + (i * 34) + offsetX, 148 + offsetY);
+      M5.Displays(display).drawString("0" + String(delta), 4 + (i * 34) + offsetX, 148 + offsetY);
     }
     else
     {
-      display.drawString(String(delta), 4 + (i * 34) + offsetX, 148 + offsetY);
+      M5.Displays(display).drawString(String(delta), 4 + (i * 34) + offsetX, 148 + offsetY);
     }
   }
 }
@@ -72,48 +72,48 @@ void viewElsewhere(DynamicJsonDocument doc, const char *salon)
 
   scroll(20);
 
-  display.setFont(&tahoma6pt7b);
+  M5.Displays(display).setFont(&tahoma6pt7b);
 
   size_t stop = sizeof(room) / sizeof(room[0]);
   stop -= 1;
 
   if (reset == 0)
   {
-    display.setTextColor(TFT_WHITE, TFT_FRONT);
-    display.setTextDatum(CC_DATUM);
-    display.setTextPadding(25);
+    M5.Displays(display).setTextColor(TFT_WHITE, TFT_FRONT);
+    M5.Displays(display).setTextDatum(CC_DATUM);
+    M5.Displays(display).setTextPadding(25);
 
     for (i = 0; i < stop; i++)
     {
-      display.drawString(leftOld[i].substring(0, 3), 15 + offsetX, 162 + (14 * i) + offsetY);
+      M5.Displays(display).drawString(leftOld[i].substring(0, 3), 15 + offsetX, 162 + (14 * i) + offsetY);
     }
 
-    display.setTextDatum(CC_DATUM);
-    display.setTextPadding(70);
+    M5.Displays(display).setTextDatum(CC_DATUM);
+    M5.Displays(display).setTextPadding(70);
 
     for (i = 0; i < stop; i++)
     {
       if (strstr(middleOld[i].c_str(), "LINK") != NULL)
       {
-        display.fillRect(29 + offsetX, 155 + (14 * i) + offsetY, 71, 13, TFT_WHITE);
-        display.setTextColor(TFT_BLACK, TFT_WHITE);
+        M5.Displays(display).fillRect(29 + offsetX, 155 + (14 * i) + offsetY, 71, 13, TFT_WHITE);
+        M5.Displays(display).setTextColor(TFT_BLACK, TFT_WHITE);
       }
       else
       {
-        display.fillRect(29 + offsetX, 155 + (14 * i) + offsetY, 71, 13, TFT_FRONT);
-        display.setTextColor(TFT_WHITE, TFT_FRONT);
+        M5.Displays(display).fillRect(29 + offsetX, 155 + (14 * i) + offsetY, 71, 13, TFT_FRONT);
+        M5.Displays(display).setTextColor(TFT_WHITE, TFT_FRONT);
       }
       // Serial.println(middleOld[i]);
-      display.drawString(middleOld[i], 64 + offsetX, 162 + (14 * i) + offsetY);
+      M5.Displays(display).drawString(middleOld[i], 64 + offsetX, 162 + (14 * i) + offsetY);
     }
 
-    display.setTextColor(TFT_BLACK, TFT_WHITE);
-    display.setTextDatum(CC_DATUM);
-    display.setTextPadding(52);
+    M5.Displays(display).setTextColor(TFT_BLACK, TFT_WHITE);
+    M5.Displays(display).setTextDatum(CC_DATUM);
+    M5.Displays(display).setTextPadding(52);
 
     for (i = 0; i < stop; i++)
     {
-      display.drawString(rightOld[i], 128 + offsetX, 162 + (14 * i) + offsetY);
+      M5.Displays(display).drawString(rightOld[i], 128 + offsetX, 162 + (14 * i) + offsetY);
     }
   }
 
@@ -170,21 +170,21 @@ void viewElsewhere(DynamicJsonDocument doc, const char *salon)
         }
       }
 
-      display.setTextColor(TFT_WHITE, TFT_FRONT);
-      display.setTextDatum(CC_DATUM);
-      display.setTextPadding(25);
+      M5.Displays(display).setTextColor(TFT_WHITE, TFT_FRONT);
+      M5.Displays(display).setTextDatum(CC_DATUM);
+      M5.Displays(display).setTextPadding(25);
 
       for (i = 0; i < stop; i++)
       {
         if (left[i] != leftOld[i])
         {
           leftOld[i] = left[i];
-          display.drawString(left[i].substring(0, 3), 15 + offsetX, 162 + (14 * i) + offsetY);
+          M5.Displays(display).drawString(left[i].substring(0, 3), 15 + offsetX, 162 + (14 * i) + offsetY);
         }
       }
 
-      display.setTextDatum(CC_DATUM);
-      display.setTextPadding(70);
+      M5.Displays(display).setTextDatum(CC_DATUM);
+      M5.Displays(display).setTextPadding(70);
 
       for (i = 0; i < stop; i++)
       {
@@ -193,28 +193,28 @@ void viewElsewhere(DynamicJsonDocument doc, const char *salon)
           middleOld[i] = middle[i];
           if (strstr(middle[i].c_str(), "LINK") != NULL)
           {
-            display.fillRect(29 + offsetX, 155 + (14 * i) + offsetY, 71, 13, TFT_WHITE);
-            display.setTextColor(TFT_BLACK, TFT_WHITE);
+            M5.Displays(display).fillRect(29 + offsetX, 155 + (14 * i) + offsetY, 71, 13, TFT_WHITE);
+            M5.Displays(display).setTextColor(TFT_BLACK, TFT_WHITE);
           }
           else
           {
-            display.fillRect(29 + offsetX, 155 + (14 * i) + offsetY, 71, 13, TFT_FRONT);
-            display.setTextColor(TFT_WHITE, TFT_FRONT);
+            M5.Displays(display).fillRect(29 + offsetX, 155 + (14 * i) + offsetY, 71, 13, TFT_FRONT);
+            M5.Displays(display).setTextColor(TFT_WHITE, TFT_FRONT);
           }
-          display.drawString(middle[i], 64 + offsetX, 162 + (14 * i) + offsetY);
+          M5.Displays(display).drawString(middle[i], 64 + offsetX, 162 + (14 * i) + offsetY);
         }
       }
 
-      display.setTextColor(TFT_BLACK, TFT_WHITE);
-      display.setTextDatum(CC_DATUM);
-      display.setTextPadding(52);
+      M5.Displays(display).setTextColor(TFT_BLACK, TFT_WHITE);
+      M5.Displays(display).setTextDatum(CC_DATUM);
+      M5.Displays(display).setTextPadding(52);
 
       for (i = 0; i < stop; i++)
       {
         if (right[i] != rightOld[i])
         {
           rightOld[i] = right[i];
-          display.drawString(right[i], 128 + offsetX, 162 + (14 * i) + offsetY);
+          M5.Displays(display).drawString(right[i], 128 + offsetX, 162 + (14 * i) + offsetY);
         }
       }
     }
@@ -230,30 +230,30 @@ void viewSettings()
 
   if (refresh == 0)
   {
-    display.setTextPadding(160);
-    display.drawString("RRFRemote " + String(VERSION), 240 + offsetX, 110 + offsetY);
+    M5.Displays(display).setTextPadding(160);
+    M5.Displays(display).drawString("RRFRemote " + String(VERSION), 240 + offsetX, 110 + offsetY);
 
     i = 161;
     j = 74;
-    display.fillRoundRect(160 + offsetX, 117 + offsetY, 159, 122, 4, TFT_WHITE);
-    display.fillRoundRect(i + offsetX, 118 + offsetY, j, 120, 4, TFT_FRONT);
-    display.drawFastVLine(i + j - 3 + offsetX, 118 + offsetY, 120, TFT_BACK);
-    display.drawFastVLine(i + j - 2 + offsetX, 118 + offsetY, 120, TFT_WHITE);
-    display.drawFastVLine(i + j - 1 + offsetX, 118 + offsetY, 120, TFT_WHITE);
+    M5.Displays(display).fillRoundRect(160 + offsetX, 117 + offsetY, 159, 122, 4, TFT_WHITE);
+    M5.Displays(display).fillRoundRect(i + offsetX, 118 + offsetY, j, 120, 4, TFT_FRONT);
+    M5.Displays(display).drawFastVLine(i + j - 3 + offsetX, 118 + offsetY, 120, TFT_BACK);
+    M5.Displays(display).drawFastVLine(i + j - 2 + offsetX, 118 + offsetY, 120, TFT_WHITE);
+    M5.Displays(display).drawFastVLine(i + j - 1 + offsetX, 118 + offsetY, 120, TFT_WHITE);
 
     String system[] = {"CPU", "CPU Cores", "CPU Freq", "Chip Rev", "Flash Speed", "Flash Size", "Free RAM", "Free Heap", "IP", "Battery"};
 
     for (i = 0; i < 10; i++)
     {
-      display.setTextColor(TFT_WHITE, TFT_FRONT);
-      display.setTextDatum(CL_DATUM);
-      display.setTextPadding(0);
-      display.drawString(system[i], 163 + offsetX, 124 + (12 * i) + offsetY);
+      M5.Displays(display).setTextColor(TFT_WHITE, TFT_FRONT);
+      M5.Displays(display).setTextDatum(CL_DATUM);
+      M5.Displays(display).setTextPadding(0);
+      M5.Displays(display).drawString(system[i], 163 + offsetX, 124 + (12 * i) + offsetY);
 
-      display.setTextColor(TFT_BLACK, TFT_WHITE);
-      display.setTextDatum(CR_DATUM);
-      display.setTextPadding(70);
-      display.drawString(dataOld[i], 318 + offsetX, 124 + (12 * i) + offsetY);
+      M5.Displays(display).setTextColor(TFT_BLACK, TFT_WHITE);
+      M5.Displays(display).setTextDatum(CR_DATUM);
+      M5.Displays(display).setTextPadding(70);
+      M5.Displays(display).drawString(dataOld[i], 318 + offsetX, 124 + (12 * i) + offsetY);
     }
 
     refresh = 1;
@@ -270,16 +270,16 @@ void viewSettings()
   data[8] = WiFi.localIP().toString();
   data[9] = String(getBatteryLevel(1)) + " %";
 
-  display.setTextColor(TFT_BLACK, TFT_WHITE);
-  display.setTextDatum(CR_DATUM);
-  display.setTextPadding(70);
+  M5.Displays(display).setTextColor(TFT_BLACK, TFT_WHITE);
+  M5.Displays(display).setTextDatum(CR_DATUM);
+  M5.Displays(display).setTextPadding(70);
 
   for (i = 0; i < 10; i++)
   {
     if (data[i] != dataOld[i])
     {
       dataOld[i] = data[i];
-      display.drawString(data[i], 318 + offsetX, 124 + (12 * i) + offsetY);
+      M5.Displays(display).drawString(data[i], 318 + offsetX, 124 + (12 * i) + offsetY);
     }
   }
 }
@@ -295,34 +295,34 @@ void viewPropagation()
 
   if (refresh == 0)
   {
-    display.setTextPadding(160);
-    display.drawString("Propagation", 240 + offsetX, 110 + offsetY);
+    M5.Displays(display).setTextPadding(160);
+    M5.Displays(display).drawString("Propagation", 240 + offsetX, 110 + offsetY);
 
     i = 161;
     j = 70;
-    display.fillRoundRect(160 + offsetX, 117 + offsetY, 159, 122, 4, TFT_WHITE);
-    display.fillRoundRect(i + offsetX, 118 + offsetY, j, 120, 4, TFT_FRONT);
-    display.drawFastVLine(i + j - 3 + offsetX, 118 + offsetY, 120, TFT_BACK);
-    display.drawFastVLine(i + j - 2 + offsetX, 118 + offsetY, 120, TFT_WHITE);
-    display.drawFastVLine(i + j - 1 + offsetX, 118 + offsetY, 120, TFT_WHITE);
+    M5.Displays(display).fillRoundRect(160 + offsetX, 117 + offsetY, 159, 122, 4, TFT_WHITE);
+    M5.Displays(display).fillRoundRect(i + offsetX, 118 + offsetY, j, 120, 4, TFT_FRONT);
+    M5.Displays(display).drawFastVLine(i + j - 3 + offsetX, 118 + offsetY, 120, TFT_BACK);
+    M5.Displays(display).drawFastVLine(i + j - 2 + offsetX, 118 + offsetY, 120, TFT_WHITE);
+    M5.Displays(display).drawFastVLine(i + j - 1 + offsetX, 118 + offsetY, 120, TFT_WHITE);
 
-    display.setTextColor(TFT_WHITE, TFT_FRONT);
-    display.setTextDatum(CL_DATUM);
-    display.setTextPadding(0);
+    M5.Displays(display).setTextColor(TFT_WHITE, TFT_FRONT);
+    M5.Displays(display).setTextDatum(CL_DATUM);
+    M5.Displays(display).setTextPadding(0);
 
     String solar[] = {"SFI", "Sunspots", "A-Index", "K-Index", "X-Ray", "Ptn Flux", "Elc Flux", "Aurora", "Solar Wind", "Update"};
 
     for (i = 0; i < 10; i++)
     {
-      display.setTextColor(TFT_WHITE, TFT_FRONT);
-      display.setTextDatum(CL_DATUM);
-      display.setTextPadding(0);
-      display.drawString(solar[i], 163 + offsetX, 124 + (12 * i) + offsetY);
+      M5.Displays(display).setTextColor(TFT_WHITE, TFT_FRONT);
+      M5.Displays(display).setTextDatum(CL_DATUM);
+      M5.Displays(display).setTextPadding(0);
+      M5.Displays(display).drawString(solar[i], 163 + offsetX, 124 + (12 * i) + offsetY);
 
-      display.setTextColor(TFT_BLACK, TFT_WHITE);
-      display.setTextDatum(CR_DATUM);
-      display.setTextPadding(70);
-      display.drawString(dataOld[i], 318 + offsetX, 124 + (12 * i) + offsetY);
+      M5.Displays(display).setTextColor(TFT_BLACK, TFT_WHITE);
+      M5.Displays(display).setTextDatum(CR_DATUM);
+      M5.Displays(display).setTextPadding(70);
+      M5.Displays(display).drawString(dataOld[i], 318 + offsetX, 124 + (12 * i) + offsetY);
     }
 
     refresh = 1;
@@ -355,16 +355,16 @@ void viewPropagation()
   }
   data[9] = tmpString.substring(1, 3) + ":" + tmpString.substring(3);
 
-  display.setTextColor(TFT_BLACK, TFT_WHITE);
-  display.setTextDatum(CR_DATUM);
-  display.setTextPadding(70);
+  M5.Displays(display).setTextColor(TFT_BLACK, TFT_WHITE);
+  M5.Displays(display).setTextDatum(CR_DATUM);
+  M5.Displays(display).setTextPadding(70);
 
   for (i = 0; i < 10; i++)
   {
     if (data[i] != dataOld[i])
     {
       dataOld[i] = data[i];
-      display.drawString(data[i], 318 + offsetX, 124 + (12 * i) + offsetY);
+      M5.Displays(display).drawString(data[i], 318 + offsetX, 124 + (12 * i) + offsetY);
     }
   }
 }
@@ -382,41 +382,41 @@ void viewTopLinks(uint8_t stop, uint16_t allTx[10], const char *allIndicatif[10]
 
   if (refresh == 0)
   {
-    display.setTextPadding(160);
-    display.drawString("Top Links sur " + String(salon).substring(0, 3), 240 + offsetX, 110 + offsetY);
+    M5.Displays(display).setTextPadding(160);
+    M5.Displays(display).drawString("Top Links sur " + String(salon).substring(0, 3), 240 + offsetX, 110 + offsetY);
 
     i = 161;
     j = 38;
-    display.fillRoundRect(160 + offsetX, 117 + offsetY, 159, 122, 4, TFT_WHITE);
-    display.fillRoundRect(i + offsetX, 118 + offsetY, j, 120, 4, TFT_FRONT);
-    display.drawFastVLine(i + j - 3 + offsetX, 118 + offsetY, 120, TFT_BACK);
-    display.drawFastVLine(i + j - 2 + offsetX, 118 + offsetY, 120, TFT_WHITE);
-    display.drawFastVLine(i + j - 1 + offsetX, 118 + offsetY, 120, TFT_WHITE);
+    M5.Displays(display).fillRoundRect(160 + offsetX, 117 + offsetY, 159, 122, 4, TFT_WHITE);
+    M5.Displays(display).fillRoundRect(i + offsetX, 118 + offsetY, j, 120, 4, TFT_FRONT);
+    M5.Displays(display).drawFastVLine(i + j - 3 + offsetX, 118 + offsetY, 120, TFT_BACK);
+    M5.Displays(display).drawFastVLine(i + j - 2 + offsetX, 118 + offsetY, 120, TFT_WHITE);
+    M5.Displays(display).drawFastVLine(i + j - 1 + offsetX, 118 + offsetY, 120, TFT_WHITE);
 
-    display.setTextColor(TFT_WHITE, TFT_FRONT);
-    display.setTextDatum(CL_DATUM);
-    display.setTextPadding(0);
+    M5.Displays(display).setTextColor(TFT_WHITE, TFT_FRONT);
+    M5.Displays(display).setTextDatum(CL_DATUM);
+    M5.Displays(display).setTextPadding(0);
 
     for (i = 0; i < stop; i++)
     {
-      display.drawString(leftOld[i], 163 + offsetX, 124 + (12 * i) + offsetY);
+      M5.Displays(display).drawString(leftOld[i], 163 + offsetX, 124 + (12 * i) + offsetY);
     }
 
-    display.setTextColor(TFT_BLACK, TFT_WHITE);
-    display.setTextDatum(CC_DATUM);
-    display.setTextPadding(70);
+    M5.Displays(display).setTextColor(TFT_BLACK, TFT_WHITE);
+    M5.Displays(display).setTextDatum(CC_DATUM);
+    M5.Displays(display).setTextPadding(70);
 
     for (i = 0; i < stop; i++)
     {
-      display.drawString(middleOld[i], 234 + offsetX, 124 + (12 * i) + offsetY);
+      M5.Displays(display).drawString(middleOld[i], 234 + offsetX, 124 + (12 * i) + offsetY);
     }
 
-    display.setTextDatum(CR_DATUM);
-    display.setTextPadding(0);
+    M5.Displays(display).setTextDatum(CR_DATUM);
+    M5.Displays(display).setTextPadding(0);
 
     for (i = 0; i < stop; i++)
     {
-      display.drawString(rightOld[i], 318 + offsetX, 124 + (12 * i) + offsetY);
+      M5.Displays(display).drawString(rightOld[i], 318 + offsetX, 124 + (12 * i) + offsetY);
     }
 
     refresh = 1;
@@ -450,41 +450,41 @@ void viewTopLinks(uint8_t stop, uint16_t allTx[10], const char *allIndicatif[10]
     right[i] = String(allDuree[i]);
   }
 
-  display.setTextColor(TFT_WHITE, TFT_FRONT);
-  display.setTextDatum(CL_DATUM);
-  display.setTextPadding(0);
+  M5.Displays(display).setTextColor(TFT_WHITE, TFT_FRONT);
+  M5.Displays(display).setTextDatum(CL_DATUM);
+  M5.Displays(display).setTextPadding(0);
 
   for (i = 0; i < stop; i++)
   {
     if (left[i] != leftOld[i])
     {
       leftOld[i] = left[i];
-      display.drawString(left[i], 163 + offsetX, 124 + (12 * i) + offsetY);
+      M5.Displays(display).drawString(left[i], 163 + offsetX, 124 + (12 * i) + offsetY);
     }
   }
 
-  display.setTextColor(TFT_BLACK, TFT_WHITE);
-  display.setTextDatum(CC_DATUM);
-  display.setTextPadding(70);
+  M5.Displays(display).setTextColor(TFT_BLACK, TFT_WHITE);
+  M5.Displays(display).setTextDatum(CC_DATUM);
+  M5.Displays(display).setTextPadding(70);
 
   for (i = 0; i < stop; i++)
   {
     if (middle[i] != middleOld[i])
     {
       middleOld[i] = middle[i];
-      display.drawString(middle[i], 234 + offsetX, 124 + (12 * i) + offsetY);
+      M5.Displays(display).drawString(middle[i], 234 + offsetX, 124 + (12 * i) + offsetY);
     }
   }
 
-  display.setTextDatum(CR_DATUM);
-  display.setTextPadding(0);
+  M5.Displays(display).setTextDatum(CR_DATUM);
+  M5.Displays(display).setTextPadding(0);
 
   for (i = 0; i < stop; i++)
   {
     if (right[i] != rightOld[i])
     {
       rightOld[i] = right[i];
-      display.drawString(right[i], 318 + offsetX, 124 + (12 * i) + offsetY);
+      M5.Displays(display).drawString(right[i], 318 + offsetX, 124 + (12 * i) + offsetY);
     }
   }
 }
@@ -507,8 +507,8 @@ void viewBlocage(uint8_t stop, const char *iptableIndicatif[10], const char *ipt
 
   if (refresh == 0)
   {
-    display.setTextPadding(160);
-    display.drawString("Blocages sur " + String(salon).substring(0, 3), 240 + offsetX, 110 + offsetY);
+    M5.Displays(display).setTextPadding(160);
+    M5.Displays(display).drawString("Blocages sur " + String(salon).substring(0, 3), 240 + offsetX, 110 + offsetY);
 
     i = 161;
     j = 50;
@@ -516,35 +516,35 @@ void viewBlocage(uint8_t stop, const char *iptableIndicatif[10], const char *ipt
     for (uint8_t k = 0; k < stop; k++)
     {
       tmpString = String(iptableType[k]);
-      if (tmpString.substring(0, 11) == "INTEMPESTIF")
+      if (tmpString.substring(0, 11) == "INTEMPESTIF" || tmpString == "CAMPEUR")
       {
         j = 80;
         break;
       }
     }
 
-    display.fillRoundRect(160 + offsetX, 117 + offsetY, 159, 122, 4, TFT_WHITE);
-    display.fillRoundRect(i + offsetX, 118 + offsetY, j, 120, 4, TFT_FRONT);
-    display.drawFastVLine(i + j - 3 + offsetX, 118 + offsetY, 120, TFT_BACK);
-    display.drawFastVLine(i + j - 2 + offsetX, 118 + offsetY, 120, TFT_WHITE);
-    display.drawFastVLine(i + j - 1 + offsetX, 118 + offsetY, 120, TFT_WHITE);
+    M5.Displays(display).fillRoundRect(160 + offsetX, 117 + offsetY, 159, 122, 4, TFT_WHITE);
+    M5.Displays(display).fillRoundRect(i + offsetX, 118 + offsetY, j, 120, 4, TFT_FRONT);
+    M5.Displays(display).drawFastVLine(i + j - 3 + offsetX, 118 + offsetY, 120, TFT_BACK);
+    M5.Displays(display).drawFastVLine(i + j - 2 + offsetX, 118 + offsetY, 120, TFT_WHITE);
+    M5.Displays(display).drawFastVLine(i + j - 1 + offsetX, 118 + offsetY, 120, TFT_WHITE);
 
-    display.setTextColor(TFT_WHITE, TFT_FRONT);
-    display.setTextDatum(CL_DATUM);
-    display.setTextPadding(0);
+    M5.Displays(display).setTextColor(TFT_WHITE, TFT_FRONT);
+    M5.Displays(display).setTextDatum(CL_DATUM);
+    M5.Displays(display).setTextPadding(0);
 
     for (i = 0; i < stop; i++)
     {
-      display.drawString(leftOld[i], 163 + offsetX, 124 + (12 * i) + offsetY);
+      M5.Displays(display).drawString(leftOld[i], 163 + offsetX, 124 + (12 * i) + offsetY);
     }
 
-    display.setTextColor(TFT_BLACK, TFT_WHITE);
-    display.setTextDatum(CR_DATUM);
-    display.setTextPadding(74);
+    M5.Displays(display).setTextColor(TFT_BLACK, TFT_WHITE);
+    M5.Displays(display).setTextDatum(CR_DATUM);
+    M5.Displays(display).setTextPadding(74);
 
     for (i = 0; i < stop; i++)
     {
-      display.drawString(rightOld[i], 318 + offsetX, 124 + (12 * i) + offsetY);
+      M5.Displays(display).drawString(rightOld[i], 318 + offsetX, 124 + (12 * i) + offsetY);
     }
 
     refresh = 1;
@@ -586,29 +586,29 @@ void viewBlocage(uint8_t stop, const char *iptableIndicatif[10], const char *ipt
     right[i] = tmpString;
   }
 
-  display.setTextColor(TFT_WHITE, TFT_FRONT);
-  display.setTextDatum(CL_DATUM);
-  display.setTextPadding(0);
+  M5.Displays(display).setTextColor(TFT_WHITE, TFT_FRONT);
+  M5.Displays(display).setTextDatum(CL_DATUM);
+  M5.Displays(display).setTextPadding(0);
 
   for (i = 0; i < stop; i++)
   {
     if (left[i] != leftOld[i])
     {
       leftOld[i] = left[i];
-      display.drawString(left[i], 163 + offsetX, 124 + (12 * i) + offsetY);
+      M5.Displays(display).drawString(left[i], 163 + offsetX, 124 + (12 * i) + offsetY);
     }
   }
 
-  display.setTextColor(TFT_BLACK, TFT_WHITE);
-  display.setTextDatum(CR_DATUM);
-  display.setTextPadding(74);
+  M5.Displays(display).setTextColor(TFT_BLACK, TFT_WHITE);
+  M5.Displays(display).setTextDatum(CR_DATUM);
+  M5.Displays(display).setTextPadding(74);
 
   for (i = 0; i < stop; i++)
   {
     if (right[i] != rightOld[i])
     {
       rightOld[i] = right[i];
-      display.drawString(right[i], 318 + offsetX, 124 + (12 * i) + offsetY);
+      M5.Displays(display).drawString(right[i], 318 + offsetX, 124 + (12 * i) + offsetY);
     }
   }
 }
@@ -624,30 +624,30 @@ void viewISS(StaticJsonDocument<512> docISS)
 
   if (refresh == 0)
   {
-    display.setTextPadding(160);
-    display.drawString("ISS", 240 + offsetX, 110 + offsetY);
+    M5.Displays(display).setTextPadding(160);
+    M5.Displays(display).drawString("ISS", 240 + offsetX, 110 + offsetY);
 
     i = 161;
     j = 70;
-    display.fillRoundRect(160 + offsetX, 117 + offsetY, 159, 122, 4, TFT_WHITE);
-    display.fillRoundRect(i + offsetX, 118 + offsetY, j, 120, 4, TFT_FRONT);
-    display.drawFastVLine(i + j - 3 + offsetX, 118 + offsetY, 120, TFT_BACK);
-    display.drawFastVLine(i + j - 2 + offsetX, 118 + offsetY, 120, TFT_WHITE);
-    display.drawFastVLine(i + j - 1 + offsetX, 118 + offsetY, 120, TFT_WHITE);
+    M5.Displays(display).fillRoundRect(160 + offsetX, 117 + offsetY, 159, 122, 4, TFT_WHITE);
+    M5.Displays(display).fillRoundRect(i + offsetX, 118 + offsetY, j, 120, 4, TFT_FRONT);
+    M5.Displays(display).drawFastVLine(i + j - 3 + offsetX, 118 + offsetY, 120, TFT_BACK);
+    M5.Displays(display).drawFastVLine(i + j - 2 + offsetX, 118 + offsetY, 120, TFT_WHITE);
+    M5.Displays(display).drawFastVLine(i + j - 1 + offsetX, 118 + offsetY, 120, TFT_WHITE);
 
     String iss[] = {"Distance", "Units", "Visibility", "Latitude", "Longitude", "Altitude", "Velocity", "Footprint", "Solar Lat", "Solar Long"};
 
     for (i = 0; i < 10; i++)
     {
-      display.setTextColor(TFT_WHITE, TFT_FRONT);
-      display.setTextDatum(CL_DATUM);
-      display.setTextPadding(0);
-      display.drawString(iss[i], 163 + offsetX, 124 + (12 * i) + offsetY);
+      M5.Displays(display).setTextColor(TFT_WHITE, TFT_FRONT);
+      M5.Displays(display).setTextDatum(CL_DATUM);
+      M5.Displays(display).setTextPadding(0);
+      M5.Displays(display).drawString(iss[i], 163 + offsetX, 124 + (12 * i) + offsetY);
 
-      display.setTextColor(TFT_BLACK, TFT_WHITE);
-      display.setTextDatum(CR_DATUM);
-      display.setTextPadding(70);
-      display.drawString(dataOld[i], 318 + offsetX, 124 + (12 * i) + offsetY);
+      M5.Displays(display).setTextColor(TFT_BLACK, TFT_WHITE);
+      M5.Displays(display).setTextDatum(CR_DATUM);
+      M5.Displays(display).setTextPadding(70);
+      M5.Displays(display).drawString(dataOld[i], 318 + offsetX, 124 + (12 * i) + offsetY);
     }
 
     refresh = 1;
@@ -679,16 +679,16 @@ void viewISS(StaticJsonDocument<512> docISS)
     }
   }
 
-  display.setTextColor(TFT_BLACK, TFT_WHITE);
-  display.setTextDatum(CR_DATUM);
-  display.setTextPadding(70);
+  M5.Displays(display).setTextColor(TFT_BLACK, TFT_WHITE);
+  M5.Displays(display).setTextDatum(CR_DATUM);
+  M5.Displays(display).setTextPadding(70);
 
   for (i = 0; i < 10; i++)
   {
     if (data[i] != dataOld[i])
     {
       dataOld[i] = data[i];
-      display.drawString(data[i], 318 + offsetX, 124 + (12 * i) + offsetY);
+      M5.Displays(display).drawString(data[i], 318 + offsetX, 124 + (12 * i) + offsetY);
     }
   }
 }
@@ -706,41 +706,41 @@ void viewLastLinks(uint8_t stop, const char *lastHeure[10], const char *lastIndi
 
   if (refresh == 0)
   {
-    display.setTextPadding(160);
-    display.drawString("Derniers TX sur " + String(salon).substring(0, 3), 240 + offsetX, 110 + offsetY);
+    M5.Displays(display).setTextPadding(160);
+    M5.Displays(display).drawString("Derniers TX sur " + String(salon).substring(0, 3), 240 + offsetX, 110 + offsetY);
 
     i = 161;
     j = 38;
-    display.fillRoundRect(160 + offsetX, 117 + offsetY, 159, 122, 4, TFT_WHITE);
-    display.fillRoundRect(i + offsetX, 118 + offsetY, j, 120, 4, TFT_FRONT);
-    display.drawFastVLine(i + j - 3 + offsetX, 118 + offsetY, 120, TFT_BACK);
-    display.drawFastVLine(i + j - 2 + offsetX, 118 + offsetY, 120, TFT_WHITE);
-    display.drawFastVLine(i + j - 1 + offsetX, 118 + offsetY, 120, TFT_WHITE);
+    M5.Displays(display).fillRoundRect(160 + offsetX, 117 + offsetY, 159, 122, 4, TFT_WHITE);
+    M5.Displays(display).fillRoundRect(i + offsetX, 118 + offsetY, j, 120, 4, TFT_FRONT);
+    M5.Displays(display).drawFastVLine(i + j - 3 + offsetX, 118 + offsetY, 120, TFT_BACK);
+    M5.Displays(display).drawFastVLine(i + j - 2 + offsetX, 118 + offsetY, 120, TFT_WHITE);
+    M5.Displays(display).drawFastVLine(i + j - 1 + offsetX, 118 + offsetY, 120, TFT_WHITE);
 
-    display.setTextColor(TFT_WHITE, TFT_FRONT);
-    display.setTextDatum(CL_DATUM);
-    display.setTextPadding(0);
+    M5.Displays(display).setTextColor(TFT_WHITE, TFT_FRONT);
+    M5.Displays(display).setTextDatum(CL_DATUM);
+    M5.Displays(display).setTextPadding(0);
 
     for (i = 0; i < stop; i++)
     {
-      display.drawString(leftOld[i], 163 + offsetX, 124 + (12 * i) + offsetY);
+      M5.Displays(display).drawString(leftOld[i], 163 + offsetX, 124 + (12 * i) + offsetY);
     }
 
-    display.setTextColor(TFT_BLACK, TFT_WHITE);
-    display.setTextDatum(CC_DATUM);
-    display.setTextPadding(80);
+    M5.Displays(display).setTextColor(TFT_BLACK, TFT_WHITE);
+    M5.Displays(display).setTextDatum(CC_DATUM);
+    M5.Displays(display).setTextPadding(80);
 
     for (i = 0; i < stop; i++)
     {
-      display.drawString(middleOld[i], 242 + offsetX, 124 + (12 * i) + offsetY);
+      M5.Displays(display).drawString(middleOld[i], 242 + offsetX, 124 + (12 * i) + offsetY);
     }
 
-    display.setTextDatum(CR_DATUM);
-    display.setTextPadding(0);
+    M5.Displays(display).setTextDatum(CR_DATUM);
+    M5.Displays(display).setTextPadding(0);
 
     for (i = 0; i < stop; i++)
     {
-      display.drawString(rightOld[i], 318 + offsetX, 124 + (12 * i) + offsetY);
+      M5.Displays(display).drawString(rightOld[i], 318 + offsetX, 124 + (12 * i) + offsetY);
     }
 
     refresh = 1;
@@ -783,41 +783,41 @@ void viewLastLinks(uint8_t stop, const char *lastHeure[10], const char *lastIndi
     right[i] = String(lastDuree[i]);
   }
 
-  display.setTextColor(TFT_WHITE, TFT_FRONT);
-  display.setTextDatum(CL_DATUM);
-  display.setTextPadding(0);
+  M5.Displays(display).setTextColor(TFT_WHITE, TFT_FRONT);
+  M5.Displays(display).setTextDatum(CL_DATUM);
+  M5.Displays(display).setTextPadding(0);
 
   for (i = 0; i < stop; i++)
   {
     if (left[i] != leftOld[i])
     {
       leftOld[i] = left[i];
-      display.drawString(left[i], 163 + offsetX, 124 + (12 * i) + offsetY);
+      M5.Displays(display).drawString(left[i], 163 + offsetX, 124 + (12 * i) + offsetY);
     }
   }
 
-  display.setTextColor(TFT_BLACK, TFT_WHITE);
-  display.setTextDatum(CC_DATUM);
-  display.setTextPadding(80);
+  M5.Displays(display).setTextColor(TFT_BLACK, TFT_WHITE);
+  M5.Displays(display).setTextDatum(CC_DATUM);
+  M5.Displays(display).setTextPadding(80);
 
   for (i = 0; i < stop; i++)
   {
     if (middle[i] != middleOld[i])
     {
       middleOld[i] = middle[i];
-      display.drawString(middle[i], 242 + offsetX, 124 + (12 * i) + offsetY);
+      M5.Displays(display).drawString(middle[i], 242 + offsetX, 124 + (12 * i) + offsetY);
     }
   }
 
-  display.setTextDatum(CR_DATUM);
-  display.setTextPadding(0);
+  M5.Displays(display).setTextDatum(CR_DATUM);
+  M5.Displays(display).setTextPadding(0);
 
   for (i = 0; i < stop; i++)
   {
     if (right[i] != rightOld[i])
     {
       rightOld[i] = right[i];
-      display.drawString(right[i], 318 + offsetX, 124 + (12 * i) + offsetY);
+      M5.Displays(display).drawString(right[i], 318 + offsetX, 124 + (12 * i) + offsetY);
     }
   }
 }
@@ -827,18 +827,18 @@ String viewData(uint8_t icon, String data, String dataOld)
 {
   if (dataOld != data)
   {
-    display.fillRect(4 + offsetX, 2 + offsetY, 36, 42, TFT_HEADER);
+    M5.Displays(display).fillRect(4 + offsetX, 2 + offsetY, 36, 42, TFT_HEADER);
     // Serial.println(data);
 
     sprintf(swap, "%c", icon);
     tmpString = swap;
-    display.drawString(tmpString, 10 + offsetX, 22 + offsetY);
+    M5.Displays(display).drawString(tmpString, 10 + offsetX, 22 + offsetY);
 
-    display.setFont(&rounded_led_board10pt7b);
-    display.setTextColor(TFT_WHITE, TFT_INFO);
-    display.setTextDatum(CC_DATUM);
-    display.setTextPadding(320);
-    display.drawString(data, 160 + offsetX, 64 + offsetY);
+    M5.Displays(display).setFont(&rounded_led_board10pt7b);
+    M5.Displays(display).setTextColor(TFT_WHITE, TFT_INFO);
+    M5.Displays(display).setTextDatum(CC_DATUM);
+    M5.Displays(display).setTextPadding(320);
+    M5.Displays(display).drawString(data, 160 + offsetX, 64 + offsetY);
 
     dateStringOld = "";
     linkTotalStringOld = "";
@@ -852,125 +852,15 @@ String viewData(uint8_t icon, String data, String dataOld)
   return dataOld;
 }
 
-// view menu
-void viewMenu()
-{
-  if (menuRefresh == 0)
-  {
-    display.setBrightness(map(brightnessCurrent, 1, 100, 1, 254));
-
-    display.fillRect(4 + offsetX, 4 + offsetY, 316, 40, TFT_HEADER);
-
-    display.setFont(ICON_FONT);
-    display.setTextColor(TFT_WHITE, TFT_HEADER);
-    display.setTextDatum(CL_DATUM);
-    display.setTextPadding(40);
-    sprintf(swap, "%c", ICON_LEFT);
-    tmpString = swap;
-    display.drawString(tmpString, 10 + offsetX, 22 + offsetY);
-
-    display.setFont(ICON_FONT);
-    display.setTextColor(TFT_WHITE, TFT_HEADER);
-    display.setTextDatum(CR_DATUM);
-    display.setTextPadding(40);
-    sprintf(swap, "%c", ICON_RIGHT);
-    tmpString = swap;
-    display.drawString(tmpString, 310 + offsetX, 22 + offsetY);
-
-    titleStringOld = "";
-    optionStringOld = "";
-
-    menuRefresh = 1;
-  }
-
-  display.setFont(&dot15pt7b);
-  display.setTextColor(TFT_WHITE, TFT_HEADER);
-  display.setTextDatum(CC_DATUM);
-  display.setTextPadding(220);
-
-  titleString = "";
-  optionString = String(menu[menuCurrent]);
-
-  if (menuSelected == -1)
-  {
-    titleString = "MODE MENU";
-  }
-  else
-  {
-    titleString = String(menu[menuSelected]);
-
-    if (optionString == "SYSOP")
-    {
-      optionString = String(sysop[sysopCurrent]);
-    }
-    else if (optionString == "COULEUR")
-    {
-      optionString = String(color[colorCurrent]);
-    }
-    else if (optionString == "QSY")
-    {
-      optionString = String(room[roomCurrent]);
-    }
-    else if (optionString == "LUMINOSITE")
-    {
-      optionString = "LEVEL " + String(brightnessCurrent);
-    }
-    else if (optionString == "BEEP")
-    {
-      optionString = "LEVEL " + String(beepCurrent);
-    }
-    else if (optionString == "CONFIG")
-    {
-      optionString = String(config[(configCurrent * 6) + 4]);
-    }
-    else if (optionString == "RAPTOR")
-    {
-      optionString = (raptorCurrent == 0) ? "RAPTOR OFF" : "RAPTOR ON";
-    }
-    else if (optionString == "ISS")
-    {
-      optionString = (issCurrent == 0) ? "ISS OFF" : "ISS ON";
-    }
-    else if (optionString == "TOT")
-    {
-      optionString = (totCurrent == 0) ? "TOT OFF" : "TOT ON";
-    }
-    else if (optionString == "MODE")
-    {
-      optionString = (modeCurrent == 0) ? "MODE EXPERT" : "MODE BASIC";
-    }
-    else if (optionString == "FOLLOW")
-    {
-      optionString = (followCurrent == 0) ? "FOLLOW OFF" : "FOLLOW ON";
-    }
-  }
-
-  if (titleString != titleStringOld)
-  {
-    titleStringOld = titleString;
-    display.drawString(titleString, 160 + offsetX, 16 + offsetY);
-  }
-
-  if (optionString != optionStringOld)
-  {
-    optionStringOld = optionString;
-    display.setFont(&rounded_led_board10pt7b);
-    display.setTextColor(TFT_WHITE, TFT_INFO);
-    display.setTextDatum(CC_DATUM);
-    display.setTextPadding(320);
-    display.drawString(optionString, 160 + offsetX, 64 + offsetY);
-  }
-}
-
 // View baseline
 void viewBaseline()
 {
   static uint8_t viewTemp = 0;
 
-  display.setFont(0);
-  display.setTextColor(TFT_WHITE, TFT_HEADER);
-  display.setTextDatum(CC_DATUM);
-  display.setTextPadding(240);
+  M5.Displays(display).setFont(0);
+  M5.Displays(display).setTextColor(TFT_WHITE, TFT_HEADER);
+  M5.Displays(display).setTextDatum(CC_DATUM);
+  M5.Displays(display).setTextPadding(240);
 
   baselineString = config[(configCurrent * 6) + 4];
 
@@ -1018,8 +908,8 @@ void viewBaseline()
     }
   }
 
-  display.drawString(baselineString, 160 + offsetX, 36 + offsetY);
-  display.drawFastHLine(0 + offsetX, 0 + offsetY, 320, TFT_WHITE);
+  M5.Displays(display).drawString(baselineString, 160 + offsetX, 36 + offsetY);
+  M5.Displays(display).drawFastHLine(0 + offsetX, 0 + offsetY, 320, TFT_WHITE);
 
   viewTemp = (viewTemp++ < 60) ? viewTemp : 0;
 }
@@ -1033,17 +923,17 @@ void viewBattery()
       batteryLevelCurrent = getBatteryLevel(0);
       batteryChargeCurrent = isCharging();
 
-      display.setFont(&Battery_Icons21pt7b);
-      display.setTextColor(TFT_WHITE, TFT_HEADER);
-      display.setTextDatum(CR_DATUM);
-      display.setTextPadding(0);
+      M5.Displays(display).setFont(&Battery_Icons21pt7b);
+      M5.Displays(display).setTextColor(TFT_WHITE, TFT_HEADER);
+      M5.Displays(display).setTextDatum(CR_DATUM);
+      M5.Displays(display).setTextPadding(0);
 
       if (isCharging() && screensaverMode == 0)
       {
         sprintf(swap, "%c", ICON_CHARGING);
         tmpString = swap;
-        display.drawString(tmpString, 310 + offsetX, 22 + offsetY);
-        // display.setBrightness(128);
+        M5.Displays(display).drawString(tmpString, 310 + offsetX, 22 + offsetY);
+        // M5.Displays(display).setBrightness(128);
       }
       else
       {
@@ -1066,7 +956,7 @@ void viewBattery()
           break;
         }
         tmpString = swap;
-        display.drawString(tmpString, 310 + offsetX, 22 + offsetY);
+        M5.Displays(display).drawString(tmpString, 310 + offsetX, 22 + offsetY);
       }
     }
   }
@@ -1089,42 +979,42 @@ void viewElsewhereBig(DynamicJsonDocument doc, const char *salon)
 
   scroll(20);
 
-  display.setFont(&tahoma8pt7b);
+  M5.Displays(display).setFont(&tahoma8pt7b);
 
   size_t stop = sizeof(room) / sizeof(room[0]);
   stop -= 1;
 
   if (reset == 0)
   {
-    display.setTextColor(TFT_WHITE, TFT_BACK);
-    display.setTextPadding(0);
-    display.drawString("Trafic en cours", 75 + offsetX, 114 + offsetY);
+    M5.Displays(display).setTextColor(TFT_WHITE, TFT_BACK);
+    M5.Displays(display).setTextPadding(0);
+    M5.Displays(display).drawString("Trafic en cours", 75 + offsetX, 114 + offsetY);
 
-    display.setTextColor(TFT_WHITE, TFT_FRONT);
-    display.setTextDatum(CC_DATUM);
-    display.setTextPadding(45);
+    M5.Displays(display).setTextColor(TFT_WHITE, TFT_FRONT);
+    M5.Displays(display).setTextDatum(CC_DATUM);
+    M5.Displays(display).setTextPadding(45);
 
     for (i = 0; i < stop; i++)
     {
-      display.drawString(leftOld[i], 25 + offsetX, 136 + (19 * i) + offsetY);
+      M5.Displays(display).drawString(leftOld[i], 25 + offsetX, 136 + (19 * i) + offsetY);
     }
 
-    display.setTextDatum(CC_DATUM);
-    display.setTextPadding(96);
+    M5.Displays(display).setTextDatum(CC_DATUM);
+    M5.Displays(display).setTextPadding(96);
 
     for (i = 0; i < stop; i++)
     {
       if (strstr(rightOld[i].c_str(), "LINK") != NULL)
       {
-        display.fillRect(51 + offsetX, 126 + (18 * i) + i + offsetY, 98, 18, TFT_WHITE);
-        display.setTextColor(TFT_BLACK, TFT_WHITE);
+        M5.Displays(display).fillRect(51 + offsetX, 126 + (18 * i) + i + offsetY, 98, 18, TFT_WHITE);
+        M5.Displays(display).setTextColor(TFT_BLACK, TFT_WHITE);
       }
       else
       {
-        display.fillRect(51 + offsetX, 126 + (18 * i) + i + offsetY, 98, 18, TFT_FRONT);
-        display.setTextColor(TFT_WHITE, TFT_FRONT);
+        M5.Displays(display).fillRect(51 + offsetX, 126 + (18 * i) + i + offsetY, 98, 18, TFT_FRONT);
+        M5.Displays(display).setTextColor(TFT_WHITE, TFT_FRONT);
       }
-      display.drawString(rightOld[i], 100 + offsetX, 136 + (19 * i) + offsetY);
+      M5.Displays(display).drawString(rightOld[i], 100 + offsetX, 136 + (19 * i) + offsetY);
     }
   }
 
@@ -1180,21 +1070,21 @@ void viewElsewhereBig(DynamicJsonDocument doc, const char *salon)
       }
     }
 
-    display.setTextColor(TFT_WHITE, TFT_FRONT);
-    display.setTextDatum(CC_DATUM);
-    display.setTextPadding(45);
+    M5.Displays(display).setTextColor(TFT_WHITE, TFT_FRONT);
+    M5.Displays(display).setTextDatum(CC_DATUM);
+    M5.Displays(display).setTextPadding(45);
 
     for (i = 0; i < stop; i++)
     {
       if (left[i] != leftOld[i])
       {
         leftOld[i] = left[i];
-        display.drawString(left[i].substring(0, 3), 25 + offsetX, 136 + (19 * i) + offsetY);
+        M5.Displays(display).drawString(left[i].substring(0, 3), 25 + offsetX, 136 + (19 * i) + offsetY);
       }
     }
 
-    display.setTextDatum(CC_DATUM);
-    display.setTextPadding(96);
+    M5.Displays(display).setTextDatum(CC_DATUM);
+    M5.Displays(display).setTextPadding(96);
 
     for (i = 0; i < stop; i++)
     {
@@ -1203,15 +1093,15 @@ void viewElsewhereBig(DynamicJsonDocument doc, const char *salon)
         rightOld[i] = right[i];
         if (strstr(right[i].c_str(), "LINK") != NULL)
         {
-          display.fillRect(51 + offsetX, 126 + (18 * i) + i + offsetY, 98, 18, TFT_WHITE);
-          display.setTextColor(TFT_BLACK, TFT_WHITE);
+          M5.Displays(display).fillRect(51 + offsetX, 126 + (18 * i) + i + offsetY, 98, 18, TFT_WHITE);
+          M5.Displays(display).setTextColor(TFT_BLACK, TFT_WHITE);
         }
         else
         {
-          display.fillRect(51 + offsetX, 126 + (18 * i) + i + offsetY, 98, 18, TFT_FRONT);
-          display.setTextColor(TFT_WHITE, TFT_FRONT);
+          M5.Displays(display).fillRect(51 + offsetX, 126 + (18 * i) + i + offsetY, 98, 18, TFT_FRONT);
+          M5.Displays(display).setTextColor(TFT_WHITE, TFT_FRONT);
         }
-        display.drawString(right[i], 100 + offsetX, 136 + (19 * i) + offsetY);
+        M5.Displays(display).drawString(right[i], 100 + offsetX, 136 + (19 * i) + offsetY);
       }
     }
   }
@@ -1233,31 +1123,31 @@ void viewLastLinksBig(uint8_t stop, const char *lastHeure[10], const char *lastI
     stop = 6;
   }
 
-  display.setFont(&tahoma8pt7b);
+  M5.Displays(display).setFont(&tahoma8pt7b);
 
   if (reset == 0)
   {
-    display.setTextColor(TFT_WHITE, TFT_BACK);
-    display.setTextDatum(CC_DATUM);
-    display.setTextPadding(150);
-    display.drawString("Derniers TX sur " + String(salon).substring(0, 3), 245 + offsetX, 114 + offsetY);
+    M5.Displays(display).setTextColor(TFT_WHITE, TFT_BACK);
+    M5.Displays(display).setTextDatum(CC_DATUM);
+    M5.Displays(display).setTextPadding(150);
+    M5.Displays(display).drawString("Derniers TX sur " + String(salon).substring(0, 3), 245 + offsetX, 114 + offsetY);
 
-    display.setTextColor(TFT_WHITE, TFT_FRONT);
-    display.setTextDatum(CC_DATUM);
-    display.setTextPadding(45);
+    M5.Displays(display).setTextColor(TFT_WHITE, TFT_FRONT);
+    M5.Displays(display).setTextDatum(CC_DATUM);
+    M5.Displays(display).setTextPadding(45);
 
     for (i = 0; i < stop; i++)
     {
-      display.drawString(leftOld[i], 195 + offsetX, 136 + (19 * i) + offsetY);
+      M5.Displays(display).drawString(leftOld[i], 195 + offsetX, 136 + (19 * i) + offsetY);
     }
 
-    display.setTextColor(TFT_BLACK, TFT_WHITE);
-    display.setTextDatum(CC_DATUM);
-    display.setTextPadding(96);
+    M5.Displays(display).setTextColor(TFT_BLACK, TFT_WHITE);
+    M5.Displays(display).setTextDatum(CC_DATUM);
+    M5.Displays(display).setTextPadding(96);
 
     for (i = 0; i < stop; i++)
     {
-      display.drawString(rightOld[i], 270 + offsetX, 136 + (19 * i) + offsetY);
+      M5.Displays(display).drawString(rightOld[i], 270 + offsetX, 136 + (19 * i) + offsetY);
     }
   }
 
@@ -1297,29 +1187,29 @@ void viewLastLinksBig(uint8_t stop, const char *lastHeure[10], const char *lastI
     right[i] = tmpString;
   }
 
-  display.setTextColor(TFT_WHITE, TFT_FRONT);
-  display.setTextDatum(CC_DATUM);
-  display.setTextPadding(45);
+  M5.Displays(display).setTextColor(TFT_WHITE, TFT_FRONT);
+  M5.Displays(display).setTextDatum(CC_DATUM);
+  M5.Displays(display).setTextPadding(45);
 
   for (i = 0; i < stop; i++)
   {
     if (left[i] != leftOld[i])
     {
       leftOld[i] = left[i];
-      display.drawString(left[i], 195 + offsetX, 136 + (19 * i) + offsetY);
+      M5.Displays(display).drawString(left[i], 195 + offsetX, 136 + (19 * i) + offsetY);
     }
   }
 
-  display.setTextColor(TFT_BLACK, TFT_WHITE);
-  display.setTextDatum(CC_DATUM);
-  display.setTextPadding(96);
+  M5.Displays(display).setTextColor(TFT_BLACK, TFT_WHITE);
+  M5.Displays(display).setTextDatum(CC_DATUM);
+  M5.Displays(display).setTextPadding(96);
 
   for (i = 0; i < stop; i++)
   {
     if (right[i] != rightOld[i])
     {
       rightOld[i] = right[i];
-      display.drawString(right[i], 270 + offsetX, 136 + (19 * i) + offsetY);
+      M5.Displays(display).drawString(right[i], 270 + offsetX, 136 + (19 * i) + offsetY);
     }
   }
 }
@@ -1329,10 +1219,10 @@ void viewDTMF()
 {
   uint8_t i, j, k;
 
-  display.setFont(&tahoma8pt7b);
-  display.setTextColor(TFT_WHITE, TFT_FRONT);
-  display.setTextDatum(CC_DATUM);
-  display.setTextPadding(45);
+  M5.Displays(display).setFont(&tahoma8pt7b);
+  M5.Displays(display).setTextColor(TFT_WHITE, TFT_FRONT);
+  M5.Displays(display).setTextDatum(CC_DATUM);
+  M5.Displays(display).setTextPadding(45);
 
   j = 0;
   k = 0;
@@ -1341,9 +1231,9 @@ void viewDTMF()
   {
     tmpString = String(room[i]);
     tmpString = tmpString.substring(0, 3);
-    display.drawString(tmpString, (50 + j) + offsetX, (115 + k) + offsetY);
+    M5.Displays(display).drawString(tmpString, (50 + j) + offsetX, (115 + k) + offsetY);
     tmpString = String(dtmf[i]);
-    display.drawString(tmpString, (50 + j) + offsetX, (115 + k + 16) + offsetY);
+    M5.Displays(display).drawString(tmpString, (50 + j) + offsetX, (115 + k + 16) + offsetY);
     j += 110;
     if (i == 2 || i == 5)
     {
@@ -1352,7 +1242,7 @@ void viewDTMF()
     }
   }
 
-  display.drawString("PERROQUET", (50 + j) + offsetX, (123 + k) + offsetY);
+  M5.Displays(display).drawString("PERROQUET", (50 + j) + offsetX, (123 + k) + offsetY);
   j += 110;
-  display.drawString("RAPTOR", (50 + j) + offsetX, (123 + k) + offsetY);
+  M5.Displays(display).drawString("RAPTOR", (50 + j) + offsetX, (123 + k) + offsetY);
 }
