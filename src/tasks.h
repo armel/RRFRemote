@@ -161,6 +161,8 @@ void button(void *pvParameters)
   int8_t left;
   int16_t change = 0;
 
+  static uint32_t timer = 0;
+
   static int8_t settingsChoice = 0;
   static boolean settingsSelect = false;
 
@@ -185,6 +187,7 @@ void button(void *pvParameters)
 
     if(btnA || btnB || btnC) {     
       screensaver = millis(); // Screensaver update !!!
+      timer = millis();
     }
 
     if (M5.Displays(display).getRotation() == 1)
@@ -201,6 +204,7 @@ void button(void *pvParameters)
     if (btnD == 1)
     {
       screensaver = millis(); // Screensaver update !!!
+      timer = millis();
 
       if (modeCurrent == 2)
       {
@@ -217,79 +221,121 @@ void button(void *pvParameters)
       }
     }
 
-    // Manage DTMF on CORE2
-    if (btnDTMF1 == 1)
+    // Gestion CORE2 QSY rapide
+    if(modeNew == 2)
     {
-      // Serial.println("QSY RRF");
-      qsy = dtmf[0];
-      modeNew = modeOld;
-      action = 5;
-    }
-    else if (btnDTMF2 == 1)
-    {
-      // Serial.println("QSY TEC");
-      qsy = dtmf[1];
-      modeNew = modeOld;
-      action = 5;
-    }
-    else if (btnDTMF3 == 1)
-    {
-      // Serial.println("QSY BAV");
-      qsy = dtmf[2];
-      modeNew = modeOld;
-      action = 5;
-    }
-    else if (btnDTMF4 == 1)
-    {
-      // Serial.println("QSY LOC");
-      qsy = dtmf[3];
-      modeNew = modeOld;
-      action = 5;
-    }
-    else if (btnDTMF5 == 1)
-    {
-      // Serial.println("QSY INT");
-      qsy = dtmf[4];
-      modeNew = modeOld;
-      action = 5;
-    }
-    else if (btnDTMF6 == 1)
-    {
-      // Serial.println("QSY EXP");
-      qsy = dtmf[5];
-      modeNew = modeOld;
-      action = 5;
-    }
-    else if (btnDTMF7 == 1)
-    {
-      // Serial.println("QSY FON");
-      qsy = dtmf[6];
-      modeNew = modeOld;
-      action = 5;
-    }
-    else if (btnDTMF8 == 1)
-    {
-      if (whereisString == "PERROQUET")
+      // Sortie automatique si aucune action
+      if ((millis() - timer) > TIMEOUT_MENU)
       {
-        qsy = dtmf[roomCurrent];
+        modeNew = modeOld;
+        action = 5;
+        settingsSelect = false;
+        settingsMode = false;
+        vTaskDelay(pdMS_TO_TICKS(150));
       }
-      else
+
+      // Manage DTMF on CORE2
+      if (btnDTMF1 == 1)
       {
-        qsy = 95;
+        // Serial.println("QSY RRF");
+        qsy = dtmf[0];
+        modeNew = modeOld;
+        action = 5;
       }
-      modeNew = modeOld;
-      action = 5;
-    }
-    else if (btnDTMF9 == 1)
-    {
-      // Serial.println("RAPTOR");
-      qsy = 200;
-      modeNew = modeOld;
-      action = 5;
+      else if (btnDTMF2 == 1)
+      {
+        // Serial.println("QSY TEC");
+        qsy = dtmf[1];
+        modeNew = modeOld;
+        action = 5;
+      }
+      else if (btnDTMF3 == 1)
+      {
+        // Serial.println("QSY BAV");
+        qsy = dtmf[2];
+        modeNew = modeOld;
+        action = 5;
+      }
+      else if (btnDTMF4 == 1)
+      {
+        // Serial.println("QSY LOC");
+        qsy = dtmf[3];
+        modeNew = modeOld;
+        action = 5;
+      }
+      else if (btnDTMF5 == 1)
+      {
+        // Serial.println("QSY INT");
+        qsy = dtmf[4];
+        modeNew = modeOld;
+        action = 5;
+      }
+      else if (btnDTMF6 == 1)
+      {
+        // Serial.println("QSY EXP");
+        qsy = dtmf[5];
+        modeNew = modeOld;
+        action = 5;
+      }
+      else if (btnDTMF7 == 1)
+      {
+        // Serial.println("QSY FON");
+        qsy = dtmf[6];
+        modeNew = modeOld;
+        action = 5;
+      }
+      else if (btnDTMF8 == 1)
+      {
+        if (whereisString == "PERROQUET")
+        {
+          qsy = dtmf[roomCurrent];
+        }
+        else
+        {
+          qsy = 95;
+        }
+        modeNew = modeOld;
+        action = 5;
+      }
+      else if (btnDTMF9 == 1)
+      {
+        // Serial.println("RAPTOR");
+        qsy = 200;
+        modeNew = modeOld;
+        action = 5;
+      }
     }
 
     if(settingsMode == false)
     {
+      if (followCurrent == 0)
+      {
+        change = roomCurrent;
+
+        int n = sizeof(room) / sizeof(room[0]);
+        n -= 1;
+
+        if (btnA)
+        {
+          change += left;
+
+          change = (change < 0) ? n : change;
+          change = (change > n) ? 0 : change;
+          roomCurrent = change;
+          preferences.putUInt("room", roomCurrent);
+          action = 2;
+        }
+        else if (btnC)
+        {
+          change += right;
+
+          change = (change < 0) ? n : change;
+          change = (change > n) ? 0 : change;
+          roomCurrent = change;
+          preferences.putUInt("room", roomCurrent);
+          action = 2;
+        }
+      }
       // Enter settings
       if(btnB) {
         settingsMode = true;
@@ -305,6 +351,17 @@ void button(void *pvParameters)
     // Select settings
     else if(settingsMode == true)
     {
+      // Sortie automatique si aucune action
+      if ((millis() - timer) > TIMEOUT_MENU)
+      {
+        reset = 0;
+        refresh = 0;
+        clear();
+        settingsSelect = false;
+        settingsMode = false;
+        vTaskDelay(pdMS_TO_TICKS(150));
+      }
+      
       if(settingsSelect == false) {
         if(btnA || btnC) {
           if(btnA) {
@@ -547,12 +604,9 @@ void button(void *pvParameters)
             change = (change > stop) ? 0 : change;
           }
           else if(btnB == 1) {
-            if(change != roomCurrent)
-            {
-              roomCurrent = change;
-              preferences.putUInt("room", roomCurrent);
-              qsy = dtmf[roomCurrent];
-            }
+            roomCurrent = change;
+            preferences.putUInt("room", roomCurrent);
+            qsy = dtmf[roomCurrent];
             reset = 0;
             refresh = 0;
             clear();
