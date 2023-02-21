@@ -250,7 +250,30 @@ Toujours dans le fichier `src/settings.h`, si vous disposez d'un module aditionn
 
 > Vous pouvez vous contenter d'indiquer seulement une partie d'un indicatif. Par exemple ```"F", "0xff0000"```, idéalement positionné en fin de liste, permettra d'allumer les leds en rouge, à chaque passage en émission d'une station donc l'indicatif commence par F (et non listé plus haut dans la liste).
 
-#### Fichier `platformio.ini` (pour l'ATOM Display uniquement)
+#### Fichier `platformio.ini`
+
+Le RRFRemote peut fonctionner sur un écran externe, via une connexion HDMI. Cela permet de profiter d'un affichage plus grand et donc, pour certains, plus confortable. 
+
+Afin de disposer d'une connectique HDMI, il existe actuellement une alternative (donc 2 solutions) :
+
+- soit disposer d'un ATOM Display,
+- soit disposer d'un Display Module 13.2 (compatible avec les CORE et CORE2). 
+
+##### Utilisation du Display Module 13.2 (CORE et CORE2)
+
+Si et seulement si __vous utilisez le Display Module 13.2__, éditer le fichier `platformio.ini` et modifier éventuellement la ligne 35, afin de préciser la résolution de votre écran. Attention, le RRFRemote s'affichera toujours en 320 x 240, mais sera centré à l'écran. Par défaut, la résolution de l'écran est initialisée à 320 x 240. Mais si vous souhaitez la changer en 480 x 320, modifier la ligne 35,
+
+```
+build_flags = ${env.build_flags} -D atom=0 -D displayWidth=320 -D displayHeight=240
+```
+
+Par,
+
+```
+build_flags = ${env.build_flags} -D atom=0 -D displayWidth=480 -D displayHeight=320
+```
+
+##### Utilisation de l'ATOM Display (ATOM uniquement)
 
 Si et seulement si __vous utilisez l'ATOM Display__, éditer le fichier `platformio.ini` et modifier la ligne 12,
 
@@ -266,7 +289,7 @@ default_envs = atom
 
 Cela revient à changer la plate-forme cible.
 
-En complément, vous pouvez préciser la résolution de votre écran. Attention, le RRFRemote s'affichera toujours en 320 x 240, mais sera centré à l'écran. Par défaut, la résolution de l'écran est initialisée à 320 x 240. Mais si vous souhaitez la changer en 480 x 320, modifier la ligne 43,
+En complément, vous pouvez également préciser la résolution de votre écran. Attention, le RRFRemote s'affichera toujours en 320 x 240, mais sera centré à l'écran. Par défaut, la résolution de l'écran est initialisée à 320 x 240. Mais si vous souhaitez la changer en 480 x 320, modifier la ligne 43,
 
 ```
 build_flags = ${env.build_flags} -D atom=1 -D displayWidth=320 -D displayHeight=240
