@@ -209,17 +209,17 @@ String endpointHamQSL = "http://www.hamqsl.com/solarxml.php";
 String endpointISS = "https://api.wheretheiss.at/v1/satellites/25544";
 
 String endpointRRF[] = {
-    "http://rrf.f5nlg.ovh:8080/RRFTracker/RRF-today/rrf_tiny.json",
-    "http://rrf.f5nlg.ovh:8080/RRFTracker/FON-today/rrf_tiny.json",
-    "http://rrf.f5nlg.ovh:8080/RRFTracker/TECHNIQUE-today/rrf_tiny.json",
-    "http://rrf.f5nlg.ovh:8080/RRFTracker/INTERNATIONAL-today/rrf_tiny.json",
-    "http://rrf.f5nlg.ovh:8080/RRFTracker/BAVARDAGE-today/rrf_tiny.json",
-    "http://rrf.f5nlg.ovh:8080/RRFTracker/LOCAL-today/rrf_tiny.json",
-    "http://rrf.f5nlg.ovh:8080/RRFTracker/EXPERIMENTAL-today/rrf_tiny.json"
+    "http://rrf.globalis-dev.com:8080/RRFTracker/RRF-today/rrf_tiny.json",
+    "http://rrf.globalis-dev.com:8080/RRFTracker/FON-today/rrf_tiny.json",
+    "http://rrf.globalis-dev.com:8080/RRFTracker/TECHNIQUE-today/rrf_tiny.json",
+    "http://rrf.globalis-dev.com:8080/RRFTracker/INTERNATIONAL-today/rrf_tiny.json",
+    "http://rrf.globalis-dev.com:8080/RRFTracker/BAVARDAGE-today/rrf_tiny.json",
+    "http://rrf.globalis-dev.com:8080/RRFTracker/LOCAL-today/rrf_tiny.json",
+    "http://rrf.globalis-dev.com:8080/RRFTracker/IDF-today/rrf_tiny.json"
     };
 
-const char *room[] = {"RRF", "FON", "TECHNIQUE", "INTERNATIONAL", "BAVARDAGE", "LOCAL", "EXPERIMENTAL"};
-const uint8_t dtmf[] = {96, 97, 98, 99, 100, 101, 102};
+const char *room[] = {"RRF", "FON", "TECHNIQUE", "INTERNATIONAL", "BAVARDAGE", "LOCAL", "IDF"};
+const uint8_t dtmf[] = {96, 97, 98, 99, 100, 101, 104};
 
 // Scroll
 LGFX_Sprite Sprite(&M5.Lcd); // Create Sprite object "img" with pointer to "tft" object
