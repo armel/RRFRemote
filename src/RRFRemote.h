@@ -35,7 +35,7 @@
 #include <HTTPClient.h>
 #include <Preferences.h>
 #include <FS.h>
-#include <SPIFFS.h>
+#include "LittleFS.h"
 #include <ArduinoJson.h>
 #include <FastLED.h>
 #include <time.h>

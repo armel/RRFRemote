@@ -50,7 +50,7 @@ void iniLogMessage(char* message, uint16_t x = 160, uint16_t y = 50, boolean ver
 {
   if(verbose == true)
   {
-    M5.Displays(display).drawString(message, x, y);
+    M5.Displays(display).drawString(message, x + offsetX, y + offsetY);
   }
   else
   {
@@ -67,11 +67,11 @@ void iniParser(String fileNameSelected, char* media, boolean verbose)
 
   Serial.println(fileNameSelected.c_str());
 
-  if (strcmp(media, "SPIFFS") == 0)
+  if (strcmp(media, "LittleFS") == 0)
   {
-    if (SPIFFS.begin())
+    if (LittleFS.begin())
     {
-      if(!SPIFFS.exists(fileNameSelected.c_str()))
+      if(!LittleFS.exists(fileNameSelected.c_str()))
       {
         iniLogMessage((char *) "Ini file does not exist.", 160, 50, verbose);
         vTaskDelay(pdMS_TO_TICKS(500));
@@ -146,7 +146,7 @@ void iniParser(String fileNameSelected, char* media, boolean verbose)
     return;
   }
 
-  if(strcmp(NAME, "DXTracker") != 0)
+  if(strcmp(NAME, "ICSMeter") == 0 || strcmp(NAME, "ICMultiMeter") == 0 || strcmp(NAME, "ICKeyer") == 0)
   {
     // Icom settings
 
@@ -264,6 +264,11 @@ void iniParser(String fileNameSelected, char* media, boolean verbose)
       iniLogMessage((char*) "Ini file parsing error.", 160, 50, verbose);
       return;
     }
+  }
+
+  if(strcmp(NAME, "ICSMeter") == 0 || strcmp(NAME, "ICMultiMeter") == 0)
+  {
+    // Transverter settings
 
     for(uint8_t i = 1; i <= 5; i++)
     {
@@ -327,19 +332,19 @@ void backupSave(String fileNameSelected, char* media, boolean verbose)
 
   iniLogMessage((char*) "Saving config file...", 160, 50, verbose);
 
-  if (strcmp(media, "SPIFFS") == 0)
+  if (strcmp(media, "LittleFS") == 0)
   {
-    SPIFFS.begin();
-    sourceFile = SPIFFS.open(fileNameSelected.c_str());
-    destFile = SPIFFS.open("/.backup.ini", FILE_WRITE);
+    LittleFS.begin();
+    sourceFile = LittleFS.open(fileNameSelected.c_str());
+    destFile = LittleFS.open("/.backup.ini", FILE_WRITE);
   }
   else
   {
     if (SD.begin(GPIO_NUM_4, SPI, 25000000))
     {
-      SPIFFS.begin();
+      LittleFS.begin();
       sourceFile = SD.open(fileNameSelected.c_str());
-      destFile = SPIFFS.open("/.backup.ini", FILE_WRITE);     
+      destFile = LittleFS.open("/.backup.ini", FILE_WRITE);     
     }
   }
 
@@ -350,7 +355,7 @@ void backupSave(String fileNameSelected, char* media, boolean verbose)
   sourceFile.close();
 
   SD.end();
-  SPIFFS.end();
+  LittleFS.end();
 }
 
 // Load Backup
@@ -361,19 +366,19 @@ void backupLoad(String fileNameSelected, boolean verbose)
   M5.Displays(display).setTextColor(TFT_DARKGRAY, TFT_BLACK);
   iniLogMessage((char*) "Loading config file...", 160, 50, verbose);
 
-  iniParser("/.backup.ini", (char*) "SPIFFS", verbose);
+  iniParser("/.backup.ini", (char*) "LittleFS", verbose);
   
   if(iniValid == false)
   {
-    M5.Displays(display).drawString("Please, add a valid config file", 160, 110);
-    M5.Displays(display).drawString("on SPIFFS or SD Card.", 160, 130);
+    M5.Displays(display).drawString("Please, add a valid config file", 160 + offsetX, 110 + offsetY);
+    M5.Displays(display).drawString("on LittleFS or SD Card.", 160 + offsetX, 130 + offsetY);
   }
 
   while(iniValid == false)
   {
-    M5.Displays(display).drawString("Failed to load config file.", 160, 70);
+    M5.Displays(display).drawString("Failed to load config file.", 160 + offsetX, 70 + offsetY);
     vTaskDelay(pdMS_TO_TICKS(500));
-    M5.Displays(display).drawString(" ", 160, 70);
+    M5.Displays(display).drawString(" ", 160 + offsetX, 70 + offsetY);
     vTaskDelay(pdMS_TO_TICKS(500));
   }
   return;
@@ -399,8 +404,8 @@ void iniLoader() {
 
   fileIndex = 0;
 
-  root = SPIFFS.open("/");
-  getFileList(root, (char*)"SPIFFS", (char*)".ini");
+  root = LittleFS.open("/");
+  getFileList(root, (char*)"LittleFS", (char*)".ini");
 
   if (SD.begin(GPIO_NUM_4, SPI, 25000000))
   {
@@ -418,8 +423,8 @@ void iniLoader() {
 
   if (fileIndex != 0)
   {
-    M5.Displays(display).drawString(version, 160, 20);
-    M5.Displays(display).drawRect(20, 28, 280, 10, TFT_DARKGRAY);
+    M5.Displays(display).drawString(version, 160 + offsetX, 20 + offsetY);
+    M5.Displays(display).drawRect(20 + offsetX, 28 + offsetY, 280, 10, TFT_DARKGRAY);
 
     for (uint16_t i = 0; i < TIMEOUT_INI_LOADER * 10; i++)
     {
@@ -428,14 +433,14 @@ void iniLoader() {
       {
         for (uint8_t j = 0; j <= 5; j++)
         {
-          M5.Displays(display).drawGradientHLine(22, 30 + j, gauge, TFT_BLACK, TFT_SKYBLUE);
+          M5.Displays(display).drawGradientHLine(22 + offsetX, 30 + offsetY + j, gauge, TFT_BLACK, TFT_SKYBLUE);
         }
 
         for (uint16_t j = 1; j < gauge; j++)
         {
           if(j % 23 == 0)
           {
-            M5.Displays(display).drawFastVLine(22 + j, 30, 6, TFT_BLACK);
+            M5.Displays(display).drawFastVLine(22 + offsetX + j, 30 + offsetY, 6, TFT_BLACK);
           }
         }
       }
@@ -446,12 +451,12 @@ void iniLoader() {
       {
         if(blink == false)
         {
-          M5.Displays(display).drawString("Push middle button to enter", 160, 50);
+          M5.Displays(display).drawString("Push middle button to enter", 160 + offsetX, 50 + offsetY);
           blink = true;
         }
         else
         {
-          M5.Displays(display).drawString("", 160, 50);
+          M5.Displays(display).drawString("", 160 + offsetX, 50 + offsetY);
           blink = false;
         }
       }
@@ -480,7 +485,7 @@ void iniLoader() {
       }
 
       M5.Displays(display).setTextColor(TFT_WHITE, TFT_BLACK);
-      M5.Displays(display).drawString(version, 160, 20);
+      M5.Displays(display).drawString(version, 160 + offsetX, 20 + offsetY);
 
       getButton();
 
@@ -497,11 +502,11 @@ void iniLoader() {
         pos = String(fileName[cursor]).indexOf('/');
         switch (pos)
         {
-        case 6:
-          iniParser(String(fileName[cursor]).substring(pos), (char*) "SPIFFS", true);
+        case 8:
+          iniParser(String(fileName[cursor]).substring(pos), (char*) "LittleFS", true);
           if(iniValid == true)
           {
-            backupSave(String(fileName[cursor]).substring(pos), (char*) "SPIFFS", true);
+            backupSave(String(fileName[cursor]).substring(pos), (char*) "LittleFS", true);
             return;
           }
           break;
@@ -538,12 +543,12 @@ void iniLoader() {
           pos = String(fileName[j]).indexOf('/');
           switch (pos)
           {
-          case 6:
+          case 8:
             tmpName = String(fileName[j]).substring(pos + 1);
             if(j == cursor)
             {
               tmpName = ">> " + tmpName + " <<";
-              M5.Displays(display).drawString("SPI Flash File Storage", 160, 50);
+              M5.Displays(display).drawString("LittleFS Flash File Storage", 160 + offsetX, 50 + offsetY);
             }
             break;
           case 2:
@@ -551,12 +556,12 @@ void iniLoader() {
             if(j == cursor)
             {
               tmpName = ">> " + tmpName + " <<";
-              M5.Displays(display).drawString("SD Card Storage", 160, 50);
+              M5.Displays(display).drawString("SD Card Storage", 160 + offsetX, 50 + offsetY);
             }
             break;  
           }
 
-          M5.Displays(display).drawString(tmpName, 160, 80 + i * 20);
+          M5.Displays(display).drawString(tmpName, 160 + offsetX, 80 + offsetY + i * 20);
           i++;
         }
       }

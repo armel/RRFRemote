@@ -17,7 +17,7 @@ char* stristr(const char* haystack, const char* needle) {
   return 0;
 }
 
-// List files on SPIFFS or SD
+// List files on LittleFS or SD
 void getFileList(File dir, char* media, char* extension)
 {
   while (true)
@@ -60,30 +60,30 @@ void myProgressFunction( int state, int size )
   {
     for (uint8_t j = 0; j <= 5; j++)
     {
-      M5.Displays(display).drawGradientHLine(22, 30 + j, gauge, TFT_BLACK, TFT_RED);
+      M5.Displays(display).drawGradientHLine(22 + offsetX, 30 + offsetY + j, gauge, TFT_BLACK, TFT_RED);
     }
 
     for (uint16_t j = 1; j < gauge; j++)
     {
       if(j % 23 == 0)
       {
-        M5.Displays(display).drawFastVLine(22 + j, 30, 6, TFT_BLACK);
+        M5.Displays(display).drawFastVLine(22 + offsetX + j, 30 + offsetY, 6, TFT_BLACK);
       }
     }
   }
 
-  M5.Displays(display).drawString(String(percent) + " %", 160, 70);
+  M5.Displays(display).drawString(String(percent) + " %", 160 + offsetX, 70 + offsetY);
 
   if (percent % 2 == 0)
   {
     if(blink == false)
     {
-      M5.Displays(display).drawString("Loading in progress, please wait...", 160, 50);
+      M5.Displays(display).drawString("Loading in progress, please wait...", 160 + offsetX, 50 + offsetY);
       blink = true;
     }
     else
     {
-      M5.Displays(display).drawString("", 160, 50);
+      M5.Displays(display).drawString("", 160 + offsetX, 50 + offsetY);
       blink = false;
     }
   }
@@ -113,31 +113,31 @@ void binLoader()
 
   uint16_t gauge = 0;
 
-  if (!SPIFFS.begin())
+  if (!LittleFS.begin())
   {
-    Serial.println("SPIFFS Mount Failed");
+    Serial.println("LittleFS Mount Failed");
 
     M5.Displays(display).fillScreen(TFT_BLACK);
 
     M5.Displays(display).setFont(&tahoma8pt7b);
     M5.Displays(display).setTextColor(TFT_WHITE, TFT_BLACK);
     M5.Displays(display).setTextDatum(CC_DATUM);
-    M5.Displays(display).drawString("BUILD SPIFFS", 160, 20);
+    M5.Displays(display).drawString("BUILD LittleFS", 160 + offsetX, 20 + offsetY);
 
-    M5.Displays(display).drawString("SPI Flash File System", 160, 80);
-    M5.Displays(display).drawString("needs to be formated.", 160, 100);
-    M5.Displays(display).drawString("It takes around 4 minutes.", 160, 140);
-    M5.Displays(display).drawString("Please, wait until ", 160, 180);
-    M5.Displays(display).drawString("the application starts !", 160, 200);
+    M5.Displays(display).drawString("LittleFS Flash File System", 160 + offsetX, 80 + offsetY);
+    M5.Displays(display).drawString("needs to be formated.", 160 + offsetX, 100 + offsetY);
+    M5.Displays(display).drawString("It takes around 4 minutes.", 160 + offsetX, 140 + offsetY);
+    M5.Displays(display).drawString("Please, wait until ", 160 + offsetX, 180 + offsetY);
+    M5.Displays(display).drawString("the application starts !", 160 + offsetX, 200 + offsetY);
 
-    Serial.println("SPIFFS Formating...");
+    Serial.println("LittleFS Formating...");
 
-    SPIFFS.format(); // Format SPIFFS...
+    LittleFS.format(); // Format LittleFS...
   }
 
   fileIndex = 0;
-  root = SPIFFS.open("/");
-  getFileList(root, (char*)"SPIFFS", (char*)".bin");
+  root = LittleFS.open("/");
+  getFileList(root, (char*)"LittleFS", (char*)".bin");
 
   if (SD.begin(GPIO_NUM_4, SPI, 25000000))
   {
@@ -153,8 +153,8 @@ void binLoader()
     M5.Displays(display).setTextColor(TFT_DARKGRAY, TFT_BLACK);
     M5.Displays(display).setTextDatum(CC_DATUM);
     M5.Displays(display).setTextPadding(320);
-    M5.Displays(display).drawString(version, 160, 20);
-    M5.Displays(display).drawRect(20, 28, 280, 10, TFT_DARKGRAY);
+    M5.Displays(display).drawString(version, 160 + offsetX, 20 + offsetY);
+    M5.Displays(display).drawRect(20 + offsetX, 28 + offsetY, 280, 10, TFT_DARKGRAY);
     
     for (uint16_t i = 0; i < TIMEOUT_BIN_LOADER * 10; i++)
     {
@@ -163,14 +163,14 @@ void binLoader()
       {
         for (uint8_t j = 0; j <= 5; j++)
         {
-          M5.Displays(display).drawGradientHLine(22, 30 + j, gauge, TFT_BLACK, TFT_GREEN);
+          M5.Displays(display).drawGradientHLine(22 + offsetX, 30 + offsetY + j, gauge, TFT_BLACK, TFT_GREEN);
         }
        
         for (uint16_t j = 1; j < gauge; j++)
         {
           if(j % 23 == 0)
           {
-            M5.Displays(display).drawFastVLine(22 + j, 30, 6, TFT_BLACK);
+            M5.Displays(display).drawFastVLine(22 + j + offsetX, 30 + offsetY, 6, TFT_BLACK);
           }
         }
       }
@@ -183,12 +183,12 @@ void binLoader()
         M5.Displays(display).setTextSize(1);
         if(blink == false)
         {
-          M5.Displays(display).drawString("Push middle button to enter", 160, 50);
+          M5.Displays(display).drawString("Push middle button to enter", 160 + offsetX, 50 + offsetY);
           blink = true;
         }
         else
         {
-          M5.Displays(display).drawString("", 160, 50);
+          M5.Displays(display).drawString("", 160 + offsetX, 50 + offsetY);
           blink = false;
         }
       }
@@ -219,7 +219,7 @@ void binLoader()
 
     M5.Displays(display).setTextColor(TFT_WHITE, TFT_BLACK);
     M5.Displays(display).setTextDatum(CC_DATUM);
-    M5.Displays(display).drawString(version, 160, 20);
+    M5.Displays(display).drawString(version, 160 + offsetX, 20 + offsetY);
 
     getButton();
 
@@ -238,9 +238,9 @@ void binLoader()
       M5.Displays(display).setTextColor(TFT_WHITE, TFT_BLACK);
       M5.Displays(display).setTextDatum(CC_DATUM);
       M5.Displays(display).setTextPadding(320);
-      M5.Displays(display).drawString(version, 160, 20);
+      M5.Displays(display).drawString(version, 160 + offsetX, 20 + offsetY);
 
-      M5.Displays(display).drawRect(20, 28, 280, 10, TFT_WHITE);
+      M5.Displays(display).drawRect(20 + offsetX, 28 + offsetY, 280, 10, TFT_WHITE);
 
       SDUCfg.setProgressCb  ( myProgressFunction );
       SDUCfg.setWaitForActionCb( myActionTrigger );
@@ -248,17 +248,17 @@ void binLoader()
       pos = String(fileName[cursor]).indexOf('/');
       switch (pos)
       {
-      case 6:
-        M5.Displays(display).drawString(String(fileName[cursor]).substring(pos + 1), 160, 100);
+      case 8:
+        M5.Displays(display).drawString(String(fileName[cursor]).substring(pos + 1), 160 + offsetX, 100 + offsetY);
         checkSDUpdater(
-          SPIFFS,                                   // filesystem (default=SD)
+          LittleFS,                                 // filesystem (default=SD)
           String(fileName[cursor]).substring(pos),  // path to binary (default=/menu.bin, empty string=rollback only)
           10000,                                    // wait delay, (default=0, will be forced to 2000 upon ESP.restart() )
           TFCARD_CS_PIN                             // (usually default=4 but your mileage may vary)
         );
         break;
       case 2:
-        M5.Displays(display).drawString(String(fileName[cursor]).substring(pos + 1), 160, 100);
+        M5.Displays(display).drawString(String(fileName[cursor]).substring(pos + 1), 160 + offsetX, 100 + offsetY);
         checkSDUpdater(
           SD,                                       // filesystem (default=SD)
           String(fileName[cursor]).substring(pos),  // path to binary (default=/menu.bin, empty string=rollback only)
@@ -294,12 +294,12 @@ void binLoader()
         pos = String(fileName[j]).indexOf('/');
         switch (pos)
         {
-        case 6:
+        case 8:
           tmpName = String(fileName[j]).substring(pos + 1);
           if(j == cursor)
           {
             tmpName = ">> " + tmpName + " <<";
-            M5.Displays(display).drawString("SPI Flash File Storage", 160, 50);
+            M5.Displays(display).drawString("LittleFS Flash File Storage", 160 + offsetX, 50 + offsetY);
           }
           break;
         case 2:
@@ -307,12 +307,12 @@ void binLoader()
           if(j == cursor)
           {
             tmpName = ">> " + tmpName + " <<";
-            M5.Displays(display).drawString("SD Card Storage", 160, 50);
+            M5.Displays(display).drawString("SD Card Storage", 160 + offsetX, 50 + offsetY);
           }
           break;  
         }
 
-        M5.Displays(display).drawString(tmpName, 160, 80 + i * 20);
+        M5.Displays(display).drawString(tmpName, 160 + offsetX, 80 + offsetY + i * 20);
         i++;
       }
     }
