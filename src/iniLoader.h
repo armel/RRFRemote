@@ -388,14 +388,16 @@ void backupLoad(String fileNameSelected, boolean verbose)
 void iniLoader() {
   String tmpName;
 
-  char version[] = "Ini Loader V0.4";
+  char version[] = "Ini Loader V0.5";
 
   boolean click = false;
   boolean blink = false;
 
+  static int8_t iconOld = 255;
+  static int8_t start = 0;
+  int8_t icon = 0;
   int8_t pos = 0;
   int8_t cursor = 0;
-  int8_t start = 0;
   int8_t stop = 0;
   int8_t limit = 8;
   int8_t change = 255;
@@ -489,13 +491,32 @@ void iniLoader() {
 
       getButton();
 
+      if(btnA && btnC)  // Escape
+      {
+        return;
+      }
+
       if (btnA)
       {
-        cursor--;
+        if(cursor > 0)
+        {
+          cursor--;
+          if(cursor < limit)
+          {
+            start = 0;
+          }
+        }
       }
       else if (btnC)
       {
-        cursor++;
+        if(cursor < (fileIndex - 1))
+        {
+          cursor++;
+          if(cursor >= limit)
+          {
+            start++;
+          }
+        }
       }
       else if (btnB)
       {
@@ -524,8 +545,7 @@ void iniLoader() {
       cursor = (cursor < 0) ? fileIndex - 1 : cursor;
       cursor = (cursor > fileIndex - 1) ? 0 : cursor;
 
-      start = cursor / limit;
-      stop = (start * limit) + limit;
+      stop = start + limit;
 
       if(stop > fileIndex)
       {
@@ -535,11 +555,14 @@ void iniLoader() {
       if (change != cursor)
       {
         change = cursor;
-        M5.Displays(display).setTextPadding(320);
+        M5.Displays(display).setTextPadding(180);
+
+        Serial.printf("%d %d %d %d %d\n", start, stop, cursor, limit, fileIndex);
 
         uint8_t i = 0;
-        for (uint8_t j = (start * limit); j < stop; j++)
+        for (uint8_t j = start; j < stop; j++)
         {
+          M5.Displays(display).setTextColor(TFT_GRAY, TFT_BLACK);
           pos = String(fileName[j]).indexOf('/');
           switch (pos)
           {
@@ -547,14 +570,18 @@ void iniLoader() {
             tmpName = String(fileName[j]).substring(pos + 1);
             if(j == cursor)
             {
+              icon = 0;
+              M5.Displays(display).setTextColor(TFT_WHITE, TFT_BLACK);
               tmpName = ">> " + tmpName + " <<";
-              M5.Displays(display).drawString("LittleFS Flash File Storage", 160 + offsetX, 50 + offsetY);
+              M5.Displays(display).drawString("LittleFS Flash Storage", 160 + offsetX, 50 + offsetY);
             }
             break;
           case 2:
             tmpName = String(fileName[j]).substring(pos + 1);
             if(j == cursor)
             {
+              icon = 0;
+              M5.Displays(display).setTextColor(TFT_WHITE, TFT_BLACK);
               tmpName = ">> " + tmpName + " <<";
               M5.Displays(display).drawString("SD Card Storage", 160 + offsetX, 50 + offsetY);
             }
@@ -562,6 +589,21 @@ void iniLoader() {
           }
 
           M5.Displays(display).drawString(tmpName, 160 + offsetX, 80 + offsetY + i * 20);
+          if(icon != iconOld)
+          {
+            iconOld = icon;
+            M5.Displays(display).fillRect(4 + offsetX, 4 + offsetY, 64, 64, TFT_BLACK);
+            switch (icon)
+            {
+              case 0:
+                M5.Displays(display).drawPng(ram, sizeof(ram), 4 + offsetX, 4 + offsetY, 64, 64);
+                break;
+
+              case 1:
+                M5.Displays(display).drawPng(sd, sizeof(sd), 4 + offsetX, 4 + offsetY, 64, 64);
+                break;
+            }
+          }
           i++;
         }
       }
