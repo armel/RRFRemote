@@ -562,7 +562,7 @@ void iniLoader() {
         uint8_t i = 0;
         for (uint8_t j = start; j < stop; j++)
         {
-          M5.Displays(display).setTextColor(TFT_GRAY, TFT_BLACK);
+          M5.Displays(display).setTextColor(TFT_DARKGRAY, TFT_BLACK);
           pos = String(fileName[j]).indexOf('/');
           switch (pos)
           {
