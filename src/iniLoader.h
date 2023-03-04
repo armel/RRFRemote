@@ -505,6 +505,10 @@ void iniLoader() {
           {
             start = 0;
           }
+          else
+          {
+            start--;
+          }
         }
       }
       else if (btnC)
@@ -580,7 +584,7 @@ void iniLoader() {
             tmpName = String(fileName[j]).substring(pos + 1);
             if(j == cursor)
             {
-              icon = 0;
+              icon = 1;
               M5.Displays(display).setTextColor(TFT_WHITE, TFT_BLACK);
               tmpName = ">> " + tmpName + " <<";
               M5.Displays(display).drawString("SD Card Storage", 160 + offsetX, 50 + offsetY);
