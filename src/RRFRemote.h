@@ -1,7 +1,7 @@
 // Copyright (c) F4HWN Armel. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-#define VERSION "3.2.2"
+#define VERSION "3.3.0"
 #define AUTHOR "F4HWN"
 #define NAME "RRFRemote"
 
