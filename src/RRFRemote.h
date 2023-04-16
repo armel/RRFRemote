@@ -205,7 +205,7 @@ colorType BMP_BACK;
 #define ICON_CHARGING 37
 
 // HTTP endpoint
-String endpointHamQSL = "http://www.hamqsl.com/solarxml.php";
+String endpointHamQSL = "http://rrf.globalis-dev.com:8080/html/solarxml.xml";
 String endpointISS = "https://api.wheretheiss.at/v1/satellites/25544";
 
 String endpointRRF[] = {
