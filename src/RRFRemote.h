@@ -1,7 +1,7 @@
 // Copyright (c) F4HWN Armel. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-#define VERSION "3.3.0"
+#define VERSION "3.3.1"
 #define AUTHOR "F4HWN"
 #define NAME "RRFRemote"
 
@@ -215,11 +215,12 @@ String endpointRRF[] = {
     "http://rrf.globalis-dev.com:8080/RRFTracker/INTERNATIONAL-today/rrf_tiny.json",
     "http://rrf.globalis-dev.com:8080/RRFTracker/BAVARDAGE-today/rrf_tiny.json",
     "http://rrf.globalis-dev.com:8080/RRFTracker/LOCAL-today/rrf_tiny.json",
+    "http://rrf.globalis-dev.com:8080/RRFTracker/EXPERIMENTAL-today/rrf_tiny.json",
     "http://rrf.globalis-dev.com:8080/RRFTracker/IDF-today/rrf_tiny.json"
     };
 
-const char *room[] = {"RRF", "FON", "TECHNIQUE", "INTERNATIONAL", "BAVARDAGE", "LOCAL", "IDF"};
-const uint8_t dtmf[] = {96, 97, 98, 99, 100, 101, 104};
+const char *room[] = {"RRF", "FON", "TECHNIQUE", "INTERNATIONAL", "BAVARDAGE", "LOCAL", "EXPERIMENTAL", "IDF"};
+const uint8_t dtmf[] = {96, 97, 98, 99, 100, 101, 102, 104};
 
 // Scroll
 LGFX_Sprite Sprite(&M5.Lcd); // Create Sprite object "img" with pointer to "tft" object

@@ -1,6 +1,30 @@
 // Copyright (c) F4HWN Armel. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+// Use for order elsewhere
+void change(float *xp, float *yp)
+{
+    double temp = *xp;
+    *xp = *yp;
+    *yp = temp;
+}
+
+// Use for order elsewhere (bubble order)
+void bubbleSort(float arr[], int n)
+{
+    int i, j;
+    for (i = 0; i < n-1; i++)
+    {
+        // parcourir le tableau de 0 à n-i-1
+        for (j = 0; j < n-i-1; j++)
+        {
+            // échanger si l'élément courant est plus grand que le suivant
+            if (arr[j] < arr[j+1])
+                change(&arr[j], &arr[j+1]);
+        }
+    }
+}
+
 // View histogram
 void viewHistogram(uint16_t maxLevel, uint16_t tx[])
 {
@@ -123,14 +147,63 @@ void viewElsewhere(DynamicJsonDocument doc, const char *salon)
     {
       elsewhereStringOld = elsewhereString;
 
+      // Start order
+
+      float roomOrderFloat[stop];
+      int roomOrderInt[stop];
+
       j = 0;
       for (i = 0; i <= stop; i++)
       {
-        scroll(20);
         if (strcmp(room[i], salon) != 0)
         {
-          left[j] = String(room[i]).substring(0, 3);
           elsewhere = doc["elsewhere"][1][room[i]];
+          if (strcmp(elsewhere, "Aucune émission") != 0)
+          {
+            roomOrderFloat[j] = (float(10000 + int(doc["elsewhere"][5][room[i]])) + float(i/10.0f));
+          }
+          else
+          {
+            roomOrderFloat[j] = (float(int(doc["elsewhere"][5][room[i]])) + float(i/10.0f));
+          }
+          j++;
+        }
+      }
+
+      /*
+      for (i = 0; i < stop; i++)
+      {
+          Serial.printf("Avant %d %.3f %s\n", i, roomOrderFloat[i], room[i]);
+      }
+
+      Serial.println("----------");
+      */
+
+      int n = sizeof(roomOrderFloat)/sizeof(roomOrderFloat[0]);
+      bubbleSort(roomOrderFloat, n);
+
+      for (i = 0; i < stop; i++)
+      {
+          int a = floor(roomOrderFloat[i]);
+          float b = roomOrderFloat[i] - a;
+          roomOrderFloat[i] = b * 10.0f;
+          roomOrderInt[i] = round(roomOrderFloat[i]);
+          //Serial.printf(">>>Apres %.3f %d\n", roomOrderFloat[i], roomOrderInt[i]);
+          //Serial.printf("Apres %d %s %d\n", i, room[roomOrderInt[i]], roomOrderInt[i]);
+      }
+
+      //Serial.println("----------");
+
+      // End order
+
+      j = 0;
+      for (i = 0; i < stop; i++)
+      {
+        scroll(20);
+        if (strcmp(room[roomOrderInt[i]], salon) != 0)
+        {
+          left[j] = String(room[roomOrderInt[i]]).substring(0, 3);
+          elsewhere = doc["elsewhere"][1][room[roomOrderInt[i]]];
 
           // elsewhere = "GW-ALLSTAR-40020";
           // elsewhere = "(67) F1ZRZ T10M";
@@ -153,7 +226,7 @@ void viewElsewhere(DynamicJsonDocument doc, const char *salon)
           }
           else
           {
-            linkTotalElsewhere = doc["elsewhere"][5][room[i]];
+            linkTotalElsewhere = doc["elsewhere"][5][room[roomOrderInt[i]]];
             sprintf(swap, "%d", linkTotalElsewhere);
             tmpString = swap;
             tmpString += " LINK";
@@ -164,7 +237,7 @@ void viewElsewhere(DynamicJsonDocument doc, const char *salon)
           }
 
           middle[j] = tmpString;
-          elsewhere = doc["elsewhere"][3][room[i]];
+          elsewhere = doc["elsewhere"][3][room[roomOrderInt[i]]];
           right[j] = String(elsewhere);
           j += 1;
         }
@@ -174,7 +247,7 @@ void viewElsewhere(DynamicJsonDocument doc, const char *salon)
       M5.Displays(display).setTextDatum(CC_DATUM);
       M5.Displays(display).setTextPadding(25);
 
-      for (i = 0; i < stop; i++)
+      for (i = 0; i < 6; i++)
       {
         if (left[i] != leftOld[i])
         {
@@ -186,7 +259,7 @@ void viewElsewhere(DynamicJsonDocument doc, const char *salon)
       M5.Displays(display).setTextDatum(CC_DATUM);
       M5.Displays(display).setTextPadding(70);
 
-      for (i = 0; i < stop; i++)
+      for (i = 0; i < 6; i++)
       {
         if (middle[i] != middleOld[i])
         {
@@ -209,7 +282,7 @@ void viewElsewhere(DynamicJsonDocument doc, const char *salon)
       M5.Displays(display).setTextDatum(CC_DATUM);
       M5.Displays(display).setTextPadding(52);
 
-      for (i = 0; i < stop; i++)
+      for (i = 0; i < 6; i++)
       {
         if (right[i] != rightOld[i])
         {
@@ -1024,14 +1097,63 @@ void viewElsewhereBig(DynamicJsonDocument doc, const char *salon)
     {
       elsewhereStringOld = elsewhereString;
 
+      // Start order
+
+      float roomOrderFloat[stop];
+      int roomOrderInt[stop];
+
       j = 0;
       for (i = 0; i <= stop; i++)
       {
-        scroll(20);
         if (strcmp(room[i], salon) != 0)
         {
-          left[j] = String(room[i]).substring(0, 3);
           elsewhere = doc["elsewhere"][1][room[i]];
+          if (strcmp(elsewhere, "Aucune émission") != 0)
+          {
+            roomOrderFloat[j] = (float(10000 + int(doc["elsewhere"][5][room[i]])) + float(i/10.0f));
+          }
+          else
+          {
+            roomOrderFloat[j] = (float(int(doc["elsewhere"][5][room[i]])) + float(i/10.0f));
+          }
+          j++;
+        }
+      }
+
+      /*
+      for (i = 0; i < stop; i++)
+      {
+          Serial.printf("Avant %d %.3f %s\n", i, roomOrderFloat[i], room[i]);
+      }
+
+      Serial.println("----------");
+      */
+
+      int n = sizeof(roomOrderFloat)/sizeof(roomOrderFloat[0]);
+      bubbleSort(roomOrderFloat, n);
+
+      for (i = 0; i < stop; i++)
+      {
+          int a = floor(roomOrderFloat[i]);
+          float b = roomOrderFloat[i] - a;
+          roomOrderFloat[i] = b * 10.0f;
+          roomOrderInt[i] = round(roomOrderFloat[i]);
+          //Serial.printf(">>>Apres %.3f %d\n", roomOrderFloat[i], roomOrderInt[i]);
+          //Serial.printf("Apres %d %s %d\n", i, room[roomOrderInt[i]], roomOrderInt[i]);
+      }
+
+      //Serial.println("----------");
+
+      // End order
+
+      j = 0;
+      for (i = 0; i < stop; i++)
+      {
+        scroll(20);
+        if (strcmp(room[roomOrderInt[i]], salon) != 0)
+        {
+          left[j] = String(room[roomOrderInt[i]]).substring(0, 3);
+          elsewhere = doc["elsewhere"][1][room[roomOrderInt[i]]];
 
           // elsewhere = "GW-ALLSTAR-40020";
           // elsewhere = "(67) F1ZRZ T10M";
@@ -1054,7 +1176,7 @@ void viewElsewhereBig(DynamicJsonDocument doc, const char *salon)
           }
           else
           {
-            linkTotalElsewhere = doc["elsewhere"][5][room[i]];
+            linkTotalElsewhere = doc["elsewhere"][5][room[roomOrderInt[i]]];
             sprintf(swap, "%d", linkTotalElsewhere);
             tmpString = swap;
             tmpString += " LINK";
@@ -1074,7 +1196,7 @@ void viewElsewhereBig(DynamicJsonDocument doc, const char *salon)
     M5.Displays(display).setTextDatum(CC_DATUM);
     M5.Displays(display).setTextPadding(45);
 
-    for (i = 0; i < stop; i++)
+    for (i = 0; i < 6; i++)
     {
       if (left[i] != leftOld[i])
       {
@@ -1086,7 +1208,7 @@ void viewElsewhereBig(DynamicJsonDocument doc, const char *salon)
     M5.Displays(display).setTextDatum(CC_DATUM);
     M5.Displays(display).setTextPadding(96);
 
-    for (i = 0; i < stop; i++)
+    for (i = 0; i < 6; i++)
     {
       if (right[i] != rightOld[i])
       {
