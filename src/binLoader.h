@@ -255,7 +255,7 @@ void binLoader()
 {
   String tmpName;
 
-  char version[] = "Bin Loader V0.5";
+  char version[] = "Bin Loader V0.6";
 
   boolean click = false;
   boolean blink = false;
@@ -333,7 +333,20 @@ void binLoader()
         }
       }
       
-      getButton();
+      getButtonBinLoaderStartup();
+      //Serial.printf("%d %d %d %d\n", btnA, btnB, btnC, btnE);
+
+      if(btnE)  // Escape HDMI
+      {
+        if(hdmiCurrent == 1)
+        {
+          hdmiCurrent = 0;
+          preferences.putUInt("hdmi", hdmiCurrent);
+        }
+        display = hdmiCurrent;
+        M5.setPrimaryDisplay(display);
+        ESP.restart();
+      }
 
       if (i % 5 == 0)
       {
@@ -341,12 +354,15 @@ void binLoader()
         M5.Displays(display).setTextSize(1);
         if(blink == false)
         {
-          M5.Displays(display).drawString("Push middle button to enter", 160 + offsetX, 50 + offsetY);
+          M5.Displays(display).drawString("Short press middle button to enter", 160 + offsetX, 50 + offsetY);
+          if(hdmiCurrent == 1)
+            M5.Displays(display).drawString("Long press middle button to exit HDMI", 160 + offsetX, 70 + offsetY);
           blink = true;
         }
         else
         {
           M5.Displays(display).drawString("", 160 + offsetX, 50 + offsetY);
+          M5.Displays(display).drawString("", 160 + offsetX, 70 + offsetY);
           blink = false;
         }
       }
@@ -380,11 +396,6 @@ void binLoader()
     M5.Displays(display).drawString(version, 160 + offsetX, 20 + offsetY);
 
     getButton();
-
-    if(btnA && btnC)  // Escape
-    {
-      return;
-    }
 
     if (btnA)
     {
