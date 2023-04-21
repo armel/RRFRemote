@@ -157,7 +157,7 @@ PROGMEM const uint8_t sd[]={
 0x11, 0x00, 0x00, 0x00, 0x00, 0x49, 0x45, 0x4e, 0x44, 0xae, 0x42, 0x60, 0x82, 
 };
 
-PROGMEM const uint8_t hdmi[]={
+PROGMEM const uint8_t hdmiplug[]={
 0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00, 0x00, 0x00, 0x0d, 0x49, 0x48, 0x44, 0x52, 
 0x00, 0x00, 0x00, 0x40, 0x00, 0x00, 0x00, 0x40, 0x08, 0x03, 0x00, 0x00, 0x00, 0x9d, 0xb7, 0x81, 
 0xec, 0x00, 0x00, 0x01, 0xa4, 0x50, 0x4c, 0x54, 0x45, 0x00, 0x00, 0x00, 0x2d, 0x50, 0x6b, 0x36, 
@@ -422,13 +422,12 @@ void binLoader()
 
         btnBLong = M5.BtnB.pressedFor(500);
 
-        M5.Displays(display).drawPng(hdmi, sizeof(hdmi), 128 + offsetX, 88 + offsetY, 64, 64);
+        M5.Displays(display).drawPng(hdmiplug, sizeof(hdmiplug), 128 + offsetX, 88 + offsetY, 64, 64);
 
         if(btnBLong)  // Escape HDMI
         {
-          hdmiCurrent = !hdmiCurrent; // Logical operator
-          preferences.putUInt("hdmi", hdmiCurrent);
-          display = hdmiCurrent;
+          display = !display; // Logical operator
+          preferences.putUInt("hdmi", display);
           M5.setPrimaryDisplay(display);
           ESP.restart();
         }
@@ -448,7 +447,7 @@ void binLoader()
           M5.Displays(display).drawString("Short press middle button to enter", 160 + offsetX, 50 + offsetY);
           if(M5.getDisplayCount() > 1)
           {
-            if(hdmiCurrent == 1)
+            if(display == 1)
             {
               M5.Displays(display).drawString("Long press middle button to exit HDMI", 160 + offsetX, 70 + offsetY);
             }
