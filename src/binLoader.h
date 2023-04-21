@@ -497,6 +497,11 @@ void binLoader()
 
     getButton();
 
+    if(btnA && btnC)  // Escape
+    {
+      return;
+    }
+
     if (btnA)
     {
       if(cursor > 0)
