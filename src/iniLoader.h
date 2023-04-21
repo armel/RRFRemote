@@ -388,7 +388,7 @@ void backupLoad(String fileNameSelected, boolean verbose)
 void iniLoader() {
   String tmpName;
 
-  char version[] = "Ini Loader V0.5";
+  char version[] = "Ini Loader V0.6";
 
   boolean click = false;
   boolean blink = false;
@@ -453,7 +453,7 @@ void iniLoader() {
       {
         if(blink == false)
         {
-          M5.Displays(display).drawString("Push middle button to enter", 160 + offsetX, 50 + offsetY);
+          M5.Displays(display).drawString("Short press middle button to enter", 160 + offsetX, 50 + offsetY);
           blink = true;
         }
         else
