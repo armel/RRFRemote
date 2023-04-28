@@ -84,7 +84,7 @@ const char index_m5stack_html[] = R"HTML(
 
 )HTML";
 
-const char index_core2_html[]  = R"HTML(
+const char index_core2_html[] = R"HTML(
 
 <!doctype html>
 <html>
