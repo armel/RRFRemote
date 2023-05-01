@@ -1,7 +1,7 @@
 // Copyright (c) F4HWN Armel. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-#define VERSION "3.3.4"
+#define VERSION "3.3.5"
 #define AUTHOR  "F4HWN"
 #define NAME    "RRFRemote"
 
@@ -29,7 +29,9 @@
 #define M5MODULEDISPLAY_OUTPUT_WIDTH   960
 #define M5MODULEDISPLAY_OUTPUT_HEIGHT  480
 
-#define SDU_HEADLESS  // For Bin Loader
+#define SDU_HEADLESS
+#define SDU_ENABLE_GZ
+#define SDU_NO_AUTODETECT
 
 #include <WiFiClientSecure.h>
 #include <HTTPClient.h>

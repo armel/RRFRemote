@@ -199,6 +199,30 @@ PROGMEM const uint8_t hdmiplug[] = {
   0x00, 0x00, 0x49, 0x45, 0x4e, 0x44, 0xae, 0x42, 0x60, 0x82,
 };
 
+long gzUncompressedSize = 0;
+
+// Get uncompressed size for GZIP
+uint8_t gzReadByte(fs::File& gzFile, const int32_t addr, fs::SeekMode mode = fs::SeekSet) {
+  gzFile.seek(addr, mode);
+  return gzFile.read();
+}
+
+// Get uncompressed size for GZIP
+size_t getUncompressedSize(fs::File& gzFile) {
+  size_t output_size = 0;
+  size_t gz_size     = gzFile.size();
+  gzFile.seek(0);
+  if ((gzReadByte(gzFile, 0) == 0x1f) && (gzReadByte(gzFile, 1) == 0x8b)) {
+    // GZIP signature matched.  Find real size as encoded at the end
+    output_size = gzReadByte(gzFile, gz_size - 4);
+    output_size += gzReadByte(gzFile, gz_size - 3) << 8;
+    output_size += gzReadByte(gzFile, gz_size - 2) << 16;
+    output_size += gzReadByte(gzFile, gz_size - 1) << 24;
+  }
+  gzFile.seek(0);
+  return output_size;
+}
+
 // Add insensitive function to prevent case problem
 char* stristr(const char* haystack, const char* needle) {
   do {
@@ -241,6 +265,12 @@ void myProgressFunction(int state, int size) {
   static boolean blink = false;
   uint16_t gauge;
 
+  if (gzUncompressedSize != 0) {
+    size = gzUncompressedSize;
+  }
+
+  // Serial.printf("%d %d\n", state, size);
+
   int percent = (state * 100) / size;
   if (percent == SD_UI_Progress) {
     // don't render twice the same value
@@ -280,9 +310,11 @@ static int myActionTrigger(char* labelLoad, char* labelSkip, char* labelSave, un
 
 // Bin Loader
 void binLoader() {
+  fs::File file;
+
   String tmpName;
 
-  char version[] = "Bin Loader V0.6";
+  char version[] = "Bin Loader V0.7";
 
   boolean click = false;
   boolean blink = false;
@@ -322,10 +354,14 @@ void binLoader() {
   fileIndex = 0;
   root      = LittleFS.open("/");
   getFileList(root, (char*)"LittleFS", (char*)".bin");
+  root = LittleFS.open("/");
+  getFileList(root, (char*)"LittleFS", (char*)".gz");
 
   if (SD.begin(GPIO_NUM_4, SPI, 25000000)) {
     root = SD.open("/");
     getFileList(root, (char*)"SD", (char*)".bin");
+    root = SD.open("/");
+    getFileList(root, (char*)"SD", (char*)".gz");
   }
 
   if (fileIndex != 0) {
@@ -455,9 +491,15 @@ void binLoader() {
       SDUCfg.setWaitForActionCb(myActionTrigger);
 
       pos = String(fileName[cursor]).indexOf('/');
+
       switch (pos) {
         case 8:
           M5.Displays(display).drawString(String(fileName[cursor]).substring(pos + 1), 160 + offsetX, 100 + offsetY);
+          if (String(fileName[cursor]).substring(String(fileName[cursor]).length() - 3) == ".gz") {
+            file               = LittleFS.open(String(fileName[cursor]).substring(pos), "r");
+            gzUncompressedSize = getUncompressedSize(file);
+            Serial.printf(">>>>>>> %lu\n", gzUncompressedSize);
+          }
           checkSDUpdater(
             LittleFS,                                 // filesystem (default=SD)
             String(fileName[cursor]).substring(pos),  // path to binary (default=/menu.bin, empty string=rollback only)
@@ -467,6 +509,11 @@ void binLoader() {
           break;
         case 2:
           M5.Displays(display).drawString(String(fileName[cursor]).substring(pos + 1), 160 + offsetX, 100 + offsetY);
+          if (String(fileName[cursor]).substring(String(fileName[cursor]).length() - 3) == ".gz") {
+            file               = SD.open(String(fileName[cursor]).substring(pos), "r");
+            gzUncompressedSize = getUncompressedSize(file);
+            Serial.printf(">>>>>>> %lu\n", gzUncompressedSize);
+          }
           checkSDUpdater(
             SD,                                       // filesystem (default=SD)
             String(fileName[cursor]).substring(pos),  // path to binary (default=/menu.bin, empty string=rollback only)
@@ -481,6 +528,10 @@ void binLoader() {
     cursor = (cursor < 0) ? fileIndex - 1 : cursor;
     cursor = (cursor > fileIndex - 1) ? 0 : cursor;
 
+    if (start > cursor) {
+      start = cursor;
+    }
+
     stop = start + limit;
 
     if (stop > fileIndex) {
@@ -489,12 +540,13 @@ void binLoader() {
 
     if (change != cursor) {
       change = cursor;
-      M5.Displays(display).setTextPadding(180);
 
-      Serial.printf("%d %d %d %d %d\n", start, stop, cursor, limit, fileIndex);
+      // Serial.printf("%d %d %d %d %d\n", start, stop, cursor, limit, fileIndex);
+      Serial.printf("%02d %02d %02d\n", start, stop, cursor);
 
       uint8_t i = 0;
       for (uint8_t j = start; j < stop; j++) {
+        M5.Displays(display).setTextPadding(180);
         M5.Displays(display).setTextColor(TFT_DARKGRAY, TFT_BLACK);
         pos = String(fileName[j]).indexOf('/');
         switch (pos) {
@@ -518,7 +570,9 @@ void binLoader() {
             break;
         }
 
+        M5.Displays(display).setTextPadding(320);
         M5.Displays(display).drawString(tmpName, 160 + offsetX, 80 + offsetY + i * 20);
+        M5.Displays(display).setTextPadding(180);
         if (icon != iconOld) {
           iconOld = icon;
           M5.Displays(display).fillRect(4 + offsetX, 4 + offsetY, 64, 64, TFT_BLACK);

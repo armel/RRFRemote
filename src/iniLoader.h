@@ -1,5 +1,6 @@
 // Copyright (c) F4HWN Armel. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// Licensed under the MIT license. See LICENSE file in the project root for full
+// license information.
 
 // Ini error messages
 void printErrorMessage(uint8_t e, bool eol = true) {
@@ -145,7 +146,9 @@ void iniParser(String fileNameSelected, char *media, boolean verbose) {
       myConfig.icAddress = strtol(buffer, 0, 16);
       Serial.printf("%02X\n", myConfig.icAddress);
     } else {
-      Serial.print("Could not read 'icom_address' from section 'icom', error was ");
+      Serial.print(
+        "Could not read 'icom_address' from section 'icom', error "
+        "was ");
       printErrorMessage(ini.getError());
       iniLogMessage((char *)"Ini file parsing error.", 160, 50, verbose);
       return;
@@ -160,7 +163,9 @@ void iniParser(String fileNameSelected, char *media, boolean verbose) {
       }
       Serial.println(myConfig.icConnect);
     } else {
-      Serial.print("Could not read 'icom_connect' from section 'icom', error was ");
+      Serial.print(
+        "Could not read 'icom_connect' from section 'icom', error "
+        "was ");
       printErrorMessage(ini.getError());
       iniLogMessage((char *)"Ini file parsing error.", 160, 50, verbose);
       return;
@@ -171,7 +176,9 @@ void iniParser(String fileNameSelected, char *media, boolean verbose) {
         strncpy(myConfig.icDevice, buffer, 64);
         Serial.println(myConfig.icDevice);
       } else {
-        Serial.print("Could not read 'icom_device' from section 'icom', error was ");
+        Serial.print(
+          "Could not read 'icom_device' from section 'icom', error "
+          "was ");
         printErrorMessage(ini.getError());
         iniLogMessage((char *)"Ini file parsing error.", 160, 50, verbose);
         return;
@@ -187,7 +194,9 @@ void iniParser(String fileNameSelected, char *media, boolean verbose) {
         }
         Serial.println("");
       } else {
-        Serial.print("Could not read 'icom_device' from section 'icom', error was ");
+        Serial.print(
+          "Could not read 'icom_device' from section 'icom', error "
+          "was ");
         printErrorMessage(ini.getError());
         iniLogMessage((char *)"Ini file parsing error.", 160, 50, verbose);
         return;
@@ -240,7 +249,10 @@ void iniParser(String fileNameSelected, char *media, boolean verbose) {
         myConfig.lo[i] = atoll(buffer);
         Serial.println(myConfig.lo[i]);
       } else {
-        Serial.printf("Could not read 'transverter_lo_%d' from section 'transverter', error was ", i);
+        Serial.printf(
+          "Could not read 'transverter_lo_%d' from section "
+          "'transverter', error was ",
+          i);
         printErrorMessage(ini.getError());
         iniLogMessage((char *)"Ini file parsing error.", 160, 50, verbose);
         return;
@@ -256,7 +268,9 @@ void iniParser(String fileNameSelected, char *media, boolean verbose) {
       myConfig.latitude = atof(buffer);
       Serial.println(myConfig.latitude);
     } else {
-      Serial.print("Could not read 'latitude' from section 'geolocation', error was ");
+      Serial.print(
+        "Could not read 'latitude' from section 'geolocation', error "
+        "was ");
       printErrorMessage(ini.getError());
       iniLogMessage((char *)"Ini file parsing error.", 160, 50, verbose);
       return;
@@ -267,7 +281,9 @@ void iniParser(String fileNameSelected, char *media, boolean verbose) {
       myConfig.longitude = atof(buffer);
       Serial.println(myConfig.longitude);
     } else {
-      Serial.print("Could not read 'longitude' from section 'geolocation', error was ");
+      Serial.print(
+        "Could not read 'longitude' from section 'geolocation', error "
+        "was ");
       printErrorMessage(ini.getError());
       iniLogMessage((char *)"Ini file parsing error.", 160, 50, verbose);
       return;
@@ -338,7 +354,7 @@ void backupLoad(String fileNameSelected, boolean verbose) {
 void iniLoader() {
   String tmpName;
 
-  char version[] = "Ini Loader V0.6";
+  char version[] = "Ini Loader V0.7";
 
   boolean click = false;
   boolean blink = false;
@@ -469,6 +485,10 @@ void iniLoader() {
       cursor = (cursor < 0) ? fileIndex - 1 : cursor;
       cursor = (cursor > fileIndex - 1) ? 0 : cursor;
 
+      if (start > cursor) {
+        start = cursor;
+      }
+
       stop = start + limit;
 
       if (stop > fileIndex) {
@@ -479,10 +499,12 @@ void iniLoader() {
         change = cursor;
         M5.Displays(display).setTextPadding(180);
 
-        Serial.printf("%d %d %d %d %d\n", start, stop, cursor, limit, fileIndex);
+        // Serial.printf("%d %d %d %d %d\n", start, stop, cursor, limit, fileIndex);
+        Serial.printf("%02d %02d %02d\n", start, stop, cursor);
 
         uint8_t i = 0;
         for (uint8_t j = start; j < stop; j++) {
+          M5.Displays(display).setTextPadding(180);
           M5.Displays(display).setTextColor(TFT_DARKGRAY, TFT_BLACK);
           pos = String(fileName[j]).indexOf('/');
           switch (pos) {
@@ -506,7 +528,9 @@ void iniLoader() {
               break;
           }
 
+          M5.Displays(display).setTextPadding(320);
           M5.Displays(display).drawString(tmpName, 160 + offsetX, 80 + offsetY + i * 20);
+          M5.Displays(display).setTextPadding(180);
           if (icon != iconOld) {
             iconOld = icon;
             M5.Displays(display).fillRect(4 + offsetX, 4 + offsetY, 64, 64, TFT_BLACK);
