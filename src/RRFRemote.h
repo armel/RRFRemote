@@ -12,7 +12,7 @@
 
 #define TIMEOUT_BIN_LOADER    3              // 3 sec
 #define TIMEOUT_MENU          10 * 1000      // 10 sec
-#define TIMEOUT_TOT_RRF       55 * 1000      // 55 sec
+#define TIMEOUT_TOT_RRF       115 * 1000     // 115 sec
 #define TIMEOUT_TOT_ELSEWHERE 285 * 1000     // 285 sec, 4min 45sec
 
 #define FASTLED_INTERNAL                     // To disable pragma messages on compile
