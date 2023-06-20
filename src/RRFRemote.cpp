@@ -35,13 +35,16 @@ void setup() {
 
   M5.begin(cfg);
 
+  //M5.Power.setUsbOutput(false);
+
   Serial.printf("On start %d\n", M5.getDisplayCount());
+  Serial.printf("%d %d %d\n", BOARD, WIDTH, HEIGHT);
 
   // Manage external buttons for atom only
-  if (atom == 1) {
-    pinMode(32, INPUT_PULLUP);
-    pinMode(26, INPUT_PULLUP);
-  }
+#if BOARD == ATOM
+  pinMode(32, INPUT_PULLUP);
+  pinMode(26, INPUT_PULLUP);
+#endif
 
   // Preferences
   preferences.begin(NAME);
@@ -76,6 +79,7 @@ void setup() {
   hdmiCurrent        = preferences.getUInt("hdmi", 0);
 
   // Init Display
+  Serial.printf("---> %d\n", M5.getDisplayCount());
   if (M5.getDisplayCount() == 1) {
     display = 0;
   } else {
@@ -90,11 +94,13 @@ void setup() {
   screensaver = millis();
 
   // Init Led
+#if BOARD == CORE
   if (M5.getBoard() == m5::board_t::board_M5Stack) {
     FastLED.addLeds<NEOPIXEL, 15>(leds, NUM_LEDS);  // GRB ordering is assumed
   } else if (M5.getBoard() == m5::board_t::board_M5StackCore2) {
     FastLED.addLeds<NEOPIXEL, 25>(leds, NUM_LEDS);  // GRB ordering is assumed
   }
+#endif
 
   // Bin Loader
   binLoader();
@@ -132,20 +138,24 @@ void setup() {
       delay(500);
       if (attempt % 2 == 0) {
         M5.Displays(display).drawString("Connexion en cours", 160 + offsetX, 70 + offsetY);
+#if BOARD == CORE
         for (uint8_t j = 0; j <= 4; j++) {
           leds[j]     = color;
           leds[9 - j] = color;
         }
         FastLED.setBrightness(16);
         FastLED.show();
+#endif
       } else {
         M5.Displays(display).drawString(" ", 160 + offsetX, 70 + offsetY);
+#if BOARD == CORE
         for (uint8_t j = 0; j <= 4; j++) {
           leds[j]     = CRGB::Black;
           leds[9 - j] = CRGB::Black;
         }
         FastLED.setBrightness(16);
         FastLED.show();
+#endif
       }
       attempt++;
       if (attempt > 10) {
@@ -199,6 +209,9 @@ void setup() {
 
   // Start server (for Web site Screen Capture)
   httpServer.begin();
+
+  // Clean settings
+  settings = cleanSettings();
 
   // Multitasking task for retreive rrf, spotnik and propag data
   xTaskCreatePinnedToCore(rrfdata,         // Function to implement the task

@@ -1,14 +1,26 @@
 // Copyright (c) F4HWN Armel. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-#define VERSION "3.3.5"
+#define VERSION "3.3.7"
 #define AUTHOR  "F4HWN"
 #define NAME    "RRFRemote"
 
 #define DEBUG  0
-#define ATOM   atom
-#define WIDTH  displayWidth
-#define HEIGHT displayHeight
+#define ATOM   1
+#define CORE   2
+#define CORES3 3
+
+#if not defined(BOARD)
+#define BOARD 2
+#endif
+
+#if not defined(WIDTH)
+#define WIDTH 320
+#endif
+
+#if not defined(HEIGHT)
+#define HEIGHT 240
+#endif
 
 #define TIMEOUT_BIN_LOADER    3              // 3 sec
 #define TIMEOUT_MENU          10 * 1000      // 10 sec
@@ -39,15 +51,23 @@
 #include <FS.h>
 #include "LittleFS.h"
 #include <ArduinoJson.h>
-#include <FastLED.h>
-#include <time.h>
 
-#if ATOM == 1
+// LED
+#if BOARD == CORE || BOARD == CORE2
+#include <FastLED.h>
+#define FASTLED_INTERNAL  // To disable pragma messages on compile
+#define NUM_LEDS 10
+CRGB leds[NUM_LEDS];
+#endif
+
+// Display
+#if BOARD == ATOM
 #include <M5AtomDisplay.h>
 #else
 #include <M5ModuleDisplay.h>
 #endif
 
+#include <time.h>
 #include <M5Unified.h>
 #include <M5StackUpdater.h>
 
@@ -70,11 +90,6 @@ uint16_t offsetY = 0;
 boolean buttonLeftPressed   = false;
 boolean buttonCenterPressed = false;
 boolean buttonRightPressed  = false;
-
-// LED
-#define FASTLED_INTERNAL  // To disable pragma messages on compile
-#define NUM_LEDS 10
-CRGB leds[NUM_LEDS];
 
 // Timezone
 const char *ntpServer   = "pool.ntp.org";
@@ -227,12 +242,17 @@ String message;
 int16_t pos = 0;
 
 // Bin Loader && Ini Loader
-#define NUMBER_OF_FILENAME 64
+#define NUMBER_OF_FILENAME 32
 #define MAX_FILENAME_SIZE  64
+
+long speedSD[]        = {40000000, 10000000};
+char speedDot[6]      = "";
+int8_t speedSDCurrent = -1;
 
 File root;
 char fileName[NUMBER_OF_FILENAME][MAX_FILENAME_SIZE];
-uint8_t fileIndex = 0;
+uint8_t fileIndex         = 0;
+uint8_t fileIndexLittleFS = 0;
 
 // Task Handle
 TaskHandle_t rrfdataHandle;
@@ -316,14 +336,18 @@ uint32_t screensaver;
 #define SPI_READ_FREQUENCY 40000000
 
 // Menu
-const char *menuSpotnikOn[]  = {(char *)"Config",      (char *)"Sysop",  (char *)"Perroquet",   (char *)"QSY",
+char *menuSpotnikOn[]  = {(char *)"Config",      (char *)"Sysop",  (char *)"Perroquet",   (char *)"QSY",
                                 (char *)"Follow",      (char *)"Raptor", (char *)"TOT",         (char *)"ISS",
                                 (char *)"Affichage",   (char *)"Themes", (char *)"Luminosite",  (char *)"Beep",
                                 (char *)"Screensaver", (char *)"HDMI",   (char *)"Addresse IP", (char *)"Eteindre",
                                 (char *)"Exit"};
-const char *menuSpotnikOff[] = {(char *)"Config", (char *)"TOT",         (char *)"ISS",      (char *)"Affichage",
+
+char *menuSpotnikOff[] = {(char *)"Config", (char *)"TOT",         (char *)"ISS",      (char *)"Affichage",
                                 (char *)"Themes", (char *)"Luminosite",  (char *)"Beep",     (char *)"Screensaver",
                                 (char *)"HDMI",   (char *)"Addresse IP", (char *)"Eteindre", (char *)"Exit"};
+
+int settingsLength;
+char **settings;
 
 const char *choiceSysop[]     = {"REBOOT", "IP", "SCAN RAPIDE", "LIBRE"};
 const char *choicePerroquet[] = {"OFF", "ON"};

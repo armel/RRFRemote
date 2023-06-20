@@ -675,6 +675,8 @@ void getScreenshot() {
                     httpClient.write_P(index_m5stack_html, sizeof(index_m5stack_html));
                   } else if (M5.getBoard() == m5::board_t::board_M5StackCore2) {
                     httpClient.write_P(index_core2_html, sizeof(index_core2_html));
+                  } else if (M5.getBoard() == m5::board_t::board_M5StackCoreS3) {
+                    httpClient.write_P(index_coreS3_html, sizeof(index_coreS3_html));
                   }
                   break;
                 }
@@ -772,6 +774,7 @@ void ledAlert(bool type) {
   boolean qrzDetected = false;
   uint8_t i, j;
 
+#if BOARD == CORE
   if (type) {
     for (i = 0; i < sizeof(qrz) / sizeof(qrz[0]); i += 2) {
       if (strstr(indicatifString.c_str(), qrz[i]) != NULL) {
@@ -806,4 +809,44 @@ void ledAlert(bool type) {
     FastLED.setBrightness(16);
     FastLED.show();
   }
+#endif
+}
+
+// Clean some options settings
+char **cleanSettings() {
+  int j      = 0;
+  int k      = 0;
+  char **tmp;
+
+  if ((String)config[(configCurrent * 6) + 5] != "") {
+    int size   = sizeof(menuSpotnikOn) / sizeof(menuSpotnikOn[0]);
+    tmp = (char **)malloc((size - 1) * sizeof(char *));
+
+    for (int i = 0; i < size; i++) {
+      if (strcmp(menuSpotnikOn[i], "HDMI") == 0 && M5.getDisplayCount() == 1)
+        continue;
+      else {
+        tmp[j++] = menuSpotnikOn[i];
+        k++;
+      }
+    }
+  }
+  else
+  {
+    int size   = sizeof(menuSpotnikOff) / sizeof(menuSpotnikOff[0]);
+    tmp = (char **)malloc((size - 1) * sizeof(char *));
+
+    for (int i = 0; i < size; i++) {
+      if (strcmp(menuSpotnikOff[i], "HDMI") == 0 && M5.getDisplayCount() == 1)
+        continue;
+      else {
+        tmp[j++] = menuSpotnikOff[i];
+        k++;
+      }
+    }
+  }  
+
+  settingsLength = k;
+
+  return tmp;
 }

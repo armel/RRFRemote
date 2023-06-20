@@ -12,26 +12,46 @@ struct Button {
   int y;           // y
   int w;           // width
   int h;           // height
+  int d;           // distance
   boolean active;  // active, if true, check this button, else bypass
   boolean read;    // read, if true, button is push, else false
 };
 
+#if BOARD == CORES3
 Button myBtn[] = {
-  {"myBtnA", 0, 200, 100, 80, true, false},
-  {"myBtnB", 110, 200, 100, 80, true, false},
-  {"myBtnC", 220, 200, 100, 80, true, false},
-  {"myBtnD", 0, 0, 320, 80, true, false},
+  {"myBtnA", 0, 160, 100, 80, 1000, true, false},
+  {"myBtnB", 110, 160, 100, 80, 1000, true, false},
+  {"myBtnC", 220, 160, 100, 80, 1000, true, false},
+  {"myBtnD", 0, 0, 320, 80, 1000, true, false},
 
-  {"myBtnDTMF1", 10 + (110 * 0), 109 + (48 * 0), 80, 30, false, false},
-  {"myBtnDTMF2", 10 + (110 * 1), 109 + (48 * 0), 80, 30, false, false},
-  {"myBtnDTMF3", 10 + (110 * 2), 109 + (48 * 0), 80, 30, false, false},
-  {"myBtnDTMF4", 10 + (110 * 0), 109 + (48 * 1), 80, 30, false, false},
-  {"myBtnDTMF5", 10 + (110 * 1), 109 + (48 * 1), 80, 30, false, false},
-  {"myBtnDTMF6", 10 + (110 * 2), 109 + (48 * 1), 80, 30, false, false},
-  {"myBtnDTMF7", 10 + (110 * 0), 109 + (48 * 2), 80, 30, false, false},
-  {"myBtnDTMF8", 10 + (110 * 1), 109 + (48 * 2), 80, 30, false, false},
-  {"myBtnDTMF9", 10 + (110 * 2), 109 + (48 * 2), 80, 30, false, false},
+  {"myBtnDTMF1", 10 + (110 * 0), 109 + (48 * 0), 80, 30, 1000, false, false},
+  {"myBtnDTMF2", 10 + (110 * 1), 109 + (48 * 0), 80, 30, 1000, false, false},
+  {"myBtnDTMF3", 10 + (110 * 2), 109 + (48 * 0), 80, 30, 1000, false, false},
+  {"myBtnDTMF4", 10 + (110 * 0), 109 + (48 * 1), 80, 30, 1000, false, false},
+  {"myBtnDTMF5", 10 + (110 * 1), 109 + (48 * 1), 80, 30, 1000, false, false},
+  {"myBtnDTMF6", 10 + (110 * 2), 109 + (48 * 1), 80, 30, 1000, false, false},
+  {"myBtnDTMF7", 10 + (110 * 0), 109 + (48 * 2), 80, 30, 1000, false, false},
+  {"myBtnDTMF8", 10 + (110 * 1), 109 + (48 * 2), 80, 30, 1000, false, false},
+  {"myBtnDTMF9", 10 + (110 * 2), 109 + (48 * 2), 80, 30, 1000, false, false},
 };
+#else
+Button myBtn[] = {
+  {"myBtnA", 0, 240, 100, 80, 1000, true, false},
+  {"myBtnB", 110, 240, 100, 80, 1000, true, false},
+  {"myBtnC", 220, 240, 100, 80, 1000, true, false},
+  {"myBtnD", 0, 0, 320, 80, 1000, true, false},
+
+  {"myBtnDTMF1", 10 + (110 * 0), 109 + (48 * 0), 80, 30, 1000, false, false},
+  {"myBtnDTMF2", 10 + (110 * 1), 109 + (48 * 0), 80, 30, 1000, false, false},
+  {"myBtnDTMF3", 10 + (110 * 2), 109 + (48 * 0), 80, 30, 1000, false, false},
+  {"myBtnDTMF4", 10 + (110 * 0), 109 + (48 * 1), 80, 30, 1000, false, false},
+  {"myBtnDTMF5", 10 + (110 * 1), 109 + (48 * 1), 80, 30, 1000, false, false},
+  {"myBtnDTMF6", 10 + (110 * 2), 109 + (48 * 1), 80, 30, 1000, false, false},
+  {"myBtnDTMF7", 10 + (110 * 0), 109 + (48 * 2), 80, 30, 1000, false, false},
+  {"myBtnDTMF8", 10 + (110 * 1), 109 + (48 * 2), 80, 30, 1000, false, false},
+  {"myBtnDTMF9", 10 + (110 * 2), 109 + (48 * 2), 80, 30, 1000, false, false},
+};
+#endif
 
 uint8_t limit = sizeof myBtn / sizeof myBtn[0];
 
@@ -69,7 +89,7 @@ void getButton(uint8_t modeCurrent = 1, uint8_t menuMode = 0) {
       btnA = 1;
     else if (digitalRead(26) == 0)
       btnC = 1;
-  } else if (M5.getBoard() == m5::board_t::board_M5StackCore2) {
+  } else if (M5.getBoard() == m5::board_t::board_M5StackCore2 || M5.getBoard() == m5::board_t::board_M5StackCoreS3) {
     if (menuMode == 0) {
       myBtn[3].active = true;  // active bntD
       if (modeChange != modeCurrent) {
@@ -77,34 +97,51 @@ void getButton(uint8_t modeCurrent = 1, uint8_t menuMode = 0) {
 
         if (modeChange != 2) {
           Serial.println("A");
-          for (uint8_t i = 0; i < 3; i++) myBtn[i].active = true;       // active btnA, btnB, btnC
+          for (uint8_t i = 0; i < 4; i++) myBtn[i].active = true;       // active btnA, btnB, btnC
           for (uint8_t i = 4; i < limit; i++) myBtn[i].active = false;  // inactive others
         } else {
           Serial.println("B");
-          for (uint8_t i = 0; i < 3; i++) myBtn[i].active = false;     // active btnA, btnB, btnC
+          for (uint8_t i = 0; i < 4; i++) myBtn[i].active = false;     // inactive btnA, btnB, btnC
           for (uint8_t i = 4; i < limit; i++) myBtn[i].active = true;  // inactive others
         }
       }
     } else {
-      for (uint8_t i = 0; i < 3; i++) myBtn[i].active = true;       // active btnA, btnB, btnC
-      for (uint8_t i = 3; i < limit; i++) myBtn[i].active = false;  // inactive others
+      Serial.println("Normal");
+      for (uint8_t i = 0; i < 4; i++) myBtn[i].active = true;       // active btnA, btnB, btnC
+      for (uint8_t i = 4; i < limit; i++) myBtn[i].active = false;  // inactive others
     }
 
     M5.update();
 
-    auto t        = M5.Touch.getDetail();
+    auto t = M5.Touch.getDetail();
+    auto c = M5.Touch.getCount();
+
     uint8_t limit = sizeof myBtn / sizeof myBtn[0];
 
-    for (uint8_t i = 0; i < limit; i++) {
-      myBtn[i].read = false;
+    int distanceBtn     = 0;
+    int distanceMin     = 1000;
+    int distanceCurrent = 1000;
 
-      if (t.state == 1 || t.state == 5 || t.state == 9 || t.state == 13) {
-        if (myBtn[i].active == true && (t.x >= myBtn[i].x) && (t.x <= (myBtn[i].x + myBtn[i].w)) &&
-            (t.y >= myBtn[i].y) && (t.y <= (myBtn[i].y + myBtn[i].h))) {
-          myBtn[i].read = true;
+    if (c == 1) {
+      for (uint8_t i = 0; i < limit; i++) {
+        myBtn[i].read = false;
+        if (myBtn[i].active == true) {
+          distanceCurrent =
+            (int)(sqrt(pow(t.x - (myBtn[i].x + (myBtn[i].w / 2)), 2) + pow(t.y - (myBtn[i].y + (myBtn[i].h / 2)), 2)));
+          myBtn[i].d = distanceCurrent;
+          if (distanceCurrent < distanceMin) {
+            distanceMin = distanceCurrent;
+            distanceBtn = i;
+          }
         }
       }
+
+      if (t.state == 1 || t.state == 3 || t.state == 5) {
+        myBtn[distanceBtn].read = true;
+      }
     }
+
+    //Serial.printf("%d %d %d %d %d %d\n", c, t.state, t.x, t.y, distanceBtn, distanceCurrent);
 
     btnA = myBtn[0].read;
     btnB = myBtn[1].read;
@@ -122,13 +159,15 @@ void getButton(uint8_t modeCurrent = 1, uint8_t menuMode = 0) {
     btnDTMF9 = myBtn[12].read;
   }
 
-  // Serial.printf("%d %d %d %d\n", btnA, btnB, btnC, digitalRead(32));
+  // Serial.printf("A%d B%d C%d D%d / DTMF 1%d 2%d 3%d 4%d 5%d 6%d 7%d 8%d 9%d\n", btnA, btnB, btnC, btnD, btnDTMF1,
+  // btnDTMF2, btnDTMF3, btnDTMF4, btnDTMF5, btnDTMF6, btnDTMF7, btnDTMF8, btnDTMF9);
 
   M5.Speaker.setVolume(beepCurrent);
 
   // Play sound
   if (btnA || btnC) {
     M5.Speaker.tone(1000, 50);
+    vTaskDelay(pdMS_TO_TICKS(20));
   } else if (btnD) {
     M5.Speaker.tone(1000, 50);
     vTaskDelay(pdMS_TO_TICKS(100));

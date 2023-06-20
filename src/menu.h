@@ -39,32 +39,35 @@ void viewOption(int8_t settingsChoice, boolean settingsSelect, uint16_t x, uint1
     start = 0;
   }
 
-  stop = start + 7;
+  if (settingsLength < 7)  // If remove certains option from cleanSettings()
+    stop = start + settingsLength;
+  else
+    stop = start + 7;
 
   j = 0;
   for (i = start; i < stop; i++) {
-    Serial.printf("%d %d %d %d %d %s\n", i, j, start, stop, settingsChoice, settingsMenu[i]);
+    Serial.printf("%d %d %d %d %d %s\n", i, j, start, stop, settingsChoice, settings[i]);
     if (settingsSelect == false) {
       if (settingsChoice == i) {
         M5.Displays(display).setTextColor(TFT_MENU_SELECT, TFT_FRONT);
-        M5.Displays(display).drawString(settingsMenu[i], 160 + offsetX, 45 + y + (j * 18));
+        M5.Displays(display).drawString(settings[i], 160 + offsetX, 45 + y + (j * 18));
         if (j0 > 0) M5.Displays(display).drawFastHLine(x + 1, 45 + y + (j * 18) - 9, w - 2, TFT_MENU_SELECT);
         if (j < 6) M5.Displays(display).drawFastHLine(x + 1, 45 + y + (j * 18) + 8, w - 2, TFT_MENU_SELECT);
       } else {
         M5.Displays(display).setTextColor(TFT_MENU_SELECT, TFT_BACK);
-        M5.Displays(display).drawString(settingsMenu[i], 160 + offsetX, 45 + y + (j * 18));
+        M5.Displays(display).drawString(settings[i], 160 + offsetX, 45 + y + (j * 18));
         if (j > 0) M5.Displays(display).drawFastHLine(x + 1, 45 + y + (j * 18) - 9, w - 2, TFT_BACK);
         if (j < 6) M5.Displays(display).drawFastHLine(x + 1, 45 + y + (j * 18) + 8, w - 2, TFT_BACK);
       }
     } else {
       if (settingsChoice == i) {
         M5.Displays(display).setTextColor(TFT_MENU_SELECT, TFT_FRONT);
-        M5.Displays(display).drawString(settingsMenu[i], 160 + offsetX, 45 + y + (j * 18));
+        M5.Displays(display).drawString(settings[i], 160 + offsetX, 45 + y + (j * 18));
         if (j > 0) M5.Displays(display).drawFastHLine(x + 1, 45 + y + (j * 18) - 9, w - 2, TFT_MENU_SELECT);
         if (j < 6) M5.Displays(display).drawFastHLine(x + 1, 45 + y + (j * 18) + 8, w - 2, TFT_MENU_SELECT);
       } else {
         M5.Displays(display).setTextColor(TFT_FRONT, TFT_BACK);
-        M5.Displays(display).drawString(settingsMenu[i], 160 + offsetX, 45 + y + (j * 18));
+        M5.Displays(display).drawString(settings[i], 160 + offsetX, 45 + y + (j * 18));
         if (j > 0) M5.Displays(display).drawFastHLine(x + 1, 45 + y + (j * 18) - 9, w - 2, TFT_BACK);
         if (j < 6) M5.Displays(display).drawFastHLine(x + 1, 45 + y + (j * 18) + 8, w - 2, TFT_BACK);
       }

@@ -314,7 +314,7 @@ void binLoader() {
 
   String tmpName;
 
-  char version[] = "Bin Loader V0.7";
+  char version[] = "Bin Loader V0.8";
 
   boolean click = false;
   boolean blink = false;
@@ -357,11 +357,47 @@ void binLoader() {
   root = LittleFS.open("/");
   getFileList(root, (char*)"LittleFS", (char*)".gz");
 
-  if (SD.begin(GPIO_NUM_4, SPI, 25000000)) {
-    root = SD.open("/");
-    getFileList(root, (char*)"SD", (char*)".bin");
-    root = SD.open("/");
-    getFileList(root, (char*)"SD", (char*)".gz");
+  fileIndexLittleFS = fileIndex;
+
+  size_t n = sizeof(speedSD)/sizeof(speedSD[0]);
+
+  if(speedSDCurrent == -1)
+  {
+    M5.Displays(display).fillScreen(TFT_BLACK);
+    M5.Displays(display).setFont(&tahoma8pt7b);
+    M5.Displays(display).setTextColor(TFT_DARKGRAY, TFT_BLACK);
+    M5.Displays(display).setTextDatum(CC_DATUM);
+    M5.Displays(display).setTextPadding(320);
+
+    for(uint8_t s = 0; s < n; s++)
+    {
+      Serial.printf("Test %lu Mhz\n", speedSD[s] / 1000000);
+      if (SD.begin(GPIO_NUM_4, SPI, speedSD[s])) {
+        root = SD.open("/");
+        getFileList(root, (char*)"SD", (char*)".bin");
+        root = SD.open("/");
+        getFileList(root, (char*)"SD", (char*)".gz");
+      }
+      Serial.printf("File index %d\n", fileIndex);
+      if(fileIndex > fileIndexLittleFS)
+      {
+        speedSDCurrent = s;
+        break;
+      }
+      //sprintf(speedDot, "%.*s", s + 1, ".....");
+      //M5.Displays(display).drawString(speedDot, 160 + offsetX, 20 + offsetY);
+      SD.end();
+      //delay(100);
+    }
+  }
+  else {
+    Serial.printf("SD ready at %lu Mhz\n", speedSD[speedSDCurrent] / 1000000);
+    if (SD.begin(GPIO_NUM_4, SPI, speedSD[speedSDCurrent])) {
+      root = SD.open("/");
+      getFileList(root, (char*)"SD", (char*)".bin");
+      root = SD.open("/");
+      getFileList(root, (char*)"SD", (char*)".gz");
+    }
   }
 
   if (fileIndex != 0) {
@@ -372,6 +408,8 @@ void binLoader() {
     M5.Displays(display).setTextDatum(CC_DATUM);
     M5.Displays(display).setTextPadding(320);
     M5.Displays(display).drawString(version, 160 + offsetX, 20 + offsetY);
+    //M5.Displays(display).drawString(String(NAME) + " V" + String(VERSION), 160 + offsetX, 100 + offsetY);
+    //M5.Displays(display).drawString("Developed by " + String(AUTHOR), 160 + offsetX, 120 + offsetY);
     M5.Displays(display).drawRect(20 + offsetX, 28 + offsetY, 280, 10, TFT_DARKGRAY);
 
     for (uint16_t i = 0; i < TIMEOUT_BIN_LOADER * 10; i++) {

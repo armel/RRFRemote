@@ -318,8 +318,10 @@ void button(void *pvParameters) {
             settingsChoice++;
           }
 
+          /*
           uint8_t stop = menuSize;
           stop--;
+          */
 
           // If settings from SD
           /*
@@ -328,6 +330,8 @@ void button(void *pvParameters) {
             stop--;
           }
           */
+
+          size_t stop = settingsLength - 1;
 
           settingsChoice = (settingsChoice < 0) ? stop : settingsChoice;
           settingsChoice = (settingsChoice > stop) ? 0 : settingsChoice;
@@ -339,7 +343,7 @@ void button(void *pvParameters) {
           settingsSelect = true;
           viewOption(settingsChoice, settingsSelect, x, y, w);
 
-          String settingsString = String(settingsMenu[settingsChoice]);
+          String settingsString = String(settings[settingsChoice]);
 
           if (settingsString == "Config")
             change = configCurrent;
@@ -397,7 +401,7 @@ void button(void *pvParameters) {
       }
       // Manage settings
       else if (settingsSelect == true) {
-        String settingsString = String(settingsMenu[settingsChoice]);
+        String settingsString = String(settings[settingsChoice]);
 
         M5.Displays(display).setTextDatum(CC_DATUM);
         M5.Displays(display).setFont(&YELLOWCRE8pt7b);
@@ -431,6 +435,9 @@ void button(void *pvParameters) {
               }
 
               // Create menu
+              settings = cleanSettings();
+
+              /*
               if ((String)config[(configCurrent * 6) + 5] != "") {
                 menuSize     = sizeof(menuSpotnikOn);
                 settingsMenu = (char **)malloc(menuSize);
@@ -445,6 +452,7 @@ void button(void *pvParameters) {
                 followCurrent = (followCurrent == 1) ? 0 : 0;
                 preferences.putUInt("follow", followCurrent);
               }
+              */
             }
             reset   = 0;
             refresh = 0;
@@ -683,7 +691,6 @@ void button(void *pvParameters) {
         // HDMI
         if (settingsString == "HDMI") {
           M5.Displays(display).drawString(String(choiceHDMI[change]), 160 + offsetX, h - 6 + offsetY);
-
           if (btnA || btnC) {
             if (btnA) {
               change += left;
