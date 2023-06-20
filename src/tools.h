@@ -96,17 +96,17 @@ void getButton(uint8_t modeCurrent = 1, uint8_t menuMode = 0) {
         modeChange = modeCurrent;
 
         if (modeChange != 2) {
-          Serial.println("A");
+          //Serial.println("A");
           for (uint8_t i = 0; i < 4; i++) myBtn[i].active = true;       // active btnA, btnB, btnC
           for (uint8_t i = 4; i < limit; i++) myBtn[i].active = false;  // inactive others
         } else {
-          Serial.println("B");
+          //Serial.println("B");
           for (uint8_t i = 0; i < 4; i++) myBtn[i].active = false;     // inactive btnA, btnB, btnC
           for (uint8_t i = 4; i < limit; i++) myBtn[i].active = true;  // inactive others
         }
       }
     } else {
-      Serial.println("Normal");
+      //Serial.println("Normal");
       for (uint8_t i = 0; i < 4; i++) myBtn[i].active = true;       // active btnA, btnB, btnC
       for (uint8_t i = 4; i < limit; i++) myBtn[i].active = false;  // inactive others
     }
@@ -175,5 +175,8 @@ void getButton(uint8_t modeCurrent = 1, uint8_t menuMode = 0) {
              btnDTMF9) {
     M5.Speaker.tone(2000, 50);
     vTaskDelay(pdMS_TO_TICKS(100));
+  }
+  else {
+    vTaskDelay(pdMS_TO_TICKS(20));
   }
 }
