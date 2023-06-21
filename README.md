@@ -3,7 +3,7 @@
 ![grey](https://img.shields.io/badge/M5Stack-GREY-blue)
 ![fire](https://img.shields.io/badge/M5Stack-FIRE-red)
 ![core2](https://img.shields.io/badge/M5Stack-CORE2-green)
-![coreS3](https://img.shields.io/badge/M5Stack-CORES3-grey)
+![coreS3](https://img.shields.io/badge/M5Stack-CORES3-purple)
 ![aws](https://img.shields.io/badge/M5Stack-AWS-orange)
 
 ![ATOM Lite](https://img.shields.io/badge/M5Stack-ATOM%20Lite-darkgrey)
