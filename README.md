@@ -1,9 +1,9 @@
 # RRFRemote
-![basic](https://img.shields.io/badge/M5Stack-BASIC-blue)
-![grey](https://img.shields.io/badge/M5Stack-GREY-blue)
+![basic](https://img.shields.io/badge/M5Stack-BASIC-black)
+![grey](https://img.shields.io/badge/M5Stack-GREY-lightgrey)
 ![fire](https://img.shields.io/badge/M5Stack-FIRE-red)
-![core2](https://img.shields.io/badge/M5Stack-CORE2-green)
-![coreS3](https://img.shields.io/badge/M5Stack-CORES3-purple)
+![core2](https://img.shields.io/badge/M5Stack-CORE2-white)
+![coreS3](https://img.shields.io/badge/M5Stack-CORES3-darkgrey)
 ![aws](https://img.shields.io/badge/M5Stack-AWS-orange)
 
 ![ATOM Lite](https://img.shields.io/badge/M5Stack-ATOM%20Lite-darkgrey)
