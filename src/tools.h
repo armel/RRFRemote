@@ -74,22 +74,9 @@ bool isCharging() {
 void getButton(uint8_t modeCurrent = 1, uint8_t menuMode = 0) {
   static uint8_t modeChange = 10;
 
-  if (M5.getBoard() == m5::board_t::board_M5Stack) {
-    M5.update();
-
-    btnHDMI = M5.BtnB.pressedFor(500);
-
-    btnA = M5.BtnA.wasReleased();
-    btnB = M5.BtnB.wasReleased();
-    btnC = M5.BtnC.wasReleased();
-
-    if(btnHDMI == 1) btnB = 0;
-
-    //Serial.printf("btnA %d btnB %d btnHDMI %d btnC %d\n", btnA, btnB, btnHDMI, btnC);
-
-  } else if (M5.getBoard() == m5::board_t::board_M5ATOM || M5.getBoard() == m5::board_t::board_M5AtomPsram ||
+  // M5Stack Atom
+  if (M5.getBoard() == m5::board_t::board_M5ATOM || M5.getBoard() == m5::board_t::board_M5AtomPsram ||
       M5.getBoard() == m5::board_t::board_M5AtomU) {
-
     M5.update();
     btnB = M5.BtnA.isPressed();
     btnA = 0;
@@ -98,31 +85,54 @@ void getButton(uint8_t modeCurrent = 1, uint8_t menuMode = 0) {
       btnA = 1;
     else if (digitalRead(26) == 0)
       btnC = 1;
-  } else if (M5.getBoard() == m5::board_t::board_M5StackCore2 || M5.getBoard() == m5::board_t::board_M5StackCoreS3) {
+  }
+  // M5Stack Core
+  else if (M5.getBoard() == m5::board_t::board_M5Stack) {
+    M5.update();
+
+    if (escapeHDMI) {
+      btnHDMI = M5.BtnB.pressedFor(500);
+
+      btnA = M5.BtnA.wasReleased();
+      btnB = M5.BtnB.wasReleased();
+      btnC = M5.BtnC.wasReleased();
+
+      if (btnHDMI == 1) btnB = 0;
+    } else {
+      btnA = M5.BtnA.isPressed();
+      btnB = M5.BtnB.isPressed();
+      btnC = M5.BtnC.isPressed();
+    }
+    //Serial.printf("btnA %d btnB %d btnC %d btnHDMI %d\n", btnA, btnB, btnC, btnHDMI);
+  }
+  // M5Stack Core2 and CoreS3
+  else if (M5.getBoard() == m5::board_t::board_M5StackCore2 || M5.getBoard() == m5::board_t::board_M5StackCoreS3) {
     if (menuMode == 0) {
       myBtn[3].active = true;  // active bntD
       if (modeChange != modeCurrent) {
         modeChange = modeCurrent;
 
         if (modeChange != 2) {
-          //Serial.println("A");
+          // Serial.println("A");
           for (uint8_t i = 0; i < 4; i++) myBtn[i].active = true;       // active btnA, btnB, btnC
           for (uint8_t i = 4; i < limit; i++) myBtn[i].active = false;  // inactive others
         } else {
-          //Serial.println("B");
+          // Serial.println("B");
           for (uint8_t i = 0; i < 4; i++) myBtn[i].active = false;     // inactive btnA, btnB, btnC
           for (uint8_t i = 4; i < limit; i++) myBtn[i].active = true;  // inactive others
         }
       }
     } else {
-      //Serial.println("Normal");
+      // Serial.println("Normal");
       for (uint8_t i = 0; i < 4; i++) myBtn[i].active = true;       // active btnA, btnB, btnC
       for (uint8_t i = 4; i < limit; i++) myBtn[i].active = false;  // inactive others
     }
 
     M5.update();
 
-    btnHDMI = M5.BtnPWR.wasClicked();
+    if (escapeHDMI) {
+      btnHDMI = M5.BtnPWR.wasClicked();
+    }
 
     auto t = M5.Touch.getDetail();
     auto c = M5.Touch.getCount();
@@ -152,7 +162,7 @@ void getButton(uint8_t modeCurrent = 1, uint8_t menuMode = 0) {
       }
     }
 
-    //Serial.printf("%d %d %d %d %d %d\n", c, t.state, t.x, t.y, distanceBtn, distanceCurrent);
+    // Serial.printf("%d %d %d %d %d %d\n", c, t.state, t.x, t.y, distanceBtn, distanceCurrent);
 
     btnA = myBtn[0].read;
     btnB = myBtn[1].read;
@@ -169,9 +179,8 @@ void getButton(uint8_t modeCurrent = 1, uint8_t menuMode = 0) {
     btnDTMF8 = myBtn[11].read;
     btnDTMF9 = myBtn[12].read;
 
-    if(btnHDMI == 1) btnB = 0;
-
-    //Serial.printf("btnA %d btnB %d btnHDMI %d btnC %d\n", btnA, btnB, btnHDMI, btnC);
+    if (escapeHDMI && btnHDMI == 1) btnB = 0;
+    // Serial.printf("btnA %d btnB %d btnC %d btnHDMI %d\n", btnA, btnB, btnC, btnHDMI);
   }
 
   // Serial.printf("A%d B%d C%d D%d / DTMF 1%d 2%d 3%d 4%d 5%d 6%d 7%d 8%d 9%d\n", btnA, btnB, btnC, btnD, btnDTMF1,
@@ -190,8 +199,10 @@ void getButton(uint8_t modeCurrent = 1, uint8_t menuMode = 0) {
              btnDTMF9) {
     M5.Speaker.tone(2000, 50);
     vTaskDelay(pdMS_TO_TICKS(100));
-  }
-  else {
+  } else if (btnHDMI) {
+    M5.Speaker.tone(3000, 50);
+    vTaskDelay(pdMS_TO_TICKS(100));
+  } else {
     vTaskDelay(pdMS_TO_TICKS(20));
   }
 }

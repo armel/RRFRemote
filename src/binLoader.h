@@ -422,6 +422,10 @@ void binLoader() {
         }
       }
 
+      if (M5.getDisplayCount() > 1) {
+        escapeHDMI = true;
+      }
+      
       getButton();
 
       if (M5.getDisplayCount() > 1) {
@@ -478,6 +482,8 @@ void binLoader() {
       vTaskDelay(100);
     }
   }
+
+  escapeHDMI = false;
 
   while (click == true) {
     while (btnB != 0) {

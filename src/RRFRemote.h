@@ -249,6 +249,8 @@ long speedSD[]        = {40000000, 10000000};
 char speedDot[6]      = "";
 int8_t speedSDCurrent = -1;
 
+boolean escapeHDMI = false;
+
 File root;
 char fileName[NUMBER_OF_FILENAME][MAX_FILENAME_SIZE];
 uint8_t fileIndex         = 0;
