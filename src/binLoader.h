@@ -359,18 +359,16 @@ void binLoader() {
 
   fileIndexLittleFS = fileIndex;
 
-  size_t n = sizeof(speedSD)/sizeof(speedSD[0]);
+  size_t n = sizeof(speedSD) / sizeof(speedSD[0]);
 
-  if(speedSDCurrent == -1)
-  {
+  if (speedSDCurrent == -1) {
     M5.Displays(display).fillScreen(TFT_BLACK);
     M5.Displays(display).setFont(&tahoma8pt7b);
     M5.Displays(display).setTextColor(TFT_DARKGRAY, TFT_BLACK);
     M5.Displays(display).setTextDatum(CC_DATUM);
     M5.Displays(display).setTextPadding(320);
 
-    for(uint8_t s = 0; s < n; s++)
-    {
+    for (uint8_t s = 0; s < n; s++) {
       Serial.printf("Test %lu Mhz\n", speedSD[s] / 1000000);
       if (SD.begin(GPIO_NUM_4, SPI, speedSD[s])) {
         root = SD.open("/");
@@ -379,18 +377,16 @@ void binLoader() {
         getFileList(root, (char*)"SD", (char*)".gz");
       }
       Serial.printf("File index %d\n", fileIndex);
-      if(fileIndex > fileIndexLittleFS)
-      {
+      if (fileIndex > fileIndexLittleFS) {
         speedSDCurrent = s;
         break;
       }
-      //sprintf(speedDot, "%.*s", s + 1, ".....");
-      //M5.Displays(display).drawString(speedDot, 160 + offsetX, 20 + offsetY);
+      // sprintf(speedDot, "%.*s", s + 1, ".....");
+      // M5.Displays(display).drawString(speedDot, 160 + offsetX, 20 + offsetY);
       SD.end();
-      //delay(100);
+      // delay(100);
     }
-  }
-  else {
+  } else {
     Serial.printf("SD ready at %lu Mhz\n", speedSD[speedSDCurrent] / 1000000);
     if (SD.begin(GPIO_NUM_4, SPI, speedSD[speedSDCurrent])) {
       root = SD.open("/");
@@ -408,8 +404,8 @@ void binLoader() {
     M5.Displays(display).setTextDatum(CC_DATUM);
     M5.Displays(display).setTextPadding(320);
     M5.Displays(display).drawString(version, 160 + offsetX, 20 + offsetY);
-    //M5.Displays(display).drawString(String(NAME) + " V" + String(VERSION), 160 + offsetX, 100 + offsetY);
-    //M5.Displays(display).drawString("Developed by " + String(AUTHOR), 160 + offsetX, 120 + offsetY);
+    // M5.Displays(display).drawString(String(NAME) + " V" + String(VERSION), 160 + offsetX, 100 + offsetY);
+    // M5.Displays(display).drawString("Developed by " + String(AUTHOR), 160 + offsetX, 120 + offsetY);
     M5.Displays(display).drawRect(20 + offsetX, 28 + offsetY, 280, 10, TFT_DARKGRAY);
 
     for (uint16_t i = 0; i < TIMEOUT_BIN_LOADER * 10; i++) {
@@ -426,28 +422,18 @@ void binLoader() {
         }
       }
 
+      getButton();
+
       if (M5.getDisplayCount() > 1) {
-        // getButtonBinLoaderStartup();
-        // Serial.printf("%d %d %d %d\n", btnA, btnB, btnC, btnE);
-
-        M5.update();
-        btnA = M5.BtnA.wasReleased();
-        btnB = M5.BtnB.wasReleased();
-        btnC = M5.BtnC.wasReleased();
-
-        btnBLong = M5.BtnB.pressedFor(500);
-
         M5.Displays(display).drawPng(hdmiplug, sizeof(hdmiplug), 128 + offsetX, 88 + offsetY, 64, 64);
 
-        if (btnBLong)          // Escape HDMI
+        if (btnHDMI)           // Escape HDMI
         {
           display = !display;  // Logical operator
           preferences.putUInt("hdmi", display);
           M5.setPrimaryDisplay(display);
           ESP.restart();
         }
-      } else {
-        getButton();
       }
 
       // Continue
@@ -457,10 +443,19 @@ void binLoader() {
         if (blink == false) {
           M5.Displays(display).drawString("Short press middle button to enter", 160 + offsetX, 50 + offsetY);
           if (M5.getDisplayCount() > 1) {
-            if (display == 1) {
-              M5.Displays(display).drawString("Long press middle button to exit HDMI", 160 + offsetX, 70 + offsetY);
-            } else {
-              M5.Displays(display).drawString("Long press middle button to enter HDMI", 160 + offsetX, 70 + offsetY);
+            if (M5.getBoard() == m5::board_t::board_M5Stack) {
+              if (display == 1) {
+                M5.Displays(display).drawString("Long press middle button to exit HDMI", 160 + offsetX, 70 + offsetY);
+              } else {
+                M5.Displays(display).drawString("Long press middle button to enter HDMI", 160 + offsetX, 70 + offsetY);
+              }
+            } else if (M5.getBoard() == m5::board_t::board_M5StackCore2 ||
+                       M5.getBoard() == m5::board_t::board_M5StackCoreS3) {
+              if (display == 1) {
+                M5.Displays(display).drawString("Short press Power button to exit HDMI", 160 + offsetX, 70 + offsetY);
+              } else {
+                M5.Displays(display).drawString("Short press Power button to enter HDMI", 160 + offsetX, 70 + offsetY);
+              }
             }
           }
           blink = true;

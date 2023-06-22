@@ -1,7 +1,7 @@
 // Copyright (c) F4HWN Armel. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-uint8_t btnA, btnB, btnC, btnD, btnBLong = 0;
+uint8_t btnA, btnB, btnC, btnD, btnHDMI;
 uint8_t btnDTMF1, btnDTMF2, btnDTMF3 = 0;
 uint8_t btnDTMF4, btnDTMF5, btnDTMF6 = 0;
 uint8_t btnDTMF7, btnDTMF8, btnDTMF9 = 0;
@@ -77,9 +77,16 @@ void getButton(uint8_t modeCurrent = 1, uint8_t menuMode = 0) {
   if (M5.getBoard() == m5::board_t::board_M5Stack) {
     M5.update();
 
-    btnA = M5.BtnA.isPressed();
-    btnB = M5.BtnB.isPressed();
-    btnC = M5.BtnC.isPressed();
+    btnHDMI = M5.BtnB.pressedFor(500);
+
+    btnA = M5.BtnA.wasReleased();
+    btnB = M5.BtnB.wasReleased();
+    btnC = M5.BtnC.wasReleased();
+
+    if(btnHDMI == 1) btnB = 0;
+
+    //Serial.printf("btnA %d btnB %d btnHDMI %d btnC %d\n", btnA, btnB, btnHDMI, btnC);
+
   } else if (M5.getBoard() == m5::board_t::board_M5ATOM) {
     M5.update();
     btnB = M5.BtnA.isPressed();
@@ -112,6 +119,8 @@ void getButton(uint8_t modeCurrent = 1, uint8_t menuMode = 0) {
     }
 
     M5.update();
+
+    btnHDMI = M5.BtnPWR.wasClicked();
 
     auto t = M5.Touch.getDetail();
     auto c = M5.Touch.getCount();
@@ -157,6 +166,10 @@ void getButton(uint8_t modeCurrent = 1, uint8_t menuMode = 0) {
     btnDTMF7 = myBtn[10].read;
     btnDTMF8 = myBtn[11].read;
     btnDTMF9 = myBtn[12].read;
+
+    if(btnHDMI == 1) btnB = 0;
+
+    //Serial.printf("btnA %d btnB %d btnHDMI %d btnC %d\n", btnA, btnB, btnHDMI, btnC);
   }
 
   // Serial.printf("A%d B%d C%d D%d / DTMF 1%d 2%d 3%d 4%d 5%d 6%d 7%d 8%d 9%d\n", btnA, btnB, btnC, btnD, btnDTMF1,
