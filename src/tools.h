@@ -87,7 +87,9 @@ void getButton(uint8_t modeCurrent = 1, uint8_t menuMode = 0) {
 
     //Serial.printf("btnA %d btnB %d btnHDMI %d btnC %d\n", btnA, btnB, btnHDMI, btnC);
 
-  } else if (M5.getBoard() == m5::board_t::board_M5ATOM) {
+  } else if (M5.getBoard() == m5::board_t::board_M5ATOM || M5.getBoard() == m5::board_t::board_M5AtomPsram ||
+      M5.getBoard() == m5::board_t::board_M5AtomU) {
+
     M5.update();
     btnB = M5.BtnA.isPressed();
     btnA = 0;
