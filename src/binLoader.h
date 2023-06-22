@@ -422,16 +422,14 @@ void binLoader() {
         }
       }
 
-      if (M5.getDisplayCount() > 1) {
-        escapeHDMI = true;
-      }
+      ESC = true;
       
       getButton();
 
       if (M5.getDisplayCount() > 1) {
         M5.Displays(display).drawPng(hdmiplug, sizeof(hdmiplug), 128 + offsetX, 88 + offsetY, 64, 64);
 
-        if (btnHDMI)           // Escape HDMI
+        if (btnESC)           // Escape HDMI
         {
           display = !display;  // Logical operator
           preferences.putUInt("hdmi", display);
@@ -483,8 +481,6 @@ void binLoader() {
     }
   }
 
-  escapeHDMI = false;
-
   while (click == true) {
     while (btnB != 0) {
       getButton();
@@ -497,7 +493,7 @@ void binLoader() {
 
     getButton();
 
-    if (btnA && btnC)  // Escape
+    if (btnESC)  // Escape
     {
       return;
     }
@@ -631,4 +627,5 @@ void binLoader() {
     vTaskDelay(100);
   }
   SD.end();  // If not Bluetooth doesn't work !!!
+  ESC = false;
 }

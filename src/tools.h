@@ -1,7 +1,7 @@
 // Copyright (c) F4HWN Armel. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-uint8_t btnA, btnB, btnC, btnD, btnHDMI;
+uint8_t btnA, btnB, btnC, btnD, btnESC;
 uint8_t btnDTMF1, btnDTMF2, btnDTMF3 = 0;
 uint8_t btnDTMF4, btnDTMF5, btnDTMF6 = 0;
 uint8_t btnDTMF7, btnDTMF8, btnDTMF9 = 0;
@@ -90,14 +90,14 @@ void getButton(uint8_t modeCurrent = 1, uint8_t menuMode = 0) {
   else if (M5.getBoard() == m5::board_t::board_M5Stack) {
     M5.update();
 
-    if (escapeHDMI) {
-      btnHDMI = M5.BtnB.pressedFor(500);
+    if (ESC) {
+      btnESC = M5.BtnB.pressedFor(500);
 
-      btnA = M5.BtnA.wasReleased();
+      btnA = M5.BtnA.isPressed();
       btnB = M5.BtnB.wasReleased();
-      btnC = M5.BtnC.wasReleased();
+      btnC = M5.BtnC.isPressed();
 
-      if (btnHDMI == 1) btnB = 0;
+      if (btnESC == 1) btnB = 0;
     } else {
       btnA = M5.BtnA.isPressed();
       btnB = M5.BtnB.isPressed();
@@ -130,8 +130,8 @@ void getButton(uint8_t modeCurrent = 1, uint8_t menuMode = 0) {
 
     M5.update();
 
-    if (escapeHDMI) {
-      btnHDMI = M5.BtnPWR.wasClicked();
+    if (ESC) {
+      btnESC = M5.BtnPWR.wasClicked();
     }
 
     auto t = M5.Touch.getDetail();
@@ -179,7 +179,7 @@ void getButton(uint8_t modeCurrent = 1, uint8_t menuMode = 0) {
     btnDTMF8 = myBtn[11].read;
     btnDTMF9 = myBtn[12].read;
 
-    if (escapeHDMI && btnHDMI == 1) btnB = 0;
+    if (ESC && btnESC == 1) btnB = 0;
     // Serial.printf("btnA %d btnB %d btnC %d btnHDMI %d\n", btnA, btnB, btnC, btnHDMI);
   }
 
@@ -199,7 +199,7 @@ void getButton(uint8_t modeCurrent = 1, uint8_t menuMode = 0) {
              btnDTMF9) {
     M5.Speaker.tone(2000, 50);
     vTaskDelay(pdMS_TO_TICKS(100));
-  } else if (btnHDMI) {
+  } else if (btnESC) {
     M5.Speaker.tone(3000, 50);
     vTaskDelay(pdMS_TO_TICKS(100));
   } else {
