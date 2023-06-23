@@ -102,8 +102,9 @@ void getButton(uint8_t modeCurrent = 1, uint8_t menuMode = 0) {
       btnA = M5.BtnA.isPressed();
       btnB = M5.BtnB.isPressed();
       btnC = M5.BtnC.isPressed();
+      btnESC = 0;
     }
-    //Serial.printf("btnA %d btnB %d btnC %d btnHDMI %d\n", btnA, btnB, btnC, btnHDMI);
+    //Serial.printf("btnA %d btnB %d btnC %d btnESC %d\n", btnA, btnB, btnC, btnESC);
   }
   // M5Stack Core2 and CoreS3
   else if (M5.getBoard() == m5::board_t::board_M5StackCore2 || M5.getBoard() == m5::board_t::board_M5StackCoreS3) {
@@ -132,6 +133,10 @@ void getButton(uint8_t modeCurrent = 1, uint8_t menuMode = 0) {
 
     if (ESC) {
       btnESC = M5.BtnPWR.wasClicked();
+    }
+    else
+    {
+      btnESC = 0;
     }
 
     auto t = M5.Touch.getDetail();
@@ -180,7 +185,7 @@ void getButton(uint8_t modeCurrent = 1, uint8_t menuMode = 0) {
     btnDTMF9 = myBtn[12].read;
 
     if (ESC && btnESC == 1) btnB = 0;
-    // Serial.printf("btnA %d btnB %d btnC %d btnHDMI %d\n", btnA, btnB, btnC, btnHDMI);
+    // Serial.printf("btnA %d btnB %d btnC %d btnESC %d\n", btnA, btnB, btnC, btnESC);
   }
 
   // Serial.printf("A%d B%d C%d D%d / DTMF 1%d 2%d 3%d 4%d 5%d 6%d 7%d 8%d 9%d\n", btnA, btnB, btnC, btnD, btnDTMF1,

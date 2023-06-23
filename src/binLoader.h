@@ -314,7 +314,7 @@ void binLoader() {
 
   String tmpName;
 
-  char version[] = "Bin Loader V0.8";
+  char version[] = "Bin Loader V0.9";
 
   boolean click = false;
   boolean blink = false;
@@ -495,6 +495,7 @@ void binLoader() {
 
     if (btnESC)  // Escape
     {
+      ESC = false;
       return;
     }
 
