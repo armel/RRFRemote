@@ -404,8 +404,9 @@ void binLoader() {
     M5.Displays(display).setTextDatum(CC_DATUM);
     M5.Displays(display).setTextPadding(320);
     M5.Displays(display).drawString(version, 160 + offsetX, 20 + offsetY);
-    // M5.Displays(display).drawString(String(NAME) + " V" + String(VERSION), 160 + offsetX, 100 + offsetY);
-    // M5.Displays(display).drawString("Developed by " + String(AUTHOR), 160 + offsetX, 120 + offsetY);
+    M5.Displays(display).drawString("Current Firmware", 160 + offsetX, 170 + offsetY);
+    M5.Displays(display).drawString(String(NAME) + " V" + String(VERSION), 160 + offsetX, 190 + offsetY);
+    M5.Displays(display).drawString("Developed by " + String(AUTHOR), 160 + offsetX, 210 + offsetY);
     M5.Displays(display).drawRect(20 + offsetX, 28 + offsetY, 280, 10, TFT_DARKGRAY);
 
     for (uint16_t i = 0; i < TIMEOUT_BIN_LOADER * 10; i++) {
