@@ -49,6 +49,7 @@
 #include <HTTPClient.h>
 #include <Preferences.h>
 #include <FS.h>
+#include <SD.h>
 #include "LittleFS.h"
 #include <ArduinoJson.h>
 
