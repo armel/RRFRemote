@@ -1,25 +1,26 @@
 # RRFRemote
-![basic](https://img.shields.io/badge/M5Stack-BASIC-blue)
-![grey](https://img.shields.io/badge/M5Stack-GREY-blue)
-![fire](https://img.shields.io/badge/M5Stack-FIRE-orange)
-![core2](https://img.shields.io/badge/M5Stack-CORE2-green)
+![basic](https://img.shields.io/badge/M5Stack-BASIC-black)
+![grey](https://img.shields.io/badge/M5Stack-GREY-lightgrey)
+![fire](https://img.shields.io/badge/M5Stack-FIRE-red)
+![core2](https://img.shields.io/badge/M5Stack-CORE2-white)
+![coreS3](https://img.shields.io/badge/M5Stack-CORES3-darkgrey)
 ![aws](https://img.shields.io/badge/M5Stack-AWS-orange)
 
-![ATOM Lite](https://img.shields.io/badge/M5Stack-ATOM%20Lite-darkgrey)
-![ATOM Echo Smart](https://img.shields.io/badge/M5Stack-ATOM%20Echo%20Smart-white)
-![ATOM Matrix](https://img.shields.io/badge/M5Stack-ATOM%20Matrix-blue)
-
-![licence](https://img.shields.io/github/license/armel/RRFRemote)
-![language](https://img.shields.io/github/languages/top/armel/RRFRemote)
-![size](https://img.shields.io/github/repo-size/armel/RRFRemote)
-![version](https://img.shields.io/github/v/release/armel/RRFRemote)
-![activity](https://img.shields.io/github/commit-activity/y/armel/RRFRemote)
+![licence](https://img.shields.io/github/license/armel/RRFRemote_Develop)
+![language](https://img.shields.io/github/languages/top/armel/RRFRemote_Develop)
+![size](https://img.shields.io/github/repo-size/armel/RRFRemote_Develop)
+![version](https://img.shields.io/github/v/release/armel/RRFRemote_Develop)
+![activity](https://img.shields.io/github/commit-activity/y/armel/RRFRemote_Develop)
 
 Le projet RRFRemote permet de suivre l'activité du RRF et de piloter son point d'accès ou hotpsot. Il peut fonctionner en charge (via un connecteur USB) ou sur batterie. 
 
 ![RRFRemote](https://github.com/armel/RRFRemote/blob/main/img/RRFRemote.jpeg)
 
-**Profiter de 5% de réduction, sur l'ensemble de la boutique M5Stack en utilisant le code de réduction F4HWN ou en cliquant directement sur [M5Stack](https://shop.m5stack.com/?ref=LUxetaH4).**
+# Préambule
+
+Désormais, l'application RRFRemote est disponible sous forme de firmware. Il est possible de l'installer depuis l'application M5Burner développée par M5Stack. Vous n'avez donc plus besoin de déployer VSCode et Platformio, d'éditer le code source et de recompiler le code à chaque fois. 
+
+Néanmoins, le code source de l'ancienne version est toujours disponible, même s'il n'évoluera plus. Et vous pouvez toujours consulter l'ancienne [documentation](https://github.com/armel/RRFRemote/blob/main/_README.md) associée. 
 
 # Architecture technique
 
@@ -60,11 +61,7 @@ Ce QSJ est à comparer à celui d'un écran Nextion type NX4832K035, neurasthén
 
 ## Versions supportées actuellement
 
-Le développement actuel du RRFRemote prend en charge le [M5Stack Basic](https://m5stack.com/collections/m5-core/products/basic-core-iot-development-kit), le [M5Stack Grey](https://m5stack.com/collections/m5-core/products/grey-development-core), le [M5Stack Fire](https://shop.m5stack.com/collections/m5-controllers/products/m5stack-fire-iot-development-kit-psram-v2-6)  ainsi que les [M5Stack Core2](https://m5stack.com/products/m5stack-core2-esp32-iot-development-kit) et [M5Stack AWS](https://shop.m5stack.com/collections/m5-controllers/products/m5stack-core2-esp32-iot-development-kit-for-aws-iot-edukit). 
-
-En complément, il est désormais possible de faire fonctionner le RRFRemote avec l'[ATOM Display](https://shop.m5stack.com/products/m5stack-atom-psram-lcd-display-driver-kit) et profiter d'un écran plus grand en utilisant la sortie HDMI. Je vous recommande, en complément, de procéder à l'acquisition de l'unitié [Mini Dual Button](https://shop.m5stack.com/products/mini-dual-button-unit), dont le QSJ est inférieur à 3€, afin de pouvoir profiter de 2 boutons supplémentaire, en plus du bouton unique présent sur l'ATOM, afin de pouvoir utiliser l'ATOM comme un M5Stack à bouton.
-
-> Vous devez néanmoins disposer d'un écran supportant la résolution 320 x 240 pixels.
+Le développement actuel du RRFRemote prend en charge l'ensemble des M5Stack Core (à boutons) et Core2 (tactiles). La version pour M5Stack CoreS3 est encore expérimentale.
 
 # Fonctionnalités
 
@@ -107,6 +104,7 @@ Voici la liste des fonctionnalités actuelles :
 	- reboot du Spotnik,
 	- adresse IP du Spotnik,
 	- scan rapide du Raptor,
+	- libre,
 	- libre.
 
 > __Remarque 1__
@@ -119,14 +117,11 @@ Voici la liste des fonctionnalités actuelles :
 
 > __Remarque 3__
 > 
-> Concernant l'appel de fonctions spéciales paramétrables par le Sysop, elles sont au nombre de 4. C'est plutôt une fonctionnalité pour les _power user_ ayant un minimum de compétence en scripting. Par défaut, et à titre d'exemple, 3 fonctions sont déjà définies : reboot et adresse IP du Spotnik ainsi que le scan rapide du Raptor. Libre à vous de les modifier ou de définir celle qui reste libre. Il vous suffit :
-> 
-> - d'adapter le code du script `RRFRemote.js`. Ces appels de fonctions correspondent aux traitements des appels des commandes `cmd` 2000, 2001, 2002 et 2003 du script `RRFRemote.js`.
-> - de renommer ces fonctions dans le fichier `RRFRemote.h` (voir la définition du tableau de pointeurs `const char *sysop[]`).
+> Concernant l'appel de fonctions spéciales paramétrables par le Sysop, elles sont au nombre de 5. C'est plutôt une fonctionnalité pour les _power user_ ayant un minimum de compétence en scripting. Par défaut, et à titre d'exemple, 3 fonctions sont déjà définies : reboot et adresse IP du Spotnik ainsi que le scan rapide du Raptor. Libre à vous de les modifier ou de définir celle qui reste libre. Il vous suffit d'adapter le code du script `RRFRemote.js`. Ces appels de fonctions correspondent aux traitements des appels des commandes `cmd` 2000, 2001, 2002, 2003 et 2004 du script `RRFRemote.js`.
 
 ## Serveur Web intégré 
 
-Cette fonctionnalité permet de visualiser votre RRFRemote depuis un simple navigateur. Il est même possible de le piloter par ce biais, dans la mesure ou les boutons sont cliquables. Afin d'afficher votre RRFRemote dans votre navigateur, il suffit d'aller sur `http://adresse_ip_de_votre_rrfremote/`. Pour rappel, l'adresse IP que récupère votre RRFRemote s'affiche sur l'écran d'accueil, à l'allumage. Il est également indiquée dans données techniques de l'ESP32 (affichage alterné complémentaire).
+Cette fonctionnalité permet de visualiser votre RRFRemote depuis un simple navigateur. Il est même possible de le piloter par ce biais, dans la mesure ou les boutons sont cliquables. Afin d'afficher votre RRFRemote dans votre navigateur, il suffit d'aller sur `http://adresse_ip_de_votre_rrfremote/`. Pour rappel, l'adresse IP que récupère votre RRFRemote s'affiche sur l'écran d'accueil, à l'allumage. Elle est également indiquée dans données techniques de l'ESP32 (affichage alterné complémentaire) ou dans le menu settings.
 
 > Attention : c'est lent ! Et il n'y a pas de rafraîchissement automatique. Il faut cliquer sur le fond de l'image de l'écran pour faire une nouvelle > capture. Et sinon, comme dit, les boutons sont fonctionnels.
 
@@ -145,9 +140,7 @@ Un petit cercle est affiché en haut, à droite de l'écran de votre RRFRemote. 
 
 - si ce cercle est plein (rempli), tout est nominal : connexion Wifi et connexion avec le Spotnik. 
 - si ce cercle est vide : il y a une perte *temporaire* de connexion avec le Spotnik. Pas de panique, ça arrive. Mais sauf problème grave, ça ne dure jamais. En complément, le message défilant affichera *Perte de connexion Spotnik*.
-- si ce cercle est invisible : il n'y a carrément plus de connexion Wifi. Le RRFRemote va automatiquement tenter de se reconnecter au point d'accès en cours d'utilisation. En complément, le message défilant affichera *Perte de connexion Wifi* (en mode très saccadé, c'est normal, la reconnexion Wifi prenant l'essentiel du CPU...).
-
-> Si la perte de connexion Wifi est normale (par exemple, vous n'êtes plus chez vous), le plus simple est d'éteindre le RRFRemote. Ce dernier tentera de se reconnecter aux différents points d'accès définis dans votre fichier `settings.h` (et pourra donc se reconnecter à votre partage de connexion Smartphone, si vous l'avez prévu).
+- si ce cercle est invisible : il n'y a carrément plus de connexion Wifi. 
 
 ## En complément 
 Il est possible de :
@@ -160,36 +153,13 @@ Il est possible de :
 
 # Installation
 
-> En complément des instructions probablement trop succintes que je décris ci-dessous, je ne peux que vous conseiller de lire l'excellent [message](https://groups.io/g/RRF/message/2444) publié par F6FDY Eddie, sur le groupe RRF. Il donnera de précieux conseils aux OMs qui n'ont pas l'habitude de déployer des environnements de développement. 
+## Coté Spotnik (si vous en possédez un)
 
-## Pré-ambule
+Le RRFRemote n'a pas nécessairement besoin d'un Spotnik pour fonctionner. À ce titre, il peut être utilisé par un simple SWL, s'il le souhaite, afin de suivre l'activité du RRF. 
 
-Le plus simple est d'installer [PlateformIO for VSCode](https://platformio.org/install/ide?install=vscode) sur votre PC (Linux ou Windows) ou sur votre Mac (Intel ou M1). C'est un environnement de développement multiplateforme et multilangage performant, en plus d'être agréable à utiliser.
+Mais si vous possédez un Hotspot ou si vous êtes Sysop d'un point d'accès, assurez vous que le script `RRFRemote.js` fonctionne. 
 
-> Quelques OMs ont eu des difficultés à installer PlateformIO sous Windows. Le message d'erreur le plus courant est:
-> 
-> ```
-> The terminal process failed to launch: Path to shell executable "c:\Users\armel\RRFRemote\platformio.exe" does not exist.
-> Terminal will be reused by tasks, presse any key to close it.
-> ```
-> 
-> Afin de contourner ce problème, rechercher les __Alias d'exécution de l'appli__ et décocher les occurences __Installeur d'applications python.exe__ et __python3.exe__. Puis fermer et relancer VSCode.
-> 
-> ![Windows](https://github.com/armel/RRFRemote/blob/main/img/Windows.jpeg)
->
-> 
-> Un grand merci à F5LGW Stéphane pour l'information et VA2NRJ Robin pour la capture d'écran.
-
-
-Ensuite, toujours sur votre PC ou Mac, cloner le projet RRFRemote via la commande `git` :
-
-`git clone https://github.com/armel/RRFRemote.git`
-
-Vous pouvez aussi récuppérer une archive zip, avec l'ensemble du projet, si vous n'avez pas `git`.
-
-## Coté Spotnik : mise en place du script de contrôle
-
-Copier le script `RRFRemote.js` situé dans le sous répertoire `src/Spotnik` sur votre Spotnik (par exemple, dans le répertoire `/root`). 
+S'il n'est pas déjà présent, copier le script `RRFRemote.js` situé dans le sous répertoire `src/Spotnik` sur votre Spotnik (par exemple, dans le répertoire `/root`). 
 
 Lancer le script via la commande : 
 
@@ -201,219 +171,132 @@ Pour qu'il se lance automatiquement en cas de reboot, ajouter la ligne suivante 
 nohup node /root/RRFRemote.js & 
 ``
 
-## Coté PC : paramétrage, compilation et flashage du M5Stack
+## Coté M5Stack
 
-Ouvrez le projet RRFRemote avec PlateformIO for VSCode.
+### Prérequis
 
-### Paramétrage
+Vous avez besoin d'une M5Stack (avec une mémoire flash de 16 Mo), d'une carte micro SD et d'un PC sous Windows, Linux ou MacOS, avec les pilotes USB installés et l'application M5Burner version 3.0.0 (ou supérieure).
 
-#### Fichier `src/RRFRemote.h`
+### Carte micro SD
 
-Petit confidence : je hais la gestion des décalages horaires, des alternances hiver/été, etc. Néanmoins, si vous êtes hors de France, il est désormais possible de configurer votre _timezone_ afin qu'elle soit prise en compte lors de l'affichage de l'heure. Ligne 74, la variable `ntpTimeZone` est configurée, par défaut, pour la France. Mais j'ai indiqué d'autres configurations possibles pour d'autres régions du monde, régulièrement actives sur le RRF. Il vous suffit de décommenter uniquement la _timezone_ qui correspond à votre région. Si elle n'est pas présente, consultez cette [liste](https://github.com/blindsidenetworks/bigbluebutton-1/blob/master/bbb-voice-conference/config/freeswitch/conf/autoload_configs/timezones.conf.xml) plus détaillée. En dernier recours, me contacter si besoin d'aide ou si vous habitez dans une région exotique...
+Préparez et formatez une carte micro SD en FAT32. Cette carte micro SD sera utilisée pour stocker vos fichiers de configuration et pour stocker éventuellement d'autres firmwares.
 
-#### Fichier `src/settings.h`
+### Installation des pilotes USB
 
-Editer le fichier `src/settings.h` afin de renseigner vos paramétrages via le tableau `config`, à savoir :
+Veuillez vous rendre sur la [page de téléchargement] (https://docs.m5stack.com/en/download) afin de télécharger le pilote USB correspondant à votre système d'exploitation et installez-le.
 
-* votre SSID Wifi,
-* votre mot de passe Wifi,
-* votre latitude (format décimale, par exemple 48.8482855),
-* votre longitude (format décimale, par exemple 2.2708201),
-* votre indicatif,
-* et pour finir, l'url d'accès au script de contrôle que vous avez installé précédement (par défaut, c'est `http://adresse_ip_de_votre_spotnik:3000/`).
+### Installation de l'application M5Burner
 
-> __Remarque 1__
-> 
-> Si vous n'avez pas de Spotnik, vous pouvez tout de même utiliser le RRFRemote. Il suffit juste de ne pas indiquer d'url. Une telle configuration pourrait ressembler à ceci :
+Veuillez vous rendre sur la [page de téléchargement] (https://docs.m5stack.com/en/download) afin de télécharger l'application M5Burner (version 3.0.0 ou supérieure) correspondant à votre système d'exploitation et installez-la. 
 
-```
-const char *config[] = {
-  "Livebox", "mdp_Livebox", "48.8482855", "2.2708201", "F4HWN H", "",
-};
-```
+### Flashage du M5Stack
 
-> __Remarque 2__
-> 
-> À noter que, depuis la version 2.0.0, il est possible de gérer autant de configurations que vous le souhaitez ! Cela vous permet, par exemple, de préconfigurer vos paramétrages pour une utilisation locale sur le Wifi de votre QRA et une configuration mobile sur le Wifi de votre Smartphone. Une telle configuration pourrait ressembler à ceci :
-> 
+Connectez votre M5Stack à votre PC.
 
-```
-const char *config[] = {
-  "Livebox", "mdp_Livebox", "48.8482855", "2.2708201", "F1ZPX H", "http://192.168.1.10:3000/",
-  "iPhone8", "mdp_iphone", "48.8482855", "2.2708201", "F1ZPX M", "http://82.167.56.2:3000/" 
-};
-```
+Lancez l'application M5Burner et sélectionnez le firmware RRFRemote correspondant à votre modèle de M5Stack (Core, Core2, etc.). Vous pouvez-vous aider du moteur de recherche pour le trouver. 
 
-> Notez au passage l'utilisation d'une adresse IP publique pour la configuration mobile sur le Wifi du Smartphone...
+> Attention, il existe une version pour le M5Stack Core (Basic, Grey, Fire, etc.) avec boutons et une version pour le M5Stack Core2 (Core2, AWS, etc.) avec écran tactile. La version pour M5Stack CoreS3 est encore expérimentale.
 
-Toujours dans le fichier `src/settings.h`, si vous disposez d'un module aditionnel M5GO (BASIC, GREY ou FIRE) ou M5GO2 (CORE2 ou AWS), vous pouvez ajouter des indicatifs à surveiller via le tableau `qrz`. Ce tableau est constitué d'une liste d'indicatifs et d'une couleur associée au format RGB. Si l'un de ces indicatifs passe en émission, les barres de leds présentent sur les modules M5GO et M5GO2 s'allumeront (avec la couleur associée). Cela permet d'avoir des alertes luminueuses.
+Cliquez sur le bouton bleu `Download`. Cliquez ensuite sur le bouton rouge `Burn` en prenant soin de bien selectionner le port USB sur lesquel est branché votre M5Stack. 
 
-> Vous pouvez vous contenter d'indiquer seulement une partie d'un indicatif. Par exemple ```"F", "0xff0000"```, idéalement positionné en fin de liste, permettra d'allumer les leds en rouge, à chaque passage en émission d'une station donc l'indicatif commence par F (et non listé plus haut dans la liste).
+### Fichiers de configuration
 
-#### Fichier `platformio.ini`
+Il vous reste à créer votre ou vos fichiers de configurations. Dans le répertoire `ini`, vous trouverez 3 exemples de fichiers de configuration à adapter par vos soins.
 
-Le RRFRemote peut fonctionner sur un écran externe, via une connexion HDMI. Cela permet de profiter d'un affichage plus grand et donc, pour certains, plus confortable. 
+| Fichier           | Description             | 
+| -------------- | -------------------- |
+| `Tiny.ini` | Fichier simple avec uniquement la section requise [wifi]|
+| `Huge.ini` | Fichier complet avec toutes les sections|
+| `SWL.ini` | Fichier d'exemple pour les SWL n'ayant pas de point d'accès|
 
-Afin de disposer d'une connectique HDMI, il existe actuellement une alternative (donc 2 solutions) :
+Le plus simple est de partir du fichier `Huge.ini`. Editez-le à l'aide d'un simple éditeur de texte et renseignez les informations qui vous concerne. Les différentes sections sont décrites un peu plus loin.
 
-- soit disposer d'un ATOM Display,
-- soit disposer d'un Display Module 13.2 (compatible avec les CORE et CORE2). 
+Copiez ce de configuration, à la racine de votre carte Micro SD. Libre à vous de le renommer. Vous pouvez aussi en sauvegarder plusieurs, si vous le désirez. Par exemple, une version pour gérer votre Hotspot depuis votre box Internet de votre QRA, une autre depuis votre partage de connexion Smartphone, etc.   
 
-##### Utilisation du Display Module 13.2 (CORE et CORE2)
+#### Description des sections
 
-Si et seulement si __vous utilisez le Display Module 13.2__, éditer le fichier `platformio.ini` et modifier éventuellement la ligne 35, afin de préciser la résolution de votre écran. Attention, le RRFRemote s'affichera toujours en 320 x 240, mais sera centré à l'écran. Par défaut, la résolution de l'écran est initialisée à 320 x 240. Mais si vous souhaitez la changer en 480 x 320, modifier la ligne 35,
+Voici une description des sections. Seule la section [wifi] est requise, pour des raisons évidentes.
 
-```
-build_flags = ${env.build_flags} -D atom=0 -D displayWidth=320 -D displayHeight=240
-```
+| Section        | Requis | Valeur    |	 Description  | Défaut | 
+| -------------- | ------ | --------- | ------------- | ------ |
+| [wifi]			|        |           |               |        |
+|		          |✔| `wifi_ssid`    | votre SSID Wifi|       |
+|		          |✔| `wifi_password` | votre Password Wifi|  |
+| [spotnik]		||               |                    | |
+|		          || `spotnik_name` | le QRZ de votre point d'accès | `M5Stack`|
+|		          || `spotnik_url`  | l'url HTTP d'accès au script RRFRemote.js | |
+| [geolocation]	||               |                    | |
+|		          || `latitude` | votre latitude | `48.84`|
+|		          || `longitude`  | votre longitude | `2.27`|
+|		          || `timezone` | votre timezone | `CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00` |
 
-Par,
+> Remarque : la timezone par défaut correspond à la France (Europe/Paris). Si vous devez adapter la timezone, consultez cette [liste](https://github.com/blindsidenetworks/bigbluebutton-1/blob/master/bbb-voice-conference/config/freeswitch/conf/autoload_configs/timezones.conf.xml) plus détaillée. En dernier recours, me contacter si besoin d'aide ou si vous habitez dans une région exotique... Voici néanmoins quelques exemples de valeurs :
 
-```
-build_flags = ${env.build_flags} -D atom=0 -D displayWidth=480 -D displayHeight=320
-```
+| Pays           | Timezone             | 
+| -------------- | -------------------- |
+| Europe/Paris | CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00 |
+| Europe/Brussels | CET-1CEST,M3.5.0,M10.5.0/3 |
+| Europe/Sofia | EET-2EEST,M3.5.0/3,M10.5.0/4 |
+| America/Montreal | EST5EDT,M3.2.0,M11.1.0 |
+| America/Martinique | AST4 |
+| America/Guadeloupe | AST4 |
+| Pacific/Noumea | NCT-11 |
 
-##### Utilisation de l'ATOM Display (ATOM uniquement)
+Il existe aussi les sections suivantes. Elles sont complémentaires et vous n'en aurez peut-être pas besoin.
 
-Si et seulement si __vous utilisez l'ATOM Display__, éditer le fichier `platformio.ini` et modifier la ligne 12,
+| Section        | Requis | Valeur    |	 Description  | Défaut |
+| -------------- | ------ | --------- | ------------- | ------ |
+| [timeout]	||               |                    | |
+|		          || `timeout_tot_rrf` | réglage du TOT sur le salon d'appel en secondes | `115`|
+|		          || `timeout_tot_elsewhere`  | réglage du TOT sur les salons annexes en secondes | `285` |
+|		          || `timeout_menu`  | réglage du delai de sortie automatique du menu en secondes  | `10` |
+| [alert]		||               |     __maximum 64 valeurs__               | |
+|		          || `alert_01` | couple indicatif / couleur RGB | | 
+|		          || `...` | | |
+|		          || `alert_64` | couple indicatif / couleur RGB | |
+| [sysop]		||               |    __maximum 5 valeurs__                | |
+|		          || `sysop_01` | couple libellé / code commande | `REBOOT, 2000` |
+|		          || `sysop_02` | couple libellé / code commande | `IP, 2001` |
+|		          || `sysop_03` | couple libellé / code commande | `SCAN, 2002` |
+|		          || `sysop_04` | couple libellé / code commande | `LIBRE, 2003` |
+|		          || `sysop_05` | couple libellé / code commande | `LIBRE, 2003` |
 
-```
-default_envs = m5stack
-```
-
-Par,
-
-```
-default_envs = atom
-```
-
-Cela revient à changer la plate-forme cible.
-
-En complément, vous pouvez également préciser la résolution de votre écran. Attention, le RRFRemote s'affichera toujours en 320 x 240, mais sera centré à l'écran. Par défaut, la résolution de l'écran est initialisée à 320 x 240. Mais si vous souhaitez la changer en 480 x 320, modifier la ligne 43,
-
-```
-build_flags = ${env.build_flags} -D atom=1 -D displayWidth=320 -D displayHeight=240
-```
-
-Par,
+> Remarque : les alertes sont uniquement utiles si vous possédez un module M5GO ou M5GO2. Voici un exemple :
 
 ```
-build_flags = ${env.build_flags} -D atom=1 -D displayWidth=480 -D displayHeight=320
+; Alert Config
+[alert]
+alert_01 = F4HWN, 0xffffff
+alert_02 = F5NLG, 0x00ff00
+alert_03 = F1EVM, 0x00ff00
+alert_04 = F4GGU, 0x00ff00
+alert_05 = F1TZO, 0x00ff00
+alert_06 = F4VSJ, 0x00ff00
+alert_07 = F1ZPX, 0xffffff
+alert_08 = F5LGW, 0x0000ff
+alert_09 = F4ICR, 0x0000ff
+alert_10 = FG5GP, 0x0000ff
+alert_11 = FM,    0xffa000
+alert_12 = FG,    0xffa000
+alert_13 = F,     0x202080
+alert_14 = ON,    0x800000
 ```
 
-### Compilation et flashage
+# Utilisation
 
-Compiler et flasher le projet sur votre M5Stack. C'est terminé.
+Démarrez votre M5Stack. Au moment du chargement du iniLoader (gauge de progression bleu), appuyez sur le bouton du milieu. Si vous avez correctement inséré votre carte Micro SD et que votre fichier de configuration s'y trouve, il devrait être listé. Les boutons gauche et droite, permettent de passer d'un fichier de configuration, à un autre, si vous en avez plusieurs. Et le bouton central permet de valider le fichier de configuration en cours de sélection. Dans ce cas, il sera chargé.
 
-## Mise à jour
+S'il ne comporte aucune erreur, l'application RRFRemote devrait démarrer.
 
->Je ne peux que vous conseiller de garder une copie de votre ancien fichier `settings.h`. Ca vous fera probablement gagner du temps. Attention cependant, le fichier `settings.h` a changé depuis la version 2.0.0. 
+À notez qu'une copie du dernier fichier de configuration valide est effectuée dans la mémoire de votre M5Stack. La selection d'un fichier de configuration ne sera donc plus nécessaire au prochain redémarrage. Par contre, si vous apportez des modifications à ce fichier, il faudra le recharger à nouveau !
 
-Si vous souhaitez mettre à jour la version de votre RRFRemote, vous pouvez :
-
-* soit télécharger l'archive zip, si vous n'avez pas `git`,
-* soit effacer le répertoire existant, utiliser les commandes `git` et cloner à nouveau le projet, comme lors de la première installation,
-* soit se positionner dans le répertoire existant, utiliser les commandes `git` et mettre à jour le code à l'aide des commandes suivantes :
-
-```
-git reset --hard
-git pull
-```
-Evidement, vous devrez recompiler et uploader le projet sur votre M5Stack.
-
-## Utilisation du Bin Loader (_power user only..._)
-
-Evolution récente de mes développements, il est désormais possible de stocker plusieurs applications dans la mémoire SPI Flash de votre M5Stack ou sur une carte SD. Au démarrage, une procédure est prévue pour charger une application en particulier. 
-
-> Attention, ce Bin Loader ne fonctionne pas avec l'ATOM Display.
-
-### Préparation
-
-Je vais détailler ici la procédure pour déployer l'application RRFRemote et DXTracker sur un même M5Stack.
-
-#### Etape 1 - Compilation
-
-Commencez par compiler vos applications, comme vous aviez l'habitude de le faire. Rien ne change ici. Par exemple, commencez par compiler l'application RRFRemote. Puis faites de même avec l'application DXTracker. 
-
-> À noter que les applications ICSMeter et ICMultimeter disposent aussi du Bin Loader.
-> 
-#### Etape 2 - Collecte des fichiers binaires
-
-Ca y est, vous avez compiler l'application RRFRemote et DXTracker ? C'est parfait.
-
-Chaque compilation a produit un binaire. C'est ce binaire qui est envoyé / flashé sur votre M5Stack, via la connexion USB.
-
-Placez vous à la racine du dossier RRFRemote, qui contient l'ensemble du projet. Et allez dans le répertoire `.pio/build/m5stack`.
-
-Vous y trouverez un fichier `firmware.bin`. 
-
-Vous avez maintenant 2 solutions. 
-
-A vous de choisir celle que vous préférez : 
-
-- stockage sur carte SD : simple, offre une grosse capacité de stockage, mais nécessite d'avoir une carte disponible,
-- stockage sur la mémoire SPI Flash : plus compliqué, capacité de stockage réduite, mais aucun prérequis.
-
-#### Etape 2.1 - Stockage sur la carte SD (simple)
-
-Formater une carte SD au format FAT32.
-
-Copier le fichier `firmware.bin` de l'application RRFRemote et placer le à la racine de la carte SD. Et profitez en pour le renommer en l'appelant, par exemple, `RRFRemote.bin`.
-
-Faites de même avec l'application DXTracker. Copier le fichier `firmware.bin` de l'application DXTracker et placer le à la racine de la carte SD.  Et profitez en pour le renommer en l'appelant, par exemple, `DXTracker.bin`.
-
-Vous devez désormais avoir 2 fichiers binaires à la racine de votre carte SD : `RRFRemote.bin` et `DXTracker.bin`.
-
-#### Etape 2.2 - Stockage sur la mémoire SPI Flash (plus difficile)
-
-Copier le dans le répertoire `data` qui se trouve à la racine du dossier RRFRemote. Et profitez en pour le renommer en l'appelant, par exemple, `RRFRemote.bin`.
-
-> Si le dossier `data` n'existe pas, créé le.
-
-Faites de même avec l'application DXTracker. Placez vous à la racine du dossier DXTracker, qui contient l'ensemble du projet. Et allez dans le répertoire `.pio/build/m5stack`.
-
-Vous y trouverez également un fichier `firmware.bin`. Copier le, lui aussi, dans le répertoire `data` qui se trouve à la racine du dossier RRFRemote. Et profitez en pour le renommer en l'appelant, par exemple, `DXTracker.bin`.
-
-> **Hyper important, l'idée est bien de copier ces 2 binaires dans le même répertoire `data`** (situé à la racine du dossier RRFRemote).
-
-A ce stade, vous devez donc avoir 2 fichiers binaires clairement identifiés : `RRFRemote.bin` et `DXTracker.bin` dans le répertoire `data` qui se trouve à la racine du dossier RRFRemote.
-
-#### Etape 3 - Copie dans la mémoire Flash du M5Stack
-
-Passons à l'étape probablement la plus compliquée. Ouvrez le projet RRFRemote depuis Visual Studio Code, comme vous le feriez pour le compiler. 
-
-![Capture](https://github.com/armel/RRFRemote/blob/main/img/flash_1.png)
-
-Etape 1, cliquez sur l'icône Platformio (l'icone avec une tête de fourmi...). Etape 2, déroulez la section `m5stack`.
-
-![Capture](https://github.com/armel/RRFRemote/blob/main/img/flash_2.png)
-
-Enfin, étape 3, allez dans la sous section `Platform`. Et cliquez sur `Upload Filesystem Image`.
-
-Patientez. Le contenu du répertoire `data` va être écrit dans la mémoire Flash de votre M5Stack. Ca y est ? Vous y êtes !!!
-
-### Utilisation
-
-Démarrez votre M5Stack. Vous devriez voir un écran noir, suivi de l'affichage de 1, 2 puis 3 petits points, en haut de l'écran. C'est le fameux Bin Loader ;)
-
-Dès l'affichage du premier petit point, vous pouvez :
-
-- soit appuyez sur le bouton gauche ou droite, pour lancer l'application par défaut.
-- soit appuyez sur le bouton central. Dans ce cas, le menu du Bin Loader s'affiche et vous propose la liste des binaires disponnibles en mémoire Flash. 
-
-Si vous avez parfaitement suivi la procédure, vous devriez avoir le choix entre `RRFRemote.bin` et `DXTracker.bin`.
-
-Les boutons gauche et droite, permettent de passer d'un binaire à un autre. Et le bouton central permet de valider le binaire en cours de sélection. Dans ce cas, l'application selectionnée sera chargée ;)
-
-> Le chargement prend environ 20 secondes. C'est supportable.
-
-### Limitation
-
-Je pense qu'il est possible de faire cohabiter 3 ou 4 applications, dans la mémoire Flash de votre M5Stack. En l'état, ca me semble suffisant. Si besoin, j'adapterais le code pour les binaires sur la carte SD. 
+Amusez-vous bien 🤗
 
 # Remerciements
 
-Un grand merci à F4ICR Pascal, F6FDY Eddie, F5LGW Stéphane, F4IGC Philippe et tous les autres, pour la confiance, les idées et l'aide qu'ils m'ont apporté depuis le début de ce projet. Avoir des OMs impliqués qui suivent de près mes développements est toujours stimulant ;)
+Un grand merci à F4ICR Pascal, F6FDY Eddie, F5LGW Stéphane, F4IGC Philippe et tous les autres, pour la confiance, les idées et l'aide qu'ils m'ont apporté depuis le début de ce projet. Avoir des OMs impliqués qui suivent de près mes développements est toujours stimulant 😌
+
+Si vous trouvez ce projet amusant et utile, alors [offrez-moi un verre de vin](https://www.paypal.me/F4HWN) 🍷 😉 
 
 # That's all
 Bon trafic à tous, 88 & 73 de Armel F4HWN ! 
