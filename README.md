@@ -6,12 +6,6 @@
 ![coreS3](https://img.shields.io/badge/M5Stack-CORES3-darkgrey)
 ![aws](https://img.shields.io/badge/M5Stack-AWS-orange)
 
-![licence](https://img.shields.io/github/license/armel/RRFRemote_Develop)
-![language](https://img.shields.io/github/languages/top/armel/RRFRemote_Develop)
-![size](https://img.shields.io/github/repo-size/armel/RRFRemote_Develop)
-![version](https://img.shields.io/github/v/release/armel/RRFRemote_Develop)
-![activity](https://img.shields.io/github/commit-activity/y/armel/RRFRemote_Develop)
-
 Le projet RRFRemote permet de suivre l'activité du RRF et de piloter son point d'accès ou hotpsot. Il peut fonctionner en charge (via un connecteur USB) ou sur batterie. 
 
 ![RRFRemote](https://github.com/armel/RRFRemote/blob/main/img/RRFRemote.jpeg)
@@ -201,7 +195,7 @@ Cliquez sur le bouton bleu `Download`. Cliquez ensuite sur le bouton rouge `Burn
 
 ### Fichiers de configuration
 
-Il vous reste à créer votre ou vos fichiers de configurations. Dans le répertoire `ini`, vous trouverez 3 exemples de fichiers de configuration à adapter par vos soins.
+Il vous reste à créer votre ou vos fichiers de configurations. Dans le répertoire [`ini`](https://github.com/armel/RRFRemote/tree/main/ini), vous trouverez 3 exemples de fichiers de configuration à adapter par vos soins.
 
 | Fichier           | Description             | 
 | -------------- | -------------------- |
