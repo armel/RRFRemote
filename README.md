@@ -181,11 +181,11 @@ Préparez et formatez une carte micro SD en FAT32. Cette carte micro SD sera uti
 
 ### Installation des pilotes USB
 
-Veuillez vous rendre sur la [page de téléchargement] (https://docs.m5stack.com/en/download) afin de télécharger le pilote USB correspondant à votre système d'exploitation et installez-le.
+Veuillez vous rendre sur la [page de téléchargement](https://docs.m5stack.com/en/download) afin de télécharger le pilote USB correspondant à votre système d'exploitation et installez-le.
 
 ### Installation de l'application M5Burner
 
-Veuillez vous rendre sur la [page de téléchargement] (https://docs.m5stack.com/en/download) afin de télécharger l'application M5Burner (version 3.0.0 ou supérieure) correspondant à votre système d'exploitation et installez-la. 
+Veuillez vous rendre sur la [page de téléchargement](https://docs.m5stack.com/en/download) afin de télécharger l'application M5Burner (version 3.0.0 ou supérieure) correspondant à votre système d'exploitation et installez-la. 
 
 ### Flashage du M5Stack
 
