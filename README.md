@@ -151,19 +151,23 @@ Il est possible de :
 
 Le RRFRemote n'a pas nécessairement besoin d'un Spotnik pour fonctionner. À ce titre, il peut être utilisé par un simple SWL, s'il le souhaite, afin de suivre l'activité du RRF. 
 
-Mais si vous possédez un Hotspot ou si vous êtes Sysop d'un point d'accès, assurez vous que le script `RRFRemote.js` fonctionne. 
-
-S'il n'est pas déjà présent, copier le script `RRFRemote.js` situé dans le sous répertoire `src/Spotnik` sur votre Spotnik (par exemple, dans le répertoire `/root`). 
-
-Lancer le script via la commande : 
+Mais si vous possédez un Hotspot ou si vous êtes Sysop d'un point d'accès, assurez vous que le script `RRFRemote.js` fonctionne. Depuis une connexion SSH, vous pouvez lancer le script via la commande : 
 
 `nohup node /root/RRFRemote.js &`
 
-Pour qu'il se lance automatiquement en cas de reboot, ajouter la ligne suivante dans votre `/etc/rc.local` :
+Afin de lancer le script `RRFRemote.js` automatiquement, à chaque redémarrage, le plus simple est d'éditer le fichier `/etc/rc.local` et décommenter la ligne :
 
-``
-nohup node /root/RRFRemote.js & 
-``
+```
+#nohup node /root/RRFRemote.js &
+```
+
+Cette ligne se trouve en fin de fichier `/etc/rc.local`. Il suffit d'enlever le `#`. La ligne devient alors :
+
+```
+nohup node /root/RRFRemote.js &
+```
+
+Coté Spotnik, c'est terminé.
 
 ## Coté M5Stack
 
@@ -187,25 +191,27 @@ Veuillez vous rendre sur la [page de téléchargement] (https://docs.m5stack.com
 
 Connectez votre M5Stack à votre PC.
 
-Lancez l'application M5Burner et sélectionnez le firmware RRFRemote correspondant à votre modèle de M5Stack (Core, Core2, etc.). Vous pouvez-vous aider du moteur de recherche pour le trouver. 
+Lancez l'application M5Burner et sélectionnez le firmware RRFRemote correspondant à votre modèle de M5Stack (Core, Core2, etc.). Vous pouvez-vous aider du moteur de recherche intégré à M5Burner pour trouver le firmware RRFRemote.
 
 > Attention, il existe une version pour le M5Stack Core (Basic, Grey, Fire, etc.) avec boutons et une version pour le M5Stack Core2 (Core2, AWS, etc.) avec écran tactile. La version pour M5Stack CoreS3 est encore expérimentale.
 
 Cliquez sur le bouton bleu `Download`. Cliquez ensuite sur le bouton rouge `Burn` en prenant soin de bien selectionner le port USB sur lesquel est branché votre M5Stack. 
 
+Votre M5Stack sera flashé avec la dernière version du firmware RRFRemote.
+
 ### Fichiers de configuration
 
-Il vous reste à créer votre ou vos fichiers de configurations. Dans le répertoire [`ini`](https://github.com/armel/RRFRemote/tree/main/ini), vous trouverez 3 exemples de fichiers de configuration à adapter par vos soins.
+Il vous reste à créer votre ou vos fichiers de configurations. Dans ce [répertoire](https://github.com/armel/RRFRemote/tree/main/ini), vous trouverez 3 exemples de fichiers de configuration à adapter par vos soins.
 
 | Fichier           | Description             | 
 | -------------- | -------------------- |
-| `Tiny.ini` | Fichier simple avec uniquement la section requise [wifi]|
-| `Huge.ini` | Fichier complet avec toutes les sections|
-| `SWL.ini` | Fichier d'exemple pour les SWL n'ayant pas de point d'accès|
+| `Tiny.ini` | Fichier [simple](https://github.com/armel/RRFRemote/blob/main/ini/Tiny.ini) avec uniquement la section requise [wifi]|
+| `Huge.ini` | Fichier [complet](https://github.com/armel/RRFRemote/blob/main/ini/Huge.ini) avec toutes les sections|
+| `SWL.ini` | Fichier pour les [SWL](https://github.com/armel/RRFRemote/blob/main/ini/SWL.ini) n'ayant pas de point d'accès|
 
-Le plus simple est de partir du fichier `Huge.ini`. Editez-le à l'aide d'un simple éditeur de texte et renseignez les informations qui vous concerne. Les différentes sections sont décrites un peu plus loin.
+Le plus judicieux est de partir du fichier [complet](https://github.com/armel/RRFRemote/blob/main/ini/Huge.ini). Editez-le à l'aide d'un simple éditeur de texte (Notepad, Notepad++, SublimeText, etc.) et renseignez les informations qui vous concerne. Les différentes sections sont décrites un peu plus loin.
 
-Copiez ce de configuration, à la racine de votre carte Micro SD. Libre à vous de le renommer. Vous pouvez aussi en sauvegarder plusieurs, si vous le désirez. Par exemple, une version pour gérer votre Hotspot depuis votre box Internet de votre QRA, une autre depuis votre partage de connexion Smartphone, etc.   
+Copiez ce fichier de configuration, à la racine de votre carte Micro SD (formatée en FAT32). Libre à vous de le renommer. Vous pouvez aussi en sauvegarder plusieurs, si vous le désirez. Par exemple, une version pour gérer votre Hotspot depuis votre box Internet de votre QRA, une autre depuis votre partage de connexion Smartphone, etc.   
 
 #### Description des sections
 
@@ -255,7 +261,7 @@ Il existe aussi les sections suivantes. Elles sont complémentaires et vous n'en
 |		          || `sysop_04` | couple libellé / code commande | `LIBRE, 2003` |
 |		          || `sysop_05` | couple libellé / code commande | `LIBRE, 2003` |
 
-> Remarque : les alertes sont uniquement utiles si vous possédez un module M5GO ou M5GO2. Voici un exemple :
+> Remarque : les alertes sont uniquement utiles si vous possédez un module M5GO (Core) ou M5GO2 (Core2). Voici un exemple :
 
 ```
 ; Alert Config
@@ -278,7 +284,7 @@ alert_14 = ON,    0x800000
 
 # Utilisation
 
-Démarrez votre M5Stack. Au moment du chargement du iniLoader (gauge de progression bleu), appuyez sur le bouton du milieu. Si vous avez correctement inséré votre carte Micro SD et que votre fichier de configuration s'y trouve, il devrait être listé. Les boutons gauche et droite, permettent de passer d'un fichier de configuration, à un autre, si vous en avez plusieurs. Et le bouton central permet de valider le fichier de configuration en cours de sélection. Dans ce cas, il sera chargé.
+Démarrez votre M5Stack. Au moment du chargement du iniLoader (gauge de progression bleu), appuyez sur le bouton du milieu. Si vous avez correctement inséré votre carte Micro SD et que votre fichier de configuration s'y trouve, il devrait être listé. Les boutons gauche et droite, permettent de passer d'un fichier de configuration, à un autre, si vous en avez plusieurs. Et le bouton central permet de valider le fichier de configuration en cours de sélection et de le chargé.
 
 S'il ne comporte aucune erreur, l'application RRFRemote devrait démarrer.
 
