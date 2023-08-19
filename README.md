@@ -205,11 +205,11 @@ Il vous reste à créer votre ou vos fichiers de configurations. Dans ce [réper
 
 | Fichier           | Description             | 
 | -------------- | -------------------- |
-| `Tiny.ini` | Fichier [simple](https://github.com/armel/RRFRemote/blob/main/ini/Tiny.ini) avec uniquement la section requise [wifi]|
-| `Huge.ini` | Fichier [complet](https://github.com/armel/RRFRemote/blob/main/ini/Huge.ini) avec toutes les sections|
+| `Simple.ini` | Fichier [simple](https://github.com/armel/RRFRemote/blob/main/ini/Simple.ini) avec uniquement la section requise [wifi]|
+| `Complet.ini` | Fichier [complet](https://github.com/armel/RRFRemote/blob/main/ini/Complet.ini) avec toutes les sections|
 | `SWL.ini` | Fichier pour les [SWL](https://github.com/armel/RRFRemote/blob/main/ini/SWL.ini) n'ayant pas de point d'accès|
 
-Le plus judicieux est de partir du fichier [complet](https://github.com/armel/RRFRemote/blob/main/ini/Huge.ini). Editez-le à l'aide d'un simple éditeur de texte (Notepad, Notepad++, SublimeText, etc.) et renseignez les informations qui vous concerne. Les différentes sections sont décrites un peu plus loin.
+Le plus judicieux est de partir du fichier [complet](https://github.com/armel/RRFRemote/blob/main/ini/Complet.ini). Editez-le à l'aide d'un simple éditeur de texte (Notepad, Notepad++, SublimeText, etc.) et renseignez les informations qui vous concerne. Les différentes sections sont décrites un peu plus loin.
 
 Copiez ce fichier de configuration, à la racine de votre carte Micro SD (formatée en FAT32). Libre à vous de le renommer. Vous pouvez aussi en sauvegarder plusieurs, si vous le désirez. Par exemple, une version pour gérer votre Hotspot depuis votre box Internet de votre QRA, une autre depuis votre partage de connexion Smartphone, etc.   
 
