@@ -147,6 +147,8 @@ Il est possible de :
 
 # Installation
 
+J'ai publié une petite [video](https://www.youtube.com/watch?v=yMfFsSPBT3M) sur ma chaine Youtube, pour vous accompagner dans l'installation du RRFRemote sur votre M5Stack. Mais je vous invite à lire la documentation qui suit.
+
 ## Coté Spotnik (si vous en possédez un)
 
 Le RRFRemote n'a pas nécessairement besoin d'un Spotnik pour fonctionner. À ce titre, il peut être utilisé par un simple SWL, s'il le souhaite, afin de suivre l'activité du RRF. 
