@@ -286,11 +286,15 @@ alert_14 = ON,    0x800000
 
 # Utilisation
 
-Démarrez votre M5Stack. Au moment du chargement du iniLoader (gauge de progression bleu), appuyez sur le bouton du milieu. Si vous avez correctement inséré votre carte Micro SD et que votre fichier de configuration s'y trouve, il devrait être listé. Les boutons gauche et droite, permettent de passer d'un fichier de configuration, à un autre, si vous en avez plusieurs. Et le bouton central permet de valider le fichier de configuration en cours de sélection et de le chargé.
+Démarrez votre M5Stack. 
 
-S'il ne comporte aucune erreur, l'application RRFRemote devrait démarrer.
+La procédure de démarrage commence par l'étape de chargement du binLoader (gauge de progression verte). Le binLoader permet de charger un autre firmware, stocké à la racine de votre carte micro SD ou en mémoire Flash. Cela permet de rendre votre M5Stack multi-applicatif. À ce titre, à la demande de plusieurs Radio Amateurs, le DXTracker est désormais installé en mémoire flash, en complément du RRFRemote. Si vous souhaitez changer de firmware, appuyez sur le bouton du milieu afin d'entrer dans le menu du binLoader. Utilisez les boutons gauche et droite pour naviguer dans la liste des firmwares et valider le firmware de votre choix en appuyant sur le bouton du milieu. Votre M5Stack sera alors flashé à la volée avec ce nouveau firmware avant de redémarrer (gauge de progression rouge). Si vous ne voulez pas changer de firmware, sans attendre la fin de la gauge de progression verte du binLoader, vous pouvez appuyer sur les boutons gauche ou droite pour _bypasser_ cette étape. 
 
-À notez qu'une copie du dernier fichier de configuration valide est effectuée dans la mémoire de votre M5Stack. La selection d'un fichier de configuration ne sera donc plus nécessaire au prochain redémarrage. Par contre, si vous apportez des modifications à ce fichier, il faudra le recharger à nouveau !
+L'étape suivante concerne le chargement du iniLoader (gauge de progression bleu). Le iniLoader va vous permettre de lire vos fichiers de configuration au format .ini. Là encore, appuyez sur le bouton du milieu afin d'entrer dans le menu du iniLoader. Utilisez les boutons gauche et droite pour naviguer dans la liste des fichiers de configuration au format .ini et valider le fichier de votre choix en appuyant sur le bouton du milieu. S'il ne comporte aucune erreur, l'application RRFRemote devrait démarrer. Vous observerez alors l'établissement de la connexion Wifi, la synchronisation du temps, etc.
+
+À notez qu'une copie du dernier fichier de configuration valide est effectuée dans la mémoire de votre M5Stack. La selection d'un fichier de configuration ne sera donc plus nécessaire au prochain redémarrage, sauf si vous décidez évidement d'entrer dans le menu du iniLoader. Par contre, si vous apportez des modifications à ce fichier, il faudra évidement le recharger à nouveau !
+
+Précisons enfin, qu'à l'image du binLoader, vous pouvez appuyer sur les boutons gauche ou droite pour _bypasser_ cette étape. 
 
 Amusez-vous bien 🤗
 
@@ -300,7 +304,7 @@ Un grand merci à F4ICR Pascal, F6FDY Eddie, F5LGW Stéphane, F4IGC Philippe et 
 
 # Dons
 
-Special thanks to Rolf Schroeder DL8BAG, Brian Garber WB8AM, Matt B-Wilkinson M6VWM, Robert Agnew KD0TVP, Meinhard Frank Günther DL0CN, Johan Hansson SM0TSC, Tadeusz Pater VA7CPM, Frederic Ulmer F4ESO, Joshua Murray M0JMO, Mark Hammond N8MH, Angel Mateu Muzzio EA4GIG (2 times 🍷🍷), Hiroshi Sasaki JL7KGW, Robert John Williams VK3IE, Mark Bumstead M0IAX, Félix Symann F1VEO, Patrick Ruhl DG2YRP, Michael Beck DH5DAX, Philippe Nicolas F4IQP, Timothy Nustad KD9KHZ, Martin Blanz DL9SAD, Edmund Thompson AE4TQ, Gregory Kiyoi KN6RUQ, Patrick Samson F6GWE, George Kokolakis SV3QUP, Ambrose "Bo" Barry W4GHV, Roger Bouche F1HCN, Christopher Platt, Pascal Paquet F4ICR, Gregory Kiyoi, Ning Yang BH7JAG, Mitsuhiko Nagasawa JL1LYT, Mike Mann G4GOC, David Cappello, Matt Brinkhoff KB0RXC, Franklin Beider WD9GZ, Robrecht Laurens ON4ROB, Florian Wolters DF2ET, James Gatwood WA9JG, Christoph Gässler DL6SEZ, Roger Kenyon WB2YOJ and Jean-pierre Billat F1RXM for their donations. That’s so kind of them. Thanks so much 🙏🏻
+Special thanks to Rolf Schroeder DL8BAG, Brian Garber WB8AM, Matt B-Wilkinson M6VWM, Robert Agnew KD0TVP, Meinhard Frank Günther DL0CN, Johan Hansson SM0TSC, Tadeusz Pater VA7CPM, Frederic Ulmer F4ESO, Joshua Murray M0JMO, Mark Hammond N8MH, Angel Mateu Muzzio EA4GIG (2 times 🍷🍷), Hiroshi Sasaki JL7KGW, Robert John Williams VK3IE, Mark Bumstead M0IAX, Félix Symann F1VEO, Patrick Ruhl DG2YRP, Michael Beck DH5DAX, Philippe Nicolas F4IQP, Timothy Nustad KD9KHZ, Martin Blanz DL9SAD, Edmund Thompson AE4TQ, Gregory Kiyoi KN6RUQ, Patrick Samson F6GWE, George Kokolakis SV3QUP, Ambrose "Bo" Barry W4GHV, Roger Bouche F1HCN, Christopher Platt, Pascal Paquet F4ICR, Gregory Kiyoi, Ning Yang BH7JAG, Mitsuhiko Nagasawa JL1LYT, Mike Mann G4GOC, David Cappello, Matt Brinkhoff KB0RXC, Franklin Beider WD9GZ, Robrecht Laurens ON4ROB, Florian Wolters DF2ET, James Gatwood WA9JG, Christoph Gässler DL6SEZ, Roger Kenyon WB2YOJ, Jean-pierre Billat F1RXM and John Sheppard G4WOD for their donations. That’s so kind of them. Thanks so much 🙏🏻
 
 Si vous trouvez ce projet amusant et utile, alors [offrez-moi un verre de vin](https://www.paypal.me/F4HWN) 🍷 😉 
 If you find this project fun and useful, then [buy me a glass of wine](https://www.paypal.me/F4HWN) 🍷 😉 
